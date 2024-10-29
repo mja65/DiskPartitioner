@@ -5,9 +5,9 @@ function Add-AmigaPartitiontoDisk {
         $LeftMargin
     )
     
-    $DiskName = 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk'
-    $SizePixels = 100
-    $LeftMargin = 0
+    #$DiskName = 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk'
+    #$SizePixels = 100
+    #$LeftMargin = 0
 
     $PartitionNumber = (Get-Variable -Name $DiskName).Value.NextPartitionNumber
 
