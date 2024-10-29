@@ -29,7 +29,8 @@ function Set-GUIPartitionAsSelectedUnSelected {
         ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).ContextMenu.IsEnabled = ""
         ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).ContextMenu.Visibility = "Collapsed"
         if ($Script:WPF_UI_DiskPartition_PartitionGrid_Amiga.Children){
-                $Script:WPF_UI_DiskPartition_PartitionGrid_Amiga.Children.RemoveChild(((Get-Variable -Name ($PartitionName+'_AmigaDisk')).value))
+                $Script:WPF_UI_DiskPartition_PartitionGrid_Amiga.Children.Remove(((Get-Variable -Name ($PartitionName+'_AmigaDisk')).value))
+                
             }
         $Script:GUIActions.SelectedPartition = $null            
     }

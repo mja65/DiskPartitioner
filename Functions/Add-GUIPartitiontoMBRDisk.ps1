@@ -91,25 +91,25 @@ function Add-GUIPartitiontoMBRDisk {
     
         if (`$$NewPartitionName.ContextMenu.Items.Items[`$i].Name -eq 'CreateID76Right'){
             `$$NewPartitionName.ContextMenu.Items.Items[`$i].add_click({
-                Add-GUIPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Right' -SizePixels `$Script:PistormSDCard.ID76MinimumSizePixels                
+                Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Right' -SizePixels `$Script:PistormSDCard.ID76MinimumSizePixels                
             })
         }
     
         if (`$$NewPartitionName.ContextMenu.Items.Items[`$i].Name -eq 'CreateFAT32Left'){
             `$$NewPartitionName.ContextMenu.Items.Items[`$i].add_click({
-                Add-GUIPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'FAT32' -AddType 'Left' -SizePixels `$Script:PistormSDCard.FAT32MinimumSizePixels   
+                Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'FAT32' -AddType 'Left' -SizePixels `$Script:PistormSDCard.FAT32MinimumSizePixels   
             })
         }
 
         if (`$$NewPartitionName.ContextMenu.Items.Items[`$i].Name -eq 'CreateFAT32Right'){
             `$$NewPartitionName.ContextMenu.Items.Items[`$i].add_click({
-                Add-GUIPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'FAT32' -AddType 'Right' -SizePixels `$Script:PistormSDCard.FAT32MinimumSizePixels        
+                Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'FAT32' -AddType 'Right' -SizePixels `$Script:PistormSDCard.FAT32MinimumSizePixels        
             })
         }
         
         if (`$$NewPartitionName.ContextMenu.Items.Items[`$i].Name -eq 'CreateID76Left'){
             `$$NewPartitionName.ContextMenu.Items.Items[`$i].add_click({
-                Add-GUIPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Left' -SizePixels `$Script:PistormSDCard.ID76MinimumSizePixels     
+                Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Left' -SizePixels `$Script:PistormSDCard.ID76MinimumSizePixels     
             })
         }
 

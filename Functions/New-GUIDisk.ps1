@@ -3,6 +3,8 @@ function New-GUIDisk {
     $DiskType
     )
 
+    #$NewDisk_Grid = New-Object System.Windows.Controls.Grid
+
     $NewDisk = New-Object System.Windows.Shapes.Rectangle
     $NewDisk.HorizontalAlignment = "Left" 
     $NewDisk.VerticalAlignment = "Top"
@@ -25,6 +27,12 @@ function New-GUIDisk {
     $NewDisk | Add-Member -NotePropertyName NumberofPartitionsTotal -NotePropertyValue 0
     $NewDisk | Add-Member -NotePropertyName DiskSizeBytes -NotePropertyValue $null  
 
+    #$NewDisk_Grid.AddChild($NewDisk)
+    
     return $NewDisk
 
 }
+
+
+
+

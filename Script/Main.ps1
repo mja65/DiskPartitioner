@@ -45,8 +45,6 @@ Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_
 Set-PartitionWindowActions 
 Set-DiskActions
 
-
-
 $MainWindow.ShowDialog() | out-null
 
 #$MainWindow.close() | out-null
