@@ -10,4 +10,3 @@ function Add-AmigaPartitiontoDisk {
     $NewPartition = New-GUIPartition -PartitionType 'Amiga' -SizePixels $SizePixels -LeftMargin $LeftMargin  -TopMargin 0 -RightMargin 0 -BottomMargin 0
 
 }
-

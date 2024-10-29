@@ -45,3 +45,4 @@ Set-DiskActions
 $MainWindow.ShowDialog() | out-null
 
 #$MainWindow.close() | out-null
+
