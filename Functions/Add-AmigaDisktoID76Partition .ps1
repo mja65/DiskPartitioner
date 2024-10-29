@@ -8,3 +8,4 @@ function Add-AmigaDisktoID76Partition {
     Set-Variable -name ($ID76PartitionName+'_AmigaDisk') -Scope Script -value (New-GUIDisk -DiskType 'Amiga')
    
 }
+

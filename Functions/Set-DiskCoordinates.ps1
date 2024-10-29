@@ -35,7 +35,7 @@ function Set-DiskCoordinates {
     }
 
     $Script:WPF_UI_DiskPartition_Disk_MBR.LeftDiskBoundary = 0 
-    $Script:WPF_UI_DiskPartition_Disk_MBR.RightDiskBoundary = $LeftDiskBoundary + (Get-Variable -name ($Prefix+'Disk_MBR') -ValueOnly).Width
+    $Script:WPF_UI_DiskPartition_Disk_MBR.RightDiskBoundary = $LeftDiskBoundary + (Get-Variable -name ($Prefix+'Disk_MBR') -ValueOnly).Children[0].Width
     $Script:WPF_UI_DiskPartition_Disk_MBR.LeftPartitionBoundary = $LeftPartitionBoundary 
     $Script:WPF_UI_DiskPartition_Disk_MBR.RightPartitionBoundary = $RightPartitionBoundary 
 
