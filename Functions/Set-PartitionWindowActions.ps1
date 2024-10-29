@@ -10,7 +10,7 @@ function Set-PartitionWindowActions {
         ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowY -gt $WPF_UI_DiskPartition_PartitionGrid_MBR.Margin.Top + 100)
         ){
             if ($Script:GUIActions.SelectedPartition){
-                Set-GUIPartitionAsSelectedUnSelected -Action 'UnSelected' -Partition (Get-Variable -Name $Script:GUIActions.SelectedPartition).Value 
+                Set-GUIPartitionAsSelectedUnSelected -Action 'UnSelected'
             }    
         }
     })    

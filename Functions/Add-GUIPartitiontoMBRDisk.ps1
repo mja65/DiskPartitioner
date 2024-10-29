@@ -1,4 +1,4 @@
-function Add-GUIPartitiontoDisk {
+function Add-GUIPartitiontoMBRDisk {
     param (
         $Prefix,
         $PartitionType,
@@ -15,13 +15,6 @@ function Add-GUIPartitiontoDisk {
     $PrefixtoUse = ($Prefix+$PartitionType)
 
     if ($PartitionType -eq 'FAT32'){
-        $MinimumSize = $Script:PistormSDCard.FAT32MinimumSizePixels
-    }
-    elseif ($PartitionType -eq 'ID76'){
-        $MinimumSize = $Script:PistormSDCard.ID76MinimumSizePixels
-    }
-
-    if ($PartitionType -eq 'FAT32'){
         $NewPartitionNumber = $Script:WPF_UI_DiskPartition_Disk_MBR.NextPartitionFAT32Number
         $Script:WPF_UI_DiskPartition_Disk_MBR.NextPartitionFAT32Number += 1
         $Script:WPF_UI_DiskPartition_Disk_MBR.NumberofPartitionsFAT32 += 1
@@ -36,20 +29,11 @@ function Add-GUIPartitiontoDisk {
     $NewPartitionName = ($PrefixtoUse+'_'+$NewPartitionNumber) 
     
     if ($PartitionType -eq 'FAT32'){
-        $NewPartition_XML = get-content 'WPF\PartitionFAT32.xaml'
+        $MinimumSize = $Script:PistormSDCard.FAT32MinimumSizePixels
     }
-    
-    if ($PartitionType -eq 'ID76'){
-        $NewPartition_XML = get-content 'WPF\PartitionID76.xaml'
+    elseif ($PartitionType -eq 'ID76'){
+        $MinimumSize = $Script:PistormSDCard.ID76MinimumSizePixels
     }
-    $NewPartition_XML = $NewPartition_XML -replace 'mc:Ignorable="d"','' -replace "x:N",'N' -replace '^<Win.*', '<Window'
-    [xml]$NewPartition_XAML = $NewPartition_XML
-    
-    $reader = (New-Object System.Xml.XmlNodeReader $NewPartition_XAML)
-
-    $NewPartition = [Windows.Markup.XamlReader]::Load( $reader)
-    $NewPartition | Add-Member -NotePropertyName PartitionType -NotePropertyValue $PartitionType
-    $NewPartition | Add-Member -NotePropertyName PartitionSizeBytes -NotePropertyValue $null  
 
     if ($AddType -eq 'Initial'){
         $LeftMargin = (Get-MBRPartitionStartEnd -Prefix $Prefix).EndingPosition
@@ -74,20 +58,9 @@ function Add-GUIPartitiontoDisk {
             return
         }
     }
+
     
-
-    #Write-host $LeftMargin
-    $RightMargin = 0
-    $TopMargin = 0
-    $BottomMargin = 0
-    $NewPartition.Margin = [System.Windows.Thickness]"$LeftMargin,$TopMargin,$RightMargin,$BottomMargin"
-
-    $TotalColumns = $NewPartition.ColumnDefinitions.Count-1
-    for ($i = 0; $i -le $TotalColumns; $i++) {
-        if  ($NewPartition.ColumnDefinitions[$i].Name -eq 'FullSpace'){
-            $NewPartition.ColumnDefinitions[$i].Width = $SizePixels
-        } 
-    }
+    $NewPartition = New-GUIPartition -PartitionType $PartitionType -SizePixels $SizePixels -LeftMargin $LeftMargin  -TopMargin 0 -RightMargin 0 -BottomMargin 0
 
     Set-Variable -name $NewPartitionName -Scope Script -Value ((Get-Variable -Name NewPartition).Value)
     (Get-Variable -Name $NewPartitionName).Value.Name = $NewPartitionName
@@ -146,6 +119,11 @@ function Add-GUIPartitiontoDisk {
 "@
 
     Invoke-Expression $PSCommand  
+
+
+    If ($PartitionType -eq 'ID76'){
+        Add-AmigaDisktoID76Partition -ID76PartitionName $NewPartitionName
+    }
 
 }
 

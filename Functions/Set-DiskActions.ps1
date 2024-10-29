@@ -16,11 +16,11 @@ function Set-DiskActions {
         }
         else{
             if ($Script:GUIActions.SelectedPartition){
-                Set-GUIPartitionAsSelectedUnSelected -Action 'UnSelected' -Partition (Get-Variable -Name $Script:GUIActions.SelectedPartition).Value 
+                Set-GUIPartitionAsSelectedUnSelected -Action 'UnSelected'
             }
             $Script:GUIActions.SelectedPartition = (Get-SelectedGUIPartition -Prefix 'WPF_UI_DiskPartition_Partition_' -MouseX $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress)
             if ($Script:GUIActions.SelectedPartition){
-                Set-GUIPartitionAsSelectedUnSelected -Action 'Selected' -Partition (Get-Variable -Name $Script:GUIActions.SelectedPartition).Value 
+                Set-GUIPartitionAsSelectedUnSelected -Action 'Selected'
                 $Script:GUIActions.ActionToPerform = 'Move'
             } 
         }

@@ -1,38 +1,45 @@
 function Set-GUIPartitionAsSelectedUnSelected {
     param (
-        $Partition,
         $Action
 
     )
     
-    $TotalChildren = $Partition.Children.Count-1
+    #$Script:GUIActions.SelectedPartition = 'WPF_UI_DiskPartition_Partition_ID76_1'
+  
+    $TotalChildren = ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).Children.Count-1
     
     for ($i = 0; $i -le $TotalChildren; $i++) {
-        if  (($Partition.Children[$i].Name -eq 'TopBorder_Rectangle') -or `
-            ($Partition.Children[$i].Name -eq 'BottomBorder_Rectangle') -or `
-            ($Partition.Children[$i].Name -eq 'LeftBorder_Rectangle') -or `
-            ($Partition.Children[$i].Name -eq 'RightBorder_Rectangle'))
+        if  ((((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).Children[$i].Name -eq 'TopBorder_Rectangle') -or `
+            (((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).Children[$i].Name -eq 'BottomBorder_Rectangle') -or `
+            (((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).Children[$i].Name -eq 'LeftBorder_Rectangle') -or `
+            (((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).Children[$i].Name -eq 'RightBorder_Rectangle'))
         {
             #Write-host $Partition.Children[$i].Name
             if ($Action -eq 'Selected'){
-                $Partition.Children[$i].Stroke='Red'
+                ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).Children[$i].Stroke='Red'
             }
             if ($Action -eq 'UnSelected'){
-                $Partition.Children[$i].Stroke='Black'
+                ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).Children[$i].Stroke='Black'
             }
         }
     }
     
     if ($Action -eq 'UnSelected'){
-        $Script:GUIActions.SelectedPartition = $null
-        $Partition.ContextMenu.IsOpen = ""
-        $Partition.ContextMenu.IsEnabled = ""
-        $Partition.ContextMenu.Visibility = "Collapsed"
+        ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).ContextMenu.IsOpen = ""
+        ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).ContextMenu.IsEnabled = ""
+        ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).ContextMenu.Visibility = "Collapsed"
+        if ($Script:WPF_UI_DiskPartition_PartitionGrid_Amiga.Children){
+                $Script:WPF_UI_DiskPartition_PartitionGrid_Amiga.Children.RemoveChild(((Get-Variable -Name ($PartitionName+'_AmigaDisk')).value))
+            }
+        $Script:GUIActions.SelectedPartition = $null            
     }
     elseif($Action -eq 'Selected'){
-        $Partition.ContextMenu.IsOpen = ""
-        $Partition.ContextMenu.IsEnabled = "True"
-        $Partition.ContextMenu.Visibility = "Visible"
+        ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).ContextMenu.IsOpen = ""
+        ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).ContextMenu.IsEnabled = "True"
+        ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).ContextMenu.Visibility = "Visible"
+        if (((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value).PartitionType -eq 'ID76'){
+            $Script:WPF_UI_DiskPartition_PartitionGrid_Amiga.AddChild(((Get-Variable -Name ($PartitionName+'_AmigaDisk')).value))
+        }
     }       
 
 }

@@ -1,10 +1,8 @@
-function Add-GUIDisktoWindow {
+function New-GUIDisk {
     param (
-
-    $TopMargin,
     $DiskType
-
     )
+
     $NewDisk = New-Object System.Windows.Shapes.Rectangle
     $NewDisk.HorizontalAlignment = "Left" 
     $NewDisk.VerticalAlignment = "Top"
@@ -20,9 +18,12 @@ function Add-GUIDisktoWindow {
         $NewDisk | Add-Member -NotePropertyName NextPartitionID76Number -NotePropertyValue 1
     }
     
+    if ($DiskType -eq 'Amiga'){
+        $NewDisk | Add-Member -NotePropertyName ID76PartitionParent -NotePropertyValue $null
+    }
+
     $NewDisk | Add-Member -NotePropertyName NumberofPartitionsTotal -NotePropertyValue 0
     $NewDisk | Add-Member -NotePropertyName DiskSizeBytes -NotePropertyValue $null  
-    #$NewDisk.Margin = [System.Windows.Thickness]"0,$TopMargin,0,0"
 
     return $NewDisk
 
