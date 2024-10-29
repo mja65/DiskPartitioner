@@ -13,7 +13,7 @@ function Set-DiskCoordinates {
         RightPartitionBoundary = $null
     }
          
-    $ListofVariables = Get-Variable | Where-Object {$_.Name -match ($Prefix+$PartitionPrefix)}
+    $ListofVariables = Get-Variable | Where-Object {$_.Name -match $Prefix -and $_.Value.PartitionTypeMBRorAmiga -eq 'MBR'} 
     
     $LeftPartitionBoundary = $null
     $RightPartitionBoundary = $null

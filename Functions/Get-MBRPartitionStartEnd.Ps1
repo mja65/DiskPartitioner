@@ -18,16 +18,13 @@ function Get-MBRPartitionStartEnd {
 
     #$PrefixtoUse = ($Prefix+$PartitionType)
 
-    $ListofVariables = Get-Variable | Where-Object {$_.Name -match $Prefix} | Sort-Object -Property 'Name'
+    $ListofVariables = Get-Variable | Where-Object {$_.Name -match $Prefix -and $_.Value.PartitionTypeMBRorAmiga -eq 'MBR'} 
+
     $Counter = 0
     if (-not $ListofVariables){ # No Partitions at all
         return $ValuetoReturn 
     }
     else{
-        $ListofVariables = Get-Variable | Where-Object {$_.Name -match $Prefix} | Sort-Object -Property 'Name'
-        if ( -not $ListofVariables){ #No partitions of that type
-            $ListofVariables = Get-Variable | Where-Object {$_.Name -match $Prefix} | Sort-Object -Property 'Name'
-        }
         Foreach ($Variable in $ListofVariables){
             If ($Counter -eq 0){
                 $ValuetoReturn.StartingPosition = $Variable.Value.Margin.Left

@@ -33,9 +33,6 @@ $MainWindow = (Get-MainWindow -WPFPrefix 'WPF_UI_DiskPartition_')
 $WPF_UI_DiskPartition_Disk_MBR = New-GUIDisk -Prefix 'WPF_UI_DiskPartition_' -DiskType 'MBR'
 $Script:WPF_UI_DiskPartition_PartitionGrid_MBR.AddChild($WPF_UI_DiskPartition_Disk_MBR)
 
-# $WPF_UI_DiskPartition_Disk = Add-GUIDisktoWindow -Prefix 'WPF_UI_DiskPartition_' -DiskType 'Amiga'
-# $Script:WPF_UI_DiskPartition_PartitionGrid_Amiga.AddChild($WPF_UI_DiskPartition_Disk_Amiga)
-
 Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'FAT32' -AddType 'Initial'-SizePixels 100
 Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Initial' -SizePixels 100
 Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Initial' -SizePixels 100
@@ -48,4 +45,3 @@ Set-DiskActions
 $MainWindow.ShowDialog() | out-null
 
 #$MainWindow.close() | out-null
-

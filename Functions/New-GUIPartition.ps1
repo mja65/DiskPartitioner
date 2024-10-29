@@ -26,9 +26,17 @@ function New-GUIPartition {
     $NewPartition = [Windows.Markup.XamlReader]::Load( $reader)
     $NewPartition | Add-Member -NotePropertyName PartitionType -NotePropertyValue $PartitionType
     $NewPartition | Add-Member -NotePropertyName PartitionSizeBytes -NotePropertyValue $null  
+    $NewPartition |Add-Member -NotePropertyName PartitionTypeMBRorAmiga -NotePropertyValue $null
 
-    if ($PartitionType -eq 'ID76'){
+    if ($PartitionType -eq 'FAT32'){
+        $NewPartition.PartitionTypeMBRorAmiga='MBR'
+    } 
+    elseif ($PartitionType -eq 'ID76'){
         $NewPartition | Add-Member -NotePropertyName AmigaDiskName -NotePropertyValue $null  
+        $NewPartition.PartitionTypeMBRorAmiga='MBR'
+    }
+    elseif ($PartitionType -eq 'Amiga'){
+        $NewPartition.PartitionTypeMBRorAmiga='Amiga'
     }
 
     $TotalColumns = $NewPartition.ColumnDefinitions.Count-1
