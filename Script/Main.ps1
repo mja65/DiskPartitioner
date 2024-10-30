@@ -14,9 +14,11 @@ Remove-Variable -name WPF_UI_DiskPartition*
 $Script:GUIActions = [PSCustomObject]@{
     MouseStatus = $null
     ActionToPerform = $null
-    SelectedPartition = $null
+    SelectedMBRPartition = $null
+    SelectedAmigaPartition = $null
     MousePositionRelativetoWindowXatTimeofPress = $null
     MousePositionRelativetoWindowYatTimeofPress = $null
+    IsAmigaPartitionShowing = $false
 }
 
 $Script:PistormSDCard = [PSCustomObject]@{
@@ -28,7 +30,7 @@ $MainWindow = (Get-MainWindow -WPFPrefix 'WPF_UI_DiskPartition_')
 
 #Get-Variable
 
-#[System.Windows.Controls.Grid].GetEvents() | Select-Object Name, *Method, EventHandlerType
+#[System.Windows.Window].GetEvents() | Select-Object Name, *Method, EventHandlerType
 
 $WPF_UI_DiskPartition_Disk_MBR = New-GUIDisk -Prefix 'WPF_UI_DiskPartition_' -DiskType 'MBR'
 $Script:WPF_UI_DiskPartition_PartitionGrid_MBR.AddChild($WPF_UI_DiskPartition_Disk_MBR)
@@ -37,14 +39,16 @@ Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionTy
 Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Initial' -SizePixels 100
 Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Initial' -SizePixels 100
 
-Add-AmigaPartitiontoDisk -DiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -SizePixels 100 -LeftMargin 0
+Add-AmigaPartitiontoDisk -DiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -SizePixels 100 -AddType 'Initial' 
+Add-AmigaPartitiontoDisk -DiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -SizePixels 100 -AddType 'Initial' 
 
-Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_'
+Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_' -PartitionType 'MBR'
+Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_' -PartitionType 'Amiga' -AmigaDisk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk
 
 Set-PartitionWindowActions 
-Set-DiskActions
+Set-MBRDiskActions
+Set-AmigaDiskActions 
 
 $MainWindow.ShowDialog() | out-null
 
 #$MainWindow.close() | out-null
-

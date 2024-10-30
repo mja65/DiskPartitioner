@@ -18,8 +18,8 @@ function Get-IsResizeZoneGUIPartition {
     {
         $InResizeZone = 'ResizeFromLeft'
     } 
-    elseif  (($MouseX -gt ((Get-Variable -Name $ObjectName).Value.Margin.Left + (Get-MBRPartitionWidth -MBRPartition (Get-Variable -Name $ObjectName).Value) - $PixelThreshold)) -and `
-            ($MouseX -lt ((Get-Variable -Name $ObjectName).Value.Margin.Left + (Get-MBRPartitionWidth -MBRPartition (Get-Variable -Name $ObjectName).Value) + $PixelThreshold)))
+    elseif  (($MouseX -gt ((Get-Variable -Name $ObjectName).Value.Margin.Left + (Get-GUIPartitionWidth -Partition (Get-Variable -Name $ObjectName).Value) - $PixelThreshold)) -and `
+            ($MouseX -lt ((Get-Variable -Name $ObjectName).Value.Margin.Left + (Get-GUIPartitionWidth -Partition (Get-Variable -Name $ObjectName).Value) + $PixelThreshold)))
     {
         $InResizeZone = 'ResizeFromRight'
     }  

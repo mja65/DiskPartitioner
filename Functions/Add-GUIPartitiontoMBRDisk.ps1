@@ -11,6 +11,7 @@ function Add-GUIPartitiontoMBRDisk {
     #$PartitionType = 'ID76'
     #$NewPartitionNumber = '1'
     #$SizePixels = 100
+    #$LeftMargin = 0
     
     $PrefixtoUse = ($Prefix+$PartitionType)
 
@@ -36,10 +37,10 @@ function Add-GUIPartitiontoMBRDisk {
     }
 
     if ($AddType -eq 'Initial'){
-        $LeftMargin = (Get-MBRPartitionStartEnd -Prefix $Prefix).EndingPosition
+        $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'MBR' -Prefix $Prefix).EndingPosition
     }
     elseif ($AddType -eq 'Right'){
-        $CoordinatestoCheck = Get-GUIPartitionBoundaries -Prefix 'WPF_UI_DiskPartition_Partition_' -ObjecttoCheck (Get-Variable -name $Script:GUIActions.SelectedPartition).value 
+        $CoordinatestoCheck = Get-GUIPartitionBoundaries -PartitionType 'MBR' -Prefix 'WPF_UI_DiskPartition_Partition_' -ObjecttoCheck (Get-Variable -name $Script:GUIActions.SelectedMBRPartition).value 
         if ($CoordinatestoCheck.RightBoundary - $CoordinatestoCheck.RightEdgeofObject -gt $MinimumSize){
             Write-Host $MinimumSize
             Write-Host $CoordinatestoCheck
@@ -50,7 +51,7 @@ function Add-GUIPartitiontoMBRDisk {
         }
     }
     elseif ($AddType -eq 'Left'){
-        $CoordinatestoCheck = Get-GUIPartitionBoundaries -Prefix 'WPF_UI_DiskPartition_Partition_' -ObjecttoCheck (Get-Variable -name $Script:GUIActions.SelectedPartition).value 
+        $CoordinatestoCheck = Get-GUIPartitionBoundaries -PartitionType 'MBR' -Prefix 'WPF_UI_DiskPartition_Partition_' -ObjecttoCheck (Get-Variable -name $Script:GUIActions.SelectedMBRPartition).value 
         if ($CoordinatestoCheck.LeftEdgeofObject - $CoordinatestoCheck.LeftBoundary -gt $MinimumSize){
             $LeftMargin = $CoordinatestoCheck.LeftEdgeofObject-$MinimumSize
         }
@@ -69,7 +70,7 @@ function Add-GUIPartitiontoMBRDisk {
 
         `$Script:WPF_UI_DiskPartition_PartitionGrid_MBR.AddChild(`$$NewPartitionName)
         `$$NewPartitionName.ContextMenu.add_Opened({
-            if (-not `$Script:GUIActions.SelectedPartition){
+            if (-not `$Script:GUIActions.SelectedMBRPartition){
                 `$$NewPartitionName.ContextMenu.IsOpen = ""
             }
         })
@@ -120,6 +121,19 @@ function Add-GUIPartitiontoMBRDisk {
 
     Invoke-Expression $PSCommand  
 
+    $PSCommand = @"
+    
+    `$$NewPartitionName.add_MouseMove({
+        if (Get-IsResizeZoneGUIPartition -ObjectName `$Script:GUIActions.SelectedMBRPartition -MouseX ((Get-MouseCoordinatesRelativetoWindow -Window `$WPF_UI_DiskPartition_Window -Disk `$WPF_UI_DiskPartition_Disk_MBR -Grid `$WPF_UI_DiskPartition_PartitionGrid_MBR).MousePositionRelativetoWindowX)){
+            `$$NewPartitionName.Cursor = "SizeWE"
+        }
+        else{
+            `$$NewPartitionName.Cursor = "Hand"
+        }    
+    })
+"@
+    
+    Invoke-Expression $PSCommand  
 
     If ($PartitionType -eq 'ID76'){
         Add-AmigaDisktoID76Partition -ID76PartitionName $NewPartitionName

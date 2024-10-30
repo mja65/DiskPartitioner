@@ -1,4 +1,4 @@
-function Set-DiskActions {
+function Set-MBRDiskActions {
     param (
      
     )
@@ -9,19 +9,19 @@ function Set-DiskActions {
         $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Disk_MBR -Grid $WPF_UI_DiskPartition_PartitionGrid_MBR).MousePositionRelativetoWindowX
         $Script:GUIActions.MousePositionRelativetoWindowYatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Disk_MBR -Grid $WPF_UI_DiskPartition_PartitionGrid_MBR).MousePositionRelativetoWindowY
         
-        $RezizeAction = (Get-IsResizeZoneGUIPartition -ObjectName $Script:GUIActions.SelectedPartition -MouseX $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress)
+        $RezizeAction = (Get-IsResizeZoneGUIPartition -ObjectName $Script:GUIActions.SelectedMBRPartition -MouseX $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress)
 
         if ($RezizeAction){
-            $Script:GUIActions.ActionToPerform = $RezizeAction
+            $Script:GUIActions.ActionToPerform = ('MBR_'+$RezizeAction)
         }
         else{
-            if ($Script:GUIActions.SelectedPartition){
-                Set-GUIPartitionAsSelectedUnSelected -Action 'UnSelected'
+            if ($Script:GUIActions.SelectedMBRPartition){
+                Set-MBRGUIPartitionAsSelectedUnSelected -Action 'MBRUnSelected'
             }
-            $Script:GUIActions.SelectedPartition = (Get-SelectedGUIPartition -Prefix 'WPF_UI_DiskPartition_Partition_' -MouseX $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress)
-            if ($Script:GUIActions.SelectedPartition){
-                Set-GUIPartitionAsSelectedUnSelected -Action 'Selected'
-                $Script:GUIActions.ActionToPerform = 'Move'
+            $Script:GUIActions.SelectedMBRPartition = (Get-SelectedGUIPartition -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'MBR' -MouseX $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress)
+            if ($Script:GUIActions.SelectedMBRPartition){
+                Set-MBRGUIPartitionAsSelectedUnSelected -Action 'MBRSelected'
+                $Script:GUIActions.ActionToPerform = 'MBR_Move'
             } 
         }
              
@@ -34,14 +34,14 @@ function Set-DiskActions {
     })
 
     $WPF_UI_DiskPartition_PartitionGrid_MBR.add_MouseMove({
-        if ($Script:GUIActions.SelectedPartition){
+        if ($Script:GUIActions.SelectedMBRPartition){
             Start-Sleep -Milliseconds 5
             $AmountMoved = ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Disk_MBR -Grid $WPF_UI_DiskPartition_PartitionGrid_MBR).MousePositionRelativetoWindowX) - $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress
-            if ($Script:GUIActions.ActionToPerform -eq 'Move'){
-                Set-GUIPartitionNewPosition -Partition ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value) -AmountMoved $AmountMoved 
+            if ($Script:GUIActions.ActionToPerform -eq 'MBR_Move'){
+                Set-GUIPartitionNewPosition -PartitionType 'MBR' -Partition ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value) -AmountMoved $AmountMoved 
             }
             elseif ($Script:GUIActions.ActionToPerform -match 'Resize'){            
-                Set-GUIPartitionNewSize -Partition ((Get-Variable -Name $Script:GUIActions.SelectedPartition).Value) -AmountMoved $AmountMoved -ActiontoPerform $Script:GUIActions.ActionToPerform 
+                Set-GUIPartitionNewSize -PartitionType 'MBR' -Partition ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value) -AmountMoved $AmountMoved -ActiontoPerform $Script:GUIActions.ActionToPerform 
             }
               
          
@@ -53,3 +53,4 @@ function Set-DiskActions {
     })
 
 }       
+

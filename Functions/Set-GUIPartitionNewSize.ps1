@@ -2,17 +2,18 @@ function Set-GUIPartitionNewSize {
     param (
         $Partition,
         $AmountMoved,
-        $ActiontoPerform
+        $ActiontoPerform,
+        $PartitionType
     )
     
     # $Partition = $WPF_UI_DiskPartition_Partition_FAT32_1
     # $ActiontoPerform = 'ResizeFromLeft'
     
-    $PartitionBoundaries = (Get-GUIPartitionBoundaries -Prefix 'WPF_UI_DiskPartition_Partition_' -ObjecttoCheck $Partition)
+    $PartitionBoundaries = (Get-GUIPartitionBoundaries -PartitionType $PartitionType -Prefix 'WPF_UI_DiskPartition_Partition_' -ObjecttoCheck $Partition)
     $LeftandRightPartitionBorderWidth = 10
-    $CurrentWidth = Get-MBRPartitionWidth -MBRPartition $Partition
+    $CurrentWidth = Get-GUIPartitionWidth -Partition $Partition
 
-    if ($ActiontoPerform -eq 'ResizeFromLeft'){
+    if (($ActiontoPerform -eq 'MBR_ResizeFromLeft') -or ($ActiontoPerform -eq 'Amiga_ResizeFromLeft')) {
         if ($AmountMoved -gt 0){
             if ($AmountMoved -gt ($CurrentWidth - $LeftandRightPartitionBorderWidth)){
                 $AmountMoved = ($CurrentWidth - $LeftandRightPartitionBorderWidth)
@@ -35,8 +36,11 @@ function Set-GUIPartitionNewSize {
     
     }
 
-    elseif ($ActiontoPerform -eq 'ResizeFromRight'){
-        Write-host 'ResizeFromRight'
+    elseif (($ActiontoPerform -eq 'MBR_ResizeFromRight') -or ($ActiontoPerform -eq 'Amiga_ResizeFromRight')){
+        # Write-host "Amount Moved: $AmountMoved" 
+        # Write-host "Current Width: $CurrentWidth"
+        # Write-host "Right Boundary: $($PartitionBoundaries.RightBoundary)"
+        # Write-host "Margin Left: $($Partition.Margin.Left)"
         if ($AmountMoved -lt 0){
             if ([math]::abs($AmountMoved) -gt ($CurrentWidth - $LeftandRightPartitionBorderWidth)){
                 $AmountMoved = (($CurrentWidth - $LeftandRightPartitionBorderWidth)*-1)
@@ -44,7 +48,7 @@ function Set-GUIPartitionNewSize {
         }
 
         if ($Partition.Margin.Left + $CurrentWidth + $AmountMoved -gt $PartitionBoundaries.RightBoundary){
-            $AmountMoved = $PartitionBoundaries.LeftBoundary - $Partition.Margin.Left - $CurrentWidth
+            $AmountMoved = $PartitionBoundaries.RightBoundary - $Partition.Margin.Left - $CurrentWidth
         }
 
         $TotalColumns = $Partition.ColumnDefinitions.Count-1

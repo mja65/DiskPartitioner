@@ -2,12 +2,16 @@ function Add-AmigaPartitiontoDisk {
     param (
         $DiskName,
         $SizePixels,
-        $LeftMargin
+        $AddType
     )
     
-    #$DiskName = 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk'
-    #$SizePixels = 100
-    #$LeftMargin = 0
+    # $DiskName = 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk'
+    # $SizePixels = 100
+
+
+    if ($AddType -eq 'Initial'){
+        $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'Amiga' -Prefix $DiskName).EndingPosition
+    }
 
     $PartitionNumber = (Get-Variable -Name $DiskName).Value.NextPartitionNumber
 

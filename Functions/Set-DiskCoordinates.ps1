@@ -1,19 +1,32 @@
 function Set-DiskCoordinates {
     param (
         $Prefix,
-        $PartitionPrefix 
+        $PartitionPrefix,
+        $PartitionType,
+        $AmigaDisk
+
     )
     # $Prefix = 'WPF_UI_DiskPartition_'
     # $PartitionPrefix = 'Partition_'
 
-    $Script:WPF_UI_DiskPartition_Disk_MBR | Add-Member -force -NotePropertyMembers @{
-        LeftDiskBoundary = $null
-        RightDiskBoundary = $null
-        LeftPartitionBoundary = $null
-        RightPartitionBoundary = $null
+    if ($PartitionType -eq 'MBR'){
+        $Script:WPF_UI_DiskPartition_Disk_MBR | Add-Member -force -NotePropertyMembers @{
+            LeftDiskBoundary = $null
+            RightDiskBoundary = $null
+            LeftPartitionBoundary = $null
+            RightPartitionBoundary = $null
+        }
     }
-         
-    $ListofVariables = Get-Variable | Where-Object {$_.Name -match $Prefix -and $_.Value.PartitionTypeMBRorAmiga -eq 'MBR'} 
+    elseif ($PartitionType -eq 'Amiga'){
+        $AmigaDisk | Add-Member -force -NotePropertyMembers @{
+            LeftDiskBoundary = $null
+            RightDiskBoundary = $null
+            LeftPartitionBoundary = $null
+            RightPartitionBoundary = $null
+        }
+    }   
+
+    $ListofVariables = Get-Variable | Where-Object {$_.Name -match $Prefix -and $_.Value.PartitionTypeMBRorAmiga -eq $PartitionType} 
     
     $LeftPartitionBoundary = $null
     $RightPartitionBoundary = $null
@@ -26,17 +39,27 @@ function Set-DiskCoordinates {
             $LeftPartitionBoundary = (Get-Variable -name $Variable.Name -ValueOnly).Margin.Left
         }
         if ($null -eq $RightPartitionBoundary){
-            $RightPartitionBoundary = (Get-Variable -name $Variable.Name -ValueOnly).Margin.Left + (Get-MBRPartitionWidth -MBRPartition (Get-Variable -name $Variable.Name -ValueOnly))
+            $RightPartitionBoundary = (Get-Variable -name $Variable.Name -ValueOnly).Margin.Left + (Get-GUIPartitionWidth -Partition (Get-Variable -name $Variable.Name -ValueOnly))
         }
-        elseif ((Get-Variable -name $Variable.Name -ValueOnly).Margin.Left + (Get-MBRPartitionWidth -MBRPartition (Get-Variable -name $Variable.Name -ValueOnly)) -gt $RightPartitionBoundary){
-            $RightPartitionBoundary = (Get-Variable -name $Variable.Name -ValueOnly).Margin.Left + (Get-MBRPartitionWidth -MBRPartition (Get-Variable -name $Variable.Name -ValueOnly))
+        elseif ((Get-Variable -name $Variable.Name -ValueOnly).Margin.Left + (Get-GUIPartitionWidth -Partition (Get-Variable -name $Variable.Name -ValueOnly)) -gt $RightPartitionBoundary){
+            $RightPartitionBoundary = (Get-Variable -name $Variable.Name -ValueOnly).Margin.Left + (Get-GUIPartitionWidth -Partition (Get-Variable -name $Variable.Name -ValueOnly))
         }
 
     }
 
-    $Script:WPF_UI_DiskPartition_Disk_MBR.LeftDiskBoundary = 0 
-    $Script:WPF_UI_DiskPartition_Disk_MBR.RightDiskBoundary = $LeftDiskBoundary + (Get-Variable -name ($Prefix+'Disk_MBR') -ValueOnly).Children[0].Width
-    $Script:WPF_UI_DiskPartition_Disk_MBR.LeftPartitionBoundary = $LeftPartitionBoundary 
-    $Script:WPF_UI_DiskPartition_Disk_MBR.RightPartitionBoundary = $RightPartitionBoundary 
+    if ($PartitionType -eq 'MBR'){
+        $Script:WPF_UI_DiskPartition_Disk_MBR.LeftDiskBoundary = 0 
+        $Script:WPF_UI_DiskPartition_Disk_MBR.RightDiskBoundary = $LeftDiskBoundary + (Get-Variable -name ($Prefix+'Disk_MBR') -ValueOnly).Children[0].Width
+        $Script:WPF_UI_DiskPartition_Disk_MBR.LeftPartitionBoundary = $LeftPartitionBoundary 
+        $Script:WPF_UI_DiskPartition_Disk_MBR.RightPartitionBoundary = $RightPartitionBoundary 
+    }
+
+    if ($PartitionType -eq 'Amiga'){
+        $AmigaDisk.LeftDiskBoundary = 0 
+        $AmigaDisk.RightDiskBoundary = $LeftDiskBoundary + $AmigaDisk.Children[0].Width
+        $AmigaDisk.LeftPartitionBoundary = $LeftPartitionBoundary 
+        $AmigaDisk.RightPartitionBoundary = $RightPartitionBoundary 
+    }
 
 }
+
