@@ -5,7 +5,8 @@ function New-GUIPartition {
         $LeftMargin,
         $TopMargin,
         $RightMargin,
-        $BottomMargin
+        $BottomMargin,
+        $DefaultPartition
     )
     
     if ($PartitionType -eq 'FAT32'){
@@ -48,5 +49,27 @@ function New-GUIPartition {
 
     $NewPartition.Margin = [System.Windows.Thickness]"$LeftMargin,$TopMargin,$RightMargin,$BottomMargin"
 
+    if ($DefaultPartition -eq 'TRUE'){
+        $TotalChildren = $NewPartition.Children.Count-1
+        
+        for ($i = 0; $i -le $TotalChildren; $i++) {
+            if ($NewPartition.Children[$i].Name -eq 'FullSpace_Rectangle'){
+                if ($PartitionType -eq 'FAT32'){
+                    $NewPartition.Children[$i].Fill=$WPF_UI_DiskPartition_Window.Resources.DefaultFAT32Brush
+                }
+                elseif ($PartitionType -eq 'ID76'){
+                    $NewPartition.Children[$i].Fill=$WPF_UI_DiskPartition_Window.Resources.DefaultID76Brush
+                }
+                elseif ($PartitionType -eq 'Amiga'){
+                    Write-host "Wibble"
+                    $NewPartition.Children[$i].Fill='Black'
+                    $NewPartition.Children[$i].Fill=$WPF_UI_DiskPartition_Window.Resources.DefaultAmigaPartitionBrush
+                }
+            }
+
+        }
+    }
+
     return $NewPartition
 }
+

@@ -3,7 +3,8 @@ function Add-GUIPartitiontoMBRDisk {
         $Prefix,
         $PartitionType,
         $AddType,
-        $SizePixels
+        $SizePixels,
+        $DefaultPartition
     )
     
     #$Prefix = 'WPF_UI_DiskPartition_Partition_'
@@ -61,7 +62,7 @@ function Add-GUIPartitiontoMBRDisk {
     }
 
     
-    $NewPartition = New-GUIPartition -PartitionType $PartitionType -SizePixels $SizePixels -LeftMargin $LeftMargin  -TopMargin 0 -RightMargin 0 -BottomMargin 0
+    $NewPartition = New-GUIPartition -DefaultPartition $DefaultPartition -PartitionType $PartitionType -SizePixels $SizePixels -LeftMargin $LeftMargin  -TopMargin 0 -RightMargin 0 -BottomMargin 0
 
     Set-Variable -name $NewPartitionName -Scope Script -Value ((Get-Variable -Name NewPartition).Value)
     (Get-Variable -Name $NewPartitionName).Value.Name = $NewPartitionName

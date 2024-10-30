@@ -6,6 +6,60 @@
         xmlns:local="clr-namespace:WpfApp14"
         mc:Ignorable="d"
         Title="Partition Disk" Height="650" Width="900" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
+        <Window.Resources>
+    <VisualBrush 
+x:Key="DotFillBrush" 
+TileMode="Tile" 
+Viewport="0,0,10,10" 
+ViewportUnits="Absolute" 
+Viewbox="0,0,12,12"
+ViewboxUnits="Absolute">
+        <VisualBrush.Visual>
+            <Ellipse 
+    Fill="#00C0FF" 
+    Width="10" Height="10" />
+        </VisualBrush.Visual>
+    </VisualBrush>
+    <VisualBrush 
+      x:Key="DefaultFAT32Brush" 
+      TileMode="Tile" Viewport="0,0,10,10" 
+      ViewportUnits="Absolute" Viewbox="0,0,10,10"    
+      ViewboxUnits="Absolute">
+      <VisualBrush.Visual>
+        <Canvas>
+           <Rectangle Fill="Blue" Width="10" Height="10" />
+           <Path Stroke="White" Data="M 0 0 l 10 10" />
+           <Path Stroke="White" Data="M 0 10 l 10 -10" />
+        </Canvas>
+        </VisualBrush.Visual>
+    </VisualBrush>
+        <VisualBrush 
+      x:Key="DefaultID76Brush" 
+      TileMode="Tile" Viewport="0,0,10,10" 
+      ViewportUnits="Absolute" Viewbox="0,0,10,10"    
+      ViewboxUnits="Absolute">
+      <VisualBrush.Visual>
+        <Canvas>
+           <Rectangle Fill="Green" Width="10" Height="10" />
+           <Path Stroke="White" Data="M 0 0 l 10 10" />
+           <Path Stroke="White" Data="M 0 10 l 10 -10" />
+        </Canvas>
+        </VisualBrush.Visual>
+    </VisualBrush>
+            <VisualBrush 
+      x:Key="DefaultAmigaPartitionBrush" 
+      TileMode="Tile" Viewport="0,0,10,10" 
+      ViewportUnits="Absolute" Viewbox="0,0,10,10"    
+      ViewboxUnits="Absolute">
+      <VisualBrush.Visual>
+        <Canvas>
+           <Rectangle Fill="White" Width="10" Height="10" />
+           <Path Stroke="Yellow" Data="M 0 0 l 10 10" />
+           <Path Stroke="Yellow" Data="M 0 10 l 10 -10" />
+        </Canvas>
+        </VisualBrush.Visual>
+    </VisualBrush>
+</Window.Resources>
         <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
         <Grid x:Name="PartitionGrid_MBR" Margin="20,100,0,0" VerticalAlignment="Top" Height="100">
         </Grid>

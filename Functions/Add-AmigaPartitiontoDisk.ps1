@@ -2,7 +2,8 @@ function Add-AmigaPartitiontoDisk {
     param (
         $DiskName,
         $SizePixels,
-        $AddType
+        $AddType,
+        $DefaultPartition
     )
     
     # $DiskName = 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk'
@@ -15,7 +16,7 @@ function Add-AmigaPartitiontoDisk {
 
     $PartitionNumber = (Get-Variable -Name $DiskName).Value.NextPartitionNumber
 
-    Set-Variable -name ($DiskName+'_Partition_'+$PartitionNumber) -Scope script -value (New-GUIPartition -PartitionType 'Amiga' -SizePixels $SizePixels -LeftMargin $LeftMargin  -TopMargin 0 -RightMargin 0 -BottomMargin 0)
+    Set-Variable -name ($DiskName+'_Partition_'+$PartitionNumber) -Scope script -value (New-GUIPartition -DefaultPartition $DefaultPartition -PartitionType 'Amiga' -SizePixels $SizePixels -LeftMargin $LeftMargin  -TopMargin 0 -RightMargin 0 -BottomMargin 0)
 
     #$WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk.AddChild(
 
