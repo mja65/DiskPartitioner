@@ -21,4 +21,14 @@
             <Rectangle x:Name="LeftBorder_Rectangle" Grid.RowSpan="3" Grid.Column="0" Grid.Row ="0" Stroke="Black" StrokeThickness="5" />
             <Rectangle x:Name="RightBorder_Rectangle" Grid.RowSpan="3" Grid.Column="2" Grid.Row ="0" Stroke="Black" StrokeThickness="5" />
             <Rectangle x:Name="FullSpace_Rectangle" Grid.ColumnSpan="1" Fill="Yellow" Grid.Row="1" Grid.Column="1"/>
+                       <Grid.ContextMenu>
+<ContextMenu IsEnabled = "False" Visibility="Collapsed">
+    <MenuItem Header="New Partition">
+        <MenuItem x:Name="CreatePartitionLeft" Header="Create Partition - Left of Current Partition" ></MenuItem>
+         <MenuItem x:Name="CreatePartitionRight" Header="Create Partition - Right of Current Partition" ></MenuItem>
+    </MenuItem>
+    <MenuItem x:Name="DeletePartition" Header="Delete Partition"></MenuItem>
+    <MenuItem ></MenuItem>
+</ContextMenu>
+            </Grid.ContextMenu>
 </Grid>

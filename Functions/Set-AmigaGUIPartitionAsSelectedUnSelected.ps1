@@ -22,10 +22,15 @@ function Set-AmigaGUIPartitionAsSelectedUnSelected {
     }
 
     if ($Action -eq 'AmigaUnSelected'){
-        $Script:GUIActions.SelectedAmigaPartition = $null            
+        ((Get-Variable -Name $Script:GUIActions.SelectedAmigaPartition).Value).ContextMenu.IsOpen = ""
+        ((Get-Variable -Name $Script:GUIActions.SelectedAmigaPartition).Value).ContextMenu.IsEnabled = ""
+        ((Get-Variable -Name $Script:GUIActions.SelectedAmigaPartition).Value).ContextMenu.Visibility = "Collapsed"            
+        $Script:GUIActions.SelectedAmigaPartition = $null
     }
     elseif($Action -eq 'AmigaSelected'){
-        
+        ((Get-Variable -Name $Script:GUIActions.SelectedAmigaPartition).Value).ContextMenu.IsOpen = ""
+        ((Get-Variable -Name $Script:GUIActions.SelectedAmigaPartition).Value).ContextMenu.IsEnabled = "True"
+        ((Get-Variable -Name $Script:GUIActions.SelectedAmigaPartition).Value).ContextMenu.Visibility = "Visible"
     }
     
 }

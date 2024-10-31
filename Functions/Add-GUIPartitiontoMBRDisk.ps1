@@ -63,6 +63,28 @@ function Add-GUIPartitiontoMBRDisk {
 
     
     $NewPartition = New-GUIPartition -DefaultPartition $DefaultPartition -PartitionType $PartitionType -SizePixels $SizePixels -LeftMargin $LeftMargin  -TopMargin 0 -RightMargin 0 -BottomMargin 0
+    
+    if ($NewPartition.DefaultPartition -eq 'TRUE'){
+        for ($i = 0; $i -le $NewPartition.ContextMenu.Items.Count-1; $i++) {
+            if ($NewPartition.ContextMenu.Items[$i].Name -eq 'DeletePartition'){
+                if ($NewPartition.CanDelete -eq $false){
+                    $NewPartition.ContextMenu.Items[1].IsEnabled = ""
+                }
+            }
+        }
+        for ($i = 0; $i -le $NewPartition.ContextMenu.Items.Items.Count-1; $i++) {    
+            if ($NewPartition.ContextMenu.Items.Items[$i].Name -eq 'CreateID76Left'){
+                if ($NewPartition.CanResizeLeft -eq $false){
+                    $NewPartition.ContextMenu.Items.Items[$i].IsEnabled = ""
+                }
+            }
+            if ($NewPartition.ContextMenu.Items.Items[$i].Name -eq 'CreateFAT32Left'){
+                if ($NewPartition.CanResizeLeft -eq $false){
+                    $NewPartition.ContextMenu.Items.Items[$i].IsEnabled = ""
+                }
+            }
+        }
+    }
 
     Set-Variable -name $NewPartitionName -Scope Script -Value ((Get-Variable -Name NewPartition).Value)
     (Get-Variable -Name $NewPartitionName).Value.Name = $NewPartitionName
@@ -88,27 +110,52 @@ function Add-GUIPartitiontoMBRDisk {
             })
         }
     }
+"@
 
-    for (`$i = 0; `$i -le `$$NewPartitionName.ContextMenu.Items.Items.Count-1; `$i++) {
-    
+    Invoke-Expression $PSCommand  
+
+    $PSCommand = @"
+
+    for (`$i = 0; `$i -le `$$NewPartitionName.ContextMenu.Items.Items.Count-1; `$i++) {    
         if (`$$NewPartitionName.ContextMenu.Items.Items[`$i].Name -eq 'CreateID76Right'){
             `$$NewPartitionName.ContextMenu.Items.Items[`$i].add_click({
                 Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Right' -SizePixels `$Script:PistormSDCard.ID76MinimumSizePixels                
             })
         }
+    }
+"@
+
+    Invoke-Expression $PSCommand 
     
+    $PSCommand = @"
+
+    for (`$i = 0; `$i -le `$$NewPartitionName.ContextMenu.Items.Items.Count-1; `$i++) {    
         if (`$$NewPartitionName.ContextMenu.Items.Items[`$i].Name -eq 'CreateFAT32Left'){
             `$$NewPartitionName.ContextMenu.Items.Items[`$i].add_click({
                 Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'FAT32' -AddType 'Left' -SizePixels `$Script:PistormSDCard.FAT32MinimumSizePixels   
             })
         }
+    }
+"@
 
+    Invoke-Expression $PSCommand  
+
+    $PSCommand = @"
+
+    for (`$i = 0; `$i -le `$$NewPartitionName.ContextMenu.Items.Items.Count-1; `$i++) {    
         if (`$$NewPartitionName.ContextMenu.Items.Items[`$i].Name -eq 'CreateFAT32Right'){
             `$$NewPartitionName.ContextMenu.Items.Items[`$i].add_click({
                 Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'FAT32' -AddType 'Right' -SizePixels `$Script:PistormSDCard.FAT32MinimumSizePixels        
             })
         }
-        
+    }
+"@
+
+    Invoke-Expression $PSCommand  
+
+    $PSCommand = @"
+
+    for (`$i = 0; `$i -le `$$NewPartitionName.ContextMenu.Items.Items.Count-1; `$i++) {    
         if (`$$NewPartitionName.ContextMenu.Items.Items[`$i].Name -eq 'CreateID76Left'){
             `$$NewPartitionName.ContextMenu.Items.Items[`$i].add_click({
                 Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Left' -SizePixels `$Script:PistormSDCard.ID76MinimumSizePixels     
@@ -141,6 +188,5 @@ function Add-GUIPartitiontoMBRDisk {
     }
 
 }
-
 
 

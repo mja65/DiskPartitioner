@@ -3,17 +3,30 @@ function Set-MBRDiskActions {
      
     )
     
+
     $WPF_UI_DiskPartition_PartitionGrid_MBR.add_MouseLeftButtonDown({
 
+       
         $Script:GUIActions.MouseStatus = 'LeftButtonDown'
         $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Disk_MBR -Grid $WPF_UI_DiskPartition_PartitionGrid_MBR).MousePositionRelativetoWindowX
         $Script:GUIActions.MousePositionRelativetoWindowYatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Disk_MBR -Grid $WPF_UI_DiskPartition_PartitionGrid_MBR).MousePositionRelativetoWindowY
         
-        $RezizeAction = (Get-IsResizeZoneGUIPartition -ObjectName $Script:GUIActions.SelectedMBRPartition -MouseX $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress)
+        if ($Script:GUIActions.SelectedMBRPartition){
+            $RezizeAction = (Get-IsResizeZoneGUIPartition -ObjectName $Script:GUIActions.SelectedMBRPartition -MouseX $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress)
+        }
 
         if ($RezizeAction){
-            $Script:GUIActions.ActionToPerform = ('MBR_'+$RezizeAction)
+            if  (
+                (($RezizeAction -eq 'ResizeFromLeft') -and (((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).CanResizeLeft -eq $true)) -or `
+                (($RezizeAction -eq 'ResizeFromRight') -and (((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).CanResizeRight -eq $true))
+                ){
+                    $Script:GUIActions.ActionToPerform = ('MBR_'+$RezizeAction)
+            }
+            else{
+                Write-host 'Cannot Resize'
+            }
         }
+
         else{
             if ($Script:GUIActions.SelectedMBRPartition){
                 Set-MBRGUIPartitionAsSelectedUnSelected -Action 'MBRUnSelected'
@@ -21,7 +34,12 @@ function Set-MBRDiskActions {
             $Script:GUIActions.SelectedMBRPartition = (Get-SelectedGUIPartition -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'MBR' -MouseX $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress)
             if ($Script:GUIActions.SelectedMBRPartition){
                 Set-MBRGUIPartitionAsSelectedUnSelected -Action 'MBRSelected'
-                $Script:GUIActions.ActionToPerform = 'MBR_Move'
+                if (((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).CanMove -eq $false){
+                    Write-host 'Cannot move'
+                }
+                else{
+                    $Script:GUIActions.ActionToPerform = 'MBR_Move'
+                }
             } 
         }
              
@@ -53,4 +71,3 @@ function Set-MBRDiskActions {
     })
 
 }       
-

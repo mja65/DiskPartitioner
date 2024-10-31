@@ -28,6 +28,32 @@ function New-GUIPartition {
     $NewPartition | Add-Member -NotePropertyName PartitionType -NotePropertyValue $PartitionType
     $NewPartition | Add-Member -NotePropertyName PartitionSizeBytes -NotePropertyValue $null  
     $NewPartition |Add-Member -NotePropertyName PartitionTypeMBRorAmiga -NotePropertyValue $null
+    $NewPartition |Add-Member -NotePropertyName DefaultPartition -NotePropertyValue $DefaultPartition
+    $NewPartition |Add-Member -NotePropertyName CanResizeLeft -NotePropertyValue $null
+    $NewPartition |Add-Member -NotePropertyName CanResizeRight -NotePropertyValue $null
+    $NewPartition |Add-Member -NotePropertyName CanMove -NotePropertyValue $null
+    $NewPartition |Add-Member -NotePropertyName CanDelete  -NotePropertyValue $null
+
+
+    If ($DefaultPartition -eq 'TRUE'){
+        $NewPartition.CanDelete = $false
+        $NewPartition.CanResizeRight = $true
+        if ($PartitionType -eq 'FAT32'){
+            $NewPartition.CanMove = $false
+            $NewPartition.CanResizeLeft =$false
+        }
+        else{
+            $NewPartition.CanMove = $true
+            $NewPartition.CanResizeLeft =$true
+        }
+    }
+    else{
+        $NewPartition.CanDelete = $true
+        $NewPartition.CanResizeRight = $true
+        $NewPartition.CanResizeLeft =$true
+        $NewPartition.CanMove = $true
+    }
+
 
     if ($PartitionType -eq 'FAT32'){
         $NewPartition.PartitionTypeMBRorAmiga='MBR'
@@ -61,12 +87,9 @@ function New-GUIPartition {
                     $NewPartition.Children[$i].Fill=$WPF_UI_DiskPartition_Window.Resources.DefaultID76Brush
                 }
                 elseif ($PartitionType -eq 'Amiga'){
-                    Write-host "Wibble"
-                    $NewPartition.Children[$i].Fill='Black'
                     $NewPartition.Children[$i].Fill=$WPF_UI_DiskPartition_Window.Resources.DefaultAmigaPartitionBrush
                 }
             }
-
         }
     }
 

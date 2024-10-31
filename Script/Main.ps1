@@ -40,10 +40,6 @@ Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -DefaultPart
 Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -PartitionType 'ID76' -AddType 'Initial' -SizePixels 100
 
 Add-AmigaPartitiontoDisk -DiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -DefaultPartition 'TRUE' -SizePixels 100 -AddType 'Initial' 
-
-# $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk_Partition_1.Children[4].Fill=$WPF_UI_DiskPartition_Window.Resources.DefaultAmigaPartitionBrush
-#$WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk_Partition_1.Children[4].Fill = $WPF_UI_DiskPartition_Window.Resources.DefaultID76Brush 
-
 Add-AmigaPartitiontoDisk -DiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -SizePixels 100 -AddType 'Initial' 
 
 Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_' -PartitionType 'MBR'
