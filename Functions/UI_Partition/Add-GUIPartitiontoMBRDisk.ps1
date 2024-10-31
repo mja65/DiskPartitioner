@@ -106,7 +106,7 @@ function Add-GUIPartitiontoMBRDisk {
     for (`$i = 0; `$i -le `$$NewPartitionName.ContextMenu.Items.Count-1; `$i++) {
         if (`$$NewPartitionName.ContextMenu.Items[`$i].Name -eq 'DeletePartition'){
             `$$NewPartitionName.ContextMenu.Items[`$i].add_click({
-                Remove-GUIPartition -PartitionName '$NewPartitionName'
+                Remove-MBRGUIPartition -PartitionName '$NewPartitionName'
             })
         }
     }

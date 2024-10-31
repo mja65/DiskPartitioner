@@ -1,4 +1,4 @@
-function Remove-GUIPartition {
+function Remove-MBRGUIPartition {
     param (
         $PartitionName
     )

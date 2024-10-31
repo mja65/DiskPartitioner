@@ -1,30 +1,12 @@
 Set-Location -Path (Split-Path -Path $PSScriptRoot -Parent)
 
-Get-ChildItem -Path '.\GenericFunctions\' -Recurse | ForEach-Object {
-   . ($_).fullname
-    
+Get-ChildItem -Path '.\Functions\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
+    . ($_).fullname
 }
-
-Get-ChildItem -Path '.\Functions\' -Recurse | ForEach-Object {
+Get-ChildItem -Path '.\Variables\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
     . ($_).fullname
 }
 
-Remove-Variable -name WPF_UI_DiskPartition*
-
-$Script:GUIActions = [PSCustomObject]@{
-    MouseStatus = $null
-    ActionToPerform = $null
-    SelectedMBRPartition = $null
-    SelectedAmigaPartition = $null
-    MousePositionRelativetoWindowXatTimeofPress = $null
-    MousePositionRelativetoWindowYatTimeofPress = $null
-    IsAmigaPartitionShowing = $false
-}
-
-$Script:PistormSDCard = [PSCustomObject]@{
-    FAT32MinimumSizePixels = 100
-    ID76MinimumSizePixels = 100 
-}
 
 $MainWindow = (Get-MainWindow -WPFPrefix 'WPF_UI_DiskPartition_') 
 
@@ -48,6 +30,10 @@ Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_
 Set-PartitionWindowActions 
 Set-MBRDiskActions
 Set-AmigaDiskActions 
+
+Get-ChildItem -Path '.\UI_Actions\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
+    . ($_).fullname
+}
 
 $MainWindow.ShowDialog() | out-null
 

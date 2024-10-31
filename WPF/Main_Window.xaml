@@ -65,5 +65,6 @@ ViewboxUnits="Absolute">
         </Grid>
         <Grid x:Name="PartitionGrid_Amiga" Margin="20,250,0,0" VerticalAlignment="Top" Height="100">
         </Grid>
+        <TextBox x:Name="Input_DiskSize" HorizontalAlignment="Left" Margin="126,539,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         </Grid>
     </Window>
