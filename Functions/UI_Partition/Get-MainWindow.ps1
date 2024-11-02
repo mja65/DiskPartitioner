@@ -32,6 +32,11 @@ function Get-MainWindow {
 
     Set-WPFVariables -XAMLtoUse $MainWindow_XAML -WPFPrefix $WPFPrefix -Form $MainWindow 
 
+    Get-ChildItem -Path '.\UI_Actions\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
+        . ($_).fullname
+    }
+    
+
     return $MainWindow
 
 } 

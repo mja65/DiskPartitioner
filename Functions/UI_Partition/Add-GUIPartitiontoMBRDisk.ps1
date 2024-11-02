@@ -7,15 +7,25 @@ function Add-GUIPartitiontoMBRDisk {
         $DefaultPartition
     )
     
-    #$Prefix = 'WPF_UI_DiskPartition_Partition_'
-    #$PartitionType = 'FAT32'
-    #$PartitionType = 'ID76'
-    #$NewPartitionNumber = '1'
-    #$SizePixels = 100
-    #$LeftMargin = 0
+    # $Prefix = 'WPF_UI_DiskPartition_Partition_'
+    # $PartitionType = 'FAT32'
+    # $PartitionType = 'ID76'
+    # $NewPartitionNumber = '1'
+    # $SizePixels = 100
+    # $LeftMargin = 0
     
     $PrefixtoUse = ($Prefix+$PartitionType)
 
+    if (($Script:WPF_UI_DiskPartition_Disk_MBR.NumberofPartitionsFAT32 + $Script:WPF_UI_DiskPartition_Disk_MBR.NumberofPartitionsID76) -eq 4){
+        Write-host "Exceeded number of MBR Partitions"
+        return $false
+    }
+    if ($AddType -eq 'Initial'){
+        if ((Get-FreeSpace -Prefix $Prefix -PartitionType 'MBR') -lt $SizePixels){
+            Write-host "Insufficient free space"
+            return $false
+        }
+    }
     if ($PartitionType -eq 'FAT32'){
         $NewPartitionNumber = $Script:WPF_UI_DiskPartition_Disk_MBR.NextPartitionFAT32Number
         $Script:WPF_UI_DiskPartition_Disk_MBR.NextPartitionFAT32Number += 1
@@ -26,8 +36,7 @@ function Add-GUIPartitiontoMBRDisk {
         $Script:WPF_UI_DiskPartition_Disk_MBR.NextPartitionID76Number += 1
         $Script:WPF_UI_DiskPartition_Disk_MBR.NumberofPartitionsID76 += 1
     }
-    $Script:WPF_UI_DiskPartition_Disk_MBR.NumberofPartitionsTotal += 1
-    
+        
     $NewPartitionName = ($PrefixtoUse+'_'+$NewPartitionNumber) 
     
     if ($PartitionType -eq 'FAT32'){
@@ -185,8 +194,11 @@ function Add-GUIPartitiontoMBRDisk {
 
     If ($PartitionType -eq 'ID76'){
         Add-AmigaDisktoID76Partition -ID76PartitionName $NewPartitionName
+        Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_' -PartitionType 'Amiga' -AmigaDisk ((Get-Variable -name ($NewPartitionName+'_AmigaDisk')).value)
     }
-
+    
+    $Script:WPF_UI_DiskPartition_Disk_MBR.NumberofPartitionsTotal += 1
+    return $true
 }
 
 
