@@ -18,11 +18,15 @@ $Script:WPF_UI_DiskPartition_PartitionGrid_MBR.AddChild($WPF_UI_DiskPartition_Di
 
 Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_' -PartitionType 'MBR'
 
-Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -DefaultPartition 'TRUE' -PartitionType 'FAT32' -AddType 'Initial'-SizePixels 100
-Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -DefaultPartition 'TRUE' -PartitionType 'ID76' -AddType 'Initial' -SizePixels 100
+if(Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -DefaultPartition 'TRUE' -PartitionType 'FAT32' -AddType 'Initial'-SizePixels 100){
 
-Add-AmigaPartitiontoDisk -DiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -DefaultPartition 'TRUE' -SizePixels 100 -AddType 'Initial' 
-Add-AmigaPartitiontoDisk -DiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -SizePixels 100 -AddType 'Initial' 
+}
+if(Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -DefaultPartition 'TRUE' -PartitionType 'ID76' -AddType 'Initial' -SizePixels 100){
+
+}
+
+Add-AmigaPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -AmigaDiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -DefaultPartition 'TRUE' -SizePixels 100 -AddType 'Initial' 
+Add-AmigaPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -AmigaDiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -SizePixels 100 -AddType 'Initial' 
 
 Set-PartitionWindowActions 
 Set-MBRDiskActions
@@ -31,3 +35,4 @@ Set-AmigaDiskActions
 $MainWindow.ShowDialog() | out-null
 
 #$MainWindow.close() | out-null
+

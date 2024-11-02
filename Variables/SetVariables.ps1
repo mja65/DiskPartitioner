@@ -1,6 +1,6 @@
 Remove-Variable -name WPF_UI_DiskPartition*
 
-$Script:Options = [PSCustomObject]@{
+$Script:Settings = [PSCustomObject]@{
     LogLocation = '.\Logs\Log.txt'
     LogFolder = '.\Logs\'
     LogDateTime = (Get-Date -Format yyyyMMddHHmmss).tostring()
@@ -17,10 +17,6 @@ $Script:GUIActions = [PSCustomObject]@{
     MousePositionRelativetoWindowXatTimeofPress = $null
     MousePositionRelativetoWindowYatTimeofPress = $null
     IsAmigaPartitionShowing = $false
-}
-
-$Script:GUIUIInput = [PSCustomObject]@{
-    DiskSizeBytes = $null
 }
 
 $Script:PistormSDCard = [PSCustomObject]@{

@@ -1,16 +1,22 @@
 function Add-AmigaPartitiontoDisk {
     param (
-        $DiskName,
+        $Prefix,
+        $AmigaDiskName,
         $SizePixels,
         $AddType,
         $DefaultPartition
     )
     
-    # $DiskName = 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk'
+    # $Prefix = 'WPF_UI_DiskPartition_Partition_'
+    # $AmigaDiskName = 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk'
     # $SizePixels = 100
     
     if ($AddType -eq 'Initial'){
-        $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'Amiga' -Prefix $DiskName).EndingPosition
+        if ((Get-FreeSpace -Prefix $Prefix -PartitionType 'Amiga' -AmigaDiskName $AmigaDiskName) -lt $SizePixels){
+            Write-host "Insufficient free space"
+            return $false
+        }
+        $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'Amiga' -Prefix $AmigaDiskName).EndingPosition
     }
 
     elseif ($AddType -eq 'Right'){
@@ -36,15 +42,15 @@ function Add-AmigaPartitiontoDisk {
     }
 
 
-    $PartitionNumber = (Get-Variable -Name $DiskName).Value.NextPartitionNumber
+    $PartitionNumber = (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber
 
-    $NewPartitionName = ($DiskName+'_Partition_'+$PartitionNumber)
+    $NewPartitionName = ($AmigaDiskName+'_Partition_'+$PartitionNumber)
 
     Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -DefaultPartition $DefaultPartition -PartitionType 'Amiga' -SizePixels $SizePixels -LeftMargin $LeftMargin -TopMargin 0 -RightMargin 0 -BottomMargin 0)
 
-    (Get-Variable -Name $DiskName).Value.AddChild(((Get-Variable -name $NewPartitionName).value))
+    (Get-Variable -Name $AmigaDiskName).Value.AddChild(((Get-Variable -name $NewPartitionName).value))
 
-    (Get-Variable -Name $DiskName).Value.NextPartitionNumber += 1
+    (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber += 1
 
     if ($DefaultPartition -eq 'TRUE'){
         for ($i = 0; $i -le (Get-Variable -name $NewPartitionName).Value.ContextMenu.Items.Count-1; $i++) {
@@ -88,7 +94,7 @@ function Add-AmigaPartitiontoDisk {
     for (`$i = 0; `$i -le `$$NewPartitionName.ContextMenu.Items.Items.Count-1; `$i++) {    
         if (`$$NewPartitionName.ContextMenu.Items.Items[`$i].Name -eq 'CreatePartitionLeft'){
             `$$NewPartitionName.ContextMenu.Items.Items[`$i].add_click({
-                Add-AmigaPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -DiskName (`$Script:GUIActions.SelectedMBRPartition+'_AmigaDisk') -PartitionType 'Amiga' -AddType 'Left' -SizePixels `$Script:PistormSDCard.AmigaMinimumSizePixels   
+                Add-AmigaPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -AmigaDiskName (`$Script:GUIActions.SelectedMBRPartition+'_AmigaDisk') -PartitionType 'Amiga' -AddType 'Left' -SizePixels `$Script:PistormSDCard.AmigaMinimumSizePixels   
             })
         }
     }
@@ -101,7 +107,7 @@ function Add-AmigaPartitiontoDisk {
     for (`$i = 0; `$i -le `$$NewPartitionName.ContextMenu.Items.Items.Count-1; `$i++) {    
         if (`$$NewPartitionName.ContextMenu.Items.Items[`$i].Name -eq 'CreatePartitionRight'){
             `$$NewPartitionName.ContextMenu.Items.Items[`$i].add_click({
-                Add-AmigaPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -DiskName (`$Script:GUIActions.SelectedMBRPartition+'_AmigaDisk') -PartitionType 'Amiga' -AddType 'Right' -SizePixels `$Script:PistormSDCard.AmigaMinimumSizePixels        
+                Add-AmigaPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -AmigaDiskName (`$Script:GUIActions.SelectedMBRPartition+'_AmigaDisk') -PartitionType 'Amiga' -AddType 'Right' -SizePixels `$Script:PistormSDCard.AmigaMinimumSizePixels        
             })
         }
     }
