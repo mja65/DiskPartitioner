@@ -6,10 +6,16 @@ function Set-PartitionWindowActions {
 
     $WPF_UI_DiskPartition_Window.add_MouseLeftButtonDown({
 
+        $DistancefromTop_MBR = ($WPF_UI_DiskPartition_PartitionGrid_MBR.Margin.Top+$WPF_UI_DiskPartition_Grid_MBR.Margin.Top)
+        $DistancefromLeft_MBR = ($WPF_UI_DiskPartition_PartitionGrid_MBR.Margin.left+$WPF_UI_DiskPartition_Grid_MBR.Margin.Left)
+        
+        $DistancefromTop_Amiga = ($WPF_UI_DiskPartition_PartitionGrid_Amiga.Margin.Top+$WPF_UI_DiskPartition_Grid_Amiga.Margin.Top)
+        $DistancefromLeft_Amiga = ($WPF_UI_DiskPartition_PartitionGrid_Amiga.Margin.left+$WPF_UI_DiskPartition_Grid_Amiga.Margin.Left)
+        
         $OutofRangeMBRPartition = if(
-                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowY -lt $WPF_UI_DiskPartition_PartitionGrid_MBR.Margin.Top) -or `
-                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowY -gt ($WPF_UI_DiskPartition_PartitionGrid_MBR.Margin.Top + 100)) -or `
-                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowX -lt ($WPF_UI_DiskPartition_PartitionGrid_MBR.Margin.left -10))
+                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowY -lt $DistancefromTop_MBR) -or `
+                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowY -gt ($DistancefromTop_MBR + 100)) -or `
+                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowX -lt ($DistancefromLeft_MBR -10))
                                 ){
                                     $true
                                 }
@@ -18,9 +24,9 @@ function Set-PartitionWindowActions {
                                 }
                                         
         $OutofRangeAmigaPartition =  if(
-                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowY -lt $WPF_UI_DiskPartition_PartitionGrid_Amiga.Margin.Top) -or `
-                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowY -gt ($WPF_UI_DiskPartition_PartitionGrid_Amiga.Margin.Top + 100)) -or `
-                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowX -lt ($WPF_UI_DiskPartition_PartitionGrid_Amiga.Margin.left -10))
+                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowY -lt $DistancefromTop_Amiga) -or `
+                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowY -gt ($DistancefromTop_Amiga + 100)) -or `
+                                    ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window).MousePositionRelativetoWindowX -lt ($DistancefromLeft_Amiga -10))
                                     ){
                                         $true
                                      }

@@ -60,47 +60,86 @@ ViewboxUnits="Absolute">
         </VisualBrush.Visual>
     </VisualBrush>
 </Window.Resources>
-        <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
-        <Grid x:Name="PartitionGrid_MBR" Margin="20,100,0,0" VerticalAlignment="Top" Height="100">
+    <Grid x:Name="Grid_Partitioning" Background="#FFE5E5E5" Margin="0,0,0,0">
+        <Grid x:Name="Grid_MBR" Margin="20,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Visible" >
+            <Button x:Name="MBRPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" Margin="50,0,0,0">
+                <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform Y="-1"/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+            </Button>
+            <Button x:Name="MBRPartitionSelect_LeftArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" RenderTransformOrigin="0.5,0.5" Margin="10,0,0,0"  >
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="180"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform Y="-1"/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+            </Button>
+            <Button x:Name="Button_RemoveFreeSpace" Content="Remove Free Space Between Partitions" HorizontalAlignment="Left" Margin="114,15,0,0" VerticalAlignment="Top" Height="20"/>
+            <Button x:Name="Button_AddNewFAT32Partition" Content="Add new FAT 32 partition" HorizontalAlignment="Left" Margin="450,5,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
+            <Button x:Name="Button_AddNewID76Partition" Content="Add new ID76 partition" HorizontalAlignment="Left" Margin="450,30,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
+            <Grid x:Name="PartitionGrid_MBR" Margin="0,60,0,0" VerticalAlignment="Top" Height="100">
+            </Grid>
         </Grid>
-        <Grid x:Name="PartitionGrid_Amiga" Margin="20,250,0,0" VerticalAlignment="Top" Height="100">
+        <Grid x:Name="Grid_Amiga" Margin="20,220,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden">
+              <Button x:Name="AmigaPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" Margin="50,0,0,0">
+      <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
+          <Path.RenderTransform>
+              <TransformGroup>
+                  <ScaleTransform/>
+                  <SkewTransform/>
+                  <RotateTransform/>
+                  <TranslateTransform Y="-1"/>
+              </TransformGroup>
+          </Path.RenderTransform>
+      </Path>
+  </Button>
+  <Button x:Name="AmigaPartitionSelect_LeftArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" RenderTransformOrigin="0.5,0.5" Margin="10,0,0,0"  >
+      <Button.RenderTransform>
+          <TransformGroup>
+              <ScaleTransform/>
+              <SkewTransform/>
+              <RotateTransform Angle="180"/>
+              <TranslateTransform/>
+          </TransformGroup>
+      </Button.RenderTransform>
+      <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
+          <Path.RenderTransform>
+              <TransformGroup>
+                  <ScaleTransform/>
+                  <SkewTransform/>
+                  <RotateTransform/>
+                  <TranslateTransform Y="-1"/>
+              </TransformGroup>
+          </Path.RenderTransform>
+      </Path>
+  </Button>
+            <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition at end of Disk" HorizontalAlignment="Left" Margin="294,00,0,0" VerticalAlignment="Top" Height="20"/>
+            <Grid x:Name="PartitionGrid_Amiga" Margin="0,50,0,0" VerticalAlignment="Top" Height="100">
+            </Grid>
         </Grid>
+
         <TextBox x:Name="Input_DiskSize" HorizontalAlignment="Left" Margin="126,539,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="MBRPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" Margin="50,50,0,0">
-    <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
-        <Path.RenderTransform>
-            <TransformGroup>
-                <ScaleTransform/>
-                <SkewTransform/>
-                <RotateTransform/>
-                <TranslateTransform Y="-1"/>
-            </TransformGroup>
-        </Path.RenderTransform>
-    </Path>
-</Button>
-        <Button x:Name="MBRPartitionSelect_LeftArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" RenderTransformOrigin="0.5,0.5" Margin="10,50,0,0"  >
-    <Button.RenderTransform>
-        <TransformGroup>
-            <ScaleTransform/>
-            <SkewTransform/>
-            <RotateTransform Angle="180"/>
-            <TranslateTransform/>
-        </TransformGroup>
-    </Button.RenderTransform>
-    <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
-        <Path.RenderTransform>
-            <TransformGroup>
-                <ScaleTransform/>
-                <SkewTransform/>
-                <RotateTransform/>
-                <TranslateTransform Y="-1"/>
-            </TransformGroup>
-        </Path.RenderTransform>
-    </Path>
-</Button>
-        <Button x:Name="Button_RemoveFreeSpace" Content="Remove Free Space Between Partitions" HorizontalAlignment="Left" Margin="114,55,0,0" VerticalAlignment="Top" Height="20"/>
-        <Button x:Name="Button_AddNewFAT32Partition" Content="Add new FAT 32 partition" HorizontalAlignment="Left" Margin="450,40,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
-        <Button x:Name="Button_AddNewID76Partition" Content="Add new ID76 partition" HorizontalAlignment="Left" Margin="450,60,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
-        <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition at end of Disk" HorizontalAlignment="Left" Margin="314,210,0,0" VerticalAlignment="Top" Height="20"/>
-        </Grid>
-    </Window>
+       
+
+    </Grid>
+</Window>

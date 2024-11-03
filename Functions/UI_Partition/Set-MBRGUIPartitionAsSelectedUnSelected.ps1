@@ -27,20 +27,28 @@ function Set-MBRGUIPartitionAsSelectedUnSelected {
         ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).ContextMenu.IsOpen = ""
         ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).ContextMenu.IsEnabled = ""
         ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).ContextMenu.Visibility = "Collapsed"
+        $WPF_UI_DiskPartition_Grid_Amiga.Visibility = 'Hidden'
         if ($Script:WPF_UI_DiskPartition_PartitionGrid_Amiga.Children){
             $Script:WPF_UI_DiskPartition_PartitionGrid_Amiga.Children.Remove(((Get-Variable -Name ($Script:GUIActions.SelectedMBRPartition+'_AmigaDisk')).value))
                 
         }
         $Script:GUIActions.IsAmigaPartitionShowing = $false
-        $Script:GUIActions.SelectedMBRPartition = $null            
+        $Script:GUIActions.SelectedMBRPartition = $null
+        if ($Script:GUIActions.SelectedAmigaPartition){
+            Set-AmigaGUIPartitionAsSelectedUnSelected -Action 'AmigaUnselected'            
+        }
     }
     elseif($Action -eq 'MBRSelected'){
         ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).ContextMenu.IsOpen = ""
         ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).ContextMenu.IsEnabled = "True"
         ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).ContextMenu.Visibility = "Visible"
         if (((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).PartitionType -eq 'ID76'){
+            $WPF_UI_DiskPartition_Grid_Amiga.Visibility ='Visible'
             $Script:WPF_UI_DiskPartition_PartitionGrid_Amiga.AddChild(((Get-Variable -Name ($Script:GUIActions.SelectedMBRPartition+'_AmigaDisk')).value))
             $Script:GUIActions.IsAmigaPartitionShowing = $true
+        }
+        else{
+            $WPF_UI_DiskPartition_Grid_Amiga.Visibility = 'Hidden'
         }
     }       
 

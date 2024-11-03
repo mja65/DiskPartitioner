@@ -35,4 +35,3 @@ Set-AmigaDiskActions
 $MainWindow.ShowDialog() | out-null
 
 #$MainWindow.close() | out-null
-

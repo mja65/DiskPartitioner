@@ -8,9 +8,9 @@ function Set-AmigaDiskActions {
         Write-Host $Script:GUIActions.SelectedMBRPartition
         If ($Script:GUIActions.SelectedMBRPartition){
             $Script:GUIActions.MouseStatus = 'AmigaLeftButtonDown'
-            $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk -Grid $WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowX
+            $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk -MainGrid $WPF_UI_DiskPartition_Grid_Amiga -Grid $WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowX
             Write-host $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress 
-            $Script:GUIActions.MousePositionRelativetoWindowYatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk -Grid $WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowY
+            $Script:GUIActions.MousePositionRelativetoWindowYatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk -MainGrid $WPF_UI_DiskPartition_Grid_Amiga -Grid $WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowY
         
             $RezizeAction = (Get-IsResizeZoneGUIPartition -ObjectName $Script:GUIActions.SelectedAmigaPartition -MouseX $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress)
         
@@ -41,7 +41,7 @@ function Set-AmigaDiskActions {
     $WPF_UI_DiskPartition_PartitionGrid_Amiga.add_MouseMove({
         if ($Script:GUIActions.SelectedAmigaPartition){
             Start-Sleep -Milliseconds 5
-            $AmountMoved = ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk -Grid $WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowX) - $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress
+            $AmountMoved = ((Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk -MainGrid $WPF_UI_DiskPartition_Grid_Amiga -Grid $WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowX) - $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress
             if ($Script:GUIActions.ActionToPerform -eq 'Amiga_Move'){
                 Set-GUIPartitionNewPosition -PartitionType 'Amiga' -Partition ((Get-Variable -Name $Script:GUIActions.SelectedAmigaPartition).Value) -AmountMoved $AmountMoved 
             }
@@ -50,8 +50,8 @@ function Set-AmigaDiskActions {
             }
               
          
-            $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk -Grid $WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowX
-            $Script:GUIActions.MousePositionRelativetoWindowYatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk -Grid $WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowY
+            $Script:GUIActions.MousePositionRelativetoWindowXatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk -MainGrid $WPF_UI_DiskPartition_Grid_Amiga -Grid $WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowX
+            $Script:GUIActions.MousePositionRelativetoWindowYatTimeofPress = (Get-MouseCoordinatesRelativetoWindow -Window $WPF_UI_DiskPartition_Window -Disk $WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk -MainGrid $WPF_UI_DiskPartition_Grid_Amiga -Grid $WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowY
         } 
     })
 
