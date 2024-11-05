@@ -65,7 +65,7 @@ function Add-AmigaPartitiontoDisk {
     $PSCommand = @"
 
     `$$NewPartitionName.add_MouseMove({
-        if(Get-IsResizeZoneGUIPartition -ObjectName `$Script:GUIActions.SelectedAmigaPartition -MouseX ((Get-MouseCoordinatesRelativetoWindow -Window `$WPF_UI_DiskPartition_Window -Disk `$WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk  -Grid `$WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowX)){
+        if(Get-IsResizeZoneGUIPartition -ObjectName `$Script:GUIActions.SelectedAmigaPartition -MouseX ((Get-MouseCoordinatesRelativetoWindow -Window `$WPF_UI_DiskPartition_Window -Disk `$WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk  -MainGrid `$WPF_UI_DiskPartition_Grid_Amiga -Grid `$WPF_UI_DiskPartition_PartitionGrid_Amiga).MousePositionRelativetoWindowX)){
             `$$NewPartitionName.Cursor = "SizeWE"
         }
         else{

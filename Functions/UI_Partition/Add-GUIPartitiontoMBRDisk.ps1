@@ -181,7 +181,7 @@ function Add-GUIPartitiontoMBRDisk {
     $PSCommand = @"
     
     `$$NewPartitionName.add_MouseMove({
-        if (Get-IsResizeZoneGUIPartition -ObjectName `$Script:GUIActions.SelectedMBRPartition -MouseX ((Get-MouseCoordinatesRelativetoWindow -Window `$WPF_UI_DiskPartition_Window -Disk `$WPF_UI_DiskPartition_Disk_MBR -Grid `$WPF_UI_DiskPartition_PartitionGrid_MBR).MousePositionRelativetoWindowX)){
+        if (Get-IsResizeZoneGUIPartition -ObjectName `$Script:GUIActions.SelectedMBRPartition -MouseX ((Get-MouseCoordinatesRelativetoWindow -Window `$WPF_UI_DiskPartition_Window -MainGrid `$WPF_UI_DiskPartition_Grid_MBR -Grid `$WPF_UI_DiskPartition_PartitionGrid_MBR -Disk `$WPF_UI_DiskPartition_Disk_MBR).MousePositionRelativetoWindowX)){
             `$$NewPartitionName.Cursor = "SizeWE"
         }
         else{

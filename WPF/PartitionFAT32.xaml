@@ -7,14 +7,14 @@
     mc:Ignorable="d"
     Grid.Column="4" Grid.Row="3">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5" ></ColumnDefinition>
-            <ColumnDefinition x:Name="FullSpace" Width="90"></ColumnDefinition>
-            <ColumnDefinition Width="5" ></ColumnDefinition>
+            <ColumnDefinition Width="2" ></ColumnDefinition>
+            <ColumnDefinition x:Name="FullSpace" Width="94"></ColumnDefinition>
+            <ColumnDefinition Width="2" ></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="5" ></RowDefinition>
-            <RowDefinition Height="90"></RowDefinition>
-            <RowDefinition Height="5" ></RowDefinition>
+            <RowDefinition Height="2" ></RowDefinition>
+            <RowDefinition Height="96"></RowDefinition>
+            <RowDefinition Height="2" ></RowDefinition>
         </Grid.RowDefinitions>
             <Rectangle x:Name="TopBorder_Rectangle" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0" Stroke="Black" StrokeThickness="5" />
             <Rectangle x:Name="BottomBorder_Rectangle" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="3" Stroke="Black" StrokeThickness="5" />

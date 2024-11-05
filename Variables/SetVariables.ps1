@@ -24,4 +24,3 @@ $Script:PistormSDCard = [PSCustomObject]@{
     ID76MinimumSizePixels = 100 
     AmigaMinimumSizePixels = 100
 }
-

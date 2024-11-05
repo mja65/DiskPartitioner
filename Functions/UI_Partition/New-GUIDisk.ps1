@@ -26,7 +26,9 @@ function New-GUIDisk {
     }
 
     $NewDisk_Grid | Add-Member -NotePropertyName NumberofPartitionsTotal -NotePropertyValue 0
-    $NewDisk_Grid | Add-Member -NotePropertyName DiskSizeBytes -NotePropertyValue $null  
+    $NewDisk_Grid | Add-Member -NotePropertyName DiskSizeBytes -NotePropertyValue $null 
+    $NewDisk_Grid | Add-Member -NotePropertyName DiskSizePixels -NotePropertyValue $null 
+    $NewDisk_Grid | Add-Member -NotePropertyName BytestoPixelFactor -NotePropertyValue $null
 
     $NewDisk_Grid.AddChild($NewDisk)
     

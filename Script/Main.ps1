@@ -11,7 +11,7 @@ $MainWindow = (Get-MainWindow -WPFPrefix 'WPF_UI_DiskPartition_')
 
 #Get-Variable
 
-#[System.Windows.Window].GetEvents() | Select-Object Name, *Method, EventHandlerType
+#[System.Windows.Controls.ComboBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
 
 $WPF_UI_DiskPartition_Disk_MBR = New-GUIDisk -Prefix 'WPF_UI_DiskPartition_' -DiskType 'MBR'
 $Script:WPF_UI_DiskPartition_PartitionGrid_MBR.AddChild($WPF_UI_DiskPartition_Disk_MBR)

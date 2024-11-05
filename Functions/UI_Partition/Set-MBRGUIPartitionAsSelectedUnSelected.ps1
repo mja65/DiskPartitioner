@@ -4,7 +4,7 @@ function Set-MBRGUIPartitionAsSelectedUnSelected {
     )
     
     #$Script:GUIActions.SelectedMBRPartition = 'WPF_UI_DiskPartition_Partition_ID76_1'
-  
+    Update_UI_Partition
     $TotalChildren = ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).Children.Count-1
     
     for ($i = 0; $i -le $TotalChildren; $i++) {
@@ -38,7 +38,7 @@ function Set-MBRGUIPartitionAsSelectedUnSelected {
             Set-AmigaGUIPartitionAsSelectedUnSelected -Action 'AmigaUnselected'            
         }
     }
-    elseif($Action -eq 'MBRSelected'){
+    elseif($Action -eq 'MBRSelected'){       
         ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).ContextMenu.IsOpen = ""
         ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).ContextMenu.IsEnabled = "True"
         ((Get-Variable -Name $Script:GUIActions.SelectedMBRPartition).Value).ContextMenu.Visibility = "Visible"

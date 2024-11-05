@@ -23,7 +23,7 @@ function Get-MouseCoordinatesRelativetoWindow {
 
     $GUICoordinates.MousePositionX =  (([System.Windows.Forms.Cursor]::position).x)
     $GUICoordinates.MousePositionY =  (([System.Windows.Forms.Cursor]::position).y)
-    $GUICoordinates.MousePositionRelativetoWindowX =  $GUICoordinates.MousePositionX - ($Window.Left) - ($MainGrid.Left) - ($Grid.Margin.Left) - ($Disk.Margin.Left) - $MicrosoftWindowThicknessHorizontal 
+    $GUICoordinates.MousePositionRelativetoWindowX =  $GUICoordinates.MousePositionX - ($Window.Left) - ($MainGrid.Margin.Left) - ($Grid.Margin.Left) - ($Disk.Margin.Left) - $MicrosoftWindowThicknessHorizontal 
     $GUICoordinates.MousePositionRelativetoWindowY =  $GUICoordinates.MousePositionY - ($Window.Top) - $MicrosoftWindowTitle 
     return $GUICoordinates
 }

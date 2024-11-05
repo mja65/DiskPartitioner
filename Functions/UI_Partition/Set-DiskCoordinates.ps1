@@ -25,10 +25,12 @@ function Set-DiskCoordinates {
     if ($PartitionType -eq 'MBR'){
         $Script:WPF_UI_DiskPartition_Disk_MBR.LeftDiskBoundary = 0 
         $Script:WPF_UI_DiskPartition_Disk_MBR.RightDiskBoundary = $LeftDiskBoundary + (Get-Variable -name ($Prefix+'Disk_MBR') -ValueOnly).Children[0].Width
+        $Script:WPF_UI_DiskPartition_Disk_MBR.DiskSizePixels =  $WPF_UI_DiskPartition_Disk_MBR.RightDiskBoundary-$WPF_UI_DiskPartition_Disk_MBR.LefttDiskBoundary
     }
     elseif ($PartitionType -eq 'Amiga'){
         $AmigaDisk.LeftDiskBoundary = 0 
         $AmigaDisk.RightDiskBoundary = $LeftDiskBoundary + $AmigaDisk.Children[0].Width
+        $AmigaDisk.DiskSizePixels = $AmigaDisk.RightDiskBoundary - $AmigaDisk.LeftDiskBoundary 
     }
 
 }
