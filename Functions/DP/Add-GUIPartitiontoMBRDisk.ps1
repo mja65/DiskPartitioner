@@ -1,0 +1,105 @@
+function Add-GUIPartitiontoMBRDisk {
+    param (
+        $PartitionType,
+        $AddType,
+        $PartitionNameNextto, 
+        $SizeBytes,
+        $DefaultPartition
+    )
+    
+    # $PartitionType = 'FAT32'
+    # $PartitionType = 'ID76'
+    # $NewPartitionNumber = '1'
+    # $SizePixels = 100
+    # $LeftMargin = 0
+    # $PartitionNameNextto = 'WPF_DP_Partition_ID76_1'
+    
+    $SizePixels = $SizeBytes/$Script:WPF_DP_Disk_MBR.BytestoPixelFactor
+    if ($SizePixels -gt 4){
+        $SizePixels -= 4
+    }
+    if (($Script:WPF_DP_Disk_MBR.NumberofPartitionsFAT32 + $Script:WPF_DP_Disk_MBR.NumberofPartitionsID76) -eq 4){
+        Write-host "Exceeded number of MBR Partitions"
+        return 1
+    }
+    
+    $AvailableFreeSpace = (Confirm-DiskFreeSpace -Disk $WPF_DP_Disk_MBR -Position $AddType -PartitionNameNextto $PartitionNameNextto)
+    if ($AvailableFreeSpace -lt $SizeBytes){
+        Write-host "Insufficient free Space!"
+        return 2
+    }
+
+    if ($PartitionType -eq 'FAT32'){
+        $NewPartitionNumber = $Script:WPF_DP_Disk_MBR.NextPartitionFAT32Number
+    }
+    elseif ($PartitionType -eq 'ID76'){
+        $NewPartitionNumber = $Script:WPF_DP_Disk_MBR.NextPartitionID76Number       
+    }
+        
+    $NewPartitionName = ($Script:DP_Settings.PartitionPrefix+$PartitionType+'_'+$NewPartitionNumber)  
+  
+    if ($AddType -eq 'AtEnd'){
+        $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'MBR').EndingPositionPixels
+        $StartingPositionBytes = (Get-GUIPartitionStartEnd -PartitionType 'MBR').EndingPositionBytes
+    }
+    else{
+        $PartitionNameNexttoDetails = (Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -eq $PartitionNameNextto}) 
+        if ($AddType -eq 'Right'){
+            $LeftMargin = $PartitionNameNexttoDetails.RightMargin
+            $StartingPositionBytes = $PartitionNameNexttoDetails.EndingPositionBytes
+        }
+        elseif ($AddType -eq 'Left'){
+            $LeftMargin = $PartitionNameNexttoDetails.LeftMargin - ($SizeBytes/$WPF_DP_Disk_MBR.BytestoPixelFactor)
+            $StartingPositionBytes = $PartitionNameNexttoDetails.StartingPositionBytes - $SizeBytes
+        }
+    }
+    
+    $NewPartition = New-GUIPartition -DefaultPartition $DefaultPartition -PartitionType $PartitionType 
+    $NewPartition.PartitionSizeBytes = $SizeBytes
+    $NewPartition.StartingPositionBytes = $StartingPositionBytes
+
+    $NewPartition.Margin = [System.Windows.Thickness]"$LeftMargin,0,0,0"
+    
+    $TotalColumns = $NewPartition.ColumnDefinitions.Count-1
+    for ($i = 0; $i -le $TotalColumns; $i++) {
+        if  ($NewPartition.ColumnDefinitions[$i].Name -eq 'FullSpace'){
+            $NewPartition.ColumnDefinitions[$i].Width = $SizePixels
+        } 
+    }
+
+    Set-Variable -name $NewPartitionName -Scope Script -Value ((Get-Variable -Name NewPartition).Value)
+    (Get-Variable -Name $NewPartitionName).Value.Name = $NewPartitionName
+ 
+    $PSCommand = @"
+    
+        `$Script:WPF_DP_DiskGrid_MBR.AddChild(`$$NewPartitionName)
+
+"@
+
+    Invoke-Expression $PSCommand  
+
+    
+    If ($PartitionType -eq 'ID76'){
+        Add-AmigaDisktoID76Partition -ID76PartitionName $NewPartitionName
+        if ($DefaultPartition -eq $true){
+            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault -AddType 'AtEnd' -DefaultPartition $true
+            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes ($SizeBytes-$Script:SDCardMinimumsandMaximums.WorkbenchDefault) -AddType 'AtEnd' 
+        }
+       # Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_' -PartitionType 'Amiga' -AmigaDisk ((Get-Variable -name ($NewPartitionName+'_AmigaDisk')).value)
+        #Set-AmigaDiskSizeBytes -ID76PartitionName $NewPartitionName -AmigaDisk ((Get-Variable -name ($NewPartitionName+'_AmigaDisk')).value)
+    }
+    
+    if ($PartitionType -eq 'FAT32'){
+        $NewPartitionNumber = $Script:WPF_DP_Disk_MBR.NextPartitionFAT32Number
+        $Script:WPF_DP_Disk_MBR.NextPartitionFAT32Number += 1
+        $Script:WPF_DP_Disk_MBR.NumberofPartitionsFAT32 += 1
+    }
+    elseif ($PartitionType -eq 'ID76'){
+        $NewPartitionNumber = $Script:WPF_DP_Disk_MBR.NextPartitionID76Number
+        $Script:WPF_DP_Disk_MBR.NextPartitionID76Number += 1
+        $Script:WPF_DP_Disk_MBR.NumberofPartitionsID76 += 1
+        
+    }
+
+    return
+}

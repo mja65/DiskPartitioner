@@ -7,31 +7,17 @@ Get-ChildItem -Path '.\Variables\' -Recurse | Where-Object { $_.PSIsContainer -e
     . ($_).fullname
 }
 
-$MainWindow = (Get-MainWindow -WPFPrefix 'WPF_UI_DiskPartition_') 
+Remove-Variable -Name 'WPF_*'
 
-#Get-Variable
+Add-Type -AssemblyName PresentationFramework
+Add-Type -AssemblyName System.Windows.Forms
 
-#[System.Windows.Controls.ComboBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
+$WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\UIActions\MainWindow\'
+$WPF_Partition = Get-XAML -WPFPrefix 'WPF_DP_' -XMLFile '.\Assets\WPF\Grid_DiskPartition.xaml' -ActionsPath '.\UIActions\GridPartition\' -AddWPFVariables
+Set-PartitionGridActions
 
-$WPF_UI_DiskPartition_Disk_MBR = New-GUIDisk -Prefix 'WPF_UI_DiskPartition_' -DiskType 'MBR'
-$Script:WPF_UI_DiskPartition_PartitionGrid_MBR.AddChild($WPF_UI_DiskPartition_Disk_MBR)
+$WPF_MainWindow.AddChild($WPF_Partition)
 
-Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_' -PartitionType 'MBR'
+$WPF_MainWindow.ShowDialog() | out-null
 
-if(Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -DefaultPartition 'TRUE' -PartitionType 'FAT32' -AddType 'Initial'-SizePixels 100){
-
-}
-if(Add-GUIPartitiontoMBRDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -DefaultPartition 'TRUE' -PartitionType 'ID76' -AddType 'Initial' -SizePixels 100){
-
-}
-
-Add-AmigaPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -AmigaDiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -DefaultPartition 'TRUE' -SizePixels 100 -AddType 'Initial' 
-Add-AmigaPartitiontoDisk -Prefix 'WPF_UI_DiskPartition_Partition_' -AmigaDiskName 'WPF_UI_DiskPartition_Partition_ID76_1_AmigaDisk' -SizePixels 100 -AddType 'Initial' 
-
-Set-PartitionWindowActions 
-Set-MBRDiskActions
-Set-AmigaDiskActions 
-
-$MainWindow.ShowDialog() | out-null
-
-#$MainWindow.close() | out-null
+# $Script:SDCardMinimumsandMaximums

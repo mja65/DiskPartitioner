@@ -1,0 +1,15 @@
+function Add-AmigaDisktoID76Partition {
+    param (
+        $ID76PartitionName
+    )
+
+    # $ID76PartitionName = 'WPF_DP_Partition_ID76_1'
+  
+    Set-Variable -name ($ID76PartitionName+'_AmigaDisk') -Scope Script -value (New-GUIDisk -DiskType 'Amiga')
+    (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.ID76PartitionParent = $ID76PartitionName   
+    (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.LeftDiskBoundary = 0 
+    (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.RightDiskBoundary = (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.Children[0].Width
+    (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.DiskSizePixels = (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.RightDiskBoundary - (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.LeftDiskBoundary
+    (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.DiskSizeBytes = (Get-Variable -Name $ID76PartitionName).Value.PartitionSizeBytes 
+    (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.BytestoPixelFactor = (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.DiskSizeBytes / (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.DiskSizePixels
+}
