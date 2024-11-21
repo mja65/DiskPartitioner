@@ -11,7 +11,7 @@ function New-GUIDisk {
     $NewDisk.Height="100" 
     $NewDisk.Stroke="Black"
     $NewDisk.Fill="White"
-    $NewDisk.Width="759"
+    $NewDisk.Width="900"
     
     if ($DiskType -eq 'MBR'){
 

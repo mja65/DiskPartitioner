@@ -64,6 +64,6 @@ function Get-HighlightedGUIPartition {
             }
         }
     }
-    
+    return
 }
 

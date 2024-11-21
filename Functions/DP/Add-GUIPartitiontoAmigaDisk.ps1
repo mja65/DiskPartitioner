@@ -18,7 +18,7 @@ function Add-GUIPartitiontoAmigaDisk {
 
     $AvailableFreeSpace = (Confirm-DiskFreeSpace -Disk (Get-Variable -Name $AmigaDiskName).Value -Position $AddType -PartitionNameNextto $PartitionNameNextto)
     if ($AvailableFreeSpace -lt $SizeBytes){
-        Write-host "Insufficient free Space!"
+        # Write-host "Insufficient free Space!"
         return 2
     }
 

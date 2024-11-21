@@ -59,22 +59,16 @@
             </Grid>
                 <TextBox x:Name="SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
                 <TextBox x:Name="SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="120,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <ComboBox x:Name="SpaceatBeginning_Input_DiskSizeScale_Dropdown" HorizontalAlignment="Left" Margin="175,200,0,0" VerticalAlignment="Top" Width="50"/>
+                <ComboBox x:Name="SpaceatBeginning_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="175,200,0,0" VerticalAlignment="Top" Width="50"/>
                 
-                <TextBox x:Name="SpaceatEnd_Label" HorizontalAlignment="Left" Margin="250,200,0,0" TextWrapping="Wrap" Text="Selected Partition Size (GiB)" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="SpaceatEnd_Value" HorizontalAlignment="Left" Margin="350,200,0,0" TextWrapping="Wrap" Text="0.00" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="SpaceatEnd_Input" HorizontalAlignment="Left" Margin="400,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <ComboBox x:Name="SpaceatEnd_Input_DiskSizeScale_Dropdown" HorizontalAlignment="Left" Margin="496,200,0,0" VerticalAlignment="Top" Width="50"/>
+                <TextBox x:Name="SpaceatEnd_Label" HorizontalAlignment="Left" Margin="250,200,0,0" TextWrapping="Wrap" Text="Space at End of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="SpaceatEnd_Input" HorizontalAlignment="Left" Margin="360,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+                <ComboBox x:Name="SpaceatEnd_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="415,200,0,0" VerticalAlignment="Top" Width="50"/>
 
-                <TextBox x:Name="SelectedSize_Label" HorizontalAlignment="Left" Margin="490,200,0,0" TextWrapping="Wrap" Text="Selected Partition Size (GiB)" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="SelectedSize_Value" HorizontalAlignment="Left" Margin="590,200,0,0" TextWrapping="Wrap" Text="0.00" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="SelectedSize_Input" HorizontalAlignment="Left" Margin="640,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <ComboBox x:Name="SelectedSize_Input_DiskSizeScale_Dropdown" HorizontalAlignment="Left" Margin="496,200,0,0" VerticalAlignment="Top" Width="50"/>
-
-                <TextBox x:Name="TotalSize_Label" HorizontalAlignment="Left" Margin="700,200,0,0" TextWrapping="Wrap" Text="Total Size of Image (GiB)" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="TotalSize_Value" HorizontalAlignment="Left" Margin="750,200,0,0" TextWrapping="Wrap" Text="0.00" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-
-
+                <TextBox x:Name="SelectedSize_Label" HorizontalAlignment="Left" Margin="490,200,0,0" TextWrapping="Wrap" Text="Selected Partition Size" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="SelectedSize_Input" HorizontalAlignment="Left" Margin="600,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+                <ComboBox x:Name="SelectedSize_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="655,200,0,0" VerticalAlignment="Top" Width="50"/>
+              
         </Grid>
         <Grid x:Name="GridAmiga" Margin="20,420,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden">
               <Button x:Name="AmigaPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" Margin="50,0,0,0">
@@ -126,7 +120,7 @@
         </Grid>
 
         <TextBox x:Name="Input_DiskSize_Value" HorizontalAlignment="Left" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-        <ComboBox x:Name="Input_DiskSizeScale_Dropdown" HorizontalAlignment="Left" Margin="186,20,0,0" VerticalAlignment="Top" Width="50"/>
+        <ComboBox x:Name="Input_DiskSize_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="186,20,0,0" VerticalAlignment="Top" Width="50"/>
 
         <TextBox x:Name="MediaSelect_Label" HorizontalAlignment="Left" Margin="246,20,0,0" TextWrapping="Wrap" Text="Select Media to Use" VerticalAlignment="Top" Width="140" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" FontWeight="Bold" FontSize="14"/>
         <ComboBox x:Name="MediaSelect_DropDown" ToolTip="Select the SD card you wish to use" HorizontalAlignment="Left" Margin="406,20,0,0" VerticalAlignment="Top" Width="340"/>

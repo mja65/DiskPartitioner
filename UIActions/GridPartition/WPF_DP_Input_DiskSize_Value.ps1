@@ -4,7 +4,7 @@ $WPF_DP_Input_DiskSize_Value.add_LostFocus({
             $Script:GUIActions.DiskSizeSelected = $true
             $WPF_DP_GridAmiga.Visibility = 'Visible'
             $WPF_DP_GridMBR.Visibility = 'Visible'
-            Add-InitialMBRDisk -DiskSizeBytes (Get-ConvertedSize -Size ($WPF_DP_Input_DiskSize_Value.Text) -ScaleFrom ($WPF_DP_Input_DiskSizeScale_Dropdown.SelectedItem) -Scaleto 'B').Size
+            Add-InitialMBRDisk -DiskSizeBytes (Get-ConvertedSize -Size ($WPF_DP_Input_DiskSize_Value.Text) -ScaleFrom ($WPF_DP_Input_DiskSize_SizeScale_Dropdown.SelectedItem) -Scaleto 'B').Size
             $Script:SDCardMinimumsandMaximums = Set-MinimumPartitionSizes   -SizeofDiskBytes $WPF_DP_Disk_MBR.DiskSizeBytes `
                                                                             -FAT32Divider 15 `
                                                                             -Fat32Minimum (35840*1024) `

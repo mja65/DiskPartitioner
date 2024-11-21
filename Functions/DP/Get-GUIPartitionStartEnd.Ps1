@@ -26,7 +26,7 @@ function Get-GUIPartitionStartEnd {
     
     $Counter = 0
     if (-not $ListofPartitions){ # No Partitions at all
-        Write-host "$PartitionType No partitions"
+        # Write-host "$PartitionType No partitions"
         return $ValuetoReturn 
     }
     else{
@@ -35,7 +35,7 @@ function Get-GUIPartitionStartEnd {
                 $ValuetoReturn.StartingPositionPixels = $Partition.Value.Margin.Left
             }          
             $ValuetoReturn.EndingPositionPixels += (Get-GUIPartitionWidth -Partition $Partition.Value)
-            Write-Host $Partition.PartitionSizeBytes
+            # Write-Host $Partition.PartitionSizeBytes
             $ValuetoReturn.EndingPositionBytes +=  $Partition.Value.PartitionSizeBytes
             $Counter ++
         }

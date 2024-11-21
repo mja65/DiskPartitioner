@@ -21,6 +21,7 @@ $Script:GUIActions = [PSCustomObject]@{
     SelectedMBRPartition = $null
     ActionToPerform = $null
     SelectedAmigaPartition = $null
+    PartitionHoveredOver = $null
     MBRPartitionContextMenuEnabled = $false
     AmigaPartitionContextMenuEnabled = $false
     # MBRPartitionIsSelectedAction = $false

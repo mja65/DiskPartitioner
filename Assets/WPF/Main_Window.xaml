@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp27"
         mc:Ignorable="d"
-   Title="Partition Disk" Height="650" Width="900" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
+   Title="Partition Disk" Height="650" Width="1200" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <VisualBrush 
 x:Key="DotFillBrush" 

@@ -15,19 +15,19 @@ function Set-GUIPartitionNewSize {
     # $PartitionType = 'MBR'
    
     if ($SizePixelstoChange -eq 0){
-        Write-host 'No change' 
+        # Write-host 'No change' 
         return $false
     }
 
     if ($ActiontoPerform -eq 'MBR_ResizeFromLeft' -or $ActiontoPerform -eq 'Amiga_ResizeFromLeft'){
         if ((Get-Variable -name $PartitionName).Value.CanResizeLeft -eq $false){
-            Write-Host "Cannot Resize left"
+            # Write-Host "Cannot Resize left"
             return $false
         }
     }
     elseif ($ActiontoPerform -eq 'MBR_ResizeFromRight' -or $ActiontoPerform -eq 'Amiga_ResizeFromRight'){
         if ((Get-Variable -name $PartitionName).Value.CanResizeRight -eq $false){
-            Write-Host "Cannot Resize Right"
+            # Write-Host "Cannot Resize Right"
             return $false
         }
     }

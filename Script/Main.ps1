@@ -14,10 +14,14 @@ Add-Type -AssemblyName System.Windows.Forms
 
 $WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\UIActions\MainWindow\'
 $WPF_Partition = Get-XAML -WPFPrefix 'WPF_DP_' -XMLFile '.\Assets\WPF\Grid_DiskPartition.xaml' -ActionsPath '.\UIActions\GridPartition\' -AddWPFVariables
+
 Set-PartitionGridActions
 
 $WPF_MainWindow.AddChild($WPF_Partition)
 
 $WPF_MainWindow.ShowDialog() | out-null
 
-# $Script:SDCardMinimumsandMaximums
+# [System.Windows.Controls.TextBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
+# Get-variable
+
+$Script:GUIActions.SelectedSizeInput

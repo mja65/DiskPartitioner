@@ -21,7 +21,7 @@ for ($i = 0; $i -lt $WPF_DP_DiskGrid_Amiga.ContextMenu.Items.Count; $i++) {
 }
 
 for ($i = 0; $i -lt $WPF_DP_DiskGrid_MBR.ContextMenu.Items.Items.Count; $i++) {
-    if ($WPF_DP_DiskGrid_MBR.ContextMenu.Items.Items[$i].Name -eq 'CreateFAT332PartitionLeft'){
+    if ($WPF_DP_DiskGrid_MBR.ContextMenu.Items.Items[$i].Name -eq 'CreateFAT32PartitionLeft'){
         $WPF_DP_DiskGrid_MBR.ContextMenu.Items.items[$i].add_click({
             #Write-Host 'Create Partition'       
             if ((Add-GUIPartitiontoMBRDisk -PartitionType 'FAT32' -AddType 'Left' -PartitionNameNextto $Script:GUIActions.SelectedMBRPartition -SizeBytes $Script:SDCardMinimumsandMaximums.DefaultAddFAT32Size) -eq 2){

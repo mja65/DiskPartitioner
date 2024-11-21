@@ -19,13 +19,13 @@ function Add-GUIPartitiontoMBRDisk {
         $SizePixels -= 4
     }
     if (($Script:WPF_DP_Disk_MBR.NumberofPartitionsFAT32 + $Script:WPF_DP_Disk_MBR.NumberofPartitionsID76) -eq 4){
-        Write-host "Exceeded number of MBR Partitions"
+        # Write-host "Exceeded number of MBR Partitions"
         return 1
     }
     
     $AvailableFreeSpace = (Confirm-DiskFreeSpace -Disk $WPF_DP_Disk_MBR -Position $AddType -PartitionNameNextto $PartitionNameNextto)
     if ($AvailableFreeSpace -lt $SizeBytes){
-        Write-host "Insufficient free Space!"
+        # Write-host "Insufficient free Space!"
         return 2
     }
 
