@@ -3,9 +3,13 @@ Set-Location -Path (Split-Path -Path $PSScriptRoot -Parent)
 Get-ChildItem -Path '.\Functions\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
     . ($_).fullname
 }
+
+
 Get-ChildItem -Path '.\Variables\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
     . ($_).fullname
 }
+
+
 
 Remove-Variable -Name 'WPF_*'
 
@@ -24,4 +28,3 @@ $WPF_MainWindow.ShowDialog() | out-null
 # [System.Windows.Controls.TextBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
 # Get-variable
 
-$Script:GUIActions.SelectedSizeInput

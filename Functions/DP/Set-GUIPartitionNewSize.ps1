@@ -40,22 +40,42 @@ function Set-GUIPartitionNewSize {
         $BytestoPixelFactor = (Get-Variable -name $AmigaDiskName).Value.BytestoPixelFactor 
     }
 
-   
-    if ($SizeBytes){
+    $PartitionToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
+
+    if ($SizeBytes){        
+        if ($PartitionType -eq 'MBR'){
+            if ((Get-Variable -name $PartitionName).Value.PartitionType -eq 'FAT32'){
+                $MinimumSizeBytes = $SDCardMinimumsandMaximums.FAT32Minimum
+            }
+            elseif ((Get-Variable -name $PartitionName).Value.PartitionType -eq 'ID76'){
+                $MinimumSizeBytes = $SDCardMinimumsandMaximums.ID76Minimum
+            }
+        }
+        elseif ($PartitionType -eq 'Amiga'){
+            $MinimumSizeBytes = $SDCardMinimumsandMaximums.PFS3Minimum
+        }
+        if ($SizeBytes -lt $MinimumSizeBytes){
+            return $false
+        }
         #Write-host 'Resizing based on bytes'
         $NewSizePixels = $SizeBytes/$BytestoPixelFactor
         if (($ActiontoPerform -eq 'MBR_ResizeFromRight') -or ($ActiontoPerform -eq 'Amiga_ResizeFromRight')) {
-            $BytestoChange = $SizeBytes - (Get-Variable -name $PartitionName).Value.PartitionSizeBytes 
+            $BytestoChange = $SizeBytes - (Get-Variable -name $PartitionName).Value.PartitionSizeBytes
+            if ($BytestoChange -gt $PartitionToCheck.BytesAvailableRight){
+                return $false
+            }
         }
         elseif (($ActiontoPerform -eq 'MBR_ResizeFromLeft') -or ($ActiontoPerform -eq 'Amiga_ResizeFromLeft')){
             $BytestoChange = (Get-Variable -name $PartitionName).Value.PartitionSizeBytes - $SizeBytes 
+            if ($BytestoChange -gt $PartitionToCheck.BytesAvailableLeft){
+                return $false
+            }
         }
     }
     elseif ($SizePixelstoChange){
         #Write-host 'Resizing based on Pixels'
         $BytestoChange = ($SizePixelstoChange*$BytestoPixelFactor)
-        $PartitionToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
-        
+               
         if (($ActiontoPerform -eq 'MBR_ResizeFromRight') -or ($ActiontoPerform -eq 'Amiga_ResizeFromRight')) {
             if ($BytestoChange -gt $PartitionToCheck.BytesAvailableRight){
                 $BytestoChange = $PartitionToCheck.BytesAvailableRight

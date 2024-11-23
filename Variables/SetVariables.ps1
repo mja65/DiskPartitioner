@@ -31,4 +31,4 @@ $Script:GUIActions = [PSCustomObject]@{
     # IsAmigaPartitionShowing = $false
 }
 
- $Script:SDCardMinimumsandMaximums = $null
+$Script:SDCardMinimumsandMaximums = $null

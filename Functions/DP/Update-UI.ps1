@@ -54,6 +54,7 @@ function Update-UI {
         if ($Script:GUIActions.SelectedMBRPartition){
             if (-not $WPF_DP_SelectedSize_Input.InputEntry -eq $true){
                 $SizetoReturn =  (Get-ConvertedSize -Size ((get-variable -name $Script:GUIActions.SelectedMBRPartition).value.PartitionSizeBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+                $WPF_DP_SelectedSize_Input.Background = 'White'
                 $WPF_DP_SelectedSize_Input.Text = $SizetoReturn.Size
                 $WPF_DP_SelectedSize_Label.Text = "Selected Partition Size ($($SizetoReturn.Scale))"
                 $WPF_DP_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
@@ -62,22 +63,25 @@ function Update-UI {
             $PartitionToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -eq $Script:GUIActions.SelectedMBRPartition}
             $SpaceatBeginning = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableLeft -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
             $SpaceatEnd = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableRight -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+            $WPF_DP_SpaceatBeginning_Input.Background = 'White'
             $WPF_DP_SpaceatBeginning_Input.Text = $SpaceatBeginning.Size
             $WPF_DP_SpaceatBeginning_Input_SizeScale_Dropdown.SelectedItem  = $SpaceatBeginning.Scale
+            $WPF_DP_SpaceatEnd_Input.Background = 'White'
             $WPF_DP_SpaceatEnd_Input.Text =  $SpaceatEnd.Size
             $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem = $SpaceatEnd.Scale
+        }
+        if ($Script:GUIActions.SelectedAmigaPartition){
+            if (-not $WPF_DP_Amiga_SelectedSize_Input.InputEntry -eq $true){
+                $SizetoReturn =  (Get-ConvertedSize -Size ((get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.PartitionSizeBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+                $WPF_DP_Amiga_SelectedSize_Input.Background = 'White'
+                $WPF_DP_Amiga_SelectedSize_Input.Text = $SizetoReturn.Size
+                $WPF_DP_Amiga_SelectedSize_Label.Text = "Selected Partition Size ($($SizetoReturn.Scale))"
+                $WPF_DP_Amiga_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
+            }
         }        
     }
 
 }
-
-
-
-
-
-
-
-
 
 
 # foreach ($Child in $WPF_DP_DiskGrid_Amiga.Children) {

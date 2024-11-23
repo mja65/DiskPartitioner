@@ -9,7 +9,7 @@ function Get-NextGUIPartition {
 
     if ($PartitionType -eq 'Amiga'){
         if ($PartitionNametoCheck){
-            $AmigaDiskName = ($PartitionName.Substring(0,($PartitionName.IndexOf('_AmigaDisk_Partition_')+10)))    
+            $AmigaDiskName = ($PartitionNametoCheck.Substring(0,($PartitionNametoCheck.IndexOf('_AmigaDisk_Partition_')+10)))    
         }
         else{
             $AmigaDiskName = ($Script:GUIActions.SelectedMBRPartition+'_AmigaDisk')

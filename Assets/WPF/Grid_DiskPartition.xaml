@@ -40,7 +40,9 @@
             </Button>
             <Button x:Name="Button_RemoveFreeSpace" Content="Remove Free Space Between Partitions" HorizontalAlignment="Left" Margin="114,15,0,0" VerticalAlignment="Top" Height="20"/>
             <Button x:Name="Button_AddNewFAT32Partition" Content="Add new FAT 32 partition" HorizontalAlignment="Left" Margin="450,5,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
+             <ComboBox x:Name="AddNewFAT32Partition_DropDown" HorizontalAlignment="Left" Margin="600,5,0,0" VerticalAlignment="Top" Width="170"/>
             <Button x:Name="Button_AddNewID76Partition" Content="Add new ID76 partition" HorizontalAlignment="Left" Margin="450,30,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
+             <ComboBox x:Name="AddNewID76Partition_DropDown" HorizontalAlignment="Left" Margin="600,30,0,0" VerticalAlignment="Top" Width="170"/>
             <Grid x:Name="DiskGrid_MBR" Margin="0,60,0,0" VerticalAlignment="Top" Height="100" Visibility="Visible" >
                 <Grid.ContextMenu>
 <ContextMenu IsEnabled = "True"  Visibility="Visible">
@@ -103,7 +105,22 @@
           </Path.RenderTransform>
       </Path>
   </Button>
-            <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition at end of Disk" HorizontalAlignment="Left" Margin="294,00,0,0" VerticalAlignment="Top" Height="20"/>
+            <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition" HorizontalAlignment="Left" Margin="294,0,0,0" VerticalAlignment="Top" Width="100" Height="20" />
+            <ComboBox x:Name="AddNewAmigaPartition_DropDown" HorizontalAlignment="Left" Margin="400,0,0,0" VerticalAlignment="Top" Width="170"/>
+
+                <TextBox x:Name="Amiga_SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="120,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+                <ComboBox x:Name="Amiga_SpaceatBeginning_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="175,200,0,0" VerticalAlignment="Top" Width="50"/>
+                
+                <TextBox x:Name="Amiga_SpaceatEnd_Label" HorizontalAlignment="Left" Margin="250,200,0,0" TextWrapping="Wrap" Text="Space at End of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_SpaceatEnd_Input" HorizontalAlignment="Left" Margin="360,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+                <ComboBox x:Name="Amiga_SpaceatEnd_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="415,200,0,0" VerticalAlignment="Top" Width="50"/>
+
+                <TextBox x:Name="Amiga_SelectedSize_Label" HorizontalAlignment="Left" Margin="490,200,0,0" TextWrapping="Wrap" Text="Selected Partition Size" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_SelectedSize_Input" HorizontalAlignment="Left" Margin="600,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+                <ComboBox x:Name="Amiga_SelectedSize_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="655,200,0,0" VerticalAlignment="Top" Width="50"/>
+
+
             <Grid x:Name="DiskGrid_Amiga" Margin="0,50,0,0" VerticalAlignment="Top" Height="100">
                                 <Grid.ContextMenu>
 <ContextMenu IsEnabled = "True" Visibility="Visible">

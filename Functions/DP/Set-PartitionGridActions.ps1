@@ -94,7 +94,13 @@ function Set-PartitionGridActions {
     $WPF_Partition.add_MouseLeftButtonDown({
 
         If ($WPF_DP_SelectedSize_Input.InputEntry -eq $true){
-            Update-GUIInputBox -InputBox $WPF_DP_SelectedSize_Input -DropDownBox $WPF_DP_SelectedSize_Input_SizeScale_Dropdown
+            Update-GUIInputBox -InputBox $WPF_DP_SelectedSize_Input -DropDownBox $WPF_DP_SelectedSize_Input_SizeScale_Dropdown -MBRResize
+        }
+        if ($WPF_DP_SpaceatBeginning_Input.InputEntry -eq $true){
+            Update-GUIInputBox -InputBox $WPF_DP_SpaceatBeginning_Input -DropDownBox $WPF_DP_SpaceatBeginning_Input_SizeScale_Dropdown -MBRMove_SpaceatBeginning
+        }
+        if ($WPF_DP_SpaceatEnd_Input.InputEntry -eq $true){
+            Update-GUIInputBox -InputBox $WPF_DP_SpaceatEnd_Input -DropDownBox $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown -MBRMove_SpaceatEnd
         }
         $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow -Window $WPF_MainWindow -MainGrid $WPF_Partition
         $Script:GUIActions.MousePositionXatTimeofPress = $MouseCoordinates.MousePositionRelativetoWindowX

@@ -37,7 +37,10 @@ function Set-GUIPartitionNewPosition {
             }
             $AmountMovedBytes = $BytestoPixelFactor*$AmountMovedPixels
         }
-        
+        elseif ($AmountMovedBytes){
+            $AmountMovedPixels = $AmountMovedBytes/$BytestoPixelFactor
+            Write-host "$AmountMovedPixels"
+        }
        
         $AmounttoSetLeft = (Get-Variable -Name $PartitionName).value.Margin.Left + $AmountMovedPixels
             

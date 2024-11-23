@@ -1,10 +1,10 @@
-$ScaleOptions = @()
+$DropDownScaleOptions = @()
 
-$ScaleOptions  += New-Object -TypeName pscustomobject -Property @{Scale='TiB'}
-$ScaleOptions  += New-Object -TypeName pscustomobject -Property @{Scale='GiB'}
-$ScaleOptions  += New-Object -TypeName pscustomobject -Property @{Scale='MiB'}
+$DropDownScaleOptions += New-Object -TypeName pscustomobject -Property @{Scale='TiB'}
+$DropDownScaleOptions += New-Object -TypeName pscustomobject -Property @{Scale='GiB'}
+$DropDownScaleOptions += New-Object -TypeName pscustomobject -Property @{Scale='MiB'}
 
-foreach ($Option in $ScaleOptions){
+foreach ($Option in $DropDownScaleOptions){
     $WPF_DP_Input_DiskSize_SizeScale_Dropdown.AddChild($Option.Scale)
 }
 
