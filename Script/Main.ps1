@@ -25,4 +25,3 @@ $WPF_MainWindow.ShowDialog() | out-null
 
 # [System.Windows.Controls.TextBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
 # Get-variable
-

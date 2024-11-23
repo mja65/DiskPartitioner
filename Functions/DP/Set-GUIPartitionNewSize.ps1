@@ -9,7 +9,7 @@ function Set-GUIPartitionNewSize {
         $SizePixelstoChange
     )
     
-    # $PartitionName = 'WPF_DP_Partition_FAT32_1'
+    # $PartitionName = 'WPF_DP_Partition_ID76_1'
     # $SizeBytes = 536870912
     # $ActiontoPerform = 'MBR_ResizeFromRight'
     # $PartitionType = 'MBR'
@@ -48,7 +48,17 @@ function Set-GUIPartitionNewSize {
                 $MinimumSizeBytes = $SDCardMinimumsandMaximums.FAT32Minimum
             }
             elseif ((Get-Variable -name $PartitionName).Value.PartitionType -eq 'ID76'){
-                $MinimumSizeBytes = $SDCardMinimumsandMaximums.ID76Minimum
+                $AmigaPartitionstoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -match $PartitionName -and $_.PartitionType -eq 'Amiga'}
+                $TotalSpaceofAmigaPartitions = 0
+                for ($i = 0; $i -lt $AmigaPartitionstoCheck.Count; $i++) {
+                    $TotalSpaceofAmigaPartitions += $AmigaPartitionstoCheck[$i].PartitionSizeBytes
+                }
+                if ($TotalSpaceofAmigaPartitions -gt $SDCardMinimumsandMaximums.ID76Minimum){
+                    $MinimumSizeBytes = $TotalSpaceofAmigaPartitions 
+                }
+                else{
+                    $MinimumSizeBytes = $SDCardMinimumsandMaximums.ID76Minimum
+                }
             }
         }
         elseif ($PartitionType -eq 'Amiga'){
@@ -89,7 +99,17 @@ function Set-GUIPartitionNewSize {
                     $MinimumSizeBytes = $SDCardMinimumsandMaximums.FAT32Minimum
                 }
                 elseif ((Get-Variable -name $PartitionName).Value.PartitionType -eq 'ID76'){
-                    $MinimumSizeBytes = $SDCardMinimumsandMaximums.ID76Minimum
+                    $AmigaPartitionstoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -match $PartitionName -and $_.PartitionType -eq 'Amiga'}
+                    $TotalSpaceofAmigaPartitions = 0
+                    for ($i = 0; $i -lt $AmigaPartitionstoCheck.Count; $i++) {
+                        $TotalSpaceofAmigaPartitions += $AmigaPartitionstoCheck[$i].PartitionSizeBytes
+                    }
+                    if ($TotalSpaceofAmigaPartitions -gt $SDCardMinimumsandMaximums.ID76Minimum){
+                        $MinimumSizeBytes = $TotalSpaceofAmigaPartitions 
+                    }
+                    else{
+                        $MinimumSizeBytes = $SDCardMinimumsandMaximums.ID76Minimum
+                    }
                 }
             }
             elseif ($PartitionType -eq 'Amiga'){
@@ -122,6 +142,39 @@ function Set-GUIPartitionNewSize {
  
     if (($ActiontoPerform -eq 'MBR_ResizeFromRight') -or ($ActiontoPerform -eq 'Amiga_ResizeFromRight') -or ($ActiontoPerform -eq 'MBR_ResizeFromLeft') -or ($ActiontoPerform -eq 'Amiga_ResizeFromLeft')){
         (Get-Variable -name $PartitionName).Value.PartitionSizeBytes = $SizeBytes
+        if ((Get-Variable -name $PartitionName).Value.PartitionType -eq 'ID76'){            
+            (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes = $SizeBytes
+            (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor = (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes / (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizePixels
+            $AmigaPartitionstoChange = Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $PartitionName} | Sort-Object $_.Margin.Left
+            
+            $Counter = 1
+            $LastPartitionEndPixels = 0
+            foreach ($AmigaPartition in $AmigaPartitionstoChange) {
+                if ($Counter -eq 1){
+                    $AmounttoSetLeft = $AmigaPartition.Value.StartingPositionBytes / (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
+                }
+                else {
+                    $AmounttoSetLeft = $LastPartitionEndPixels
+                }
+                $AmigaPartition.Value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"                
+                $AmigaSizePixels = $AmigaPartition.Value.PartitionSizeBytes  / (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
+                if ($AmigaSizePixels -gt 4){
+                    $AmigaSizePixels -= 4
+                }
+
+                $TotalColumns = $AmigaPartition.Value.ColumnDefinitions.Count-1
+                for ($i = 0; $i -le $TotalColumns; $i++) {
+                    if  ($AmigaPartition.Value.ColumnDefinitions[$i].Name -eq 'FullSpace'){
+                        $AmigaPartition.Value.ColumnDefinitions[$i].Width = $AmigaSizePixels
+                    } 
+                }
+
+                $LastPartitionEndPixels += ($AmigaSizePixels + 4)
+               # Write-Host "Last Partition EndPixels for partition $($AmigaPartition.Name) is: $LastPartitionEndPixels "
+                $Counter ++
+            }
+           
+        }
         if (($ActiontoPerform -eq 'MBR_ResizeFromLeft') -or ($ActiontoPerform -eq 'Amiga_ResizeFromLeft')){
             $AmounttoSetLeft = (Get-Variable -Name $PartitionName).value.Margin.Left + $SizePixelstoChange
             (Get-Variable -Name $PartitionName).value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
