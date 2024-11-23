@@ -2,7 +2,7 @@ $WPF_DP_Input_DiskSize_Value.add_LostFocus({
     if (-not $Script:GUIActions.DiskSizeSelected -eq $true){
         if ($WPF_DP_Input_DiskSize_Value.Text){
             $Script:GUIActions.DiskSizeSelected = $true
-            $WPF_DP_GridAmiga.Visibility = 'Visible'
+            #$WPF_DP_GridAmiga.Visibility = 'Visible'
             $WPF_DP_GridMBR.Visibility = 'Visible'
             Add-InitialMBRDisk -DiskSizeBytes (Get-ConvertedSize -Size ($WPF_DP_Input_DiskSize_Value.Text) -ScaleFrom ($WPF_DP_Input_DiskSize_SizeScale_Dropdown.SelectedItem) -Scaleto 'B').Size
             $Script:SDCardMinimumsandMaximums = Set-MinimumPartitionSizes   -SizeofDiskBytes $WPF_DP_Disk_MBR.DiskSizeBytes `
@@ -19,9 +19,11 @@ $WPF_DP_Input_DiskSize_Value.add_LostFocus({
                                                                             -DefaultAddID76Size 1073741824 `
                                                                             -DefaultAddPFS3Size 1073741824 `
             
-            if (Add-GUIPartitiontoMBRDisk -PartitionType 'FAT32' -AddType 'AtEnd' -DefaultPartition $true -SizeBytes $Script:SDCardMinimumsandMaximums.FAT32Default -eq $true){
+            if (-not (Add-GUIPartitiontoMBRDisk -PartitionType 'FAT32' -AddType 'AtEnd' -DefaultPartition $true -SizeBytes $Script:SDCardMinimumsandMaximums.FAT32Default)){
+               # Write-host "Added FAT32 Partition"
             }
-            if (Add-GUIPartitiontoMBRDisk -PartitionType 'ID76' -AddType 'AtEnd'-DefaultPartition $true -SizeBytes ($WPF_DP_Disk_MBR.DiskSizeBytes - $Script:SDCardMinimumsandMaximums.FAT32Default) -eq $true){
+            if (-not (Add-GUIPartitiontoMBRDisk -PartitionType 'ID76' -AddType 'AtEnd' -DefaultPartition $true -SizeBytes ($WPF_DP_Disk_MBR.DiskSizeBytes - $Script:SDCardMinimumsandMaximums.FAT32Default))){
+               # Write-host "Added Id76 Partition"
             }
         }
         else{

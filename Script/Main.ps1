@@ -9,8 +9,6 @@ Get-ChildItem -Path '.\Variables\' -Recurse | Where-Object { $_.PSIsContainer -e
     . ($_).fullname
 }
 
-
-
 Remove-Variable -Name 'WPF_*'
 
 Add-Type -AssemblyName PresentationFramework

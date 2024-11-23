@@ -87,7 +87,8 @@ function Get-AllGUIPartitionBoundaries {
         }
     }
 
-    $AllPartitionBoundaries_MBR = $AllPartitionBoundaries_MBR | Sort-Object {$_.LeftMargin} | Sort-Object {$_.PartitionName}
+
+    $AllPartitionBoundaries_MBR = @($AllPartitionBoundaries_MBR | Sort-Object {$_.LeftMargin} | Sort-Object {$_.PartitionName})
 
     for ($i = 0; $i -lt $AllPartitionBoundaries_MBR.Count; $i++) {
         if ($i -eq 0){
@@ -109,7 +110,7 @@ function Get-AllGUIPartitionBoundaries {
      }
 
 
-    $AllPartitionBoundaries_Amiga = $AllPartitionBoundaries_Amiga | Sort-Object {$_.LeftMargin} | Sort-Object {$_.PartitionName}
+    $AllPartitionBoundaries_Amiga = @($AllPartitionBoundaries_Amiga | Sort-Object {$_.LeftMargin} | Sort-Object {$_.PartitionName})
 
     $AmigaDisks = (get-variable | Where-Object {$_.Value.DiskType -eq 'Amiga'}).Name  
     

@@ -162,29 +162,3 @@ function Set-PartitionGridActions {
         $Script:GUIActions.ActionToPerform = $null
     })
 }
-
-# if ($PartitionHoveredOver.PartitionType -eq 'MBR'){
-    # if ($Script:GUIActions.MBRPartitionContextMenuEnabled -eq $false){
-    #     $WPF_DP_DiskGrid_MBR.ContextMenu.IsOpen = ''
-    #     $WPF_DP_DiskGrid_MBR.ContextMenu.IsEnabled = 'True'
-    #     $WPF_DP_DiskGrid_MBR.ContextMenu.Visibility = 'Visible'
-    #     $Script:GUIActions.MBRPartitionContextMenuEnabled = $true
-    # }
-#}
-# elseif ($PartitionHoveredOver.PartitionType -eq 'Amiga'){
-#     if ($Script:GUIActions.AmigaPartitionContextMenuEnabled -eq $false){                    
-#         $WPF_DP_DiskGrid_Amiga.ContextMenu.IsOpen = ''
-#         $WPF_DP_DiskGrid_Amiga.ContextMenu.IsEnabled = 'True'
-#         $WPF_DP_DiskGrid_Amiga.ContextMenu.Visibility = 'Visible'
-#         $Script:GUIActions.AmigaPartitionContextMenuEnabled = $true
-#     }
-# }
-
-            # $Script:GUIActions.AmigaPartitionContextMenuEnabled = $false
-            # $Script:GUIActions.MBRPartitionContextMenuEnabled = $false
-            # $WPF_DP_DiskGrid_Amiga.ContextMenu.IsOpen = ''
-            # $WPF_DP_DiskGrid_Amiga.ContextMenu.IsEnabled = ''
-            # $WPF_DP_DiskGrid_Amiga.ContextMenu.Visibility = 'Collapsed'
-            # $WPF_DP_DiskGrid_MBR.ContextMenu.IsOpen = ''
-            # $WPF_DP_DiskGrid_MBR.ContextMenu.IsEnabled = ''
-            # $WPF_DP_DiskGrid_MBR.ContextMenu.Visibility = 'Collapsed'

@@ -121,7 +121,7 @@
                 <ComboBox x:Name="Amiga_SelectedSize_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="655,200,0,0" VerticalAlignment="Top" Width="50"/>
 
 
-            <Grid x:Name="DiskGrid_Amiga" Margin="0,50,0,0" VerticalAlignment="Top" Height="100">
+            <Grid x:Name="DiskGrid_Amiga" Margin="0,50,0,0" Visibility="Hidden" VerticalAlignment="Top" Height="100">
                                 <Grid.ContextMenu>
 <ContextMenu IsEnabled = "True" Visibility="Visible">
     <MenuItem Header="New Partition">

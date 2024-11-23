@@ -8,9 +8,12 @@ function Confirm-DiskFreeSpace {
     # $Disk = $WPF_DP_Disk_MBR
     # $Disk = $WPF_DP_Partition_ID76_1_AmigaDisk
     # $PartitionNameNextto = 'WPF_DP_Partition_ID76_1'
- 
-    $PartitionstoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq $Disk.DiskType} 
+    # $Position = 'AtEnd'
 
+    #$PartitionstoCheck = [System.Collections.Generic.List[PSCustomObject]]::New()
+
+    $PartitionstoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq $Disk.DiskType} 
+           
     if ($Position -eq 'AtEnd'){
         if ($PartitionstoCheck){
             return $PartitionstoCheck[$PartitionstoCheck.Count-1].BytesAvailableRight
