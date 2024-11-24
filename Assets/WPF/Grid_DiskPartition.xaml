@@ -70,7 +70,13 @@
                 <TextBox x:Name="SelectedSize_Label" HorizontalAlignment="Left" Margin="490,200,0,0" TextWrapping="Wrap" Text="Selected Partition Size" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
                 <TextBox x:Name="SelectedSize_Input" HorizontalAlignment="Left" Margin="600,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
                 <ComboBox x:Name="SelectedSize_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="655,200,0,0" VerticalAlignment="Top" Width="50"/>
-              
+
+                <TextBox x:Name="MBR_TotalDiskSize_Label" HorizontalAlignment="Left" Margin="715,200,0,0" TextWrapping="Wrap" Text="Total Disk Size" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="MBR_TotalDiskSize" HorizontalAlignment="Left" Margin="785,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+                
+                <TextBox x:Name="MBR_TotalFreeSpaceSize_Label" HorizontalAlignment="Left" Margin="875,200,0,0" TextWrapping="Wrap" Text="Free Space Size" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="MBR_TotalFreeSpaceSize" HorizontalAlignment="Left" Margin="945,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+                
         </Grid>
         <Grid x:Name="GridAmiga" Margin="20,420,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden">
               <Button x:Name="AmigaPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" Margin="50,0,0,0">
@@ -120,6 +126,13 @@
                 <TextBox x:Name="Amiga_SelectedSize_Input" HorizontalAlignment="Left" Margin="600,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
                 <ComboBox x:Name="Amiga_SelectedSize_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="655,200,0,0" VerticalAlignment="Top" Width="50"/>
 
+                <TextBox x:Name="Amiga_TotalDiskSize_Label" HorizontalAlignment="Left" Margin="715,200,0,0" TextWrapping="Wrap" Text="Total Disk Size" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_TotalDiskSize" HorizontalAlignment="Left" Margin="785,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+                <TextBox x:Name="Amiga_TotalDiskSize_Scale" HorizontalAlignment="Left" Margin="840,200,0,0" TextWrapping="Wrap" Text="GiB" VerticalAlignment="Top" Width="30" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+
+                <TextBox x:Name="Amiga_TotalFreeSpaceSize_Label" HorizontalAlignment="Left" Margin="875,200,0,0" TextWrapping="Wrap" Text="Free Space Size" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_TotalFreeSpaceSize" HorizontalAlignment="Left" Margin="945,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+                <TextBox x:Name="Amiga_TotalFreeSpaceSize_Scale" HorizontalAlignment="Left" Margin="1000,200,0,0" TextWrapping="Wrap" Text="GiB" VerticalAlignment="Top" Width="30" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
 
             <Grid x:Name="DiskGrid_Amiga" Margin="0,50,0,0" Visibility="Hidden" VerticalAlignment="Top" Height="100">
                                 <Grid.ContextMenu>
