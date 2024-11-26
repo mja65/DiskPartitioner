@@ -12,6 +12,9 @@ $Script:DP_Settings = [PSCustomObject]@{
 # }
 
 $Script:GUIActions = [PSCustomObject]@{
+    ListofRemovableMedia = $null
+    SelectedPhysicalDisk = $null
+    ScriptPath = $null
     DiskSizeSelected = $null
     MouseStatus = $null
     CurrentMousePositionX = $null
@@ -32,3 +35,7 @@ $Script:GUIActions = [PSCustomObject]@{
 }
 
 $Script:SDCardMinimumsandMaximums = $null
+
+$Script:ExternalProgramSettings = [PSCustomObject]@{
+    HSTImagePath = 'C:\Users\Matt\OneDrive\Documents\hst-imager\src\Hst.Imager.ConsoleApp\bin\Debug\net8.0\Hst.Imager.ConsoleApp.exe'
+}

@@ -4,7 +4,9 @@ function Add-GUIPartitiontoMBRDisk {
         $AddType,
         $PartitionNameNextto, 
         $SizeBytes,
-        $DefaultPartition
+        $DefaultPartition,
+        $ImportedPartition,
+        $PathtoImportedPartition
     )
     
     # $PartitionType = 'FAT32'
@@ -13,6 +15,10 @@ function Add-GUIPartitiontoMBRDisk {
     # $SizePixels = 100
     # $LeftMargin = 0
     # $PartitionNameNextto = 'WPF_DP_Partition_ID76_1'
+
+    if ($ImportedPartition -eq $true){
+         Write-host "Importing MBR Partition $PathtoImportedPartition"
+    }
     
     $SizePixels = $SizeBytes/$Script:WPF_DP_Disk_MBR.BytestoPixelFactor
     if ($SizePixels -gt 4){
@@ -60,9 +66,15 @@ function Add-GUIPartitiontoMBRDisk {
         }
     }
     
-    $NewPartition = New-GUIPartition -DefaultPartition $DefaultPartition -PartitionType $PartitionType 
+    $NewPartition = New-GUIPartition -DefaultPartition $DefaultPartition -PartitionType $PartitionType -ImportedPartition $ImportedPartition
     $NewPartition.PartitionSizeBytes = $SizeBytes
     $NewPartition.StartingPositionBytes = $StartingPositionBytes
+
+    if ($ImportedPartition -eq $true){
+        $NewPartition.ImportedPartition = $true
+        $NewPartition.ImportedPartitionType = 'Direct'
+        $NewPartition.ImportedPartitionPath = $PathtoImportedPartition
+    }
 
     $NewPartition.Margin = [System.Windows.Thickness]"$LeftMargin,0,0,0"
     
@@ -85,7 +97,8 @@ function Add-GUIPartitiontoMBRDisk {
     Invoke-Expression $PSCommand  
 
     
-    If ($PartitionType -eq 'ID76'){
+    If ($PartitionType -eq 'ID76' -and (-not $ImportedPartition -eq $true)){
+        
         Add-AmigaDisktoID76Partition -ID76PartitionName $NewPartitionName
         if ($DefaultPartition -eq $true){
             Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault -AddType 'AtEnd' -DefaultPartition $true

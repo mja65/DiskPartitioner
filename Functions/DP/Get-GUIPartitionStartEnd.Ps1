@@ -5,7 +5,7 @@ function Get-GUIPartitionStartEnd {
 
     )
 
-    # $AmigaDiskName = 'WPF_DP_Partition_ID76_1_AmigaDisk'
+    # $AmigaDiskName = 'WPF_DP_Partition_ID76_2_AmigaDisk'
     # $PartitionType = 'MBR'
     # $PartitionType = 'Amiga'
 
@@ -20,10 +20,10 @@ function Get-GUIPartitionStartEnd {
         $ListofPartitions  = Get-AllGUIPartitions -PartitionType $PartitionType
     }
     elseif ($PartitionType -eq 'Amiga'){
-        $ListofPartitions  = Get-AllGUIPartitions -PartitionType $PartitionType | Where-Object {$_.Name -Match $AmigaDiskName } 
+        $ID76Partition = $AmigaDiskName.Substring(0,$AmigaDiskName.IndexOf('_AmigaDisk'))        
+        $ListofPartitions  = Get-AllGUIPartitions -PartitionType $PartitionType | Where-Object {$_.Name -Match $ID76Partition } 
     }
-    
-    
+       
     $Counter = 0
     if (-not $ListofPartitions){ # No Partitions at all
         # Write-host "$PartitionType No partitions"

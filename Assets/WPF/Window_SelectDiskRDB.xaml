@@ -1,0 +1,25 @@
+<Window x:Name="Window" 
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:local="clr-namespace:WpfApp14"
+            mc:Ignorable="d"
+               Title="Select Disk" Height="500" Width="800" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
+    <Grid x:Name="MainGrid" Background="#FFE5E5E5">
+        
+        <Button x:Name="OK_Button" Content="OK" HorizontalAlignment="Left" Margin="50,0,0,5" VerticalAlignment="Bottom" Width="40"/>
+        <Button x:Name="Cancel_Button" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,50,5" VerticalAlignment="Bottom" Width="40"/>
+        <ComboBox x:Name="PhysicalvsImage_Dropdown" HorizontalAlignment="Left" Margin="400,51,0,0" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="PhysicalvsImage_Label" HorizontalAlignment="Left" Margin="130,49,0,0" TextWrapping="Wrap" Text="Select Partition Source (Physical Disk vs File)" VerticalAlignment="Top" Width="240"/>
+
+        <Grid x:Name="Grid_ImageFile" Background="#FFE5E5E5" Visibility="Hidden" Margin="0,80,0,0" Height="80" VerticalAlignment="Top">
+            <Button x:Name="BrowseforImage_Button" Content="Browse for Image File" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="120" Margin="130,0,0,0"/>
+        </Grid>
+        <Grid x:Name="Grid_PhysicalDisk" Background="#FFE5E5E5" Visibility="Hidden" Margin="0,80,0,0" Height="80" VerticalAlignment="Top">
+            <ComboBox x:Name="BrowseforDisk_DropDown" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Top" Width="120"/>
+        </Grid>
+        <DataGrid x:Name="MBR_DataGrid"  IsReadOnly = "True" Height="100" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,200,0,0" SelectionMode="Single"/>
+        <DataGrid x:Name="RDB_DataGrid"  IsReadOnly = "True" Height="100" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,350,0,0" SelectionMode="Single"/>
+    </Grid>
+</Window>

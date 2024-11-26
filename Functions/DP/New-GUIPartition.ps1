@@ -1,7 +1,9 @@
 function New-GUIPartition {
     param (
         $PartitionType,
-        $DefaultPartition
+        $DefaultPartition,
+        $ImportedPartition,
+        $DerivedImportedPartition
     )
     
     if ($PartitionType -eq 'FAT32'){
@@ -21,6 +23,9 @@ function New-GUIPartition {
     $NewPartition = [Windows.Markup.XamlReader]::Load( $reader)
 
     $NewPartition | Add-Member -NotePropertyMembers @{
+        ImportedPartition = $false
+        ImportedPartitionType = $null
+        ImportedPartitionPath = $null
         PartitionType = $PartitionType
         StartingPositionBytes = $null
         PartitionSizeBytes = $null  
@@ -32,7 +37,7 @@ function New-GUIPartition {
         CanDelete = $null
     }
 
-    If ($DefaultPartition){
+    If ($DefaultPartition -eq $true){
         $NewPartition.CanDelete = $false
         $NewPartition.CanResizeRight = $true
         if ($PartitionType -eq 'FAT32'){
@@ -43,6 +48,18 @@ function New-GUIPartition {
             $NewPartition.CanMove = $true
             $NewPartition.CanResizeLeft =$true
         }
+    }
+    elseif ($ImportedPartition -eq $true){
+        if ($DerivedImportedPartition -eq $true){
+            $NewPartition.CanDelete = $false
+        }
+        else {
+            $NewPartition.CanDelete = $true
+
+        }
+        $NewPartition.CanResizeRight = $false
+        $NewPartition.CanResizeLeft =$false
+        $NewPartition.CanMove = $true
     }
     else{
         $NewPartition.CanDelete = $true

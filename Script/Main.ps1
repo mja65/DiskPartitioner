@@ -9,6 +9,8 @@ Get-ChildItem -Path '.\Variables\' -Recurse | Where-Object { $_.PSIsContainer -e
     . ($_).fullname
 }
 
+$Script:GUIActions.ScriptPath = (Split-Path -Path $PSScriptRoot -Parent)
+
 Remove-Variable -Name 'WPF_*'
 
 Add-Type -AssemblyName PresentationFramework
@@ -23,6 +25,5 @@ $WPF_MainWindow.AddChild($WPF_Partition)
 
 $WPF_MainWindow.ShowDialog() | out-null
 
-# [System.Windows.Controls.TextBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
+# [System.Windows.Controls.DataGrid].GetEvents() | Select-Object Name, *Method, EventHandlerType
 # Get-variable
-

@@ -43,6 +43,10 @@
              <ComboBox x:Name="AddNewFAT32Partition_DropDown" HorizontalAlignment="Left" Margin="600,5,0,0" VerticalAlignment="Top" Width="170"/>
             <Button x:Name="Button_AddNewID76Partition" Content="Add new ID76 partition" HorizontalAlignment="Left" Margin="450,30,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
              <ComboBox x:Name="AddNewID76Partition_DropDown" HorizontalAlignment="Left" Margin="600,30,0,0" VerticalAlignment="Top" Width="170"/>
+            
+            <Button x:Name="Button_ImportMBRPartition" Content="Import MBR partition" HorizontalAlignment="Left" Margin="800,30,0,0" VerticalAlignment="Top" Height="20" Width="140"/>   
+             <ComboBox x:Name="ImportMBRPartition_DropDown" HorizontalAlignment="Left" Margin="950,30,0,0" VerticalAlignment="Top" Width="170"/>
+            
             <Grid x:Name="DiskGrid_MBR" Margin="0,60,0,0" VerticalAlignment="Top" Height="100" Visibility="Visible" >
                 <Grid.ContextMenu>
 <ContextMenu IsEnabled = "True"  Visibility="Visible">
@@ -113,6 +117,9 @@
   </Button>
             <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition" HorizontalAlignment="Left" Margin="294,0,0,0" VerticalAlignment="Top" Width="100" Height="20" />
             <ComboBox x:Name="AddNewAmigaPartition_DropDown" HorizontalAlignment="Left" Margin="400,0,0,0" VerticalAlignment="Top" Width="170"/>
+
+            <Button x:Name="Button_ImportRDBPartition" Content="Import RDB partition" HorizontalAlignment="Left" Margin="600,0,0,0" VerticalAlignment="Top" Height="20" Width="140"/>   
+            <ComboBox x:Name="ImportRDBPartition_DropDown" HorizontalAlignment="Left" Margin="750,0,0,0" VerticalAlignment="Top" Width="170"/>
 
                 <TextBox x:Name="Amiga_SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
                 <TextBox x:Name="Amiga_SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="120,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
