@@ -11,11 +11,11 @@ function Set-PartitionGridActions {
             elseif ($Script:GUIActions.PartitionHoveredOver.PartitionName){
                 $WPF_Partition.Cursor = "Hand"
             }
-            Set-ContextMenu -PartitionName $Script:GUIActions.PartitionHoveredOver.PartitionName -PartitionType 'Amiga'
+            #Set-ContextMenu -PartitionName $Script:GUIActions.PartitionHoveredOver.PartitionName -PartitionType 'Amiga'
         }
         else{
             $WPF_Partition.Cursor = ''
-            Set-ContextMenu -PartitionType 'Amiga'
+            #Set-ContextMenu -PartitionType 'Amiga'
         }
     })
 
@@ -30,11 +30,11 @@ function Set-PartitionGridActions {
                 $WPF_Partition.Cursor = "Hand"
             }
             # Write-Host $Script:GUIActions.PartitionHoveredOver
-            Set-ContextMenu -PartitionName $Script:GUIActions.PartitionHoveredOver.PartitionName -PartitionType 'MBR'
+            #Set-ContextMenu -PartitionName $Script:GUIActions.PartitionHoveredOver.PartitionName -PartitionType 'MBR'
         }
         else{
             $WPF_Partition.Cursor = ''
-            Set-ContextMenu -PartitionType 'MBR'
+            #Set-ContextMenu -PartitionType 'MBR'
         }
     })
 

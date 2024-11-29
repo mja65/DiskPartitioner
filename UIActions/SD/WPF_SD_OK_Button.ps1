@@ -20,11 +20,23 @@ $WPF_SD_OK_Button.Add_Click({
             Add-GUIPartitiontoMBRDisk -PathtoImportedPartition "$($Script:GUIActions.SelectedPhysicalDisk)\mbr\$($WPF_SD_MBR_DataGrid.SelectedItem.Number)" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
             $ListofRDBPartitions = Get-HSTPartitionInfo -Path "$($Script:GUIActions.SelectedPhysicalDisk)\mbr\$($WPF_SD_MBR_DataGrid.SelectedItem.Number)" -RDBInfo
             Add-AmigaDisktoID76Partition -ID76PartitionName $PartitionName
-            $ListofRDBPartitions |ForEach-Object {
-                Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -DerivedImportedPartition $true
+            $ListofRDBPartitions |ForEach-Object {               
+
+                $StartPoint_MaxTransfer = 0
+                $Length_MaxTransfer = $_.MaxTransfer.IndexOf(' ')
+                $MaxTransfer = $_.MaxTransfer.Substring($StartPoint_MaxTransfer,$Length_MaxTransfer )
+
+                # $StartPoint_DosType = $_.DosType.IndexOf('(')+1
+                # $Length_DosType  = ($_.DosType.Length-1)-$StartPoint_DosType
+                # $DosType = $_.DosType.Substring($StartPoint_DosType,$Length_DosType)
+
+                Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -DerivedImportedPartition $true -VolumeName 'Unknown' -DeviceName $_.Name -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
             }
         }
     }
+    $Script:GUIActions.AvailableSpaceforImportedPartitionBytes = $null
+    $Script:GUIActions.SelectedPhysicalDisk = $null
+    $Script:GUIActions.ListofRemovableMedia = $null
     $WPF_SelectDiskWindow.Close()
 })
 

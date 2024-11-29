@@ -4,10 +4,18 @@ function Add-GUIPartitiontoAmigaDisk {
         $AddType,
         $PartitionNameNextto, 
         $SizeBytes,
-        $DefaultPartition,
+        $PartitionTypeAmiga,
         $ImportedPartition,
         [Switch]$DerivedImportedPartition,
-        $PathtoImportedPartition
+        $PathtoImportedPartition,
+        $DeviceName,
+        $VolumeName,
+        $Buffers,
+        $DosType,
+        $MaxTransfer,
+        $Bootable,
+        $NoMount,
+        $Priority
     )
     
     # $AmigaDiskName = 'WPF_DP_Partition_ID76_2_AmigaDisk'
@@ -15,6 +23,10 @@ function Add-GUIPartitiontoAmigaDisk {
     # $PartitionNameNextto = 'WPF_DP_Partition_ID76_1_AmigaDisk_Partition_1'
     # $AddType = 'AtEnd'
    
+    if ($PartitionTypeAmiga){
+        $DefaultPartition = $true
+    }
+
     if ($ImportedPartition -eq $true){
         Write-host "Importing Amiga Partition $PathtoImportedPartition"
    }
@@ -22,12 +34,6 @@ function Add-GUIPartitiontoAmigaDisk {
     $SizePixels = $SizeBytes / ((Get-Variable -name  $AmigaDiskName).value.BytestoPixelFactor)
     if ($SizePixels -gt 4){
         $SizePixels -= 4
-    }
-
-    $AvailableFreeSpace = (Confirm-DiskFreeSpace -Disk (Get-Variable -Name $AmigaDiskName).Value -Position $AddType -PartitionNameNextto $PartitionNameNextto)
-    if ($AvailableFreeSpace -lt $SizeBytes){
-        Write-host "Insufficient free Space!"
-        return 2
     }
 
     if ($AddType -eq 'AtEnd'){
@@ -53,11 +59,21 @@ function Add-GUIPartitiontoAmigaDisk {
 
     Write-Host "New Partition Name is: $NewPartitionName "
 
-    Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -DefaultPartition $DefaultPartition -PartitionType 'Amiga' -ImportedPartition $ImportedPartition  -DerivedImportedPartition $DerivedImportedPartition)
+    Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -DefaultPartition $DefaultPartition -PartitionType 'Amiga' -PartitionTypeAmiga $PartitionTypeAmiga -ImportedPartition $ImportedPartition  -DerivedImportedPartition $DerivedImportedPartition)
 
     (Get-Variable -Name $NewPartitionName).Value.Margin = [System.Windows.Thickness]"$LeftMargin,0,0,0"
     (Get-Variable -Name $NewPartitionName).Value.PartitionSizeBytes = $SizeBytes
     (Get-Variable -Name $NewPartitionName).Value.StartingPositionBytes = $StartingPositionBytes
+    
+    (Get-Variable -Name $NewPartitionName).Value.DeviceName = $DeviceName
+    (Get-Variable -Name $NewPartitionName).Value.VolumeName = $VolumeName
+    (Get-Variable -Name $NewPartitionName).Value.Buffers = $Buffers
+    (Get-Variable -Name $NewPartitionName).Value.DosType = $DosType
+    (Get-Variable -Name $NewPartitionName).Value.MaxTransfer = $MaxTransfer
+    (Get-Variable -Name $NewPartitionName).Value.Bootable = $Bootable
+    (Get-Variable -Name $NewPartitionName).Value.NoMount = $NoMount
+    (Get-Variable -Name $NewPartitionName).Value.Priority = $Priority
+
 
     if ($ImportedPartition -eq $true){
         (Get-Variable -Name $NewPartitionName).Value.ImportedPartition = $true
@@ -81,7 +97,5 @@ function Add-GUIPartitiontoAmigaDisk {
     (Get-Variable -Name $AmigaDiskName).Value.AddChild(((Get-Variable -name $NewPartitionName).value))
 
     (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber += 1
-    
-    return
-    
+       
 }

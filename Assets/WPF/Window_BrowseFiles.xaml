@@ -1,0 +1,27 @@
+<Window x:Name="Window" 
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:local="clr-namespace:WpfApp14"
+            mc:Ignorable="d"
+               Title="Select Files" Height="500" Width="800" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
+    <Grid x:Name="MainGrid" Background="#FFE5E5E5">
+
+        <Button x:Name="OK_Button" Content="OK" HorizontalAlignment="Left" Margin="50,0,0,5" VerticalAlignment="Bottom" Width="40"/>
+        <Button x:Name="Cancel_Button" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,50,5" VerticalAlignment="Bottom" Width="40"/>
+        
+        <ComboBox x:Name="PhysicalvsImage_Dropdown" HorizontalAlignment="Left" Margin="280,51,0,0" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="PhysicalvsImage_Label" HorizontalAlignment="Left" Margin="30,49,0,0" TextWrapping="Wrap" Text="Select File Source (Physical Disk vs File)" VerticalAlignment="Top" Width="240"/>
+
+        <Button x:Name="BrowseforFileLocation_Button" Content="Browse for File Location" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="120" Margin="430,49,0,0"/>
+
+        <Grid x:Name="Grid_FileSource" Background="#FFE5E5E5" Visibility="Visible" Margin="10,80,0,0" Width ="300" Height="370" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <DataGrid x:Name="FileSource_DataGrid"  IsReadOnly="True" Height="300" HorizontalAlignment="Center" Visibility="Visible"  VerticalAlignment="Top" Margin="0,0,0,0" /> 
+        </Grid>
+        <Grid x:Name="Grid_Destination" Background="#FFE5E5E5" Visibility="Visible" Margin="0,80,10,0" Width ="300" Height="370" HorizontalAlignment="Right" VerticalAlignment="Top">
+
+        </Grid>
+       
+    </Grid>
+</Window>

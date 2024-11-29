@@ -1,4 +1,4 @@
-function Confirm-DiskFreeSpace {
+function Get-DiskFreeSpace {
     param (
         $Disk,
         $Position,

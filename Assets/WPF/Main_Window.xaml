@@ -27,7 +27,7 @@ ViewboxUnits="Absolute">
       ViewboxUnits="Absolute">
             <VisualBrush.Visual>
                 <Canvas>
-                    <Rectangle Fill="Blue" Width="10" Height="10" />
+                    <Rectangle Fill="#FF3B67A2" Width="10" Height="10" />
                     <Path Stroke="White" Data="M 0 0 l 10 10" />
                     <Path Stroke="White" Data="M 0 10 l 10 -10" />
                 </Canvas>
@@ -47,15 +47,28 @@ ViewboxUnits="Absolute">
             </VisualBrush.Visual>
         </VisualBrush>
         <VisualBrush 
-      x:Key="DefaultAmigaPartitionBrush" 
+      x:Key="DefaultAmigaWorkbenchPartitionBrush" 
       TileMode="Tile" Viewport="0,0,10,10" 
       ViewportUnits="Absolute" Viewbox="0,0,10,10"    
       ViewboxUnits="Absolute">
             <VisualBrush.Visual>
                 <Canvas>
-                    <Rectangle Fill="White" Width="10" Height="10" />
-                    <Path Stroke="Yellow" Data="M 0 0 l 10 10" />
-                    <Path Stroke="Yellow" Data="M 0 10 l 10 -10" />
+                    <Rectangle Fill="#FFFFA997" Width="10" Height="10" />
+                    <Path Stroke= "White" Data="M 0 0 l 10 10" />
+                    <Path Stroke="White" Data="M 0 10 l 10 -10" />
+                </Canvas>
+            </VisualBrush.Visual>
+        </VisualBrush>
+         <VisualBrush 
+      x:Key="DefaultAmigaWorkPartitionBrush" 
+      TileMode="Tile" Viewport="0,0,10,10" 
+      ViewportUnits="Absolute" Viewbox="0,0,10,10"    
+      ViewboxUnits="Absolute">
+            <VisualBrush.Visual>
+                <Canvas>
+                    <Rectangle Fill="#FFAA907C" Width="10" Height="10" />
+                    <Path Stroke="White" Data="M 0 0 l 10 10" />
+                    <Path Stroke="White" Data="M 0 10 l 10 -10" />
                 </Canvas>
             </VisualBrush.Visual>
         </VisualBrush>

@@ -39,6 +39,8 @@
                 </Path>
             </Button>
             <Button x:Name="Button_RemoveFreeSpace" Content="Remove Free Space Between Partitions" HorizontalAlignment="Left" Margin="114,15,0,0" VerticalAlignment="Top" Height="20"/>
+            <Button x:Name="Button_DeleteMBRPartition" Content="Delete selected partition" HorizontalAlignment="Left" Margin="304,15,0,0" VerticalAlignment="Top" Height="20"/>
+
             <Button x:Name="Button_AddNewFAT32Partition" Content="Add new FAT 32 partition" HorizontalAlignment="Left" Margin="450,5,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
              <ComboBox x:Name="AddNewFAT32Partition_DropDown" HorizontalAlignment="Left" Margin="600,5,0,0" VerticalAlignment="Top" Width="170"/>
             <Button x:Name="Button_AddNewID76Partition" Content="Add new ID76 partition" HorizontalAlignment="Left" Margin="450,30,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
@@ -48,20 +50,7 @@
              <ComboBox x:Name="ImportMBRPartition_DropDown" HorizontalAlignment="Left" Margin="950,30,0,0" VerticalAlignment="Top" Width="170"/>
             
             <Grid x:Name="DiskGrid_MBR" Margin="0,60,0,0" VerticalAlignment="Top" Height="100" Visibility="Visible" >
-                <Grid.ContextMenu>
-<ContextMenu IsEnabled = "True"  Visibility="Visible">
-    <MenuItem Header="New Partition">
-        <MenuItem IsEnabled = "True" x:Name="CreateFAT32PartitionLeft" Header="Create FAT32 Partition - Left of Current Partition" ></MenuItem>
-        <MenuItem IsEnabled = "True" x:Name="CreateFAT32PartitionRight" Header="Create FAT32 Partition - Right of Current Partition" ></MenuItem>
-        <MenuItem IsEnabled = "True" x:Name="CreateFAT32PartitionEnd" Header="Create FAT32 Partition - End of Disk" ></MenuItem>
-        <MenuItem IsEnabled = "True" x:Name="CreateID76PartitionLeft" Header="Create ID76 Partition - Left of Current Partition" ></MenuItem>
-        <MenuItem IsEnabled = "True" x:Name="CreateID76PartitionRight" Header="Create ID76 Partition - Right of Current Partition" ></MenuItem>
-        <MenuItem IsEnabled = "True" x:Name="CreateID76PartitionEnd" Header="Create ID76 Partition - End of Disk" ></MenuItem>
-    </MenuItem>
-    <MenuItem IsEnabled = "True" Visibility="Visible" x:Name="DeletePartition" Header="Delete Partition"></MenuItem>
-    <MenuItem ></MenuItem>
-</ContextMenu>
-            </Grid.ContextMenu>
+             
             </Grid>
                 <TextBox x:Name="SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
                 <TextBox x:Name="SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="120,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
@@ -115,6 +104,7 @@
           </Path.RenderTransform>
       </Path>
   </Button>
+            <Button x:Name="Button_DeleteAmigaPartition" Content="Delete selected partition" HorizontalAlignment="Left" Margin="100,0,0,0" VerticalAlignment="Top" Height="20"/>
             <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition" HorizontalAlignment="Left" Margin="294,0,0,0" VerticalAlignment="Top" Width="100" Height="20" />
             <ComboBox x:Name="AddNewAmigaPartition_DropDown" HorizontalAlignment="Left" Margin="400,0,0,0" VerticalAlignment="Top" Width="170"/>
 
@@ -141,18 +131,29 @@
                 <TextBox x:Name="Amiga_TotalFreeSpaceSize" HorizontalAlignment="Left" Margin="945,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
                 <TextBox x:Name="Amiga_TotalFreeSpaceSize_Scale" HorizontalAlignment="Left" Margin="1000,200,0,0" TextWrapping="Wrap" Text="GiB" VerticalAlignment="Top" Width="30" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
 
+                <TextBox x:Name="Amiga_DeviceName_Label" HorizontalAlignment="Left" Margin="10,300,0,0" TextWrapping="Wrap" Text="Device Name" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_DeviceName_Input" HorizontalAlignment="Left" Margin="90,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+
+                <TextBox x:Name="Amiga_VolumeName_Label" HorizontalAlignment="Left" Margin="110,300,0,0" TextWrapping="Wrap" Text="Volume Name" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_VolumeName_Input" HorizontalAlignment="Left" Margin="190,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+
+                <TextBox x:Name="Amiga_DosTypeLabel" HorizontalAlignment="Left" Margin="250,300,0,0" TextWrapping="Wrap" Text="DosType" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_DosType_Input" HorizontalAlignment="Left" Margin="330,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+
+                <TextBox x:Name="Amiga_Buffers_Label" HorizontalAlignment="Left" Margin="390,300,0,0" TextWrapping="Wrap" Text="Buffers" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_Buffers_Input" HorizontalAlignment="Left" Margin="470,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+
+                <TextBox x:Name="Amiga_MaxTransfer_Label" HorizontalAlignment="Left" Margin="530,300,0,0" TextWrapping="Wrap" Text="MaxTransfer" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_MaxTransfer_Input" HorizontalAlignment="Left" Margin="610,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+
+                <TextBox x:Name="Amiga_Priority_Label" HorizontalAlignment="Left" Margin="670,300,0,0" TextWrapping="Wrap" Text="Priority" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+                <TextBox x:Name="Amiga_Priority_Input" HorizontalAlignment="Left" Margin="730,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+
+                <CheckBox x:Name="Amiga_Bootable" Content="Bootable Flag" HorizontalAlignment="Left" Margin="790,300,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="Amiga_Mountable" Content="Mountable Flag" HorizontalAlignment="Left" Margin="890,300,0,0" VerticalAlignment="Top"/>
+
             <Grid x:Name="DiskGrid_Amiga" Margin="0,50,0,0" Visibility="Hidden" VerticalAlignment="Top" Height="100">
-                                <Grid.ContextMenu>
-<ContextMenu IsEnabled = "True" Visibility="Visible">
-    <MenuItem Header="New Partition">
-        <MenuItem IsEnabled = "True" x:Name="CreateAmigaPartitionLeft" Header="Create Amiga Partition - Left of Current Partition" ></MenuItem>
-        <MenuItem IsEnabled = "True" x:Name="CreateAmigaPartitionRight" Header="Create Amiga Partition - Right of Current Partition" ></MenuItem>
-        <MenuItem IsEnabled = "True" x:Name="CreateAmigaPartitionEnd" Header="Create Amiga Partition - End of Disk" ></MenuItem>
-    </MenuItem>
-    <MenuItem IsEnabled = "True" Visibility="Visible" x:Name="DeleteAmigaPartition" Header="Delete Partition"></MenuItem>
-    <MenuItem ></MenuItem>
-</ContextMenu>
-            </Grid.ContextMenu>
+                     
             </Grid>
         </Grid>
 

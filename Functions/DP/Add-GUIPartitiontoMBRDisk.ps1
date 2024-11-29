@@ -6,9 +6,10 @@ function Add-GUIPartitiontoMBRDisk {
         $SizeBytes,
         $DefaultPartition,
         $ImportedPartition,
+        $DerivedImportedPartition,
         $PathtoImportedPartition
     )
-    
+
     # $PartitionType = 'FAT32'
     # $PartitionType = 'ID76'
     # $NewPartitionNumber = '1'
@@ -24,22 +25,7 @@ function Add-GUIPartitiontoMBRDisk {
     if ($SizePixels -gt 4){
         $SizePixels -= 4
     }
-    if (($Script:WPF_DP_Disk_MBR.NumberofPartitionsFAT32 + $Script:WPF_DP_Disk_MBR.NumberofPartitionsID76) -eq 4){
-        #Write-host "Exceeded number of MBR Partitions"
-        return 1
-    }
     
-    if ($AddType -eq 'AtEnd'){
-        $AvailableFreeSpace = (Confirm-DiskFreeSpace -Disk $Script:WPF_DP_Disk_MBR -Position $AddType)
-       # Write-host "Available Free Space is: $AvailableFreeSpace."
-    }
-    else{
-        $AvailableFreeSpace = (Confirm-DiskFreeSpace -Disk $Script:WPF_DP_Disk_MBR -Position $AddType -PartitionNameNextto $PartitionNameNextto)
-    }
-    if ($AvailableFreeSpace -lt $SizeBytes){
-        #Write-host "Insufficient free Space!"
-        return 2
-    }
 
     if ($PartitionType -eq 'FAT32'){
         $NewPartitionNumber = $Script:WPF_DP_Disk_MBR.NextPartitionFAT32Number
@@ -66,7 +52,7 @@ function Add-GUIPartitiontoMBRDisk {
         }
     }
     
-    $NewPartition = New-GUIPartition -DefaultPartition $DefaultPartition -PartitionType $PartitionType -ImportedPartition $ImportedPartition
+    $NewPartition = New-GUIPartition -PartitionType $PartitionType -DefaultPartition $DefaultPartition -ImportedPartition $ImportedPartition -DerivedImportedPartition $DerivedImportedPartition
     $NewPartition.PartitionSizeBytes = $SizeBytes
     $NewPartition.StartingPositionBytes = $StartingPositionBytes
 
@@ -101,8 +87,8 @@ function Add-GUIPartitiontoMBRDisk {
         
         Add-AmigaDisktoID76Partition -ID76PartitionName $NewPartitionName
         if ($DefaultPartition -eq $true){
-            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault -AddType 'AtEnd' -DefaultPartition $true
-            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes ($SizeBytes-$Script:SDCardMinimumsandMaximums.WorkbenchDefault) -AddType 'AtEnd' 
+            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault -AddType 'AtEnd' -PartitionTypeAmiga 'Workbench' -DeviceName 'SDH0' -VolumeName 'Workbench' -Buffers '300' -MaxTransfer '0xffffff' -DosType 'PFS\3' -Bootable $true -NoMount $false -Priority 1
+            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes ($SizeBytes-$Script:SDCardMinimumsandMaximums.WorkbenchDefault) -PartitionTypeAmiga 'Work' -AddType 'AtEnd' -VolumeName 'Work' -DeviceName 'SDH1' -Buffers '300' -MaxTransfer '0xffffff' -DosType 'PFS\3' -Bootable $false -NoMount $false -Priority 99
         }
        # Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_' -PartitionType 'Amiga' -AmigaDisk ((Get-Variable -name ($NewPartitionName+'_AmigaDisk')).value)
         #Set-AmigaDiskSizeBytes -ID76PartitionName $NewPartitionName -AmigaDisk ((Get-Variable -name ($NewPartitionName+'_AmigaDisk')).value)
@@ -120,5 +106,4 @@ function Add-GUIPartitiontoMBRDisk {
         
     }
 
-    return
 }
