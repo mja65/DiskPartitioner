@@ -5,23 +5,44 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:local="clr-namespace:WpfApp14"
             mc:Ignorable="d"
-               Title="Select Files" Height="500" Width="800" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
+               Title="Select Files" Height="700" Width="1000" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
     <Grid x:Name="MainGrid" Background="#FFE5E5E5">
 
         <Button x:Name="OK_Button" Content="OK" HorizontalAlignment="Left" Margin="50,0,0,5" VerticalAlignment="Bottom" Width="40"/>
         <Button x:Name="Cancel_Button" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,50,5" VerticalAlignment="Bottom" Width="40"/>
-        
+
+
+
         <ComboBox x:Name="PhysicalvsImage_Dropdown" HorizontalAlignment="Left" Margin="280,51,0,0" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="PhysicalvsImage_Label" HorizontalAlignment="Left" Margin="30,49,0,0" TextWrapping="Wrap" Text="Select File Source (Physical Disk vs File)" VerticalAlignment="Top" Width="240"/>
 
-        <Button x:Name="BrowseforFileLocation_Button" Content="Browse for File Location" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="120" Margin="430,49,0,0"/>
+        <Button x:Name="BrowseforFileLocation_Button" Content="Set Location" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="120" Margin="430,49,0,0"/>
 
-        <Grid x:Name="Grid_FileSource" Background="#FFE5E5E5" Visibility="Visible" Margin="10,80,0,0" Width ="300" Height="370" HorizontalAlignment="Left" VerticalAlignment="Top">
-        <DataGrid x:Name="FileSource_DataGrid"  IsReadOnly="True" Height="300" HorizontalAlignment="Center" Visibility="Visible"  VerticalAlignment="Top" Margin="0,0,0,0" /> 
-        </Grid>
-        <Grid x:Name="Grid_Destination" Background="#FFE5E5E5" Visibility="Visible" Margin="0,80,10,0" Width ="300" Height="370" HorizontalAlignment="Right" VerticalAlignment="Top">
+        <TextBox x:Name="FreeSpaceRemaining_Label" HorizontalAlignment="Left" Margin="600,49,0,0" TextWrapping="Wrap" Text="Free Space available after import" VerticalAlignment="Top" Width="150"/>
+        <TextBox x:Name="FreeSpaceRemaining_Value" HorizontalAlignment="Left" Margin="760,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+
+        <Grid x:Name="Grid_FileSource" Background="#FFE5E5E5" Visibility="Visible" Margin="10,150,0,0" Width ="450" Height="470" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <DataGrid x:Name="FileSource_DataGrid"  IsReadOnly="True" Height="300" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,0,0,0" />
+            <Button x:Name="Button_SelectAllFiles" Content="Select All Files" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Bottom"/>
+            <Button x:Name="Button_CopyFiles" Content="Copy Selected Files" HorizontalAlignment="Left" Margin="110,0,0,0" VerticalAlignment="Bottom"/>
+            <TextBox x:Name="SelectedFilesSpace_Label" HorizontalAlignment="Left" Margin="200,0,0,30" TextWrapping="Wrap" Text="Space of Selected Files" VerticalAlignment="Bottom" Width="150"/>
+            <TextBox x:Name="SelectedFilesSpace_Value" HorizontalAlignment="Left" Margin="360,0,0,30" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="50"/>
 
         </Grid>
-       
+        <Grid x:Name="Grid_Destination" Background="#FFE5E5E5"   Visibility="Visible" Margin="0,150,10,0" Width ="450" Height="470" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <DataGrid x:Name="FileDestination_DataGrid" AutoGenerateColumns="False" IsReadOnly="True" Height="300" HorizontalAlignment="Center" Visibility="Visible"  VerticalAlignment="Top" Margin="0,0,0,0" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="FullPath" Binding="{Binding FullPath}"/>
+                <DataGridTextColumn Header="Size" Binding="{Binding Size}"/>
+                <DataGridTextColumn Header="CreationTime" Binding="{Binding CreationTime}"/>
+                <DataGridTextColumn Header="Source" Binding="{Binding Source}"/>
+                <DataGridTextColumn Header="PathHeaderSource" Binding="{Binding PathHeader}" Visibility = "Hidden"/>
+            </DataGrid.Columns>
+            </DataGrid>
+            <Button x:Name="Button_RemoveFiles" Content="Remove Selected Files" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Bottom"/>
+            <TextBox x:Name="CopiedFilesSpace_Label" HorizontalAlignment="Left" Margin="200,0,0,30" TextWrapping="Wrap" Text="Space of Copied Files" VerticalAlignment="Bottom" Width="150"/>
+            <TextBox x:Name="CopiedFilesSpace_Value" HorizontalAlignment="Left" Margin="360,0,0,30" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="50"/>
+        </Grid>
+
     </Grid>
 </Window>

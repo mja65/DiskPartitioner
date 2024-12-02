@@ -112,7 +112,7 @@ function Update-UI {
             $WPF_DP_Amiga_Buffers_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.buffers
             $WPF_DP_Amiga_DeviceName_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.DeviceName
             $WPF_DP_Amiga_VolumeName_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.VolumeName
-            $WPF_DP_Amiga_DosType_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.DosType  
+            $WPF_DP_Amiga_DosType_Input_Dropdown.SelectedItem = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.DosType  
             $WPF_DP_Amiga_MaxTransfer_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.MaxTransfer 
             $WPF_DP_Amiga_Priority_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.Priority 
            

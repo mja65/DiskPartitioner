@@ -14,10 +14,10 @@ function Set-GUIPartitionNewSize {
     # $ActiontoPerform = 'MBR_ResizeFromRight'
     # $PartitionType = 'MBR'
    
-    # Write-host ""
-    # Write-host 'Function Set-GUIPartitionNewSize'
-    if ($SizePixelstoChange -eq 0){
-        Write-host 'No change' 
+     Write-host ""
+     Write-host "Function Set-GUIPartitionNewSize SizeBytes:$SizeBytes SizePixelstoChange:$SizePixelstoChange ActiontoPerform:$ActiontoPerform"
+    if (($ResizePixels) -and ($SizePixelstoChange -eq 0)){
+        Write-host 'No change based on Pixels' 
         return $false
     }
 
@@ -44,6 +44,10 @@ function Set-GUIPartitionNewSize {
 
     $PartitionToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
 
+    if (($ResizeBytes) -and ($SizeBytes -eq $PartitionToCheck.PartitionSizeBytes)){
+        Write-host 'No change based on bytes' 
+        return $false
+    }
 
     $MinimumSizeBytes = $null       
     if ($PartitionType -eq 'MBR'){

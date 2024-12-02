@@ -36,7 +36,6 @@ $WPF_SD_OK_Button.Add_Click({
     }
     $Script:GUIActions.AvailableSpaceforImportedPartitionBytes = $null
     $Script:GUIActions.SelectedPhysicalDisk = $null
-    $Script:GUIActions.ListofRemovableMedia = $null
     $WPF_SelectDiskWindow.Close()
 })
 

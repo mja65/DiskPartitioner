@@ -36,7 +36,7 @@ function Add-GUIPartitiontoMBRDisk {
         
     $NewPartitionName = ($Script:DP_Settings.PartitionPrefix+$PartitionType+'_'+$NewPartitionNumber)  
   
-    if ($AddType -eq 'AtEnd'){
+    if ($AddType -eq 'AtEnd' -or $AddType -eq 'Initial'){
         $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'MBR').EndingPositionPixels
         $StartingPositionBytes = (Get-GUIPartitionStartEnd -PartitionType 'MBR').EndingPositionBytes
     }
@@ -84,11 +84,28 @@ function Add-GUIPartitiontoMBRDisk {
 
     
     If ($PartitionType -eq 'ID76' -and (-not $ImportedPartition -eq $true)){
-        
+       
         Add-AmigaDisktoID76Partition -ID76PartitionName $NewPartitionName
         if ($DefaultPartition -eq $true){
             Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault -AddType 'AtEnd' -PartitionTypeAmiga 'Workbench' -DeviceName 'SDH0' -VolumeName 'Workbench' -Buffers '300' -MaxTransfer '0xffffff' -DosType 'PFS\3' -Bootable $true -NoMount $false -Priority 1
-            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes ($SizeBytes-$Script:SDCardMinimumsandMaximums.WorkbenchDefault) -PartitionTypeAmiga 'Work' -AddType 'AtEnd' -VolumeName 'Work' -DeviceName 'SDH1' -Buffers '300' -MaxTransfer '0xffffff' -DosType 'PFS\3' -Bootable $false -NoMount $false -Priority 99
+            
+            $NumberofPartitions = [math]::Ceiling(($SizeBytes-$Script:SDCardMinimumsandMaximums.WorkbenchDefault)/$Script:SDCardMinimumsandMaximums.PFS3Maximum)
+            $SpacetoAllocatetoAmigaWorkPartition = ($SizeBytes-$Script:SDCardMinimumsandMaximums.WorkbenchDefault)/$NumberofPartitions 
+                       
+            for ($i = 1; $i -le $NumberofPartitions; $i++) {
+                If ($NumberofPartitions -eq 1){
+                    $WorkVolumeName = 'Work'
+                    $DeviceName = 'SDH1'
+                }
+                else{
+                    $WorkVolumeName = "Work_$i"
+                    $DeviceName = "SDH$i"
+                }
+
+                Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes $SpacetoAllocatetoAmigaWorkPartition -PartitionTypeAmiga 'Work' -AddType 'AtEnd' -VolumeName $WorkVolumeName -DeviceName $DeviceName -Buffers '300' -MaxTransfer '0xffffff' -DosType 'PFS\3' -Bootable $false -NoMount $false -Priority 99
+                
+            }
+            
         }
        # Set-DiskCoordinates -prefix 'WPF_UI_DiskPartition_' -PartitionPrefix 'Partition_' -PartitionType 'Amiga' -AmigaDisk ((Get-Variable -name ($NewPartitionName+'_AmigaDisk')).value)
         #Set-AmigaDiskSizeBytes -ID76PartitionName $NewPartitionName -AmigaDisk ((Get-Variable -name ($NewPartitionName+'_AmigaDisk')).value)

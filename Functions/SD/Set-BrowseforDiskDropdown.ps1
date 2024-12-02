@@ -1,10 +1,27 @@
 function Set-BrowseforDiskDropdown {
     param (
+        [Switch]$TransferFiles,
+        [Switch]$ImportPartition
     )   
     
-    $Script:GUIActions.ListofRemovableMedia = Get-RemovableMedia
-
-    foreach ($Disk in $Script:GUIActions.ListofRemovableMedia){
-        $WPF_SD_BrowseforDisk_DropDown.AddChild($Disk.FriendlyName)       
+    if (-not ($Script:GUIActions.ListofRemovableMedia)){
+        $Script:GUIActions.ListofRemovableMedia = Get-RemovableMedia
     }
+
+    if ($ImportPartition){
+        if ($WPF_SD_BrowseforDisk_DropDown){
+            foreach ($Disk in $Script:GUIActions.ListofRemovableMedia){
+                $WPF_SD_BrowseforDisk_DropDown.AddChild($Disk.FriendlyName)       
+            }
+        }
+    }
+    elseif ($TransferFiles){
+        if ($WPF_TFRDB_BrowseforDisk_DropDown){
+            foreach ($Disk in $Script:GUIActions.ListofRemovableMedia){
+                $WPF_TFRDB_BrowseforDisk_DropDown.AddChild($Disk.FriendlyName)       
+            }
+        }
+    }
+       
+
 }

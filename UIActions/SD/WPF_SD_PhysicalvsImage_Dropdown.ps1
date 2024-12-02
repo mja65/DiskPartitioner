@@ -8,7 +8,7 @@ foreach ($Option in $DropDownOptions){
 
 $WPF_SD_PhysicalvsImage_Dropdown.add_selectionChanged({
     If ($WPF_SD_PhysicalvsImage_Dropdown.SelectedItem -eq 'Physical Disk'){
-        Set-BrowseforDiskDropdown  
+        Set-BrowseforDiskDropdown -ImportPartition
         $WPF_SD_Grid_ImageFile.Visibility = 'Hidden'
         $WPF_SD_Grid_PhysicalDisk.Visibility = 'Visible'
     }

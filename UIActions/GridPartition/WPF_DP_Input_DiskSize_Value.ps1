@@ -21,8 +21,12 @@ $WPF_DP_Input_DiskSize_Value.add_LostFocus({
             
             
             
-            Add-GUIPartitiontoMBRDisk -PartitionType 'FAT32' -AddType 'AtEnd' -DefaultPartition $true -SizeBytes $Script:SDCardMinimumsandMaximums.FAT32Default
-            Add-GUIPartitiontoMBRDisk -PartitionType 'ID76' -AddType 'AtEnd' -DefaultPartition $true -SizeBytes ($WPF_DP_Disk_MBR.DiskSizeBytes - $Script:SDCardMinimumsandMaximums.FAT32Default)
+            Add-GUIPartitiontoMBRDisk -PartitionType 'FAT32' -AddType 'Initial' -DefaultPartition $true -SizeBytes $Script:SDCardMinimumsandMaximums.FAT32Default
+            $RemainingSpace = ($WPF_DP_Disk_MBR.DiskSizeBytes - $Script:SDCardMinimumsandMaximums.FAT32Default)
+            
+            Add-GUIPartitiontoMBRDisk -PartitionType 'ID76' -AddType 'Initial' -DefaultPartition $true -SizeBytes $RemainingSpace    
+
+                
         }
         else{
             $WPF_DP_GridAmiga.Visibility = 'Hidden'

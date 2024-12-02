@@ -108,8 +108,7 @@
             <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition" HorizontalAlignment="Left" Margin="294,0,0,0" VerticalAlignment="Top" Width="100" Height="20" />
             <ComboBox x:Name="AddNewAmigaPartition_DropDown" HorizontalAlignment="Left" Margin="400,0,0,0" VerticalAlignment="Top" Width="170"/>
 
-            <Button x:Name="Button_ImportRDBPartition" Content="Import RDB partition" HorizontalAlignment="Left" Margin="600,0,0,0" VerticalAlignment="Top" Height="20" Width="140"/>   
-            <ComboBox x:Name="ImportRDBPartition_DropDown" HorizontalAlignment="Left" Margin="750,0,0,0" VerticalAlignment="Top" Width="170"/>
+            <Button x:Name="Button_ImportFiles" Content="Import Files to partition" HorizontalAlignment="Left" Margin="930,0,0,0" VerticalAlignment="Top" Height="20" Width="140"/>   
 
                 <TextBox x:Name="Amiga_SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
                 <TextBox x:Name="Amiga_SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="120,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
@@ -138,7 +137,7 @@
                 <TextBox x:Name="Amiga_VolumeName_Input" HorizontalAlignment="Left" Margin="190,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
 
                 <TextBox x:Name="Amiga_DosTypeLabel" HorizontalAlignment="Left" Margin="250,300,0,0" TextWrapping="Wrap" Text="DosType" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_DosType_Input" HorizontalAlignment="Left" Margin="330,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+                <ComboBox x:Name="Amiga_DosType_Input_Dropdown" HorizontalAlignment="Left" Margin="330,300,0,0" VerticalAlignment="Top" Width="50"/>
 
                 <TextBox x:Name="Amiga_Buffers_Label" HorizontalAlignment="Left" Margin="390,300,0,0" TextWrapping="Wrap" Text="Buffers" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
                 <TextBox x:Name="Amiga_Buffers_Input" HorizontalAlignment="Left" Margin="470,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>

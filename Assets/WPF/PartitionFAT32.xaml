@@ -20,5 +20,5 @@
             <Rectangle x:Name="BottomBorder_Rectangle" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="3" Stroke="Black" StrokeThickness="5" />
             <Rectangle x:Name="LeftBorder_Rectangle" Grid.RowSpan="3" Grid.Column="0" Grid.Row ="0" Stroke="Black" StrokeThickness="5" />
             <Rectangle x:Name="RightBorder_Rectangle" Grid.RowSpan="3" Grid.Column="2" Grid.Row ="0" Stroke="Black" StrokeThickness="5" />
-            <Rectangle x:Name="FullSpace_Rectangle" Grid.ColumnSpan="1" Fill="Blue" Grid.Row="1" Grid.Column="1"/>
+            <Rectangle x:Name="FullSpace_Rectangle" Grid.ColumnSpan="1" Fill="#FF3B67A2" Grid.Row="1" Grid.Column="1"/>
 </Grid>

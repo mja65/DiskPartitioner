@@ -52,6 +52,8 @@ function New-GUIPartition {
         CanResizeRight = $null
         CanMove = $null
         CanDelete = $null
+        ImportedFilesSpaceBytes = 0
+        ImportedFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
     }
 
     If ($DefaultMBRPartition -eq $true){
@@ -144,15 +146,22 @@ function New-GUIPartition {
                 elseif ($DefaultAmigaWorkbenchPartition -eq $true){
                     $NewPartition.Children[$i].Fill=$WPF_MainWindow.Resources.DefaultAmigaWorkbenchPartitionBrush
                 }
-                elseif ($DefaultAmigaWorkPartition -eq $true){
-                    $NewPartition.Children[$i].Fill=$WPF_MainWindow.Resources.DefaultAmigaWorkPartitionBrush
-                }
+                # elseif ($DefaultAmigaWorkPartition -eq $true){
+                #     $NewPartition.Children[$i].Fill=$WPF_MainWindow.Resources.DefaultAmigaWorkPartitionBrush
+                # }
             }
             else {
-                if ($ImportedPartition -eq $true){}
-                elseif ($PartitionType -eq 'FAT32'){}
-                elseif ($PartitionType -eq 'ID76'){}
-                elseif ($PartitionType -eq 'Amiga'){
+                if ($ImportedPartition -eq $true){
+                    if ($PartitionType -eq 'FAT32'){
+                        $NewPartition.Children[$i].Fill=$WPF_MainWindow.Resources.ImportedFAT32Brush
+                    }
+                    elseif ($PartitionType -eq 'ID76'){
+                        $NewPartition.Children[$i].Fill=$WPF_MainWindow.Resources.ImportedID76Brush
+                    }
+                    elseif ($PartitionType -eq 'Amiga'){
+                        $NewPartition.Children[$i].Fill=$WPF_MainWindow.Resources.ImportedAmigaPartitionBrush
+                    }
+
                 }
 
             }

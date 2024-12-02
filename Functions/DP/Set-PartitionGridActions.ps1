@@ -72,21 +72,25 @@ function Set-PartitionGridActions {
         elseif (($Script:GUIActions.ActionToPerform -eq 'MBR_ResizeFromRight') -or ($Script:GUIActions.ActionToPerform -eq 'MBR_ResizeFromLeft')) {
             $AmounttoMove = $Script:GUIActions.CurrentMousePositionX - $Script:GUIActions.MousePositionXatTimeofPress
             #Write-Host "$($Script:GUIActions.ActionToPerform) $AmounttoMove"
-            if ((Set-GUIPartitionNewSize -ResizePixels -PartitionName $Script:GUIActions.SelectedMBRPartition -ActiontoPerform $Script:GUIActions.ActionToPerform -PartitionType 'MBR' -SizePixelstoChange $AmounttoMove) -eq $false){
-
+            if ($AmounttoMove){
+                if ((Set-GUIPartitionNewSize -ResizePixels -PartitionName $Script:GUIActions.SelectedMBRPartition -ActiontoPerform $Script:GUIActions.ActionToPerform -PartitionType 'MBR' -SizePixelstoChange $AmounttoMove) -eq $false){
+    
+                }
+                $Script:GUIActions.MousePositionXatTimeofPress = $Script:GUIActions.CurrentMousePositionX 
+                Update-UI -UpdateInputBoxes
             }
-            $Script:GUIActions.MousePositionXatTimeofPress = $Script:GUIActions.CurrentMousePositionX 
-            Update-UI -UpdateInputBoxes
         }
         elseif (($Script:GUIActions.ActionToPerform -eq 'Amiga_ResizeFromRight') -or ($Script:GUIActions.ActionToPerform -eq 'Amiga_ResizeFromLeft')) {
             $WPF_Partition.Cursor = "SizeWE"
             $AmounttoMove = $Script:GUIActions.CurrentMousePositionX - $Script:GUIActions.MousePositionXatTimeofPress
             #Write-Host "$($Script:GUIActions.ActionToPerform) $AmounttoMove"
-            if ((Set-GUIPartitionNewSize -ResizePixels -PartitionName $Script:GUIActions.SelectedAmigaPartition -ActiontoPerform $Script:GUIActions.ActionToPerform -PartitionType 'Amiga' -SizePixelstoChange $AmounttoMove) -eq $false){
-                
+            if ($AmounttoMove){
+                if ((Set-GUIPartitionNewSize -ResizePixels -PartitionName $Script:GUIActions.SelectedAmigaPartition -ActiontoPerform $Script:GUIActions.ActionToPerform -PartitionType 'Amiga' -SizePixelstoChange $AmounttoMove) -eq $false){
+                    
+                }
+                $Script:GUIActions.MousePositionXatTimeofPress = $Script:GUIActions.CurrentMousePositionX
+                Update-UI -UpdateInputBoxes             
             }
-            $Script:GUIActions.MousePositionXatTimeofPress = $Script:GUIActions.CurrentMousePositionX
-            Update-UI -UpdateInputBoxes             
         }
         # Write-Host "X: $($Script:GUIActions.CurrentMousePositionX) Y: $($Script:GUIActions.CurrentMousePositionY)"
     })

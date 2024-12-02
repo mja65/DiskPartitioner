@@ -24,6 +24,7 @@ Set-PartitionGridActions
 $WPF_MainWindow.AddChild($WPF_Partition)
 
 $WPF_MainWindow.ShowDialog() | out-null
-
+# $WPF_MainWindow.Close()
 # [System.Windows.Controls.DataGrid].GetEvents() | Select-Object Name, *Method, EventHandlerType
 # Get-variable
+

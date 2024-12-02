@@ -1,33 +1,3 @@
-function Get-ParsedHSTPartitionInfo {
-    param (
-        $DataToParse,
-        $FirstHeader,
-        $SecondHeader,
-        $HeadertoUse
-   
-    )    
-
-    $PartitionDetails = @()
-    $StartRow = 0
-    $EndRow = 0    
-
-    for ($i = 0; $i -lt $DataToParse.Count; $i++) {
-        if ($DataToParse[$i] -match $FirstHeader){
-            $StartRow = $i+2
-        }
-        if ($DataToParse[$i] -match $SecondHeader){
-            $EndRow = $i-2
-            break
-        }
-    }
-
-    for ($i = $StartRow ; $i -le $EndRow; $i++) {
-        $PartitionDetails += ConvertFrom-Csv -InputObject $DataToParse[$i] -Delimiter '|' -Header $HeadertoUse   
-    }
-
-    return $PartitionDetails
-
-}
 
 function Get-HSTPartitionInfo {
     param (
@@ -39,8 +9,24 @@ function Get-HSTPartitionInfo {
         
     # $Path = '\disk7\mbr\2' 
     # $Path = "E:\Emulators\Amiga Files\Hard Drives\InstallProgs\CFD133.lha"
+    # $Path = '\disk6\mbr\2'
     
     If ($MBRInfo){
+      
+        $Exception = $null
+
+        $OutputtoParse_MBR = & $Script:ExternalProgramSettings.HSTImagePath mbr info $Path
+
+        $OutputtoParse_MBR | ForEach-Object {
+            if ($_ -match 'No Master Boot Record present'){
+                $Exception = $true
+            }
+        } 
+        
+        if ($Exception -eq $true){
+            return 'NotMBR'
+        }
+        
         $Header_MBR1 = 'Number','Id','Type','FileSystem','Size','StartSector','EndSector','Active','Primary'
         $HeadertoFind_MBR1_1 = 'File System'
         $HeadertoFind_MBR1_2 = 'Partition table overview:'
@@ -49,14 +35,7 @@ function Get-HSTPartitionInfo {
         $HeadertoFind_MBR2_1 = 'Start Off'
         $HeadertoFind_MBR2_2  = 'Done'
         
-        $OutputtoParse_MBR = & $Script:ExternalProgramSettings.HSTImagePath mbr info $Path
 
-        $OutputtoParse_MBR | ForEach-Object {
-            if ($_ -match 'No Master Boot Record present'){
-                Write-Host "No MBR found!"
-                return
-            }
-        } 
 
         $MBR_1 = Get-ParsedHSTPartitionInfo -DataToParse $OutputtoParse_MBR -FirstHeader $HeadertoFind_MBR1_1 -SecondHeader $HeadertoFind_MBR1_2 -HeadertoUse $Header_MBR1
         $MBR_2 = Get-ParsedHSTPartitionInfo -DataToParse $OutputtoParse_MBR -FirstHeader $HeadertoFind_MBR2_1 -SecondHeader $HeadertoFind_MBR2_2 -HeadertoUse $Header_MBR2 
@@ -94,6 +73,24 @@ function Get-HSTPartitionInfo {
     }
 
     elseif ($RDBInfo){
+
+        $Exception = $null
+
+        $OutputtoParse_RDB = & $Script:ExternalProgramSettings.HSTImagePath rdb info $Path 
+
+        $VolumeNameData = Get-HSTVolumeName -Path "$Path\rdb" 
+
+        $OutputtoParse_RDB | ForEach-Object {
+            if ($_ -match 'No Rigid Disk Block present'){
+                #Write-host "Not RDB!"
+                $Exception = $true
+                
+            }
+        } 
+        if ($Exception -eq $true){
+            return 'NotRDB'
+        }
+
         $Header_RDB1 = 'Number','Name','Size','LowCyl','HighCyl','Reserved','PreAlloc','BlockSize','Buffers','DOSType','MaxTransfer','Bootable','NoMount','Priority'
         $HeadertoFind_RDB1_1 = 'Max Transfer'
         $HeadertoFind_RDB1_2 = 'Partition table overview:'
@@ -102,20 +99,16 @@ function Get-HSTPartitionInfo {
         $HeadertoFind_RDB2_1 = 'Start Off'
         $HeadertoFind_RDB2_2 = 'Done'
 
-        $OutputtoParse_RDB = & $Script:ExternalProgramSettings.HSTImagePath rdb info $Path 
-
-        $OutputtoParse_RDB | ForEach-Object {
-            if ($_ -match 'No Rigid Disk Block present'){
-                Write-host "Not RDB!"
-                return
-
-            }
-        } 
-
         $RDB_1 = Get-ParsedHSTPartitionInfo -DataToParse $OutputtoParse_RDB -FirstHeader $HeadertoFind_RDB1_1 -SecondHeader $HeadertoFind_RDB1_2 -HeadertoUse $Header_RDB1 
         $RDB_2 = Get-ParsedHSTPartitionInfo -DataToParse $OutputtoParse_RDB -FirstHeader $HeadertoFind_RDB2_1 -SecondHeader $HeadertoFind_RDB2_2 -HeadertoUse $Header_RDB2 
         
         $RDBPartitionTable = [System.Collections.Generic.List[PSCustomObject]]::New()
+
+        $HashTableforVolumeNames = @{} # Clear Hash
+
+        $VolumeNameData | ForEach-Object {
+            $HashTableforVolumeNames[$_.Name] = @($_.VolumeName)
+        }
 
         $HashTableforRDB_1 = @{} # Clear Hash
         $RDB_1 | ForEach-Object {
@@ -157,7 +150,17 @@ function Get-HSTPartitionInfo {
 
         $RDBPartitionTable | Add-Member -NotePropertyMembers @{
             MBRNumber  = $MBRNumber           
+            VolumeName  = $null           
+        
         }
+
+        $RDBPartitionTable | ForEach-Object {
+            if ($HashTableforVolumeNames.ContainsKey($_.Name)){
+                $_.VolumeName = $HashTableforVolumeNames.($_.Name)[0]
+            }
+
+        }
+
         return $RDBPartitionTable
     }
 }

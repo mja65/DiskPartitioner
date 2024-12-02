@@ -19,7 +19,8 @@ $Script:GUIActions = [PSCustomObject]@{
     SelectedPhysicalDisk = $null
     AvailableSpaceforImportedPartitionBytes = $null 
     ImportedImagePath = $null
-    TransferSourceLocation =$null
+    TransferSourceLocation = $null
+    TransferSourceType = $null
     ScriptPath = $null
     DiskSizeSelected = $null
     MouseStatus = $null
@@ -43,13 +44,14 @@ $Script:GUIActions = [PSCustomObject]@{
 
 $Script:GUIVisuals = [PSCustomObject]@{
     ColourFAT32 = "#FF3B67A2"
-    ColourID76 = "Green"
+    ColourID76 = "#FF7B7B7B"
     ColourWorkbench = "#FFFFA997"
     ColourWork = "#FFAA907C" 
+    ColourImported = "#FFAFAFAF"
 }
 
 $Script:SDCardMinimumsandMaximums = $null
 
 $Script:ExternalProgramSettings = [PSCustomObject]@{
-    HSTImagePath = 'C:\Users\Matt\OneDrive\Documents\hst-imager\src\Hst.Imager.ConsoleApp\bin\Debug\net8.0\Hst.Imager.ConsoleApp.exe'
+    HSTImagePath = 'C:\Users\Matt\OneDrive\Documents\hst-imager\hst-imager\src\Hst.Imager.ConsoleApp\bin\Debug\net8.0\Hst.Imager.ConsoleApp.exe'
 }
