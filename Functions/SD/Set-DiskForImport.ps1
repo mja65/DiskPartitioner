@@ -1,19 +1,12 @@
 function Set-DiskForImport {
     param (
-        [Switch]$MBR,
-        [Switch]$RDB
+        [Switch]$MBR
+
     )
     
     Remove-Variable -Name 'WPF_SD_*'
 
-    if ($RDB)
-    {
-        $Script:GUIActions.ActionToPerform = 'ImportRDBPartition'
-        $WPF_SelectDiskWindow = Get-XAML -WPFPrefix 'WPF_SD_' -XMLFile '.\Assets\WPF\Window_SelectDiskRDB.xaml' -ActionsPath '.\UIActions\SD\' -AddWPFVariables
-        $WPF_SelectDiskWindow.ShowDialog() | out-null
-
-    }
-    elseif ($MBR){
+    if ($MBR){
         $Script:GUIActions.ActionToPerform = 'ImportMBRPartition'
 
         $WPF_SelectDiskWindow = Get-XAML -WPFPrefix 'WPF_SD_' -XMLFile '.\Assets\WPF\Window_SelectDiskMBR.xaml' -ActionsPath '.\UIActions\SD\' -AddWPFVariables

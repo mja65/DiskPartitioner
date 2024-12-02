@@ -56,59 +56,37 @@ function New-GUIPartition {
         ImportedFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
     }
 
-    If ($DefaultMBRPartition -eq $true){
-        $NewPartition.CanDelete = $false
-        $NewPartition.CanResizeRight = $true
-        if ($PartitionType -eq 'FAT32'){
-            $NewPartition.CanMove = $false
-            $NewPartition.CanResizeLeft =$false
+    If ($PartitionType -eq 'FAT32' -or $PartitionType -eq 'ID76'){        
+        $NewPartition.PartitionTypeMBRorAmiga='MBR'
+        if ($PartitionType -eq 'ID76'){
+            $NewPartition | Add-Member -NotePropertyName AmigaDiskName -NotePropertyValue $null  
+        }
+        if ($DefaultMBRPartition -eq $true){
+            $NewPartition.CanDelete = $false
+            $NewPartition.CanResizeRight = $true
+            if ($PartitionType -eq 'FAT32'){
+                $NewPartition.CanMove = $false
+                $NewPartition.CanResizeLeft =$false
+            }
+            else{
+                $NewPartition.CanMove = $true
+                $NewPartition.CanResizeLeft =$true
+            }
+        }
+        elseif ($ImportedPartition -eq $true){
+            $NewPartition.CanDelete = $true
+            $NewPartition.CanResizeLeft = $false
+            $NewPartition.CanResizeRight = $false
         }
         else{
-            $NewPartition.CanMove = $true
-            $NewPartition.CanResizeLeft =$true
-        }
-    }
-    elseif ($DefaultAmigaWorkbenchPartition -eq $true){
-        $NewPartition.CanDelete = $false
-        $NewPartition.CanResizeRight = $true
-        $NewPartition.CanMove = $true
-        $NewPartition.CanResizeLeft =$true
-    }
-    elseif ($DefaultAmigaWorkPartition -eq $true){
-        $NewPartition.CanDelete = $false
-        $NewPartition.CanResizeRight = $true
-        $NewPartition.CanMove = $true
-        $NewPartition.CanResizeLeft =$true
-    }
-    elseif ($ImportedPartition -eq $true){
-        if ($DerivedImportedPartition -eq $true){
-            $NewPartition.CanDelete = $false
-        }
-        else {
             $NewPartition.CanDelete = $true
-
+            $NewPartition.CanResizeRight = $true
+            $NewPartition.CanResizeLeft =$true
+            $NewPartition.CanMove = $true
         }
-        $NewPartition.CanResizeRight = $false
-        $NewPartition.CanResizeLeft =$false
-        $NewPartition.CanMove = $true
-    }
-    else{
-        $NewPartition.CanDelete = $true
-        $NewPartition.CanResizeRight = $true
-        $NewPartition.CanResizeLeft =$true
-        $NewPartition.CanMove = $true
-    }
-
-
-    if ($PartitionType -eq 'FAT32'){
-        $NewPartition.PartitionTypeMBRorAmiga='MBR'
-    } 
-    elseif ($PartitionType -eq 'ID76'){
-        $NewPartition | Add-Member -NotePropertyName AmigaDiskName -NotePropertyValue $null  
-        $NewPartition.PartitionTypeMBRorAmiga='MBR'
     }
     elseif ($PartitionType -eq 'Amiga'){
-
+        $NewPartition.PartitionTypeMBRorAmiga='Amiga'
         $NewPartition | Add-Member -NotePropertyMembers @{
             DeviceName =$null
             VolumeName = $null
@@ -126,8 +104,58 @@ function New-GUIPartition {
             CanChangeMountable = $null
             CanChangePriority = $null
         }
-
-        $NewPartition.PartitionTypeMBRorAmiga='Amiga'
+        if ($DefaultAmigaWorkbenchPartition -eq $true){
+            $NewPartition.CanDelete = $false
+            $NewPartition.CanResizeLeft = $true
+            $NewPartition.CanResizeRight = $true
+            $NewPartition.CanMove = $true
+            $NewPartition.CanChangeBootable = $true
+            $NewPartition.CanChangeBuffers = $true
+            $NewPartition.CanChangePriority = $true
+            $NewPartition.CanChangeMountable = $true
+            $NewPartition.CanRenameDevice =$false
+            $NewPartition.CanRenameVolume =$false
+            $NewPartition.CanChangeMaxTransfer = $true
+        }
+        elseif ($DefaultAmigaWorkPartition -eq $true){
+            $NewPartition.CanDelete = $true
+            $NewPartition.CanResizeRight = $true
+            $NewPartition.CanMove = $true
+            $NewPartition.CanResizeLeft =$true
+            $NewPartition.CanChangeBootable = $true
+            $NewPartition.CanChangeBuffers =$true
+            $NewPartition.CanChangePriority = $true
+            $NewPartition.CanChangeMountable = $true
+            $NewPartition.CanRenameDevice = $true
+            $NewPartition.CanRenameVolume = $true
+            $NewPartition.CanChangeMaxTransfer = $true
+        }
+        elseif ($DerivedImportedPartition -eq $true){
+            $NewPartition.CanDelete = $false
+            $NewPartition.CanResizeLeft = $false
+            $NewPartition.CanResizeRight = $false
+            $NewPartition.CanMove = $true
+            $NewPartition.CanChangeBootable = $true
+            $NewPartition.CanChangeBuffers =$true
+            $NewPartition.CanChangePriority = $true
+            $NewPartition.CanChangeMountable = $true
+            $NewPartition.CanRenameDevice = $true
+            $NewPartition.CanRenameVolume = $true
+            $NewPartition.CanChangeMaxTransfer = $true    
+        }
+        else{
+            $NewPartition.CanDelete = $true
+            $NewPartition.CanResizeLeft =$true
+            $NewPartition.CanResizeRight = $true
+            $NewPartition.CanMove = $true
+            $NewPartition.CanChangeBootable = $true
+            $NewPartition.CanChangeBuffers =$true
+            $NewPartition.CanChangePriority = $true
+            $NewPartition.CanChangeMountable = $true
+            $NewPartition.CanRenameDevice = $true
+            $NewPartition.CanRenameVolume = $true
+            $NewPartition.CanChangeMaxTransfer = $true    
+        }
     }
      
     #$NewPartition.PartitionSizeBytes = $SizeBytes
@@ -167,8 +195,6 @@ function New-GUIPartition {
             }
         }
     }
-
-    
 
     return $NewPartition
 }

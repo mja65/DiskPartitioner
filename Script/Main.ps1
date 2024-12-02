@@ -28,3 +28,4 @@ $WPF_MainWindow.ShowDialog() | out-null
 # [System.Windows.Controls.DataGrid].GetEvents() | Select-Object Name, *Method, EventHandlerType
 # Get-variable
 
+# $WPF_DP_Partition_ID76_1_AmigaDisk_Partition_1

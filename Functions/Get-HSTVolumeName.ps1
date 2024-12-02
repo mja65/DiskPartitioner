@@ -3,7 +3,7 @@ function Get-HSTVolumeName {
         $Path
     )
     
-    $Path = "\disk6\mbr\2\rdb"
+    #$Path = "\disk6\mbr\2\rdb"
 
     $DatatoParse = & $Script:ExternalProgramSettings.HSTImagePath fs dir $Path
 

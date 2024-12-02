@@ -8,7 +8,10 @@ function Set-GUIPartitionNewPosition {
     
     # $PartitionName = 'WPF_DP_Partition_ID76_1'
     # $PartitionName = 'WPF_DP_Partition_ID76_1_AmigaDisk_Partition_2'
-
+    
+    Write-host ""
+    Write-host "Function Set-GUIPartitionNewPosition AmountMovedBytes:$AmountMovedBytes AmountMovedPixels:$AmountMovedPixels"
+    
     if ((Get-Variable -name $PartitionName).Value.CanMove -eq $false) {
         return $false
     }

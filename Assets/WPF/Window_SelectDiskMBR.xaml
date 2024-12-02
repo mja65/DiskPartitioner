@@ -27,5 +27,7 @@
             <ComboBox x:Name="BrowseforDisk_DropDown" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Top" Width="120"/>
         </Grid>
         <DataGrid x:Name="MBR_DataGrid"  IsReadOnly = "True" Height="100" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,200,0,0" SelectionMode="Single"/>
+        <DataGrid x:Name="RDB_DataGrid"  IsReadOnly = "True" Height="100" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,350,0,0" SelectionMode="Single" IsHitTestVisible="False"/>
     </Grid>
+    
 </Window>

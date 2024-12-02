@@ -109,18 +109,19 @@ function Update-UI {
             if ((get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.Mountable -eq $false){
                 $WPF_DP_Amiga_Mountable.IsChecked = ''
             }
-            $WPF_DP_Amiga_Buffers_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.buffers
-            $WPF_DP_Amiga_DeviceName_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.DeviceName
-            $WPF_DP_Amiga_VolumeName_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.VolumeName
-            $WPF_DP_Amiga_DosType_Input_Dropdown.SelectedItem = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.DosType  
-            $WPF_DP_Amiga_MaxTransfer_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.MaxTransfer 
-            $WPF_DP_Amiga_Priority_Input.Text = (get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.Priority 
-           
+            
+            
+            Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'buffers' -CanChangeParameter 'CanChangeBuffers'      
+            Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_DeviceName_Input -Value 'DeviceName' -CanChangeParameter 'CanChangeDeviceName'
+            Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanChangeVolumeName'
+            Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_MaxTransfer_Input -Value 'MaxTransfer' -CanChangeParameter 'CanChangeMaxTransfer'
+            Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Priority_Input -Value 'Priority' -CanChangeParameter 'CanChangePriority'
+            Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'buffers' -CanChangeParameter 'CanChangeBuffers'
+            Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -DropdownControl $WPF_DP_Amiga_DosType_Input_Dropdown -Value 'DosType' -CanChangeParameter 'CanChangeDosType'                     
         }        
     }
 
 }
-
 
 # foreach ($Child in $WPF_DP_DiskGrid_Amiga.Children) {
 #     $WPF_DP_DiskGrid_Amiga.Children.Remove($Child)

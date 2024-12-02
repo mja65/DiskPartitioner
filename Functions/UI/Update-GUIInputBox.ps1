@@ -3,8 +3,11 @@ function Update-GUIInputBox {
         $InputBox,
         $DropDownBox,
         [Switch]$MBRResize,
+        [Switch]$AmigaResize,
         [Switch]$MBRMove_SpaceatBeginning,
-        [Switch]$MBRMove_SpaceatEnd
+        [Switch]$MBRMove_SpaceatEnd,
+        [Switch]$AmigaMove_SpaceatBeginning,
+        [Switch]$AmigaMove_SpaceatEnd
     )
 
     # $InputBox = $WPF_DP_SelectedSize_Input
@@ -18,9 +21,15 @@ function Update-GUIInputBox {
                 $InputBox.Background = 'Red'
             }
             else {
-                if ($MBRResize){
+                if (($MBRResize) -or ($AmigaResize)){
                     Write-Host 'Changing size based on input'
-                    if ((Set-GUIPartitionNewSize -ResizeBytes -PartitionName $Script:GUIActions.SelectedMBRPartition -SizeBytes (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size -PartitionType 'MBR' -ActiontoPerform 'MBR_ResizeFromRight') -eq $false){
+                    if ($MBRResize){
+                        $ResizeCheck = (Set-GUIPartitionNewSize -ResizeBytes -PartitionName $Script:GUIActions.SelectedMBRPartition -SizeBytes (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size -PartitionType 'MBR' -ActiontoPerform 'MBR_ResizeFromRight')
+                    }
+                    elseif ($AmigaResize){
+                        $ResizeCheck = (Set-GUIPartitionNewSize -ResizeBytes -PartitionName $Script:GUIActions.SelectedAmigaPartition -SizeBytes (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size -PartitionType 'Amiga' -ActiontoPerform 'Amiga_ResizeFromRight')
+                    }
+                    if ($ResizeCheck -eq $false){
                         Write-host "Invalid Size"
                         $InputBox.Background = 'Yellow'
                     }
@@ -28,12 +37,17 @@ function Update-GUIInputBox {
                         $InputBox.Background = 'White'
                     }
                 }
-                elseif (($MBRMove_SpaceatBeginning) -or ($MBRMove_SpaceatEnd)){
-                    $PartitiontoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'MBR' -and $_.PartitionName -eq $Script:GUIActions.SelectedMBRPartition}
-                    if ($MBRMove_SpaceatBeginning){
+                if (($MBRMove_SpaceatBeginning) -or ($MBRMove_SpaceatEnd) -or ($AmigaMove_SpaceatBeginning) -or ($AmigaMove_SpaceatEnd)){
+                    if (($MBRMove_SpaceatBeginning) -or ($MBRMove_SpaceatEnd)){
+                        $PartitiontoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'MBR' -and $_.PartitionName -eq $Script:GUIActions.SelectedMBRPartition}
+                    }
+                    elseif (($AmigaMove_SpaceatBeginning) -or ($AmigaMove_SpaceatEnd)){
+                        $PartitiontoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -eq $Script:GUIActions.SelectedAmigaPartition}
+                    }
+                    if (($MBRMove_SpaceatBeginning) -or ($AmigaMove_SpaceatBeginning)){
                         $AmounttoMove = (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size-$PartitiontoCheck.BytesAvailableLeft
                     }
-                    elseif ($MBRMove_SpaceatEnd){
+                    elseif (($MBRMove_SpaceatEnd) -or ($AmigaMove_SpaceatEnd)){
                         $AmounttoMove = (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size-$PartitiontoCheck.BytesAvailableRight
                         
                     }
@@ -49,7 +63,7 @@ function Update-GUIInputBox {
                         $InputBox.Background = 'White'
                         Set-GUIPartitionNewPosition -PartitionName $Script:GUIActions.SelectedMBRPartition -AmountMovedBytes $AmounttoMove -PartitionType 'MBR'
                     }                                  
-                }
+                }               
                 $InputBox.InputEntryChanged = $false
                 $InputBox.InputEntry = $false
                 $InputBox.InputEntryInvalid = $null

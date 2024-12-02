@@ -4,23 +4,28 @@ $WPF_SD_BrowseforDisk_DropDown.add_selectionChanged({
             $Script:GUIActions.SelectedPhysicalDisk = $_.HSTDiskName
             if ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartition'){
                 $WPF_SD_MBR_DataGrid.ItemsSource = Get-HSTPartitionInfo -MBRInfo -Path $Script:GUIActions.SelectedPhysicalDisk
+                $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDisk -PiStormDiskorImage
             }
-            elseif ($Script:GUIActions.ActionToPerform -eq 'ImportRDBPartition'){
-                if ($WPF_SD_PiStormvsAmiga_Dropdown.SelectedItem  -eq 'PiStorm Disk/Image'){
-                    $WPF_SD_MBR_DataGrid.ItemsSource = Get-HSTPartitionInfo -MBRInfo -Path $Script:GUIActions.SelectedPhysicalDisk
-                    $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDisk -PiStormDiskorImage
-                }
-                elseif ($WPF_SD_PiStormvsAmiga_Dropdown.SelectedItem  -eq 'Native Amiga Disk/Image') {
-                    $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDisk -AmigaNativeDiskorImage
-                }
+
+            $TabletoPopulate = [System.Collections.Generic.List[PSCustomObject]]::New()
+
+            $Script:RDBPartitionTable | ForEach-Object {
+                $TabletoPopulate += $_                
             }
+    
+            if ($TabletoPopulate){
+                $WPF_SD_RDB_DataGrid.ItemsSource = $TabletoPopulate
+            }
+            
         }
     }
     if ($WPF_SD_BrowseforDisk_DropDown.SelectedItem){
-        $WPF_SD_MBR_DataGrid.Visibility = 'Visible'        
+        $WPF_SD_MBR_DataGrid.Visibility = 'Visible'
+        #$WPF_SD_RDB_DataGrid.Visibility = 'Visible'        
     } 
     else {
         $WPF_SD_MBR_DataGrid.Visibility = 'Hidden'
+        #$WPF_SD_RDB_DataGrid.Visibility = 'Hidden'
     }
 })
 
