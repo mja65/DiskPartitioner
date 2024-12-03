@@ -41,6 +41,7 @@ function New-GUIPartition {
         ImportedPartition = $false
         ImportedPartitionType = $null
         ImportedPartitionPath = $null
+        ImportedPartitionMethod = $null
         PartitionType = $PartitionType
         StartingPositionBytes = $null
         PartitionSizeBytes = $null  

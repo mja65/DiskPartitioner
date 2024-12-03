@@ -6,6 +6,7 @@ function Add-GUIPartitiontoMBRDisk {
         $SizeBytes,
         $DefaultPartition,
         $ImportedPartition,
+        $ImportedPartitionMethod,
         $DerivedImportedPartition,
         $PathtoImportedPartition
     )
@@ -60,6 +61,7 @@ function Add-GUIPartitiontoMBRDisk {
         $NewPartition.ImportedPartition = $true
         $NewPartition.ImportedPartitionType = 'Direct'
         $NewPartition.ImportedPartitionPath = $PathtoImportedPartition
+        $NewPartition.ImportedPartitionMethod = $ImportedPartitionMethod 
     }
 
     $NewPartition.Margin = [System.Windows.Thickness]"$LeftMargin,0,0,0"

@@ -1,14 +1,14 @@
 $WPF_TFRDB_BrowseforDisk_DropDown.add_selectionChanged({
     $Script:GUIActions.ListofRemovableMedia | ForEach-Object{
         if ($WPF_TFRDB_BrowseforDisk_DropDown.SelectedItem -eq $_.FriendlyName){
-            $Script:GUIActions.SelectedPhysicalDisk = $_.HSTDiskName
-            $MBRDatatoPopulate = (Get-HSTPartitionInfo -MBRInfo -Path $Script:GUIActions.SelectedPhysicalDisk) 
+            $Script:GUIActions.SelectedPhysicalDiskforTransfer = $_.HSTDiskName
+            $MBRDatatoPopulate = (Get-HSTPartitionInfo -MBRInfo -Path $Script:GUIActions.SelectedPhysicalDiskforTransfer) 
             if ($MBRDatatoPopulate -eq 'NotMBR'){
-                $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDisk -AmigaNativeDiskorImage
+                $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDiskforTransfer -AmigaNativeDiskorImage
             }
             else {
                 $WPF_TFRDB_MBR_DataGrid.ItemsSource = $MBRDatatoPopulate
-                $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDisk -PiStormDiskorImage
+                $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDiskforTransfer -PiStormDiskorImage
 
             }
            

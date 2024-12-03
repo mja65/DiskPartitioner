@@ -1,12 +1,12 @@
 $WPF_SD_BrowseforDisk_DropDown.add_selectionChanged({
+    $Script:GUIActions.ImportedImagePath = $null
     $Script:GUIActions.ListofRemovableMedia | ForEach-Object{
         if ($WPF_SD_BrowseforDisk_DropDown.SelectedItem -eq $_.FriendlyName){
-            $Script:GUIActions.SelectedPhysicalDisk = $_.HSTDiskName
-            if ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartition'){
-                $WPF_SD_MBR_DataGrid.ItemsSource = Get-HSTPartitionInfo -MBRInfo -Path $Script:GUIActions.SelectedPhysicalDisk
-                $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDisk -PiStormDiskorImage
-            }
-
+            $Script:GUIActions.SelectedPhysicalDiskforImport = $_.HSTDiskName
+            $Script:GUIActions.ActionToPerform = 'ImportMBRPartitionFromMBRDisk'
+            $WPF_SD_MBR_DataGrid.ItemsSource = Get-HSTPartitionInfo -MBRInfo -Path $Script:GUIActions.SelectedPhysicalDiskforImport
+            $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDiskforImport -PiStormDiskorImage
+            
             $TabletoPopulate = [System.Collections.Generic.List[PSCustomObject]]::New()
 
             $Script:RDBPartitionTable | ForEach-Object {

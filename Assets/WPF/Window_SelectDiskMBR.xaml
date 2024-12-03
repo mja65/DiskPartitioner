@@ -7,27 +7,22 @@
             mc:Ignorable="d"
                Title="Select Disk" Height="500" Width="800" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
     <Grid x:Name="MainGrid" Background="#FFE5E5E5">
-        
-        
-        <ComboBox x:Name="PhysicalvsImage_Dropdown" HorizontalAlignment="Left" Margin="280,51,0,0" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="PhysicalvsImage_Label" HorizontalAlignment="Left" Margin="30,49,0,0" TextWrapping="Wrap" Text="Select Partition Source (Physical Disk vs File)" VerticalAlignment="Top" Width="240"/>
-        <TextBox x:Name="FreeSpace_Label" HorizontalAlignment="Left" Margin="500,49,0,0" TextWrapping="Wrap" Text="Free Space available for imported Partition" VerticalAlignment="Top" Width="150"/>
-        <TextBox x:Name="FreeSpace_Value" HorizontalAlignment="Left" Margin="660,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+        <Button x:Name="BrowseforImage_Button" Content="Browse for Image File" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="120" Margin="130,0,0,0"/>
 
-        <TextBox x:Name="FreeSpaceRemaining_Label" HorizontalAlignment="Left" Margin="500,99,0,0" TextWrapping="Wrap" Text="Free Space available after impor" VerticalAlignment="Top" Width="150"/>
-        <TextBox x:Name="FreeSpaceRemaining_Value" HorizontalAlignment="Left" Margin="660,99,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+        <ComboBox x:Name="BrowseforDisk_DropDown" HorizontalAlignment="Left" Margin="270,0,0,0" VerticalAlignment="Top" Width="120"/>
+
+        <TextBox x:Name="FreeSpace_Label" HorizontalAlignment="Left" Margin="575,3,0,0" TextWrapping="Wrap" Text="Free Space available for imported Partition" VerticalAlignment="Top" Width="150" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+        <TextBox x:Name="FreeSpace_Value" HorizontalAlignment="Left" Margin="735,3,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+
+        <TextBox x:Name="FreeSpaceRemaining_Label" HorizontalAlignment="Left" Margin="575,53,0,0" TextWrapping="Wrap" Text="Free Space available after import" VerticalAlignment="Top" Width="150"  Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+        <TextBox x:Name="FreeSpaceRemaining_Value" HorizontalAlignment="Left" Margin="735,53,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
 
         <Button x:Name="OK_Button" Content="OK" HorizontalAlignment="Left" Margin="50,0,0,5" VerticalAlignment="Bottom" Width="40"/>
         <Button x:Name="Cancel_Button" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,50,5" VerticalAlignment="Bottom" Width="40"/>
 
-        <Grid x:Name="Grid_ImageFile" Background="#FFE5E5E5" Visibility="Hidden" Margin="0,80,0,0" Height="80" VerticalAlignment="Top">
-            <Button x:Name="BrowseforImage_Button" Content="Browse for Image File" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="120" Margin="130,0,0,0"/>
-        </Grid>
-        <Grid x:Name="Grid_PhysicalDisk" Background="#FFE5E5E5" Visibility="Hidden" Margin="0,80,0,0" Height="80" VerticalAlignment="Top">
-            <ComboBox x:Name="BrowseforDisk_DropDown" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Top" Width="120"/>
-        </Grid>
+
         <DataGrid x:Name="MBR_DataGrid"  IsReadOnly = "True" Height="100" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,200,0,0" SelectionMode="Single"/>
         <DataGrid x:Name="RDB_DataGrid"  IsReadOnly = "True" Height="100" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,350,0,0" SelectionMode="Single" IsHitTestVisible="False"/>
     </Grid>
-    
+
 </Window>

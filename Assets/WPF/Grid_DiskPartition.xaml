@@ -49,9 +49,29 @@
             <Button x:Name="Button_ImportMBRPartition" Content="Import MBR partition" HorizontalAlignment="Left" Margin="800,30,0,0" VerticalAlignment="Top" Height="20" Width="140"/>   
              <ComboBox x:Name="ImportMBRPartition_DropDown" HorizontalAlignment="Left" Margin="950,30,0,0" VerticalAlignment="Top" Width="170"/>
             
-            <Grid x:Name="DiskGrid_MBR" Margin="0,60,0,0" VerticalAlignment="Top" Height="100" Visibility="Visible" >
+            <Grid x:Name="DiskGrid_MBR" Margin="0,55,0,0" VerticalAlignment="Top" Height="100" Visibility="Visible" >
              
             </Grid>
+
+    <Rectangle x:Name="Legend_FAT32" HorizontalAlignment="Left" Height="35" Width="35" Margin="10,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="#FF3B67A2" />
+    <TextBox x:Name="Legend_Fat32_Label" HorizontalAlignment="Left" Margin="45,163,0,0" TextWrapping="Wrap" Text="FAT32" VerticalAlignment="Top" Width="40" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+    <Rectangle x:Name="Legend_FAT32Imported" HorizontalAlignment="Left" Height="35" Width="35" Margin="85,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource ImportedFAT32Brush}" />
+    <TextBox x:Name="Legend_FAT32Imported_Label" HorizontalAlignment="Left" Margin="120,163,0,0" TextWrapping="Wrap" Text="FAT32 (Imported)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+    <Rectangle x:Name="Legend_FAT32Default" HorizontalAlignment="Left" Height="35" Width="35" Margin="180,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource DefaultFAT32Brush}" />
+    <TextBox x:Name="Legend_FAT32Default_Label" HorizontalAlignment="Left" Margin="215,163,0,0" TextWrapping="Wrap" Text="FAT32 (Default)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+    <Rectangle x:Name="Legend_ID76" HorizontalAlignment="Left" Height="35" Width="35" Margin="275,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="#FF7B7B7B" />
+    <TextBox x:Name="Legend_ID76_Label" HorizontalAlignment="Left" Margin="310,163,0,0" TextWrapping="Wrap" Text="ID76" VerticalAlignment="Top"  Width="40" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+    <Rectangle x:Name="Legend_ID76Imported" HorizontalAlignment="Left" Height="35" Width="35" Margin="340,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource ImportedID76Brush}" />
+    <TextBox x:Name="Legend_ID76Imported_Label" HorizontalAlignment="Left" Margin="375,163,0,0" TextWrapping="Wrap" Text="ID76 (Imported)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+    <Rectangle x:Name="Legend_ID76Default" HorizontalAlignment="Left" Height="35" Width="35" Margin="435,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource DefaultID76Brush}" />
+    <TextBox x:Name="Legend_ID76Default_Label" HorizontalAlignment="Left" Margin="470,163,0,0" TextWrapping="Wrap" Text="ID76 (Default)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+
                 <TextBox x:Name="SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
                 <TextBox x:Name="SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="120,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
                 <ComboBox x:Name="SpaceatBeginning_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="175,200,0,0" VerticalAlignment="Top" Width="50"/>
@@ -109,6 +129,16 @@
             <ComboBox x:Name="AddNewAmigaPartition_DropDown" HorizontalAlignment="Left" Margin="400,0,0,0" VerticalAlignment="Top" Width="170"/>
 
             <Button x:Name="Button_ImportFiles" Content="Import Files to partition" HorizontalAlignment="Left" Margin="930,0,0,0" VerticalAlignment="Top" Height="20" Width="140"/>   
+
+ <Rectangle x:Name="Legend_Workbench" HorizontalAlignment="Left" Height="35" Width="35" Margin="10,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource DefaultAmigaWorkbenchPartitionBrush}" />
+ <TextBox x:Name="Legend_Workbench_Label" HorizontalAlignment="Left" Margin="45,163,0,0" TextWrapping="Wrap" Text="Workbench (Default)" VerticalAlignment="Top" Width="70" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+ <Rectangle x:Name="Legend_Work" HorizontalAlignment="Left" Height="35" Width="35" Margin="115,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="#FFAA907C" />
+ <TextBox x:Name="Legend_Work_Label" HorizontalAlignment="Left" Margin="150,163,0,0" TextWrapping="Wrap" Text="Work" VerticalAlignment="Top" Width="40" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+ <Rectangle x:Name="Legend_WorkImported" HorizontalAlignment="Left" Height="35" Width="35" Margin="190,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource ImportedAmigaPartitionBrush}" />
+ <TextBox x:Name="Legend_WorkImported_Label" HorizontalAlignment="Left" Margin="225,163,0,0" TextWrapping="Wrap" Text="Work (Imported)" VerticalAlignment="Top" Width="70" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
 
                 <TextBox x:Name="Amiga_SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
                 <TextBox x:Name="Amiga_SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="120,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>

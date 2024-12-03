@@ -16,11 +16,13 @@ $Script:Settings = [PSCustomObject]@{
 
 $Script:GUIActions = [PSCustomObject]@{
     ListofRemovableMedia = $null
-    SelectedPhysicalDisk = $null
     AvailableSpaceforImportedPartitionBytes = $null 
+    ImportPartitionWindowStatus = $null
+    SelectedPhysicalDiskforImport = $null
     ImportedImagePath = $null
     TransferSourceLocation = $null
     TransferSourceType = $null
+    SelectedPhysicalDiskforTransfer = $null
     ScriptPath = $null
     DiskSizeSelected = $null
     MouseStatus = $null
@@ -32,6 +34,7 @@ $Script:GUIActions = [PSCustomObject]@{
     ActionToPerform = $null
     SelectedAmigaPartition = $null
     PartitionHoveredOver = $null
+
     MBRPartitionContextMenuEnabled = $false
     AmigaPartitionContextMenuEnabled = $false
     # SelectedMBRPartitionforImport = $null

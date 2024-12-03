@@ -60,7 +60,7 @@
         <VisualBrush x:Key="ImportedAmigaPartitionBrush" TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute" Viewbox="0,0,10,10" ViewboxUnits="Absolute">
             <VisualBrush.Visual>
                 <Canvas>
-                    <Rectangle Fill="#FFFFA997" Width="10" Height="10" />
+                    <Rectangle Fill="#FFAA907C" Width="10" Height="10" />
                     <Path Data="M 0 10 L 10 10" Stroke="white" StrokeThickness = "0.5" />
                     <Path Data="M 10 0 L 10 10" Stroke="white" StrokeThickness = "0.5"/>
                 </Canvas>
