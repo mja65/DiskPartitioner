@@ -24,11 +24,7 @@ $WPF_SD_OK_Button.Add_Click({
         $Script:GUIActions.ImportPartitionWindowStatus = $null
     }
     else {
-        if ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromAmigaImage'){
-            $PartitionType = 'ID76'
-            $PartitionName = "WPF_DP_Partition_ID76_$($WPF_DP_Disk_MBR.NextPartitionID76Number)"        
-        }
-        elseif ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRImage' -or $Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRDisk'){
+        if ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRImage' -or $Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRDisk'){
             if ($WPF_SD_MBR_DataGrid.SelectedItem){
                 if ($WPF_SD_MBR_DataGrid.SelectedItem.Type -match 'PiStorm RDB'){
                     $PartitionType = 'ID76'
@@ -39,48 +35,46 @@ $WPF_SD_OK_Button.Add_Click({
                     $PartitionName = "WPF_DP_Partition_FAT32_$($WPF_DP_Disk_MBR.NextPartitionFAT32Number)"
                 }
             }
-        
-            if ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromAmigaImage'){
-                $SourcePath = "$($Script:GUIActions.ImportedImagePath)"
-            }
-            elseif ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRImage'){
+            if ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRImage'){
                 $SourcePath = "$($Script:GUIActions.ImportedImagePath)\mbr\"
             }
             elseif ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRDisk'){
                 $SourcePath = "$($Script:GUIActions.SelectedPhysicalDiskforImport)\mbr\"
             }
-    
-            if ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRImage' -or $Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRDisk'){
-                Add-GUIPartitiontoMBRDisk -ImportPartitionMethod 'ID76' -PathtoImportedPartition "$SourcePath$($WPF_SD_MBR_DataGrid.SelectedItem.Number)" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
-            }
-            elseif($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromAmigaImage'){
-                Add-GUIPartitiontoMBRDisk -ImportPartitionMethod 'Amiga' -PathtoImportedPartition "$SourcePath" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
-            }
+        }
+        elseif($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromAmigaImage'){
+            $PartitionType = 'ID76'
+            $PartitionName = "WPF_DP_Partition_ID76_$($WPF_DP_Disk_MBR.NextPartitionID76Number)"    
+            $SourcePath = "$($Script:GUIActions.ImportedImagePath)"
+        }
         
+        if ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRImage' -or $Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRDisk'){
+            Add-GUIPartitiontoMBRDisk -ImportPartitionMethod 'ID76' -PathtoImportedPartition "$SourcePath$($WPF_SD_MBR_DataGrid.SelectedItem.Number)" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
+        }
+        elseif($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromAmigaImage'){
+            Add-GUIPartitiontoMBRDisk -ImportPartitionMethod 'Amiga' -PathtoImportedPartition "$SourcePath" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
+        }
+
+        if ($PartitionType -eq 'ID76'){
             $ListofRDBPartitions = Get-HSTPartitionInfo -Path "$SourcePath$($WPF_SD_MBR_DataGrid.SelectedItem.Number)" -RDBInfo
-                Add-AmigaDisktoID76Partition -ID76PartitionName $PartitionName
-                $ListofRDBPartitions |ForEach-Object {               
+            Add-AmigaDisktoID76Partition -ID76PartitionName $PartitionName
+            $ListofRDBPartitions |ForEach-Object {               
+                
+                $StartPoint_MaxTransfer = 0
+                $Length_MaxTransfer = $_.MaxTransfer.IndexOf(' ')
+                $MaxTransfer = $_.MaxTransfer.Substring($StartPoint_MaxTransfer,$Length_MaxTransfer )
     
-                    $StartPoint_MaxTransfer = 0
-                    $Length_MaxTransfer = $_.MaxTransfer.IndexOf(' ')
-                    $MaxTransfer = $_.MaxTransfer.Substring($StartPoint_MaxTransfer,$Length_MaxTransfer )
-    
-                    # $StartPoint_DosType = $_.DosType.IndexOf('(')+1
-                    # $Length_DosType  = ($_.DosType.Length-1)-$StartPoint_DosType
-                    # $DosType = $_.DosType.Substring($StartPoint_DosType,$Length_DosType)
-    
-                    Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -DerivedImportedPartition $true -VolumeName 'Unknown' -DeviceName $_.Name -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
-                }
-            }
-        
+                # $StartPoint_DosType = $_.DosType.IndexOf('(')+1
+                # $Length_DosType  = ($_.DosType.Length-1)-$StartPoint_DosType
+                # $DosType = $_.DosType.Substring($StartPoint_DosType,$Length_DosType)
+                Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -DerivedImportedPartition $true -VolumeName 'Unknown' -DeviceName $_.Name -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
+            }            
+        }
         $Script:GUIActions.AvailableSpaceforImportedPartitionBytes = $null
         $Script:GUIActions.SelectedPhysicalDiskforImport = $null
         $Script:GUIActions.ImportPartitionWindowStatus = $null
         $Script:GUIActions.ImportedImagePath = $null           
     
         $WPF_SelectDiskWindow.Close()
-
     }
 })
-    
-

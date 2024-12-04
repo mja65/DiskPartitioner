@@ -16,12 +16,10 @@ Remove-Variable -Name 'WPF_*'
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 
-$WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\UIActions\MainWindow\'
+$WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\UIActions\MainWindow\' -AddWPFVariables
 $WPF_Partition = Get-XAML -WPFPrefix 'WPF_DP_' -XMLFile '.\Assets\WPF\Grid_DiskPartition.xaml' -ActionsPath '.\UIActions\GridPartition\' -AddWPFVariables
-
+$WPF_SetupEmu68 = Get-XAML -WPFPrefix 'WPF_Setup_' -XMLFile '.\Assets\WPF\Grid_SetupEmu68.xaml' -ActionsPath '.\UIActions\SetupEmu68\' -AddWPFVariables
 Set-PartitionGridActions
-
-$WPF_MainWindow.AddChild($WPF_Partition)
 
 $WPF_MainWindow.ShowDialog() | out-null
 # $WPF_MainWindow.Close()
@@ -29,3 +27,4 @@ $WPF_MainWindow.ShowDialog() | out-null
 # Get-variable
 
 # $WPF_DP_Partition_ID76_1_AmigaDisk_Partition_1
+

@@ -10,6 +10,13 @@ $WPF_TF_BrowseforFileLocation_Button.Add_Click({
         Remove-Variable -Name 'WPF_TFRDB_*'
 
         $WPF_SelectRDBSourceWindow = Get-XAML -WPFPrefix 'WPF_TFRDB_' -XMLFile '.\Assets\WPF\Window_BrowseFilesRDBSelection.xaml' -ActionsPath '.\UIActions\TFRDB\' -AddWPFVariables
+        
+        if ($WPF_TFRDB_BrowseforDisk_DropDown){
+            foreach ($Disk in $Script:GUIActions.ListofRemovableMedia){
+                $WPF_TFRDB_BrowseforDisk_DropDown.AddChild($Disk.FriendlyName)       
+            }
+        }
+
         $WPF_SelectRDBSourceWindow.ShowDialog() | out-null
     }
     

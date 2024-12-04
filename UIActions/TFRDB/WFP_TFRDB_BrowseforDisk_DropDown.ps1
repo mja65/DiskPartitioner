@@ -4,9 +4,11 @@ $WPF_TFRDB_BrowseforDisk_DropDown.add_selectionChanged({
             $Script:GUIActions.SelectedPhysicalDiskforTransfer = $_.HSTDiskName
             $MBRDatatoPopulate = (Get-HSTPartitionInfo -MBRInfo -Path $Script:GUIActions.SelectedPhysicalDiskforTransfer) 
             if ($MBRDatatoPopulate -eq 'NotMBR'){
+                $Script:GUIActions.TransferAmigaSourceType = 'RDB'
                 $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDiskforTransfer -AmigaNativeDiskorImage
             }
             else {
+                $Script:GUIActions.TransferAmigaSourceType = 'MBR'
                 $WPF_TFRDB_MBR_DataGrid.ItemsSource = $MBRDatatoPopulate
                 $Script:RDBPartitionTable = Get-RDBInformation -DiskName $Script:GUIActions.SelectedPhysicalDiskforTransfer -PiStormDiskorImage
 

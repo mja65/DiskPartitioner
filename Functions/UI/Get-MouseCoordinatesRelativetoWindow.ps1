@@ -2,6 +2,7 @@ function Get-MouseCoordinatesRelativetoWindow {
     param (
         $Window,
         $MainGrid,
+        $DiskPartitionGrid,
         $Grid,
         $Disk
 
@@ -24,8 +25,8 @@ function Get-MouseCoordinatesRelativetoWindow {
 
     $GUICoordinates.MousePositionX =  (([System.Windows.Forms.Cursor]::position).x)
     $GUICoordinates.MousePositionY =  (([System.Windows.Forms.Cursor]::position).y)
-    $GUICoordinates.MousePositionRelativetoWindowX =  $GUICoordinates.MousePositionX - ($Window.Left) - ($MainGrid.Margin.Left) - ($Grid.Margin.Left) - ($Disk.Margin.Left) - $MicrosoftWindowThicknessHorizontal 
-    $GUICoordinates.MousePositionRelativetoWindowY =  $GUICoordinates.MousePositionY - ($Window.Top) - $MicrosoftWindowTitle - ($MainGrid.Margin.Top)
+    $GUICoordinates.MousePositionRelativetoWindowX =  $GUICoordinates.MousePositionX - ($Window.Left) - ($MainGrid.Margin.Left) - ($DiskPartitionGrid.Left) - ($Grid.Margin.Left) - ($Disk.Margin.Left) - $MicrosoftWindowThicknessHorizontal 
+    $GUICoordinates.MousePositionRelativetoWindowY =  $GUICoordinates.MousePositionY - ($Window.Top) - $MicrosoftWindowTitle - ($MainGrid.Margin.Top) - ($DiskPartitionGrid.Top) 
     $GUICoordinates.MouseButtons = ([System.Windows.Forms.UserControl]::MouseButtons)
     return $GUICoordinates
 }

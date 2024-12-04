@@ -3,7 +3,7 @@ function Set-PartitionGridActions {
     
     )
     
-    $WPF_DP_DiskGrid_Amiga.add_MouseMove({
+    $WPF_Window_Main.add_MouseMove({
         if ($Script:GUIActions.PartitionHoveredOver){
             if ($Script:GUIActions.PartitionHoveredOver.ResizeZone){
                 $WPF_Partition.Cursor = "SizeWE"
@@ -19,7 +19,9 @@ function Set-PartitionGridActions {
         }
     })
 
-    $WPF_DP_DiskGrid_MBR.add_MouseMove({
+ #   $WPF_DP_DiskGrid_MBR
+    
+    $WPF_Window_Main.add_MouseMove({
         #Write-Host "X: $($Script:GUIActions.CurrentMousePositionX) Y: $($Script:GUIActions.CurrentMousePositionY)"
         
         if ($Script:GUIActions.PartitionHoveredOver){
@@ -39,7 +41,7 @@ function Set-PartitionGridActions {
     })
 
     $WPF_Partition.add_MouseMove({
-        $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow -Window $WPF_MainWindow -MainGrid $WPF_Partition
+        $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow -Window $WPF_MainWindow -MainGrid $WPF_Window_Main -DiskPartitionGrid $WPF_Partition
         $Script:GUIActions.CurrentMousePositionX = $MouseCoordinates.MousePositionRelativetoWindowX
         $Script:GUIActions.CurrentMousePositionY = $MouseCoordinates.MousePositionRelativetoWindowY
         $Script:GUIActions.MouseStatus = $MouseCoordinates.MouseButtons    
@@ -95,7 +97,7 @@ function Set-PartitionGridActions {
         # Write-Host "X: $($Script:GUIActions.CurrentMousePositionX) Y: $($Script:GUIActions.CurrentMousePositionY)"
     })
     
-    $WPF_Partition.add_MouseLeftButtonDown({
+    $WPF_Window_Main.add_MouseLeftButtonDown({
 
         If ($WPF_DP_SelectedSize_Input.InputEntry -eq $true){
             Update-GUIInputBox -InputBox $WPF_DP_SelectedSize_Input -DropDownBox $WPF_DP_SelectedSize_Input_SizeScale_Dropdown -MBRResize
@@ -106,7 +108,7 @@ function Set-PartitionGridActions {
         if ($WPF_DP_SpaceatEnd_Input.InputEntry -eq $true){
             Update-GUIInputBox -InputBox $WPF_DP_SpaceatEnd_Input -DropDownBox $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown -MBRMove_SpaceatEnd
         }
-        $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow -Window $WPF_MainWindow -MainGrid $WPF_Partition
+        $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow -Window $WPF_MainWindow -MainGrid $WPF_Window_Main -DiskPartitionGrid $WPF_Partition
         $Script:GUIActions.MousePositionXatTimeofPress = $MouseCoordinates.MousePositionRelativetoWindowX
         $Script:GUIActions.MousePositionYatTimeofPress = $MouseCoordinates.MousePositionRelativetoWindowY
         
