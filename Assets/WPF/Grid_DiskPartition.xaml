@@ -1,196 +1,206 @@
-<Grid x:Name="Window_Partitioning" Background="#FFE5E5E5" Margin="200,0,0,0" HorizontalAlignment="Left" Visibility="Visible"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:WpfApp14"
-    mc:Ignorable="d">
-        <Grid x:Name="GridMBR" Margin="20,140,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden" >
-            <Button x:Name="MBRPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" Margin="50,0,0,0">
-                <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
-                    <Path.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform Y="-1"/>
-                        </TransformGroup>
-                    </Path.RenderTransform>
-                </Path>
-            </Button>
-            <Button x:Name="MBRPartitionSelect_LeftArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" RenderTransformOrigin="0.5,0.5" Margin="10,0,0,0"  >
-                <Button.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="180"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Button.RenderTransform>
-                <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
-                    <Path.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform Y="-1"/>
-                        </TransformGroup>
-                    </Path.RenderTransform>
-                </Path>
-            </Button>
-            <Button x:Name="Button_RemoveFreeSpace" Content="Remove Free Space Between Partitions" HorizontalAlignment="Left" Margin="114,15,0,0" VerticalAlignment="Top" Height="20"/>
-            <Button x:Name="Button_DeleteMBRPartition" Content="Delete selected partition" HorizontalAlignment="Left" Margin="304,15,0,0" VerticalAlignment="Top" Height="20"/>
+      <Grid x:Name="Window_Partitioning" Background="#FFE5E5E5" Margin="200,0,0,0" HorizontalAlignment="Left" Visibility="Visible"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:local="clr-namespace:WpfApp14"
+  mc:Ignorable="d">
+          <Grid x:Name="GridMBR" Margin="20,80,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden" Height="300" >
+              <Button x:Name="MBRPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" Margin="50,180,0,0">
+                  <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
+                      <Path.RenderTransform>
+                          <TransformGroup>
+                              <ScaleTransform/>
+                              <SkewTransform/>
+                              <RotateTransform/>
+                              <TranslateTransform Y="-1"/>
+                          </TransformGroup>
+                      </Path.RenderTransform>
+                  </Path>
+              </Button>
+              <Button x:Name="MBRPartitionSelect_LeftArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" RenderTransformOrigin="0.5,0.5" Margin="10,180,0,0"  >
+                  <Button.RenderTransform>
+                      <TransformGroup>
+                          <ScaleTransform/>
+                          <SkewTransform/>
+                          <RotateTransform Angle="180"/>
+                          <TranslateTransform/>
+                      </TransformGroup>
+                  </Button.RenderTransform>
+                  <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
+                      <Path.RenderTransform>
+                          <TransformGroup>
+                              <ScaleTransform/>
+                              <SkewTransform/>
+                              <RotateTransform/>
+                              <TranslateTransform Y="-1"/>
+                          </TransformGroup>
+                      </Path.RenderTransform>
+                  </Path>
+              </Button>
+              <Button x:Name="Button_RemoveFreeSpace" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Height="45" Width="150">
+                  <TextBlock Text="Remove free space between partitions" TextWrapping="Wrap" TextAlignment="Center"/>
+              </Button>
+              <Button x:Name="Button_DeleteMBRPartition" HorizontalAlignment="Left" Margin="170,15,0,0" VerticalAlignment="Top" Width="100" Height="45">
+                  <TextBlock Text="Delete selected partition" TextWrapping="Wrap" TextAlignment="Center"/>
+              </Button>
 
-            <Button x:Name="Button_AddNewFAT32Partition" Content="Add new FAT 32 partition" HorizontalAlignment="Left" Margin="450,5,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
-             <ComboBox x:Name="AddNewFAT32Partition_DropDown" HorizontalAlignment="Left" Margin="600,5,0,0" VerticalAlignment="Top" Width="170"/>
-            <Button x:Name="Button_AddNewID76Partition" Content="Add new ID76 partition" HorizontalAlignment="Left" Margin="450,30,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
-             <ComboBox x:Name="AddNewID76Partition_DropDown" HorizontalAlignment="Left" Margin="600,30,0,0" VerticalAlignment="Top" Width="170"/>
-            
-            <Button x:Name="Button_ImportMBRPartition" Content="Import MBR partition" HorizontalAlignment="Left" Margin="800,30,0,0" VerticalAlignment="Top" Height="20" Width="140"/>   
-             <ComboBox x:Name="ImportMBRPartition_DropDown" HorizontalAlignment="Left" Margin="950,30,0,0" VerticalAlignment="Top" Width="170"/>
-            
-            <Grid x:Name="DiskGrid_MBR" Margin="0,55,0,0" VerticalAlignment="Top" Height="100" Visibility="Visible" >
-             
-            </Grid>
+              <Button x:Name="Button_AddNewFAT32Partition" Content="Add new FAT 32 partition" HorizontalAlignment="Left" Margin="280,15,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
+              <ComboBox x:Name="AddNewFAT32Partition_DropDown" HorizontalAlignment="Left" Margin="430,15,0,0" VerticalAlignment="Top" Width="170" Height="20"/>
 
-    <Rectangle x:Name="Legend_FAT32" HorizontalAlignment="Left" Height="35" Width="35" Margin="10,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="#FF3B67A2" />
-    <TextBox x:Name="Legend_Fat32_Label" HorizontalAlignment="Left" Margin="45,163,0,0" TextWrapping="Wrap" Text="FAT32" VerticalAlignment="Top" Width="40" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+              <Button x:Name="Button_AddNewID76Partition" Content="Add new ID76 partition" HorizontalAlignment="Left" Margin="280,40,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
+              <ComboBox x:Name="AddNewID76Partition_DropDown" HorizontalAlignment="Left" Margin="430,40,0,0" VerticalAlignment="Top" Width="170" Height="20"/>
 
-    <Rectangle x:Name="Legend_FAT32Imported" HorizontalAlignment="Left" Height="35" Width="35" Margin="85,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource ImportedFAT32Brush}" />
-    <TextBox x:Name="Legend_FAT32Imported_Label" HorizontalAlignment="Left" Margin="120,163,0,0" TextWrapping="Wrap" Text="FAT32 (Imported)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+              <Button x:Name="Button_ImportMBRPartition" HorizontalAlignment="Left" Margin="610,15,0,0" VerticalAlignment="Top" Height="45" Width="70">
+                  <TextBlock Text="Import MBR partition" TextWrapping="Wrap" TextAlignment="Center"/>
+              </Button>
 
-    <Rectangle x:Name="Legend_FAT32Default" HorizontalAlignment="Left" Height="35" Width="35" Margin="180,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource DefaultFAT32Brush}" />
-    <TextBox x:Name="Legend_FAT32Default_Label" HorizontalAlignment="Left" Margin="215,163,0,0" TextWrapping="Wrap" Text="FAT32 (Default)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+              <ComboBox x:Name="ImportMBRPartition_DropDown" HorizontalAlignment="Left" Margin="685,30,0,0" VerticalAlignment="Top" Height="20" Width="170"/>
 
-    <Rectangle x:Name="Legend_ID76" HorizontalAlignment="Left" Height="35" Width="35" Margin="275,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="#FF7B7B7B" />
-    <TextBox x:Name="Legend_ID76_Label" HorizontalAlignment="Left" Margin="310,163,0,0" TextWrapping="Wrap" Text="ID76" VerticalAlignment="Top"  Width="40" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+              <Grid x:Name="DiskGrid_MBR" Margin="0,70,0,0" VerticalAlignment="Top" Height="100" Visibility="Visible" >
 
-    <Rectangle x:Name="Legend_ID76Imported" HorizontalAlignment="Left" Height="35" Width="35" Margin="340,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource ImportedID76Brush}" />
-    <TextBox x:Name="Legend_ID76Imported_Label" HorizontalAlignment="Left" Margin="375,163,0,0" TextWrapping="Wrap" Text="ID76 (Imported)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+              </Grid>
 
-    <Rectangle x:Name="Legend_ID76Default" HorizontalAlignment="Left" Height="35" Width="35" Margin="435,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource DefaultID76Brush}" />
-    <TextBox x:Name="Legend_ID76Default_Label" HorizontalAlignment="Left" Margin="470,163,0,0" TextWrapping="Wrap" Text="ID76 (Default)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+              <Rectangle x:Name="Legend_FAT32" HorizontalAlignment="Left" Height="35" Width="35" Margin="120,180,0,0" Stroke="Black" VerticalAlignment="Top" Fill="#FF3B67A2" />
+              <TextBox x:Name="Legend_Fat32_Label" HorizontalAlignment="Left" Margin="160,180,0,0" TextWrapping="Wrap" Text="FAT32" VerticalAlignment="Top" Width="40" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+              <Rectangle x:Name="Legend_FAT32Imported" HorizontalAlignment="Left" Height="35" Width="35" Margin="205,180,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource ImportedFAT32Brush}" />
+              <TextBox x:Name="Legend_FAT32Imported_Label" HorizontalAlignment="Left" Margin="246,180,0,0" TextWrapping="Wrap" Text="FAT32 (Imported)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+              <Rectangle x:Name="Legend_FAT32Default" HorizontalAlignment="Left" Height="35" Width="35" Margin="320,180,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource DefaultFAT32Brush}" />
+              <TextBox x:Name="Legend_FAT32Default_Label" HorizontalAlignment="Left" Margin="360,180,0,0" TextWrapping="Wrap" Text="FAT32 (Default)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+              <Rectangle x:Name="Legend_ID76" HorizontalAlignment="Left" Height="35" Width="35" Margin="430,180,0,0" Stroke="Black" VerticalAlignment="Top" Fill="#FF7B7B7B" />
+              <TextBox x:Name="Legend_ID76_Label" HorizontalAlignment="Left" Margin="470,180,0,0" TextWrapping="Wrap" Text="ID76" VerticalAlignment="Top"  Width="40" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+              <Rectangle x:Name="Legend_ID76Imported" HorizontalAlignment="Left" Height="35" Width="35" Margin="515,180,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource ImportedID76Brush}" />
+              <TextBox x:Name="Legend_ID76Imported_Label" HorizontalAlignment="Left" Margin="550,180,0,0" TextWrapping="Wrap" Text="ID76 (Imported)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+              <Rectangle x:Name="Legend_ID76Default" HorizontalAlignment="Left" Height="35" Width="35" Margin="610,180,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource DefaultID76Brush}" />
+              <TextBox x:Name="Legend_ID76Default_Label" HorizontalAlignment="Left" Margin="650,180,0,0" TextWrapping="Wrap" Text="ID76 (Default)" VerticalAlignment="Top"  Width="60" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+              <TextBox x:Name="SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,220,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="109" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="120,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+              <ComboBox x:Name="SpaceatBeginning_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="181,220,0,0" VerticalAlignment="Top" Width="50"/>
+
+              <TextBox x:Name="SpaceatEnd_Label" HorizontalAlignment="Left" Margin="238,220,0,0" TextWrapping="Wrap" Text="Space at End of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="SpaceatEnd_Input" HorizontalAlignment="Left" Margin="333,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+              <ComboBox x:Name="SpaceatEnd_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="390,220,0,0" VerticalAlignment="Top" Width="50"/>
+
+              <TextBox x:Name="SelectedSize_Label" HorizontalAlignment="Left" Margin="446,220,0,0" TextWrapping="Wrap" Text="Selected Partition Size" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="SelectedSize_Input" HorizontalAlignment="Left" Margin="548,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+              <ComboBox x:Name="SelectedSize_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="602,220,0,0" VerticalAlignment="Top" Width="50"/>
+
+              <TextBox x:Name="MBR_TotalDiskSize_Label" HorizontalAlignment="Left" Margin="656,220,0,0" TextWrapping="Wrap" Text="Total Disk Size" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="MBR_TotalDiskSize" HorizontalAlignment="Left" Margin="714,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+
+              <TextBox x:Name="MBR_TotalFreeSpaceSize_Label" HorizontalAlignment="Left" Margin="767,220,0,0" TextWrapping="Wrap" Text="Free Space Size" VerticalAlignment="Top" Width="62" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="MBR_TotalFreeSpaceSize" HorizontalAlignment="Left" Margin="832,220,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+
+          </Grid>
+          <Grid x:Name="GridAmiga" Margin="20,400,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden" Height="400">
+              <Button x:Name="AmigaPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" Margin="50,190,0,0">
+                  <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
+                      <Path.RenderTransform>
+                          <TransformGroup>
+                              <ScaleTransform/>
+                              <SkewTransform/>
+                              <RotateTransform/>
+                              <TranslateTransform Y="-1"/>
+                          </TransformGroup>
+                      </Path.RenderTransform>
+                  </Path>
+              </Button>
+              <Button x:Name="AmigaPartitionSelect_LeftArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" RenderTransformOrigin="0.5,0.5" Margin="10,190,0,0"  >
+                  <Button.RenderTransform>
+                      <TransformGroup>
+                          <ScaleTransform/>
+                          <SkewTransform/>
+                          <RotateTransform Angle="180"/>
+                          <TranslateTransform/>
+                      </TransformGroup>
+                  </Button.RenderTransform>
+                  <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
+                      <Path.RenderTransform>
+                          <TransformGroup>
+                              <ScaleTransform/>
+                              <SkewTransform/>
+                              <RotateTransform/>
+                              <TranslateTransform Y="-1"/>
+                          </TransformGroup>
+                      </Path.RenderTransform>
+                  </Path>
+              </Button>
+              <Button x:Name="Button_AmigaRemoveFreeSpace" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Height="45" Width="150">
+                  <TextBlock Text="Remove free space between partitions" TextWrapping="Wrap" TextAlignment="Center"/>
+              </Button>
+              <Button x:Name="Button_DeleteAmigaPartition" HorizontalAlignment="Left" Margin="170,15,0,0" VerticalAlignment="Top" Width="100" Height="45">
+                  <TextBlock Text="Delete selected partition" TextWrapping="Wrap" TextAlignment="Center"/>
+              </Button>
+              <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition" HorizontalAlignment="Left" Margin="290,15,0,0" VerticalAlignment="Top" Width="100" Height="20" />
+              <ComboBox x:Name="AddNewAmigaPartition_DropDown" HorizontalAlignment="Left" Margin="400,15,0,0" VerticalAlignment="Top" Width="170"/>
+
+              <Button x:Name="Button_ImportFiles" Content="Import Files to partition" HorizontalAlignment="Left" Margin="580,15,0,0" VerticalAlignment="Top" Height="20" Width="140"/>
+
+              <Rectangle x:Name="Legend_Workbench" HorizontalAlignment="Left" Height="35" Width="35" Margin="96,190,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource DefaultAmigaWorkbenchPartitionBrush}" />
+              <TextBox x:Name="Legend_Workbench_Label" HorizontalAlignment="Left" Margin="133,190,0,0" TextWrapping="Wrap" Text="Workbench (Default)" VerticalAlignment="Top" Width="70" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+              <Rectangle x:Name="Legend_Work" HorizontalAlignment="Left" Height="35" Width="35" Margin="208,190,0,0" Stroke="Black" VerticalAlignment="Top" Fill="#FFAA907C" />
+              <TextBox x:Name="Legend_Work_Label" HorizontalAlignment="Left" Margin="249,190,0,0" TextWrapping="Wrap" Text="Work" VerticalAlignment="Top" Width="40" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+
+              <Rectangle x:Name="Legend_WorkImported" HorizontalAlignment="Left" Height="35" Width="35" Margin="291,190,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource ImportedAmigaPartitionBrush}" />
+              <TextBox x:Name="Legend_WorkImported_Label" HorizontalAlignment="Left" Margin="330,190,0,0" TextWrapping="Wrap" Text="Work (Imported)" VerticalAlignment="Top" Width="70" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
 
 
-                <TextBox x:Name="SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="120,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <ComboBox x:Name="SpaceatBeginning_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="175,200,0,0" VerticalAlignment="Top" Width="50"/>
-                
-                <TextBox x:Name="SpaceatEnd_Label" HorizontalAlignment="Left" Margin="250,200,0,0" TextWrapping="Wrap" Text="Space at End of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="SpaceatEnd_Input" HorizontalAlignment="Left" Margin="360,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <ComboBox x:Name="SpaceatEnd_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="415,200,0,0" VerticalAlignment="Top" Width="50"/>
+              <TextBox x:Name="Amiga_SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,230,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="109" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="119,230,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+              <ComboBox x:Name="Amiga_SpaceatBeginning_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="175,230,0,0" VerticalAlignment="Top" Width="50"/>
 
-                <TextBox x:Name="SelectedSize_Label" HorizontalAlignment="Left" Margin="490,200,0,0" TextWrapping="Wrap" Text="Selected Partition Size" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="SelectedSize_Input" HorizontalAlignment="Left" Margin="600,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <ComboBox x:Name="SelectedSize_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="655,200,0,0" VerticalAlignment="Top" Width="50"/>
+              <TextBox x:Name="Amiga_SpaceatEnd_Label" HorizontalAlignment="Left" Margin="231,230,0,0" TextWrapping="Wrap" Text="Space at End of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_SpaceatEnd_Input" HorizontalAlignment="Left" Margin="325,230,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+              <ComboBox x:Name="Amiga_SpaceatEnd_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="382,230,0,0" VerticalAlignment="Top" Width="50"/>
 
-                <TextBox x:Name="MBR_TotalDiskSize_Label" HorizontalAlignment="Left" Margin="715,200,0,0" TextWrapping="Wrap" Text="Total Disk Size" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="MBR_TotalDiskSize" HorizontalAlignment="Left" Margin="785,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                
-                <TextBox x:Name="MBR_TotalFreeSpaceSize_Label" HorizontalAlignment="Left" Margin="875,200,0,0" TextWrapping="Wrap" Text="Free Space Size" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="MBR_TotalFreeSpaceSize" HorizontalAlignment="Left" Margin="945,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                
-        </Grid>
-        <Grid x:Name="GridAmiga" Margin="20,420,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden">
-              <Button x:Name="AmigaPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" Margin="50,0,0,0">
-      <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
-          <Path.RenderTransform>
-              <TransformGroup>
-                  <ScaleTransform/>
-                  <SkewTransform/>
-                  <RotateTransform/>
-                  <TranslateTransform Y="-1"/>
-              </TransformGroup>
-          </Path.RenderTransform>
-      </Path>
-  </Button>
-  <Button x:Name="AmigaPartitionSelect_LeftArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="30" Height="30" RenderTransformOrigin="0.5,0.5" Margin="10,0,0,0"  >
-      <Button.RenderTransform>
-          <TransformGroup>
-              <ScaleTransform/>
-              <SkewTransform/>
-              <RotateTransform Angle="180"/>
-              <TranslateTransform/>
-          </TransformGroup>
-      </Button.RenderTransform>
-      <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
-          <Path.RenderTransform>
-              <TransformGroup>
-                  <ScaleTransform/>
-                  <SkewTransform/>
-                  <RotateTransform/>
-                  <TranslateTransform Y="-1"/>
-              </TransformGroup>
-          </Path.RenderTransform>
-      </Path>
-  </Button>
-            <Button x:Name="Button_DeleteAmigaPartition" Content="Delete selected partition" HorizontalAlignment="Left" Margin="100,0,0,0" VerticalAlignment="Top" Height="20"/>
-            <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition" HorizontalAlignment="Left" Margin="294,0,0,0" VerticalAlignment="Top" Width="100" Height="20" />
-            <ComboBox x:Name="AddNewAmigaPartition_DropDown" HorizontalAlignment="Left" Margin="400,0,0,0" VerticalAlignment="Top" Width="170"/>
+              <TextBox x:Name="Amiga_SelectedSize_Label" HorizontalAlignment="Left" Margin="440,230,0,0" TextWrapping="Wrap" Text="Selected Partition Size" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_SelectedSize_Input" HorizontalAlignment="Left" Margin="542,230,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+              <ComboBox x:Name="Amiga_SelectedSize_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="598,230,0,0" VerticalAlignment="Top" Width="50"/>
 
-            <Button x:Name="Button_ImportFiles" Content="Import Files to partition" HorizontalAlignment="Left" Margin="930,0,0,0" VerticalAlignment="Top" Height="20" Width="140"/>   
+              <TextBox x:Name="Amiga_TotalDiskSize_Label" HorizontalAlignment="Left" Margin="654,230,0,0" TextWrapping="Wrap" Text="Total Disk Size" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_TotalDiskSize" HorizontalAlignment="Left" Margin="716,230,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
 
- <Rectangle x:Name="Legend_Workbench" HorizontalAlignment="Left" Height="35" Width="35" Margin="10,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource DefaultAmigaWorkbenchPartitionBrush}" />
- <TextBox x:Name="Legend_Workbench_Label" HorizontalAlignment="Left" Margin="45,163,0,0" TextWrapping="Wrap" Text="Workbench (Default)" VerticalAlignment="Top" Width="70" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+              <TextBox x:Name="Amiga_TotalFreeSpaceSize_Label" HorizontalAlignment="Left" Margin="778,230,0,0" TextWrapping="Wrap" Text="Free Space Size" VerticalAlignment="Top" Width="62" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_TotalFreeSpaceSize" HorizontalAlignment="Left" Margin="843,230,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
 
- <Rectangle x:Name="Legend_Work" HorizontalAlignment="Left" Height="35" Width="35" Margin="115,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="#FFAA907C" />
- <TextBox x:Name="Legend_Work_Label" HorizontalAlignment="Left" Margin="150,163,0,0" TextWrapping="Wrap" Text="Work" VerticalAlignment="Top" Width="40" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+              <TextBox x:Name="Amiga_DeviceName_Label" HorizontalAlignment="Left" Margin="10,310,0,0" TextWrapping="Wrap" Text="Device Name" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_DeviceName_Input" HorizontalAlignment="Left" Margin="90,310,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
 
- <Rectangle x:Name="Legend_WorkImported" HorizontalAlignment="Left" Height="35" Width="35" Margin="190,163,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource ImportedAmigaPartitionBrush}" />
- <TextBox x:Name="Legend_WorkImported_Label" HorizontalAlignment="Left" Margin="225,163,0,0" TextWrapping="Wrap" Text="Work (Imported)" VerticalAlignment="Top" Width="70" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />
+              <TextBox x:Name="Amiga_VolumeName_Label" HorizontalAlignment="Left" Margin="145,310,0,0" TextWrapping="Wrap" Text="Volume Name" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_VolumeName_Input" HorizontalAlignment="Left" Margin="192,310,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="70"/>
 
+              <TextBox x:Name="Amiga_DosTypeLabel" HorizontalAlignment="Left" Margin="261,310,0,0" TextWrapping="Wrap" Text="DosType" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <ComboBox x:Name="Amiga_DosType_Input_Dropdown" HorizontalAlignment="Left" Margin="330,310,0,0" VerticalAlignment="Top" Width="50"/>
 
-                <TextBox x:Name="Amiga_SpaceatBeginning_Label" HorizontalAlignment="Left" Margin="10,200,0,0" TextWrapping="Wrap" Text="Space at Beginning of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_SpaceatBeginning_Input" HorizontalAlignment="Left" Margin="120,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <ComboBox x:Name="Amiga_SpaceatBeginning_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="175,200,0,0" VerticalAlignment="Top" Width="50"/>
-                
-                <TextBox x:Name="Amiga_SpaceatEnd_Label" HorizontalAlignment="Left" Margin="250,200,0,0" TextWrapping="Wrap" Text="Space at End of Partition" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_SpaceatEnd_Input" HorizontalAlignment="Left" Margin="360,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <ComboBox x:Name="Amiga_SpaceatEnd_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="415,200,0,0" VerticalAlignment="Top" Width="50"/>
+              <TextBox x:Name="Amiga_Buffers_Label" HorizontalAlignment="Left" Margin="390,310,0,0" TextWrapping="Wrap" Text="Buffers" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_Buffers_Input" HorizontalAlignment="Left" Margin="442,310,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
 
-                <TextBox x:Name="Amiga_SelectedSize_Label" HorizontalAlignment="Left" Margin="490,200,0,0" TextWrapping="Wrap" Text="Selected Partition Size" VerticalAlignment="Top" Width="100" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_SelectedSize_Input" HorizontalAlignment="Left" Margin="600,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <ComboBox x:Name="Amiga_SelectedSize_Input_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="655,200,0,0" VerticalAlignment="Top" Width="50"/>
+              <TextBox x:Name="Amiga_MaxTransfer_Label" HorizontalAlignment="Left" Margin="499,310,0,0" TextWrapping="Wrap" Text="MaxTransfer" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_MaxTransfer_Input" HorizontalAlignment="Left" Margin="573,310,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
 
-                <TextBox x:Name="Amiga_TotalDiskSize_Label" HorizontalAlignment="Left" Margin="715,200,0,0" TextWrapping="Wrap" Text="Total Disk Size" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_TotalDiskSize" HorizontalAlignment="Left" Margin="785,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <TextBox x:Name="Amiga_TotalDiskSize_Scale" HorizontalAlignment="Left" Margin="840,200,0,0" TextWrapping="Wrap" Text="GiB" VerticalAlignment="Top" Width="30" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_Priority_Label" HorizontalAlignment="Left" Margin="630,310,0,0" TextWrapping="Wrap" Text="Priority" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <TextBox x:Name="Amiga_Priority_Input" HorizontalAlignment="Left" Margin="685,310,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
 
-                <TextBox x:Name="Amiga_TotalFreeSpaceSize_Label" HorizontalAlignment="Left" Margin="875,200,0,0" TextWrapping="Wrap" Text="Free Space Size" VerticalAlignment="Top" Width="60" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_TotalFreeSpaceSize" HorizontalAlignment="Left" Margin="945,200,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-                <TextBox x:Name="Amiga_TotalFreeSpaceSize_Scale" HorizontalAlignment="Left" Margin="1000,200,0,0" TextWrapping="Wrap" Text="GiB" VerticalAlignment="Top" Width="30" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+              <CheckBox x:Name="Amiga_Bootable" Content="Bootable Flag" HorizontalAlignment="Left" Margin="745,310,0,0" VerticalAlignment="Top"/>
+              <CheckBox x:Name="Amiga_Mountable" Content="Mountable Flag" HorizontalAlignment="Left" Margin="745,330,0,0" VerticalAlignment="Top"/>
 
-                <TextBox x:Name="Amiga_DeviceName_Label" HorizontalAlignment="Left" Margin="10,300,0,0" TextWrapping="Wrap" Text="Device Name" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_DeviceName_Input" HorizontalAlignment="Left" Margin="90,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+              <Grid x:Name="DiskGrid_Amiga" Margin="0,70,0,0" Visibility="Visible" VerticalAlignment="Top" Height="100">
 
-                <TextBox x:Name="Amiga_VolumeName_Label" HorizontalAlignment="Left" Margin="110,300,0,0" TextWrapping="Wrap" Text="Volume Name" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_VolumeName_Input" HorizontalAlignment="Left" Margin="190,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+              </Grid>
+          </Grid>
 
-                <TextBox x:Name="Amiga_DosTypeLabel" HorizontalAlignment="Left" Margin="250,300,0,0" TextWrapping="Wrap" Text="DosType" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <ComboBox x:Name="Amiga_DosType_Input_Dropdown" HorizontalAlignment="Left" Margin="330,300,0,0" VerticalAlignment="Top" Width="50"/>
+          <TextBox x:Name="Input_DiskSize_Value" HorizontalAlignment="Left" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+          <ComboBox x:Name="Input_DiskSize_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="186,20,0,0" VerticalAlignment="Top" Width="50"/>
 
-                <TextBox x:Name="Amiga_Buffers_Label" HorizontalAlignment="Left" Margin="390,300,0,0" TextWrapping="Wrap" Text="Buffers" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_Buffers_Input" HorizontalAlignment="Left" Margin="470,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
+          <TextBox x:Name="MediaSelect_Label" HorizontalAlignment="Left" Margin="246,20,0,0" TextWrapping="Wrap" Text="Select Media to Use" VerticalAlignment="Top" Width="140" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" FontWeight="Bold" FontSize="14"/>
+          <ComboBox x:Name="MediaSelect_DropDown" ToolTip="Select the SD card you wish to use" HorizontalAlignment="Left" Margin="406,20,0,0" VerticalAlignment="Top" Width="340"/>
+          <Button x:Name="MediaSelect_Refresh" ToolTip="Refresh available SD cards on your PC" Content="Refresh Available Media" HorizontalAlignment="Left" Margin="760,20,0,0" VerticalAlignment="Top" Width="150" Height="40" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
 
-                <TextBox x:Name="Amiga_MaxTransfer_Label" HorizontalAlignment="Left" Margin="530,300,0,0" TextWrapping="Wrap" Text="MaxTransfer" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_MaxTransfer_Input" HorizontalAlignment="Left" Margin="610,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-
-                <TextBox x:Name="Amiga_Priority_Label" HorizontalAlignment="Left" Margin="670,300,0,0" TextWrapping="Wrap" Text="Priority" VerticalAlignment="Top" Width="80" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
-                <TextBox x:Name="Amiga_Priority_Input" HorizontalAlignment="Left" Margin="730,300,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-
-                <CheckBox x:Name="Amiga_Bootable" Content="Bootable Flag" HorizontalAlignment="Left" Margin="790,300,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="Amiga_Mountable" Content="Mountable Flag" HorizontalAlignment="Left" Margin="890,300,0,0" VerticalAlignment="Top"/>
-
-            <Grid x:Name="DiskGrid_Amiga" Margin="0,50,0,0" Visibility="Hidden" VerticalAlignment="Top" Height="100">
-                     
-            </Grid>
-        </Grid>
-
-        <TextBox x:Name="Input_DiskSize_Value" HorizontalAlignment="Left" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-        <ComboBox x:Name="Input_DiskSize_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="186,20,0,0" VerticalAlignment="Top" Width="50"/>
-
-        <TextBox x:Name="MediaSelect_Label" HorizontalAlignment="Left" Margin="246,20,0,0" TextWrapping="Wrap" Text="Select Media to Use" VerticalAlignment="Top" Width="140" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" FontWeight="Bold" FontSize="14"/>
-        <ComboBox x:Name="MediaSelect_DropDown" ToolTip="Select the SD card you wish to use" HorizontalAlignment="Left" Margin="406,20,0,0" VerticalAlignment="Top" Width="340"/>
-        <Button x:Name="MediaSelect_Refresh" ToolTip="Refresh available SD cards on your PC" Content="Refresh Available Media" HorizontalAlignment="Left" Margin="760,20,0,0" VerticalAlignment="Top" Width="150" Height="40" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
-                    
-    </Grid>    
+      </Grid>

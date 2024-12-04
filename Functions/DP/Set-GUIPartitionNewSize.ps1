@@ -15,7 +15,7 @@ function Set-GUIPartitionNewSize {
     # $PartitionType = 'MBR'
    
      Write-host ""
-     Write-host "Function Set-GUIPartitionNewSize SizeBytes:$SizeBytes SizePixelstoChange:$SizePixelstoChange ActiontoPerform:$ActiontoPerform"
+     Write-host "Function Set-GUIPartitionNewSize Partition:$PartitionName SizeBytes:$SizeBytes SizePixelstoChange:$SizePixelstoChange ActiontoPerform:$ActiontoPerform"
     if (($ResizePixels) -and ($SizePixelstoChange -eq 0)){
         Write-host 'No change based on Pixels' 
         return $false

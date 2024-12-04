@@ -56,7 +56,6 @@ function Update-UI {
                 $SizetoReturn =  (Get-ConvertedSize -Size ((get-variable -name $Script:GUIActions.SelectedMBRPartition).value.PartitionSizeBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_SelectedSize_Input.Background = 'White'
                 $WPF_DP_SelectedSize_Input.Text = $SizetoReturn.Size
-                $WPF_DP_SelectedSize_Label.Text = "Selected Partition Size ($($SizetoReturn.Scale))"
                 $WPF_DP_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
             }
            
@@ -73,29 +72,47 @@ function Update-UI {
             $WPF_DP_SpaceatBeginning_Input_SizeScale_Dropdown.SelectedItem  = $SpaceatBeginning.Scale
             $WPF_DP_SpaceatEnd_Input.Background = 'White'
             $WPF_DP_SpaceatEnd_Input.Text =  $SpaceatEnd.Size
-            $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem = $SpaceatEnd.Scale
-            $WPF_DP_MBR_TotalDiskSize.Text = "$($DiskSize.Size) $($DiskSize.Scale)"
-            $WPF_DP_MBR_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)"
-            
-
+            $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem = $SpaceatEnd.Scale          
+        }
+        else {
+            if ($WPF_DP_GridMBR.Visibility -eq 'Visible'){
+                $WPF_DP_SpaceatBeginning_Input.Background = 'White'
+                $WPF_DP_SpaceatBeginning_Input.Text =''
+                $WPF_DP_SpaceatBeginning_Input_SizeScale_Dropdown.SelectedItem  = ''
+                $WPF_DP_SpaceatEnd_Input.Background = 'White'
+                $WPF_DP_SpaceatEnd_Input.Text = ''
+                $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem =''
+                $WPF_DP_SelectedSize_Input.Background = 'White' 
+                $WPF_DP_SelectedSize_Input.Text = ''
+                $WPF_DP_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = ''
+                $WPF_DP_TotalDiskSize.Text = ''
+                $WPF_DP_TotalFreeSpaceSize.Text = ''        
+            }
         }
         if ($Script:GUIActions.SelectedAmigaPartition){
             if (-not $WPF_DP_Amiga_SelectedSize_Input.InputEntry -eq $true){
                 $SizetoReturn =  (Get-ConvertedSize -Size ((get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.PartitionSizeBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_Amiga_SelectedSize_Input.Background = 'White'
                 $WPF_DP_Amiga_SelectedSize_Input.Text = $SizetoReturn.Size
-                $WPF_DP_Amiga_SelectedSize_Label.Text = "Selected Partition Size ($($SizetoReturn.Scale))"
                 $WPF_DP_Amiga_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
             }
 
-            $PartitionToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -eq $Script:GUIActions.SelectedAmigaPartition}
+            $PartitionsToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -match $Script:GUIActions.SelectedMBRPartition}
+
+            $PartitionToCheck = $PartitionsToCheck | Where-Object {$_.PartitionName -eq $Script:GUIActions.SelectedAmigaPartition}
             $SpaceatBeginning = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableLeft -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
             $SpaceatEnd = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableRight -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+            $DiskSize = (Get-ConvertedSize -Size ((Get-Variable -name ($Script:GUIActions.SelectedAmigaPartition.Substring(0,($Script:GUIActions.SelectedAmigaPartition.IndexOf('AmigaDisk_Partition_')+9)))).value).DiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+            $DiskFreeSpaceSize = (Get-ConvertedSize -Size (($PartitionsToCheck[$PartitionsToCheck.Count-1]).BytesAvailableRight) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+            
             $WPF_DP_Amiga_SpaceatBeginning_Input.Background = 'White'
             $WPF_DP_Amiga_SpaceatBeginning_Input.Text = $SpaceatBeginning.Size
             $WPF_DP_Amiga_SpaceatBeginning_Input_SizeScale_Dropdown.SelectedItem  = $SpaceatBeginning.Scale
             $WPF_DP_Amiga_SpaceatEnd_Input.Background = 'White'
             $WPF_DP_Amiga_SpaceatEnd_Input.Text =  $SpaceatEnd.Size
+            $WPF_DP_Amiga_TotalDiskSize.Text = "$($DiskSize.Size) $($DiskSize.Scale)"
+            $WPF_DP_Amiga_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)"
+            
             $WPF_DP_Amiga_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem = $SpaceatEnd.Scale
             if ((get-variable -name $Script:GUIActions.SelectedAmigaPartition).value.Bootable -eq $true){
                 $WPF_DP_Amiga_Bootable.IsChecked = 'True'
@@ -118,7 +135,22 @@ function Update-UI {
             Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Priority_Input -Value 'Priority' -CanChangeParameter 'CanChangePriority'
             Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'buffers' -CanChangeParameter 'CanChangeBuffers'
             Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -DropdownControl $WPF_DP_Amiga_DosType_Input_Dropdown -Value 'DosType' -CanChangeParameter 'CanChangeDosType'                     
-        }        
+        }    
+        else {
+            if ($WPF_DP_GridAmiga.Visibility -eq 'Visible'){
+                $WPF_DP_Amiga_SpaceatBeginning_Input.Background = 'White'
+                $WPF_DP_Amiga_SpaceatBeginning_Input.Text =''
+                $WPF_DP_Amiga_SpaceatBeginning_Input_SizeScale_Dropdown.SelectedItem  = ''
+                $WPF_DP_Amiga_SpaceatEnd_Input.Background = 'White'
+                $WPF_DP_Amiga_SpaceatEnd_Input.Text = ''
+                $WPF_DP_Amiga_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem =''
+                $WPF_DP_Amiga_SelectedSize_Input.Background = 'White' 
+                $WPF_DP_Amiga_SelectedSize_Input.Text = ''
+                $WPF_DP_Amiga_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = ''
+                $WPF_DP_Amiga_TotalDiskSize.Text = ''
+                $WPF_DP_Amiga_TotalFreeSpaceSize.Text = ''             
+            }
+        }    
     }
 
 }

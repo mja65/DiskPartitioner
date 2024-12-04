@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp27"
         mc:Ignorable="d"
-   Title="Partition Disk" Height="850" Width="1400" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
+   Title="Partition Disk" Height="900" Width="1200" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <VisualBrush 
       x:Key="DefaultFAT32Brush" TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute" Viewbox="0,0,10,10" ViewboxUnits="Absolute">
@@ -68,7 +68,7 @@
         </VisualBrush>
     </Window.Resources>
     <Grid x:Name ="Main" Background="#FFE5E5E5">
-        <Grid x:Name="Grid_Welcome" Width="1000" Margin="200,0,0,0" HorizontalAlignment="Left" >
+        <Grid x:Name="Grid_Welcome" Margin="200,0,0,0" HorizontalAlignment="Left" >
             <TextBox />
         </Grid>
         <Button x:Name="Button_LoadSettings" Content="Load Settings" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>

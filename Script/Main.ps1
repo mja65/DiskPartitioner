@@ -23,8 +23,7 @@ Set-PartitionGridActions
 
 $WPF_MainWindow.ShowDialog() | out-null
 # $WPF_MainWindow.Close()
-# [System.Windows.Controls.DataGrid].GetEvents() | Select-Object Name, *Method, EventHandlerType
+# [System.Windows.Controls.ComboBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
 # Get-variable
 
 # $WPF_DP_Partition_ID76_1_AmigaDisk_Partition_1
-

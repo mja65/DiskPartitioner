@@ -13,6 +13,7 @@ function Update-GUIInputBox {
     # $InputBox = $WPF_DP_SelectedSize_Input
     # $DropDownBox = $WPF_DP_SelectedSize_Input_SizeScale_Dropdown
 
+    
     if ($InputBox.InputEntry -eq  $true){
         if ($InputBox.InputEntryChanged -eq $true){
             if ((Get-IsValueNumber -TexttoCheck $InputBox.Text) -eq $false){
