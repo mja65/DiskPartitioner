@@ -72,10 +72,15 @@ function Update-UI {
             $WPF_DP_SpaceatBeginning_Input_SizeScale_Dropdown.SelectedItem  = $SpaceatBeginning.Scale
             $WPF_DP_SpaceatEnd_Input.Background = 'White'
             $WPF_DP_SpaceatEnd_Input.Text =  $SpaceatEnd.Size
-            $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem = $SpaceatEnd.Scale          
+            $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem = $SpaceatEnd.Scale         
+            $WPF_DP_MBR_TotalDiskSize.Text = "$($DiskSize.Size) $($DiskSize.Scale)"
+            $WPF_DP_MBR_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)" 
         }
         else {
             if ($WPF_DP_GridMBR.Visibility -eq 'Visible'){
+                $DiskSize = (Get-ConvertedSize -Size $WPF_DP_Disk_MBR.DiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+                $PartitionsToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_MBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'MBR'}
+                $DiskFreeSpaceSize = (Get-ConvertedSize -Size (($PartitionsToCheck[$PartitionsToCheck.Count-1]).BytesAvailableRight) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_SpaceatBeginning_Input.Background = 'White'
                 $WPF_DP_SpaceatBeginning_Input.Text =''
                 $WPF_DP_SpaceatBeginning_Input_SizeScale_Dropdown.SelectedItem  = ''
@@ -85,8 +90,8 @@ function Update-UI {
                 $WPF_DP_SelectedSize_Input.Background = 'White' 
                 $WPF_DP_SelectedSize_Input.Text = ''
                 $WPF_DP_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = ''
-                $WPF_DP_TotalDiskSize.Text = ''
-                $WPF_DP_TotalFreeSpaceSize.Text = ''        
+                $WPF_DP_MBR_TotalDiskSize.Text = "$($DiskSize.Size) $($DiskSize.Scale)"
+                $WPF_DP_MBR_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)"      
             }
         }
         if ($Script:GUIActions.SelectedAmigaPartition){

@@ -59,4 +59,5 @@ $Script:SDCardMinimumsandMaximums = $null
 
 $Script:ExternalProgramSettings = [PSCustomObject]@{
     HSTImagePath = 'C:\Users\Matt\OneDrive\Documents\hst-imager\hst-imager\src\Hst.Imager.ConsoleApp\bin\Debug\net8.0\Hst.Imager.ConsoleApp.exe'
+    TempFolder = '.\Temp'
 }

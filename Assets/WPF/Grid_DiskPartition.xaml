@@ -196,11 +196,17 @@
               </Grid>
           </Grid>
 
-          <TextBox x:Name="Input_DiskSize_Value" HorizontalAlignment="Left" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50"/>
-          <ComboBox x:Name="Input_DiskSize_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="186,20,0,0" VerticalAlignment="Top" Width="50"/>
+          <ComboBox x:Name="MediaSelect_Type_DropDown"  HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="100" Visibility="Visible" />
 
-          <TextBox x:Name="MediaSelect_Label" HorizontalAlignment="Left" Margin="246,20,0,0" TextWrapping="Wrap" Text="Select Media to Use" VerticalAlignment="Top" Width="140" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" FontWeight="Bold" FontSize="14"/>
-          <ComboBox x:Name="MediaSelect_DropDown" ToolTip="Select the SD card you wish to use" HorizontalAlignment="Left" Margin="406,20,0,0" VerticalAlignment="Top" Width="340"/>
-          <Button x:Name="MediaSelect_Refresh" ToolTip="Refresh available SD cards on your PC" Content="Refresh Available Media" HorizontalAlignment="Left" Margin="760,20,0,0" VerticalAlignment="Top" Width="150" Height="40" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
+          <TextBox x:Name="Input_DiskSize_Value" HorizontalAlignment="Left" Margin="126,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" Visibility="Visible"/>
+          <ComboBox x:Name="Input_DiskSize_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="186,20,0,0" VerticalAlignment="Top" Width="50" Visibility="Visible"/>
+
+              <Button x:Name="Button_SaveImage" HorizontalAlignment="Left" Margin="250,20,0,0" VerticalAlignment="Top" Width="100" Height="45">
+                  <TextBlock Text="Set Location for Image" TextWrapping="Wrap" TextAlignment="Center"/>
+              </Button>
+
+          <TextBox x:Name="MediaSelect_Label" HorizontalAlignment="Left" Margin="246,20,0,0" TextWrapping="Wrap" Text="Select Media to Use" VerticalAlignment="Top" Width="140" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" FontWeight="Bold" FontSize="14" Visibility="Hidden"/>
+          <ComboBox x:Name="MediaSelect_DropDown" ToolTip="Select the SD card you wish to use" HorizontalAlignment="Left" Margin="406,20,0,0" VerticalAlignment="Top" Width="340" Visibility="Hidden"/>
+          <Button x:Name="MediaSelect_Refresh" ToolTip="Refresh available SD cards on your PC" Content="Refresh Available Media" HorizontalAlignment="Left" Margin="760,20,0,0" VerticalAlignment="Top" Width="150" Height="40" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent" Visibility="Hidden"/>
 
       </Grid>
