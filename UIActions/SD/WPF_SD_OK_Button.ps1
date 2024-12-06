@@ -49,10 +49,10 @@ $WPF_SD_OK_Button.Add_Click({
         }
         
         if ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRImage' -or $Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRDisk'){
-            Add-GUIPartitiontoMBRDisk -ImportedMBRPartitionNumber ($WPF_SD_MBR_DataGrid.SelectedItem.Number) -ImportPartitionMethod 'ID76' -PathtoImportedPartition "$SourcePath$($WPF_SD_MBR_DataGrid.SelectedItem.Number)" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
+            Add-GUIPartitiontoMBRDisk -ImportedMBRPartitionNumber ($WPF_SD_MBR_DataGrid.SelectedItem.Number) -ImportedPartitionMethod 'ID76' -PathtoImportedPartition "$SourcePath$($WPF_SD_MBR_DataGrid.SelectedItem.Number)" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
         }
         elseif($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromAmigaImage'){
-            Add-GUIPartitiontoMBRDisk -ImportedMBRPartitionNumber ($WPF_SD_MBR_DataGrid.SelectedItem.Number) -ImportPartitionMethod 'Amiga' -PathtoImportedPartition "$SourcePath" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
+            Add-GUIPartitiontoMBRDisk -ImportedMBRPartitionNumber ($WPF_SD_MBR_DataGrid.SelectedItem.Number) -ImportedPartitionMethod 'Amiga' -PathtoImportedPartition "$SourcePath" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
         }
 
         if ($PartitionType -eq 'ID76'){
@@ -67,7 +67,12 @@ $WPF_SD_OK_Button.Add_Click({
                 # $StartPoint_DosType = $_.DosType.IndexOf('(')+1
                 # $Length_DosType  = ($_.DosType.Length-1)-$StartPoint_DosType
                 # $DosType = $_.DosType.Substring($StartPoint_DosType,$Length_DosType)
-                Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -DerivedImportedPartition $true -VolumeName 'Unknown' -DeviceName $_.Name -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
+                if($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromAmigaImage'){
+                    Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -VolumeName 'Unknown' -DeviceName $_.Name -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
+                }
+                elseif ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRDisk' -or $Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRImage'){
+                    Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -DerivedImportedPartition $true -VolumeName 'Unknown' -DeviceName $_.Name -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
+                }
             }            
         }
         $Script:GUIActions.AvailableSpaceforImportedPartitionBytes = $null
