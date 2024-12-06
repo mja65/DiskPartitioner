@@ -7,7 +7,8 @@ function Update-GUIInputBox {
         [Switch]$MBRMove_SpaceatBeginning,
         [Switch]$MBRMove_SpaceatEnd,
         [Switch]$AmigaMove_SpaceatBeginning,
-        [Switch]$AmigaMove_SpaceatEnd
+        [Switch]$AmigaMove_SpaceatEnd,
+        [Switch]$SetDiskValues
     )
 
     # $InputBox = $WPF_DP_SelectedSize_Input
@@ -22,6 +23,15 @@ function Update-GUIInputBox {
                 $InputBox.Background = 'Red'
             }
             else {
+                if ($SetDiskValues){
+                    if (-not $Script:GUIActions.DiskSizeSelected -eq $true){
+                        Set-InitialDiskValues -SizeBytes ((Get-ConvertedSize -Size ($WPF_DP_Input_DiskSize_Value.Text) -ScaleFrom ($WPF_DP_Input_DiskSize_SizeScale_Dropdown.SelectedItem) -Scaleto 'B').Size)
+                    }
+                    else{
+                       Set-RevisedDiskValues -SizeBytes ((Get-ConvertedSize -Size ($WPF_DP_Input_DiskSize_Value.Text) -ScaleFrom ($WPF_DP_Input_DiskSize_SizeScale_Dropdown.SelectedItem) -Scaleto 'B').Size)
+                    }
+                    Update-UI -UpdateInputBoxes
+                }
                 if (($MBRResize) -or ($AmigaResize)){
                     Write-Host 'Changing size based on input'
                     if ($MBRResize){

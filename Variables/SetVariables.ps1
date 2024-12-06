@@ -28,6 +28,7 @@ $Script:GUIActions = [PSCustomObject]@{
     ScriptPath = $null
     DiskSizeSelected = $null
     MouseStatus = $null
+    OutputPath = $null
     CurrentMousePositionX = $null
     MousePositionXatTimeofPress = $null
     CurrentMousePositionY = $null
@@ -59,5 +60,6 @@ $Script:SDCardMinimumsandMaximums = $null
 
 $Script:ExternalProgramSettings = [PSCustomObject]@{
     HSTImagePath = 'C:\Users\Matt\OneDrive\Documents\hst-imager\hst-imager\src\Hst.Imager.ConsoleApp\bin\Debug\net8.0\Hst.Imager.ConsoleApp.exe'
+    PFS3AIOPath= 'C:\Users\Matt\Downloads\hst-imager_v1.2.396-2cc164a_console_windows_x64\pfs3aio'
     TempFolder = '.\Temp'
 }

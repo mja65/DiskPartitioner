@@ -38,6 +38,8 @@ function New-GUIPartition {
     $NewPartition = [Windows.Markup.XamlReader]::Load( $reader)
 
     $NewPartition | Add-Member -NotePropertyMembers @{
+        VolumeName = $null
+        CanRenameVolume = $null
         ImportedPartition = $false
         ImportedPartitionType = $null
         ImportedPartitionPath = $null
@@ -57,7 +59,10 @@ function New-GUIPartition {
         ImportedFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
     }
 
-    If ($PartitionType -eq 'FAT32' -or $PartitionType -eq 'ID76'){        
+    If ($PartitionType -eq 'FAT32' -or $PartitionType -eq 'ID76'){  
+        $NewPartition | Add-Member -NotePropertyMembers @{
+            ImportedMBRPartitionNumber = $null
+        }       
         $NewPartition.PartitionTypeMBRorAmiga='MBR'
         if ($PartitionType -eq 'ID76'){
             $NewPartition | Add-Member -NotePropertyName AmigaDiskName -NotePropertyValue $null  
@@ -90,7 +95,6 @@ function New-GUIPartition {
         $NewPartition.PartitionTypeMBRorAmiga='Amiga'
         $NewPartition | Add-Member -NotePropertyMembers @{
             DeviceName =$null
-            VolumeName = $null
             Buffers = $null
             DosType = $null
             MaxTransfer = $null
@@ -99,7 +103,6 @@ function New-GUIPartition {
             Priority = $null
             CanChangeBuffers = $null
             CanRenameDevice = $null
-            CanRenameVolume = $null
             CanChangeMaxTransfer = $null
             CanChangeBootable = $null
             CanChangeMountable = $null

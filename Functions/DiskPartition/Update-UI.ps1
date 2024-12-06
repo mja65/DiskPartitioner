@@ -3,9 +3,22 @@ function Update-UI {
         [Switch]$All,
         [Switch]$HighlightSelectedPartitions,
         [Switch]$ShowGrids,
-        [Switch]$UpdateInputBoxes
+        [Switch]$UpdateInputBoxes,
+        [Switch]$Buttons
     )
    
+    if (($All) -or ($Buttons)){
+        if ($Script:GUIActions.OutputPath){
+            $WPF_DP_Button_SaveImage.Background = 'Green'
+            $WPF_DP_Button_SaveImage.Foreground = 'White'
+        }
+        else{
+            $WPF_DP_Button_SaveImage.Background = '#FFDDDDDD'
+            $WPF_DP_Button_SaveImage.Foreground = 'Black'          
+        }
+
+    }
+
     if (($All) -or ($HighlightSelectedPartitions)){
         Get-AllGUIPartitions -PartitionType 'All' | ForEach-Object {
             $TotalChildren = ((Get-Variable -Name $_.Name).Value).Children.Count-1
@@ -75,6 +88,9 @@ function Update-UI {
             $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem = $SpaceatEnd.Scale         
             $WPF_DP_MBR_TotalDiskSize.Text = "$($DiskSize.Size) $($DiskSize.Scale)"
             $WPF_DP_MBR_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)" 
+
+            Update-UITextbox -NameofPartition $Script:GUIActions.SelectedMBRPartition -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
+
         }
         else {
             if ($WPF_DP_GridMBR.Visibility -eq 'Visible'){
@@ -135,7 +151,7 @@ function Update-UI {
             
             Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'buffers' -CanChangeParameter 'CanChangeBuffers'      
             Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_DeviceName_Input -Value 'DeviceName' -CanChangeParameter 'CanChangeDeviceName'
-            Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanChangeVolumeName'
+            Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
             Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_MaxTransfer_Input -Value 'MaxTransfer' -CanChangeParameter 'CanChangeMaxTransfer'
             Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Priority_Input -Value 'Priority' -CanChangeParameter 'CanChangePriority'
             Update-UITextbox -NameofPartition $Script:GUIActions.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'buffers' -CanChangeParameter 'CanChangeBuffers'

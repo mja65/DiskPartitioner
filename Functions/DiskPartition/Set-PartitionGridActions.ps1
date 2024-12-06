@@ -108,6 +108,9 @@ function Set-PartitionGridActions {
         if ($WPF_DP_SpaceatEnd_Input.InputEntry -eq $true){
             Update-GUIInputBox -InputBox $WPF_DP_SpaceatEnd_Input -DropDownBox $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown -MBRMove_SpaceatEnd
         }
+        if ($WPF_DP_Input_DiskSize_Value.InputEntry -eq $true){
+            Update-GUIInputBox -InputBox $WPF_DP_Input_DiskSize_Value -SetDiskValues
+        }
         $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow -Window $WPF_MainWindow -MainGrid $WPF_Window_Main -DiskPartitionGrid $WPF_Partition
         $Script:GUIActions.MousePositionXatTimeofPress = $MouseCoordinates.MousePositionRelativetoWindowX
         $Script:GUIActions.MousePositionYatTimeofPress = $MouseCoordinates.MousePositionRelativetoWindowY

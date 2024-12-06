@@ -49,10 +49,10 @@ $WPF_SD_OK_Button.Add_Click({
         }
         
         if ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRImage' -or $Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRDisk'){
-            Add-GUIPartitiontoMBRDisk -ImportPartitionMethod 'ID76' -PathtoImportedPartition "$SourcePath$($WPF_SD_MBR_DataGrid.SelectedItem.Number)" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
+            Add-GUIPartitiontoMBRDisk -ImportedMBRPartitionNumber ($WPF_SD_MBR_DataGrid.SelectedItem.Number) -ImportPartitionMethod 'ID76' -PathtoImportedPartition "$SourcePath$($WPF_SD_MBR_DataGrid.SelectedItem.Number)" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
         }
         elseif($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromAmigaImage'){
-            Add-GUIPartitiontoMBRDisk -ImportPartitionMethod 'Amiga' -PathtoImportedPartition "$SourcePath" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
+            Add-GUIPartitiontoMBRDisk -ImportedMBRPartitionNumber ($WPF_SD_MBR_DataGrid.SelectedItem.Number) -ImportPartitionMethod 'Amiga' -PathtoImportedPartition "$SourcePath" -PartitionType $PartitionType -SizeBytes $WPF_SD_MBR_DataGrid.SelectedItem.TotalBytes -AddType 'AtEnd' -ImportedPartition $true
         }
 
         if ($PartitionType -eq 'ID76'){

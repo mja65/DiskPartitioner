@@ -7,8 +7,10 @@ function Add-GUIPartitiontoMBRDisk {
         $DefaultPartition,
         $ImportedPartition,
         $ImportedPartitionMethod,
+        $ImportedMBRPartitionNumber,
         $DerivedImportedPartition,
-        $PathtoImportedPartition
+        $PathtoImportedPartition,
+        $VolumeName
     )
 
     # $PartitionType = 'FAT32'
@@ -55,6 +57,9 @@ function Add-GUIPartitiontoMBRDisk {
     
     $NewPartition = New-GUIPartition -PartitionType $PartitionType -DefaultPartition $DefaultPartition -ImportedPartition $ImportedPartition -DerivedImportedPartition $DerivedImportedPartition
     $NewPartition.PartitionSizeBytes = $SizeBytes
+    if ($VolumeName){
+        $NewPartition.VolumeName = $VolumeName
+    }
     $NewPartition.StartingPositionBytes = $StartingPositionBytes
 
     if ($ImportedPartition -eq $true){
@@ -62,6 +67,7 @@ function Add-GUIPartitiontoMBRDisk {
         $NewPartition.ImportedPartitionType = 'Direct'
         $NewPartition.ImportedPartitionPath = $PathtoImportedPartition
         $NewPartition.ImportedPartitionMethod = $ImportedPartitionMethod 
+        $NewPartition.ImportedMBRPartitionNumber = $ImportedMBRPartitionNumber
     }
 
     $NewPartition.Margin = [System.Windows.Thickness]"$LeftMargin,0,0,0"
