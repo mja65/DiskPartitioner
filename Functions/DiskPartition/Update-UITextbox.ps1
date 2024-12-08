@@ -11,12 +11,17 @@ function Update-UITextbox {
     # $TextBoxControl = $WPF_DP_Amiga_Buffers_Input
     # $Value = 'buffers'
     # $CanChangeParameter = 'CanChangeBuffers'
+    
+    if (((get-variable -name $NameofPartition).value.PartitionType) -eq 'Amiga' -and ((get-variable -name $NameofPartition).value.ImportedPartition) -eq 'TRUE'){
+        Write-host  "$NameofPartition"
+        (get-variable -name $NameofPartition).value.ImportedPartitionUpdatedValues = $true
+    }
 
     if ($TextBoxControl){
-        $TextBoxControl.Text = (get-variable -name $NameofPartition ).value.$Value
+        $TextBoxControl.Text = (get-variable -name $NameofPartition).value.$Value
     }
     elseif ($DropdownControl){
-        $DropdownControl.SelectedItem = (get-variable -name $NameofPartition ).value.$Value
+        $DropdownControl.SelectedItem = (get-variable -name $NameofPartition).value.$Value
     }
 
     if ((get-variable -name $NameofPartition).value.$CanChangeParameter -eq 'True'){

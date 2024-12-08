@@ -1,5 +1,7 @@
 function Add-GUIPartitiontoMBRDisk {
     param (
+        [Switch]$LoadSettings,
+        $NewPartitionNameFromSettings,
         $PartitionType,
         $AddType,
         $PartitionNameNextto, 
@@ -10,7 +12,8 @@ function Add-GUIPartitiontoMBRDisk {
         $ImportedMBRPartitionNumber,
         $DerivedImportedPartition,
         $PathtoImportedPartition,
-        $VolumeName
+        $VolumeName,
+        $StartingPositionBytes
     )
 
     # $PartitionType = 'FAT32'
@@ -36,8 +39,13 @@ function Add-GUIPartitiontoMBRDisk {
     elseif ($PartitionType -eq 'ID76'){
         $NewPartitionNumber = $Script:WPF_DP_Disk_MBR.NextPartitionID76Number       
     }
-        
-    $NewPartitionName = ($Script:DP_Settings.PartitionPrefix+$PartitionType+'_'+$NewPartitionNumber)  
+
+    if ($LoadSettings){
+        $NewPartitionName = $NewPartitionNameFromSettings
+    }
+    else{
+        $NewPartitionName = ($Script:DP_Settings.PartitionPrefix+$PartitionType+'_'+$NewPartitionNumber)  
+    }
   
     if ($AddType -eq 'AtEnd' -or $AddType -eq 'Initial'){
         $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'MBR').EndingPositionPixels
@@ -52,6 +60,16 @@ function Add-GUIPartitiontoMBRDisk {
         elseif ($AddType -eq 'Left'){
             $LeftMargin = $PartitionNameNexttoDetails.LeftMargin - ($SizeBytes/$WPF_DP_Disk_MBR.BytestoPixelFactor)
             $StartingPositionBytes = $PartitionNameNexttoDetails.StartingPositionBytes - $SizeBytes
+        }
+        elseif ($AddType -eq 'SpecificPosition'){
+            $CheckLastPartitioninCaseofOverrrun = (Get-GUIPartitionStartEnd -PartitionType 'MBR').EndingPositionPixels
+            if ($CheckLastPartitioninCaseofOverrrun -lt $StartingPositionBytes/$WPF_DP_Disk_MBR.BytestoPixelFactor){
+                $LeftMargin = $CheckLastPartitioninCaseofOverrrun
+            }
+            else{
+                $LeftMargin =  $StartingPositionBytes/$WPF_DP_Disk_MBR.BytestoPixelFactor
+            }
+
         }
     }
     
@@ -89,9 +107,8 @@ function Add-GUIPartitiontoMBRDisk {
 "@
 
     Invoke-Expression $PSCommand  
-
-    
-    If ($PartitionType -eq 'ID76' -and (-not $ImportedPartition -eq $true)){
+   
+    If ($PartitionType -eq 'ID76' -and (-not ($LoadSettings)) -and (-not $ImportedPartition -eq $true)){
        
         Add-AmigaDisktoID76Partition -ID76PartitionName $NewPartitionName
         if ($DefaultPartition -eq $true){
@@ -119,16 +136,19 @@ function Add-GUIPartitiontoMBRDisk {
         #Set-AmigaDiskSizeBytes -ID76PartitionName $NewPartitionName -AmigaDisk ((Get-Variable -name ($NewPartitionName+'_AmigaDisk')).value)
     }
     
-    if ($PartitionType -eq 'FAT32'){
-        $NewPartitionNumber = $Script:WPF_DP_Disk_MBR.NextPartitionFAT32Number
-        $Script:WPF_DP_Disk_MBR.NextPartitionFAT32Number += 1
-        $Script:WPF_DP_Disk_MBR.NumberofPartitionsFAT32 += 1
-    }
-    elseif ($PartitionType -eq 'ID76'){
-        $NewPartitionNumber = $Script:WPF_DP_Disk_MBR.NextPartitionID76Number
-        $Script:WPF_DP_Disk_MBR.NextPartitionID76Number += 1
-        $Script:WPF_DP_Disk_MBR.NumberofPartitionsID76 += 1
-        
+    if (-not ($LoadSettings)){
+        if ($PartitionType -eq 'FAT32'){
+            $NewPartitionNumber = $Script:WPF_DP_Disk_MBR.NextPartitionFAT32Number
+            $Script:WPF_DP_Disk_MBR.NextPartitionFAT32Number += 1
+            $Script:WPF_DP_Disk_MBR.NumberofPartitionsFAT32 += 1
+        }
+        elseif ($PartitionType -eq 'ID76'){
+            $NewPartitionNumber = $Script:WPF_DP_Disk_MBR.NextPartitionID76Number
+            $Script:WPF_DP_Disk_MBR.NextPartitionID76Number += 1
+            $Script:WPF_DP_Disk_MBR.NumberofPartitionsID76 += 1
+            
+        }
+
     }
 
 }

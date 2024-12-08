@@ -1,5 +1,7 @@
 function Add-GUIPartitiontoAmigaDisk {
     param (
+        [Switch]$LoadSettings,
+        $NewPartitionNameFromSettings,
         $AmigaDiskName,
         $AddType,
         $PartitionNameNextto, 
@@ -53,9 +55,15 @@ function Add-GUIPartitiontoAmigaDisk {
         }
     }
 
-    $PartitionNumber = (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber
+    if ($LoadSettings){
+        $NewPartitionName = $NewPartitionNameFromSettings
+    }
+    else {
+        $PartitionNumber = (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber
+        $NewPartitionName = ($AmigaDiskName+'_Partition_'+$PartitionNumber)
+    }
 
-    $NewPartitionName = ($AmigaDiskName+'_Partition_'+$PartitionNumber)
+
 
     Write-Host "New Partition Name is: $NewPartitionName "
 
@@ -96,6 +104,8 @@ function Add-GUIPartitiontoAmigaDisk {
 
     (Get-Variable -Name $AmigaDiskName).Value.AddChild(((Get-Variable -name $NewPartitionName).value))
 
-    (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber += 1
+    if (-not ($LoadSettings)){
+        (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber += 1
+    }
        
 }

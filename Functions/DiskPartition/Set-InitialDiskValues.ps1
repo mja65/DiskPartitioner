@@ -1,6 +1,7 @@
 function Set-InitialDiskValues {
     param (
-       $SizeBytes
+       $SizeBytes,
+       [Switch]$LoadSettings
     )
     $Script:GUIActions.DiskSizeSelected = $true
     #$WPF_DP_GridAmiga.Visibility = 'Visible'
@@ -20,10 +21,10 @@ function Set-InitialDiskValues {
                                                                 -DefaultAddID76Size 1073741824 `
                                                                 -DefaultAddPFS3Size 1073741824 `
 
-
-
-    Add-GUIPartitiontoMBRDisk -PartitionType 'FAT32' -AddType 'Initial' -DefaultPartition $true -SizeBytes $Script:SDCardMinimumsandMaximums.FAT32Default -VolumeName 'EMU68BOOT'
-    $RemainingSpace = ($WPF_DP_Disk_MBR.DiskSizeBytes - $Script:SDCardMinimumsandMaximums.FAT32Default)
-
-    Add-GUIPartitiontoMBRDisk -PartitionType 'ID76' -AddType 'Initial' -DefaultPartition $true -SizeBytes $RemainingSpace    
+                                                                
+    if (-not ($LoadSettings)){
+        Add-GUIPartitiontoMBRDisk -PartitionType 'FAT32' -AddType 'Initial' -DefaultPartition $true -SizeBytes $Script:SDCardMinimumsandMaximums.FAT32Default -VolumeName 'EMU68BOOT'
+        $RemainingSpace = ($WPF_DP_Disk_MBR.DiskSizeBytes - $Script:SDCardMinimumsandMaximums.FAT32Default)
+        Add-GUIPartitiontoMBRDisk -PartitionType 'ID76' -AddType 'Initial' -DefaultPartition $true -SizeBytes $RemainingSpace    
+    }
 }

@@ -68,10 +68,10 @@ $WPF_SD_OK_Button.Add_Click({
                 # $Length_DosType  = ($_.DosType.Length-1)-$StartPoint_DosType
                 # $DosType = $_.DosType.Substring($StartPoint_DosType,$Length_DosType)
                 if($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromAmigaImage'){
-                    Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -VolumeName 'Unknown' -DeviceName $_.Name -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
+                    Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -VolumeName $_.VolumeName -DeviceName $_.Name -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
                 }
                 elseif ($Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRDisk' -or $Script:GUIActions.ActionToPerform -eq 'ImportMBRPartitionfromMBRImage'){
-                    Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -DerivedImportedPartition $true -VolumeName 'Unknown' -DeviceName $_.Name -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
+                    Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.TotalBytes -AddType 'AtEnd' -ImportedPartition $true -DerivedImportedPartition $true -VolumeName $_.VolumeName -DeviceName $_.Name -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
                 }
             }            
         }

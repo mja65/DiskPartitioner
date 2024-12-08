@@ -83,6 +83,7 @@ function New-GUIPartition {
             $NewPartition.CanDelete = $true
             $NewPartition.CanResizeLeft = $false
             $NewPartition.CanResizeRight = $false
+
         }
         else{
             $NewPartition.CanDelete = $true
@@ -107,6 +108,8 @@ function New-GUIPartition {
             CanChangeBootable = $null
             CanChangeMountable = $null
             CanChangePriority = $null
+            ImportedPartitionUpdatedValues =$null
+
         }
         if ($DefaultAmigaWorkbenchPartition -eq $true){
             $NewPartition.CanDelete = $false
@@ -144,7 +147,20 @@ function New-GUIPartition {
             $NewPartition.CanChangePriority = $true
             $NewPartition.CanChangeMountable = $true
             $NewPartition.CanRenameDevice = $true
-            $NewPartition.CanRenameVolume = $true
+            $NewPartition.CanRenameVolume = $false
+            $NewPartition.CanChangeMaxTransfer = $true    
+        }
+        elseif ($ImportedPartition -eq $true){
+            $NewPartition.CanDelete = $false
+            $NewPartition.CanResizeLeft = $false
+            $NewPartition.CanResizeRight = $false
+            $NewPartition.CanMove = $true
+            $NewPartition.CanChangeBootable = $true
+            $NewPartition.CanChangeBuffers =$true
+            $NewPartition.CanChangePriority = $true
+            $NewPartition.CanChangeMountable = $true
+            $NewPartition.CanRenameDevice = $true
+            $NewPartition.CanRenameVolume = $false
             $NewPartition.CanChangeMaxTransfer = $true    
         }
         else{
