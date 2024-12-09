@@ -5,7 +5,7 @@ function Get-HSTVolumeName {
     
     #$Path = "\disk6\mbr\2\rdb"
 
-    $DatatoParse = & $Script:ExternalProgramSettings.HSTImagePath fs dir $Path
+    $DatatoParse = & $Script:ExternalProgramSettings.HSTImagerPath fs dir $Path
 
     $HeadertoUse = 'Name','Size','Date','Attributes','DosType','FileSystemFree','FileSystemSize','FileSystemUsed','VolumeName'
 

@@ -1,29 +1,67 @@
-Set-Location -Path (Split-Path -Path $PSScriptRoot -Parent)
+<#PSScriptInfo
+.VERSION 1.1
+.GUID 73d9401c-ab81-4be5-a2e5-9fc0834be0fc
+.AUTHOR SupremeTurnip
+.COMPANYNAME
+.COPYRIGHT
+.TAGS
+.LICENSEURI https://github.com/mja65/Emu68-Imager/blob/main/LICENSE
+.PROJECTURI https://github.com/mja65/Emu68-Imager
+.ICONURI
+.EXTERNALMODULEDEPENDENCIES 
+.REQUIREDSCRIPTS
+.EXTERNALSCRIPTDEPENDENCIES
+.RELEASENOTES
+.PRIVATEDATA
+#>
 
-Get-ChildItem -Path '.\Functions\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
-    . ($_).fullname
-}
+<# 
+.DESCRIPTION 
+Script for Emu68Imager 
+#> 
+Add-Type -AssemblyName PresentationFramework
+Add-Type -AssemblyName System.Windows.Forms
+
+Set-Location -Path (Split-Path -Path $PSScriptRoot -Parent)
 
 Get-ChildItem -Path '.\Variables\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
     . ($_).fullname
 }
 
+Get-ChildItem -Path '.\Functions\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
+    . ($_).fullname
+}
+$Script:Settings.Version = 1.1
+
 $Script:GUIActions.ScriptPath = (Split-Path -Path $PSScriptRoot -Parent)
 
-Remove-Variable -Name 'WPF_*'
+Write-Emu68ImagerLog -start
 
-Add-Type -AssemblyName PresentationFramework
-Add-Type -AssemblyName System.Windows.Forms
+Show-Disclaimer
 
-$WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\UIActions\MainWindow\' -AddWPFVariables
-$WPF_Partition = Get-XAML -WPFPrefix 'WPF_DP_' -XMLFile '.\Assets\WPF\Grid_DiskPartition.xaml' -ActionsPath '.\UIActions\DiskPartition\' -AddWPFVariables
-$WPF_SetupEmu68 = Get-XAML -WPFPrefix 'WPF_Setup_' -XMLFile '.\Assets\WPF\Grid_SetupEmu68.xaml' -ActionsPath '.\UIActions\SetupEmu68\' -AddWPFVariables
+# #Confirm-Prerequisites
 
-Set-PartitionGridActions
+# Confirm-DefaultPaths 
 
-$WPF_MainWindow.ShowDialog() | out-null
+# Get-HSTImagerandHSTAmiga
 
-# $WPF_MainWindow.Close()
-# [System.Windows.Controls.ComboBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
-# Get-variable
+# Remove-Variable -Name 'WPF_*'
 
+# Update-InputCSV -PathtoGoogleDrive $Script:Settings.PathtoInputFileSpreadsheet -GidValue 0 -ExistingCSV "$($Script:Settings.InputFiles)\ADFHashes.CSV" 
+# Update-InputCSV -PathtoGoogleDrive $Script:Settings.PathtoInputFileSpreadsheet -GidValue 750546389 -ExistingCSV "$($Script:Settings.InputFiles)\ListofInstallFiles.CSV"
+# Update-InputCSV -PathtoGoogleDrive $Script:Settings.PathtoInputFileSpreadsheet -GidValue 2048180409 -ExistingCSV "$($Script:Settings.InputFiles)\ListofPackagestoInstall.CSV"
+# Update-InputCSV -PathtoGoogleDrive $Script:Settings.PathtoInputFileSpreadsheet -GidValue 1875558855 -ExistingCSV "$($Script:Settings.InputFiles)\RomHashes.CSV"
+# Update-InputCSV -PathtoGoogleDrive $Script:Settings.PathtoInputFileSpreadsheet -GidValue 860542576 -ExistingCSV "$($Script:Settings.InputFiles)\ScreenModes.CSV"
+
+
+# # $WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\UIActions\MainWindow\' -AddWPFVariables
+# # $WPF_Partition = Get-XAML -WPFPrefix 'WPF_DP_' -XMLFile '.\Assets\WPF\Grid_DiskPartition.xaml' -ActionsPath '.\UIActions\DiskPartition\' -AddWPFVariables
+# # $WPF_SetupEmu68 = Get-XAML -WPFPrefix 'WPF_Setup_' -XMLFile '.\Assets\WPF\Grid_SetupEmu68.xaml' -ActionsPath '.\UIActions\SetupEmu68\' -AddWPFVariables
+
+# # Set-PartitionGridActions
+
+# # $WPF_MainWindow.ShowDialog() | out-null
+
+# # # $WPF_MainWindow.Close()
+# # # [System.Windows.Controls.ComboBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
+# # # Get-variable

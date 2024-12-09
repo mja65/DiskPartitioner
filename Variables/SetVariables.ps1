@@ -4,17 +4,32 @@ $Script:DP_Settings = [PSCustomObject]@{
 
 
 $Script:Settings = [PSCustomObject]@{
-
+    Version = $null
     PowershellVersion = ((($PSVersionTable.PSVersion).Major).ToString()+'.'+(($PSVersionTable.PSVersion).Minor))
+    NetFrameworkrelease = Get-ItemPropertyValue -LiteralPath 'HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full' -Name Release
+    WindowsLocale = ((((Get-WinSystemLocale).Name).Tostring())+' ('+(((Get-WinSystemLocale).DisplayName).Tostring())+')')
+    WindowsVersion = (Get-WmiObject -class Win32_OperatingSystem).Caption
+    Architecture = (Get-WmiObject win32_operatingsystem | Select-Object osarchitecture).osarchitecture
+    DefaultADFLocation = '.\UserFiles\ADFs'
+    DefaultROMLocation = '.\UserFiles\Kickstarts'
+    InputFiles = '.\InputFiles'
+    ListofInstallFiles = '.\InputFiles\ListofInstallFiles.CSV'
+    ListofPackagestoInstall = '.\InputFiles\ListofPackagestoInstall.CSV'
+    RomHashes = '.\InputFiles\RomHashes.CSV'
+    ADFHashes = '.\InputFiles\ADFHashes.CSV'
+    ScreenModes = '.\InputFiles\ScreenModes.CSV'
+    PathtoInputFileSpreadsheet = 'https://docs.google.com/spreadsheets/d/12UcKD7INDH9y7Tw_w1q3ebQOUS9JtARIs8Z9JWfLUWg/'
+    LogFolder = '.\Logs'
+    LogLocation = $null
+    QuickStart_URL = "https://mja65.github.io/Emu68-Imager/quickstart.html"
+    Documentation_URL = "https://mja65.github.io/Emu68-Imager/"
     #DefaultImageLocation = 
-    # LogLocation = '.\Logs\Log.txt'
-    # LogFolder = '.\Logs\'
     # LogDateTime = (Get-Date -Format yyyyMMddHHmmss).tostring()
-    # HSTLocation = 'E:\Emu68Imager\Working Folder\Programs\HST-Imager'
     # TempFolder = '.\Temp\'
 }
 
 $Script:GUIActions = [PSCustomObject]@{
+    IsDisclaimerAccepted = $null
     ListofRemovableMedia = $null
     AvailableSpaceforImportedPartitionBytes = $null 
     ImportPartitionWindowStatus = $null
@@ -37,9 +52,10 @@ $Script:GUIActions = [PSCustomObject]@{
     ActionToPerform = $null
     SelectedAmigaPartition = $null
     PartitionHoveredOver = $null
-
     MBRPartitionContextMenuEnabled = $false
     AmigaPartitionContextMenuEnabled = $false
+    ADFLocation = $null
+    ROMLocation = $null
     # SelectedMBRPartitionforImport = $null
     # MBRPartitionIsSelectedAction = $false
     # MBRPartitionIsUnselectedAction =$false
@@ -59,7 +75,13 @@ $Script:GUIVisuals = [PSCustomObject]@{
 $Script:SDCardMinimumsandMaximums = $null
 
 $Script:ExternalProgramSettings = [PSCustomObject]@{
-    HSTImagePath = 'C:\Users\Matt\OneDrive\Documents\hst-imager\hst-imager\src\Hst.Imager.ConsoleApp\bin\Debug\net8.0\Hst.Imager.ConsoleApp.exe'
-    PFS3AIOPath= 'C:\Users\Matt\Downloads\hst-imager_v1.2.396-2cc164a_console_windows_x64\pfs3aio'
+    # HSTLocation = 'E:\Emu68Imager\Working Folder\Programs\HST-Imager'
+    HSTImagerPath = '.\Programs\HSTImager\hst.imager.exe'
+    HSTAmigaPath =  '.\Programs\HSTAmiga\Hst.amiga.exe'
+    PFS3AIOPath= '.\Programs\HSTImager\pfs3aio'
     TempFolder = '.\Temp'
+    HSTImagerURL = 'https://api.github.com/repos/henrikstengaard/hst-imager/releases'
+    HSTAmigaURL = 'https://api.github.com/repos/henrikstengaard/hst-amiga/releases'
+    Emu68URL = 'https://api.github.com/repos/michalsc/Emu68/releases'
+    Emu68ToolsURL = 'https://api.github.com/repos/michalsc/Emu68-tools/releases'
 }

@@ -1,0 +1,22 @@
+<Window x:Name="Disclaimer" 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp14"
+        mc:Ignorable="d"
+        Title="Disclaimer and Acknowledgements" Height="400" Width="1054" HorizontalAlignment="Center" HorizontalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ResizeMode="NoResize" WindowStyle="ToolWindow">
+    <Grid Background="#FFAAAAAA" >
+        <Button x:Name="Button_Acknowledge" Content="Acknowledge and Continue" HorizontalAlignment="Center" Height="40" VerticalAlignment="Bottom" Width="320" BorderBrush="Black" UseLayoutRounding="False" Background="#FF6688BB" Margin="0,0,0,15"/>
+        <TextBox x:Name="TextBox_Message" HorizontalAlignment="Center" Margin="0,50,0,0" TextWrapping="Wrap" Background="Transparent" BorderBrush="Transparent"
+                 Text="This software is used at your own risk! While efforts have been made to test the software, it should be used with caution.  Data will be written to physical media attached to your computer and all data on that media will be erased. If the incorrect media is chosen, data on that media will also be erased!&#xA;&#xA;If you do not accept this risk, then do not use this software! No one likes reading manuals! However, you are strongly encouraged to read at least the Quick Start section of the documentation! This can be accessed through the link below along links to the other section. &#xA;&#xA;A link to the documentation is also available in the tool should you wish to access from there." 
+                 VerticalAlignment="Top" Width="874" IsReadOnly="True" Height="160" VerticalScrollBarVisibility="Disabled" FontSize="14" BorderThickness="0,0,0,0" SelectionOpacity="0"
+                 />
+        <TextBox x:Name="TextBox_Header" HorizontalAlignment="Center" Margin="0,20,0,0" TextWrapping="Wrap" Background="Transparent" BorderBrush="Transparent"
+            Text="" FontSize="14" BorderThickness="0,0,0,0" SelectionOpacity="0"
+            VerticalAlignment="Top" Width="772" IsReadOnly="True" Height="20" VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" FontWeight="Bold"
+                 />
+        <Button x:Name="LinktoQuickstart_Button" Content="Link to Quick Start Guide" HorizontalAlignment="Center" Margin="0,210,0,0" VerticalAlignment="Top" Height="80" Width="400"/>
+    </Grid>
+</Window>
+

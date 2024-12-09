@@ -17,6 +17,8 @@ function Update-UI {
             $WPF_DP_Button_SaveImage.Foreground = 'Black'          
         }
 
+        
+
     }
 
     if (($All) -or ($HighlightSelectedPartitions)){

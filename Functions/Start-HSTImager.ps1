@@ -1,5 +1,0 @@
-function Start-HSTImager {
-    Param ()
-
-    
-}

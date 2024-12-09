@@ -15,7 +15,7 @@ function Get-HSTPartitionInfo {
       
         $Exception = $null
 
-        $OutputtoParse_MBR = & $Script:ExternalProgramSettings.HSTImagePath mbr info $Path
+        $OutputtoParse_MBR = & $Script:ExternalProgramSettings.HSTImagerPath mbr info $Path
 
         $OutputtoParse_MBR | ForEach-Object {
             if ($_ -match 'No Master Boot Record present'){
@@ -76,7 +76,7 @@ function Get-HSTPartitionInfo {
 
         $Exception = $null
 
-        $OutputtoParse_RDB = & $Script:ExternalProgramSettings.HSTImagePath rdb info $Path 
+        $OutputtoParse_RDB = & $Script:ExternalProgramSettings.HSTImagerPath rdb info $Path 
 
         $VolumeNameData = Get-HSTVolumeName -Path "$Path\rdb" 
 

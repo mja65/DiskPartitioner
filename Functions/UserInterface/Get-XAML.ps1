@@ -29,8 +29,10 @@ function Get-XAML {
         }
     }
 
-    Get-ChildItem -Path $ActionsPath -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
-        . ($_).fullname
+    if ($ActionsPath){
+        Get-ChildItem -Path $ActionsPath -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
+            . ($_).fullname
+        }
     }
     
     return $XAMLtoReturn

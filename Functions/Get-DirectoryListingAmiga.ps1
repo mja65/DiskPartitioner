@@ -11,7 +11,7 @@ function Get-DirectoryListingAmiga {
     $Footertocheck = 'directories, '
 
 
-    $DataToParse =  & $Script:ExternalProgramSettings.HSTImagePath fs dir $Path --recursive
+    $DataToParse =  & $Script:ExternalProgramSettings.HSTImagerPath fs dir $Path --recursive
     $StartRow = 0
     $EndRow = 0    
 
