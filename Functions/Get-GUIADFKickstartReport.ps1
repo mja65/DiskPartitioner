@@ -62,11 +62,11 @@ function Get-GUIADFKickstartReport {
     if ($Title){
         $WPF_ADFKickstartReporting.Title = $Title
     }
-    if ($Height){
-        $WPF_ADFKickstartReporting.Height = "$Height"
+    if ($WindowHeight){
+        $WPF_ADFKickstartReporting.Height =$WindowHeight
     }
-    if ($Width){
-        $WPF_ADFKickstartReporting.Width = "$Width"
+    if ($WindowWidth){
+        $WPF_ADFKickstartReporting.Width = $WindowWidth
     }
     
     
