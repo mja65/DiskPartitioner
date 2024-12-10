@@ -9,7 +9,7 @@ function Compare-ADFHashes {
 
     $Msg_Header ='Finding ADFs'    
     $Msg_Body = @"
-Searching folder '$Script:ADFPath' for valid ADFs. 
+Searching folder '$PathtoADFFiles' for valid ADFs. 
 
 "@
     $Msg_Header_ExceedLimit ='Exceeded file limits!'   
