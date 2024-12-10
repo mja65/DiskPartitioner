@@ -1,6 +1,7 @@
 function Update-UI {
     param (
         [Switch]$All,
+        [Switch]$Emu68Settings,
         [Switch]$HighlightSelectedPartitions,
         [Switch]$ShowGrids,
         [Switch]$UpdateInputBoxes,
@@ -19,6 +20,39 @@ function Update-UI {
 
         
 
+    }
+
+    if (($All) -or ($Emu68Settings)){
+        if ($Script:GUIActions.ROMLocation){
+            $WPF_Setup_RomPath_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUIActions.ROMLocation
+            $WPF_Setup_RomPath_Button.Background = 'Green'
+            $WPF_Setup_RomPath_Button.Foreground = 'White'
+        }
+        else {
+            $WPF_Setup_RomPath_Label.Text = 'Using default Kickstart folder'
+            $WPF_Setup_RomPath_Button.Foreground = 'Black'
+            $WPF_Setup_RomPath_Button.Background = '#FFDDDDDD'
+        }
+        if ($Script:GUIActions.ADFLocation){
+            $WPF_Setup_ADFPath_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUIActions.ADFLocation
+            $WPF_Setup_ADFPath_Button.Background = 'Green'
+            $WPF_Setup_ADFPath_Button.Foreground = 'White'
+
+        }
+        else {           
+            $WPF_Setup_ADFPath_Label.Text = 'Using default ADF folder'
+            $WPF_Setup_ADFPath_Button.Foreground = 'Black'
+            $WPF_Setup_ADFPath_Button.Background = '#FFDDDDDD'       
+        }
+
+        if ($Script:GUIActions.FoundKickstarttoUse){
+            $WPF_Setup_ROMpath_Button_Check.Background = 'Green'
+            $WPF_Setup_ROMpath_Button_Check.Foreground = 'White'
+        }
+        else{
+            $WPF_Setup_Rompath_Button_Check.Background = '#FFDDDDDD'
+            $WPF_Setup_Rompath_Button_Check.Foreground = 'Black'
+        }
     }
 
     if (($All) -or ($HighlightSelectedPartitions)){
