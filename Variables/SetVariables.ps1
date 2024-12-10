@@ -29,6 +29,12 @@ $Script:Settings = [PSCustomObject]@{
 }
 
 $Script:GUIActions = [PSCustomObject]@{
+    AvailableKickstarts = $null
+    KickstartVersiontoUse = $null
+    KickstartVersiontoUseFriendlyName = $null
+    AvailableADFs = $null  
+    FoundKickstarttoUse = $null
+    StorageADF = "E:\Emulators\Amiga Files\Shared\adf\amiga-os-310-storage.adf"
     IsDisclaimerAccepted = $null
     ListofRemovableMedia = $null
     AvailableSpaceforImportedPartitionBytes = $null 

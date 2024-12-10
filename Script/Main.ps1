@@ -39,13 +39,13 @@ Write-Emu68ImagerLog -start
 
 Show-Disclaimer
 
-# #Confirm-Prerequisites
+Confirm-Prerequisites
 
-# Confirm-DefaultPaths 
+Confirm-DefaultPaths 
 
 # Get-HSTImagerandHSTAmiga
 
-# Remove-Variable -Name 'WPF_*'
+Remove-Variable -Name 'WPF_*'
 
 # Update-InputCSV -PathtoGoogleDrive $Script:Settings.PathtoInputFileSpreadsheet -GidValue 0 -ExistingCSV "$($Script:Settings.InputFiles)\ADFHashes.CSV" 
 # Update-InputCSV -PathtoGoogleDrive $Script:Settings.PathtoInputFileSpreadsheet -GidValue 750546389 -ExistingCSV "$($Script:Settings.InputFiles)\ListofInstallFiles.CSV"
@@ -54,14 +54,15 @@ Show-Disclaimer
 # Update-InputCSV -PathtoGoogleDrive $Script:Settings.PathtoInputFileSpreadsheet -GidValue 860542576 -ExistingCSV "$($Script:Settings.InputFiles)\ScreenModes.CSV"
 
 
-# # $WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\UIActions\MainWindow\' -AddWPFVariables
-# # $WPF_Partition = Get-XAML -WPFPrefix 'WPF_DP_' -XMLFile '.\Assets\WPF\Grid_DiskPartition.xaml' -ActionsPath '.\UIActions\DiskPartition\' -AddWPFVariables
-# # $WPF_SetupEmu68 = Get-XAML -WPFPrefix 'WPF_Setup_' -XMLFile '.\Assets\WPF\Grid_SetupEmu68.xaml' -ActionsPath '.\UIActions\SetupEmu68\' -AddWPFVariables
+$WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\UIActions\MainWindow\' -AddWPFVariables
+$WPF_Partition = Get-XAML -WPFPrefix 'WPF_DP_' -XMLFile '.\Assets\WPF\Grid_DiskPartition.xaml' -ActionsPath '.\UIActions\DiskPartition\' -AddWPFVariables
+$WPF_SetupEmu68 = Get-XAML -WPFPrefix 'WPF_Setup_' -XMLFile '.\Assets\WPF\Grid_SetupEmu68.xaml' -ActionsPath '.\UIActions\SetupEmu68\' -AddWPFVariables
 
-# # Set-PartitionGridActions
+Set-PartitionGridActions
 
-# # $WPF_MainWindow.ShowDialog() | out-null
+$WPF_MainWindow.ShowDialog() | out-null
 
 # # # $WPF_MainWindow.Close()
 # # # [System.Windows.Controls.ComboBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
 # # # Get-variable
+
