@@ -4,7 +4,7 @@ $WPF_Setup_RomPath_Button.Add_Click({
         if ($PathtoPopulate -ne $Script:Settings.DefaultROMLocation) {
             $Script:GUIActions.ROMLocation = $PathtoPopulate
         }
-        $null = Update-UI -Buttons
+        $null = Update-UI -Emu68Settings
     }                
 })
 

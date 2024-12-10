@@ -37,9 +37,9 @@ $Script:GUIActions.ScriptPath = (Split-Path -Path $PSScriptRoot -Parent)
 
 Write-Emu68ImagerLog -start
 
-#Show-Disclaimer
+Show-Disclaimer
 
-#Confirm-Prerequisites
+Confirm-Prerequisites
 
 Confirm-DefaultPaths 
 
@@ -64,5 +64,5 @@ $WPF_MainWindow.ShowDialog() | out-null
 
 # # # $WPF_MainWindow.Close()
 # # # [System.Windows.Controls.ComboBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
-# # # Get-variable
+# # # Get-variable -name WPF_SetupEmu68
 

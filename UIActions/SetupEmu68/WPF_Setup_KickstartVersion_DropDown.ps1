@@ -11,7 +11,7 @@ foreach ($Kickstart in $Script:GUIActions.AvailableKickstarts) {
                 Write-Host 'Wibble'
                  $Script:GUIActions.KickstartVersiontoUse  = $Kickstart.Kickstart_Version 
                  $Script:GUIActions.KickstartVersiontoUseFriendlyName = $WPF_Setup_KickstartVersion_Dropdown.SelectedItem
-                 $Script:GUIActions.AvailableADFs = $null
+                 $Script:GUIActions.FoundADFstoUse = $null
                  $Script:GUIActions.FoundKickstarttoUse = $null
              }
              break

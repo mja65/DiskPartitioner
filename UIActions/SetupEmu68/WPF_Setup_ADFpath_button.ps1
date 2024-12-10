@@ -20,7 +20,7 @@ $WPF_Setup_ADFPath_Button.Add_Click({
     #     }
     # }
     }
-    $null = Update-UI -Buttons
+    $null = Update-UI -Emu68Settings
 })
 
        # $CheckifLocalDrive = (Get-LocalvsNetwork -PathtoCheck $PathtoPopulate -PreventNetworkPath 'LocalandMappedDrivesOnly') 

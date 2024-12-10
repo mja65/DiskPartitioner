@@ -20,6 +20,7 @@ $WPF_Setup_ROMpath_Button_Check.Add_Click({
     else{
         $null = Show-WarningorError -Msg_Header 'Error - No OS Chosen!'  -Msg_Body 'Cannot check Kickstarts as you have not yet chosen the OS!' -BoxTypeWarning -ButtonType_OK 
     }
-    #$null = Confirm-UIFields
+    
+    Update-UI -Emu68Settings
+    
 })
-
