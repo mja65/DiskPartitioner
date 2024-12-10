@@ -37,9 +37,9 @@ $Script:GUIActions.ScriptPath = (Split-Path -Path $PSScriptRoot -Parent)
 
 Write-Emu68ImagerLog -start
 
-Show-Disclaimer
+# Show-Disclaimer
 
-Confirm-Prerequisites
+# Confirm-Prerequisites
 
 Confirm-DefaultPaths 
 

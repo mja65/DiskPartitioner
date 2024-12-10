@@ -25,15 +25,15 @@ and select this path to scan.
     
     $null = Show-WarningorError -Msg_Body $Msg_Body -Msg_Header $Msg_Header -BoxTypeNone -ButtonType_OK
 
-  #  $PathtoADFFiles = 'E:\Emulators\Amiga Files\Shared\adf\commodore-amiga-operating-systems-workbench\ESCOM\'
-  #  $PathtoADFHashes = 'E:\Emu68Imager\InputFiles\ADFHashes.csv'
-  #  $KickstartVersion='3.1'
-  #  $PathtoListofInstallFiles = 'E:\Emu68Imager\InputFiles\ListofInstallFiles.csv'
+   #$PathtoADFFiles = 'E:\Emulators\Amiga Files\Shared\adf\commodore-amiga-operating-systems-workbench\ESCOM\'
+   #$PathtoADFHashes = "C:\Users\Matt\OneDrive\Documents\DiskPartitioner\InputFiles\ADFHashes.CSV"
+   #$KickstartVersion='3.1'
+   #$PathtoListofInstallFiles = "C:\Users\Matt\OneDrive\Documents\DiskPartitioner\InputFiles\ListofInstallFiles.CSV"
 
     $ListofADFFilestoCheck = Get-ChildItem $PathtoADFFiles -force -Recurse
     if ((($ListofADFFilestoCheck | Measure-Object).count) -gt 500){
         $null = Show-WarningorError -Msg_Body $Msg_Body_ExceedLimit -Msg_Header $Msg_Header_ExceedLimit -BoxTypeNone -BoxTypeWarning
-        $ListofADFFilestoCheck = $ListofADFFilestoCheck | Where-Object {$_.DirectoryName -eq $PathtoADFFiles.TrimEnd('\')} 
+        #$ListofADFFilestoCheck = $ListofADFFilestoCheck | Where-Object {$_.DirectoryName -eq $PathtoADFFiles.TrimEnd('\')} 
     } 
     $ListofADFFilestoCheck = $ListofADFFilestoCheck | Where-Object { $_.PSIsContainer -eq $false -and $_.Name -match '.adf' -and $_.Length -eq 901120 } | Get-FileHash  -Algorithm MD5
 

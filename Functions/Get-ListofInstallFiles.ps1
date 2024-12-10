@@ -1,9 +1,10 @@
 function Get-ListofInstallFiles {
     param (
-        $ListofInstallFilesCSV
+        $ListofInstallFilesCSV,
+        [Switch]$IncludePath
         )       
 
-        #$ListofInstallFilesCSV = ($InputFolder+'ListofInstallFiles.csv')
+        # $ListofInstallFilesCSV = $Script:Settings.ListofInstallFiles
 
         $ListofInstallFilesImported = Import-Csv $ListofInstallFilesCSV -delimiter ';'
 
@@ -67,89 +68,103 @@ function Get-ListofInstallFiles {
                 }
             }
         }
+
+        if ($IncludePath){
+            $HashTableADFPath = @{} # Clear Hash
+            $Script:GUIActions.FoundADFstoUse | ForEach-Object {
+                $HashTableADFPath[$_.ADF_Name] = @($_.Path)
+            }
+
+            $RevisedListofInstallFiles  | Add-Member -NotePropertyMembers @{
+                Path = $null
+            }
+
+            $RevisedListofInstallFiles  | ForEach-Object {
+                if ($HashTableADFPath.ContainsKey($_.ADF_Name)){
+                    $_.Path = $HashTableADFPath.($_.ADF_Name)[0]
+
+                } 
+            }
+
+        }
+
         return $RevisedListofInstallFiles
 }
 
 
-$InstallFiles = Get-ListofInstallFiles -ListofInstallFilesCSV $Script:Settings.ListofInstallFiles
+
+function Get-WorkbenchExtractionCommands {
+    param (
+        $AmigaDrivetoUse,
+        $AmigaTempDrivetoUse 
+    )
+    
+    $OutputCommands = @()
+    
+    # $AmigaDrivetoUse = "$($Script:GUIActions.OutputPath)\mbr\2\rdb\sdh0"
+    # $AmigaTempDrivetoUse = "$($Script:Settings.AmigaTempDrive)\SDH0"
+    $ListofInstallFiles = Get-ListofInstallFiles -ListofInstallFilesCSV $Script:Settings.ListofInstallFiles -IncludePath | Where-Object {$_.Kickstart_Version -eq $Script:GUIActions.KickstartVersiontoUse}
+
+    Foreach($InstallFileLine in $ListofInstallFiles){
+        $SourcePathtoUse = "$($InstallFileLine.Path)\$($InstallFileLine.AmigaFiletoInstall -replace '/','\')"
+        if (($InstallFileLine.NewFileName -ne "")  -or ($InstallFileLine.ModifyScript -ne 'FALSE') -or ($InstallFileLine.ModifyInfoFileTooltype -ne 'FALSE')){
+            if ($InstallFileLine.LocationtoInstall.Length -eq 0){
+                $DestinationPathtoUse = $AmigaTempDrivetoUse
+            }
+            else {
+                $DestinationPathtoUse = "$AmigaTempDrivetoUse\$($InstallFileLine.LocationtoInstall -replace '/','\')" 
+            }    
+    
+        }
+        else {
+            if ($InstallFileLine.LocationtoInstall.Length -eq 0){
+                $DestinationPathtoUse = $AmigaDrivetoUse 
+            }
+            else {
+                $DestinationPathtoUse = "$AmigaDrivetoUse\$($InstallFileLine.LocationtoInstall -replace '/','\')" 
+            }    
+            
+        }
+        $OutputCommands += "fs extract $SourcePathtoUse $DestinationPathtoUse"  
+    }
+    
+    return $OutputCommands
+}
+
+function Write-AmigaWorkbenchFileChanges {
+    param (
+        $AmigaTempDrivetoUse 
+    )
+    
+    # $AmigaTempDrivetoUse = "$($Script:Settings.AmigaTempDrive)\SDH0"
+
+    $ListofInstallFiles = Get-ListofInstallFiles -ListofInstallFilesCSV $Script:Settings.ListofInstallFiles -IncludePath | Where-Object {$_.Kickstart_Version -eq $Script:GUIActions.KickstartVersiontoUse} | Where-Object {$_.NewFileName -ne "" -or $_.ModifyScript -ne 'FALSE' -or $_.ModifyInfoFileTooltype -ne 'FALSE'}
+    
+    Foreach($InstallFileLine in $ListofInstallFiles){
+        $LocationtoInstall = $InstallFileLine.LocationtoInstall -replace '/','\'
+        if ($InstallFileLine.NewFileName -ne ""){
+            $filename = $InstallFileLine.AmigaFiletoInstall.Split("/")[-1]
+            $null = rename-Item -Path "$AmigaTempDrivetoUse\$LocationtoInstall\$filename"  -NewName $InstallFileLine.NewFileName     
+        }
+        if ($InstallFileLine.ModifyInfoFileTooltype -eq 'Modify'){
+            Read-AmigaTooltypes -IconPath "$AmigaTempDrivetoUse\$LocationtoInstall$filename" -TooltypesPath "$($Script:ExternalProgramSettings.TempFolder)\$filename`.txt"              
+            $OldToolTypes = Get-Content "$($Script:ExternalProgramSettings.TempFolder)\$filename`.txt"           
+            $TooltypestoModify = Import-Csv "$($Script:Settings.LocationofAmigaFiles)\$LocationtoInstall\$filename`.txt" -Delimiter ';'
+            Get-ModifiedToolTypes -OriginalToolTypes $OldToolTypes -ModifiedToolTypes $TooltypestoModify | Out-File "$($Script:ExternalProgramSettings.TempFolder)\$filename`amendedtoimport.txt"    
+            Write-AmigaTooltypes -IconPath "$AmigaTempDrivetoUse\$LocationtoInstall$filename" -ToolTypesPath "$($Script:ExternalProgramSettings.TempFolder)\$filename`amendedtoimport.txt"    
+        }   
+        if ($InstallFileLine.ModifyScript -eq'Remove'){
+            Write-InformationMessage -Message  "Modifying $FileName for: $($InstallFileLine.ScriptNameofChange)"
+            $ScripttoEdit = Import-TextFileforAmiga -SystemType 'Amiga' -ImportFile "$AmigaTempDrivetoUse\$LocationtoInstall$filename"
+            $ScripttoEdit = Edit-AmigaScripts -ScripttoEdit $ScripttoEdit -Action 'remove' -name $InstallFileLine.ScriptNameofChange -Startpoint $InstallFileLine.ScriptInjectionStartPoint -Endpoint $InstallFileLine.ScriptInjectionEndPoint                    
+            Export-TextFileforAmiga -ExportFile "$AmigaTempDrivetoUse\$LocationtoInstall$filename" -DatatoExport $ScripttoEdit -AddLineFeeds 'TRUE'
+        }   
+    }
+}
+
+# Get-WorkbenchExtractionCommands -AmigaDrivetoUse "$($Script:GUIActions.OutputPath)\mbr\2\rdb\sdh0" -AmigaTempDrivetoUse "$($Script:Settings.AmigaTempDrive)\SDH0"
+# Write-AmigaWorkbenchFileChanges -AmigaTempDrivetoUse "$($Script:Settings.AmigaTempDrive)\SDH0"
 
 
-# $OutputCommands = @()
 
-# Foreach($InstallFileLine in $ListofInstallFiles){
-#     $SourcePathtoUse = "$($InstallFileLine.Path)\$($InstallFileLine.AmigaFiletoInstall -replace '/','\')"
-#     if ($InstallFileLine.Uncompress -eq "TRUE"){
-#         Write-InformationMessage -Message 'Extracting files from ADFs containing .Z files'
-#         if ($InstallFileLine.LocationtoInstall.Length -eq 0){        
-#             $DestinationPathtoUse = "$AmigaDrivetoCopy$($InstallFileLine.DrivetoInstall_VolumeName)"
-#         }
-#         else{  
-#             $DestinationPathtoUse = "$AmigaDrivetoCopy$($InstallFileLine.DrivetoInstall_VolumeName)\$($InstallFileLine.LocationtoInstall -replace '/','\')" 
-#         }
-#         $OutputCommands += "fs extract $SourcePathtoUse $DestinationPathtoUse"       
-        
-#         #Expand-AmigaZFiles  -SevenzipPathtouse $7zipPath -WorkingFoldertouse $TempFolder -LocationofZFiles $DestinationPathtoUse
-#     }    
-#     elseif (($InstallFileLine.NewFileName -ne "")  -or ($InstallFileLine.ModifyScript -ne 'FALSE') -or ($InstallFileLine.ModifyInfoFileTooltype -ne 'FALSE')){
-#         if ($InstallFileLine.LocationtoInstall -ne '`*'){
-#             $LocationtoInstall=(($InstallFileLine.LocationtoInstall -replace '/','\')+'\')
-#         }
-#         else{
-#             $LocationtoInstall=$null
-#         }
-#         if ($InstallFileLine.NewFileName -ne ""){
-#             $FullPath = $AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName+'\'+$LocationtoInstall+$InstallFileLine.NewFileName
-#         }
-#         else{
-#             $FullPath = $AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName+'\'+$LocationtoInstall+(Split-Path ($InstallFileLine.AmigaFiletoInstall -replace '/','\') -Leaf) 
-#         }
-#         $filename = Split-Path $FullPath -leaf
-#         Write-InformationMessage -Message 'Extracting files from ADFs where changes needed'
-#         if ($InstallFileLine.LocationtoInstall.Length -eq 0){
-#             $DestinationPathtoUse = ($AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName)
-#         }
-#         else{        
-#             $DestinationPathtoUse = ($AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName+'\'+($InstallFileLine.LocationtoInstall -replace '/','\'))
-#         }
-#         if (-not (Start-HSTImager -Command 'fs extract' -SourcePath $SourcePathtoUse -DestinationPath $DestinationPathtoUse -TempFoldertouse $TempFolder -HSTImagePathtouse $HSTImagePath)){
-#             exit
-#         }
-#         if ($InstallFileLine.NewFileName -ne ""){
-#             $NameofFiletoChange=$InstallFileLine.AmigaFiletoInstall.split("/")[-1]  
-#             if (Test-Path ($AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName+'\'+$LocationtoInstall+$InstallFileLine.NewFileName)){
-#                 Remove-Item ($AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName+'\'+$LocationtoInstall+$InstallFileLine.NewFileName)
-#             }
-#             $null = rename-Item -Path ($AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName+'\'+$LocationtoInstall+$NameofFiletoChange) -NewName $InstallFileLine.NewFileName            
-#         }
-#         if ($InstallFileLine.ModifyInfoFileTooltype -eq 'Modify'){
-#             if (-not (Read-AmigaTooltypes -IconPath ($AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName+'\'+$LocationtoInstall+$filename) -TooltypesPath ($TempFolder+$filename+'.txt') -HSTAmigaPathtouse $HSTAmigaPath -TempFoldertouse $TempFolder)){
-#                 exit
-#             }                 
-#             $OldToolTypes = Get-Content($TempFolder+$filename+'.txt')
-#             $TooltypestoModify = Import-Csv ($LocationofAmigaFiles+$LocationtoInstall+'\'+$filename+'.txt') -Delimiter ';'
-#             Get-ModifiedToolTypes -OriginalToolTypes $OldToolTypes -ModifiedToolTypes $TooltypestoModify | Out-File ($TempFolder+$filename+'amendedtoimport.txt')
-#             if (-not (Write-AmigaTooltypes -IconPath ($AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName+'\'+$LocationtoInstall+$filename) -ToolTypesPath ($TempFolder+$fileName+'amendedtoimport.txt') -TempFoldertouse $TempFolder -HSTAmigaPathtouse $HSTAmigaPath)){
-#                 exit
-#             }                 
-#         }        
-#         if ($InstallFileLine.ModifyScript -eq'Remove'){
-#             Write-InformationMessage -Message  ('Modifying '+$FileName+' for: '+$InstallFileLine.ScriptNameofChange)
-#             $ScripttoEdit = Import-TextFileforAmiga -SystemType 'Amiga' -ImportFile ($AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName+'\'+$LocationtoInstall+$FileName)
-#             $ScripttoEdit = Edit-AmigaScripts -ScripttoEdit $ScripttoEdit -Action 'remove' -name $InstallFileLine.ScriptNameofChange -Startpoint $InstallFileLine.ScriptInjectionStartPoint -Endpoint $InstallFileLine.ScriptInjectionEndPoint                    
-#             Export-TextFileforAmiga -ExportFile ($AmigaDrivetoCopy+$InstallFileLine.DrivetoInstall_VolumeName+'\'+$LocationtoInstall+$FileName) -DatatoExport $ScripttoEdit -AddLineFeeds 'TRUE'
-#         }   
-#     }
-#     else {
-#         Write-InformationMessage -Message 'Extracting files from ADFs to .hdf file'
-#         if ($InstallFileLine.LocationtoInstall.Length -eq 0){
-#            $DestinationPathtoUse = ($HDFImageLocation +$NameofImage+'\rdb\'+$DeviceName_System)
-#         }
-#         else{
-#            $DestinationPathtoUse = ($HDFImageLocation +$NameofImage+'\rdb\'+$DeviceName_System+'\'+($InstallFileLine.LocationtoInstall -replace '/','\'))
-#         }
-#         if (-not (Start-HSTImager -Command 'fs extract' -SourcePath $SourcePathtoUse -DestinationPath $DestinationPathtoUse -TempFoldertouse $TempFolder -HSTImagePathtouse $HSTImagePath)){
-#             exit
-#         }
-#     }         
-#     $ItemCounter+=1    
-# }
+

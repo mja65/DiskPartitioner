@@ -53,6 +53,27 @@ function Update-UI {
             $WPF_Setup_Rompath_Button_Check.Background = '#FFDDDDDD'
             $WPF_Setup_Rompath_Button_Check.Foreground = 'Black'
         }
+        
+        if ($Script:GUIActions.FoundADFstoUse){
+            $WPF_Setup_ADFpath_Button_Check.Background = 'Green'
+            $WPF_Setup_ADFpath_Button_Check.Foreground = 'White'
+        }
+        else{
+            $WPF_Setup_ADFpath_Button_Check.Background = '#FFDDDDDD'
+            $WPF_Setup_ADFpath_Button_Check.Foreground = 'Black'
+        }
+
+
+        if (($Script:GUIActions.SSID) -and (-not ($WPF_Setup_SSID_Textbox.Text))){
+            $WPF_Setup_SSID_Textbox.Text = $Script:GUIActions.SSID 
+        }
+        if (($Script:GUIActions.WifiPassword) -and (-not ($WPF_Setup_Password_Textbox.Text))){
+            $WPF_Setup_Password_Textbox.Text = $Script:GUIActions.WifiPassword 
+        }
+        
+        if (($Script:GUIActions.ScreenModetoUseFriendlyName) -and (-not ($WPF_Setup_ScreenMode_Dropdown.SelectedItem))) {
+           $WPF_Setup_ScreenMode_Dropdown.SelectedItem = $Script:GUIActions.ScreenModetoUseFriendlyName
+        }
     }
 
     if (($All) -or ($HighlightSelectedPartitions)){

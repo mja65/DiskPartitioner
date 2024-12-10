@@ -1,21 +1,23 @@
 # $AvailableScreenModes = Import-Csv ($InputFolder+'ScreenModes.csv') -delimiter ';' | Where-Object 'Include' -eq 'TRUE'
 
-# foreach ($ScreenMode in $AvailableScreenModes) {
-#     $WPF_UI_ScreenMode_Dropdown.AddChild($ScreenMode.FriendlyName)
-# }
+$Script:GUIActions.AvailableScreenModes = Import-Csv -Path $Script:Settings.ScreenModes -delimiter ';' | Where-Object 'Include' -eq 'TRUE'
 
-# $Script:ScreenModetoUseFriendlyName = 'Automatic'
-# $WPF_UI_ScreenMode_Dropdown.SelectedItem = $Script:ScreenModetoUseFriendlyName 
-# $Script:ScreenModetoUse = 'Auto'
+foreach ($ScreenMode in $Script:GUIActions.AvailableScreenModes) {
+    $WPF_Setup_ScreenMode_Dropdown.AddChild($ScreenMode.FriendlyName)
+}
 
-# $WPF_UI_ScreenMode_Dropdown.Add_SelectionChanged({
-#     foreach ($ScreenMode in $AvailableScreenModes) {
-#         if ($ScreenMode.FriendlyName -eq $WPF_UI_ScreenMode_Dropdown.SelectedItem){
-#             $Script:ScreenModetoUse = $ScreenMode.Name
-#             $Script:ScreenModetoUseFriendlyName = $WPF_UI_ScreenMode_Dropdown.SelectedItem           
-#         }
-#     }
+$Script:GUIActions.ScreenModetoUseFriendlyName = 'Automatic'
+$WPF_Setup_ScreenMode_Dropdown.SelectedItem = $Script:GUIActions.ScreenModetoUseFriendlyName 
+$Script:GUIActions.ScreenModetoUse = 'Auto'
 
-#     $null = Confirm-UIFields
+$WPF_Setup_ScreenMode_Dropdown.Add_SelectionChanged({
+    foreach ($ScreenMode in $Script:GUIActions.AvailableScreenModes ) {
+        if ($ScreenMode.FriendlyName -eq $WPF_Setup_ScreenMode_Dropdown.SelectedItem){
+            $Script:GUIActions.ScreenModetoUse = $ScreenMode.Name
+            $Script:GUIActions.ScreenModetoUseFriendlyName = $WPF_Setup_ScreenMode_Dropdown.SelectedItem           
+        }
+    }
+
+     $null = Update-UI -Emu68Settings
     
-# })
+})

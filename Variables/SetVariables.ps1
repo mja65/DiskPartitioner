@@ -21,6 +21,8 @@ $Script:Settings = [PSCustomObject]@{
     PathtoInputFileSpreadsheet = 'https://docs.google.com/spreadsheets/d/12UcKD7INDH9y7Tw_w1q3ebQOUS9JtARIs8Z9JWfLUWg/'
     LogFolder = '.\Logs'
     LogLocation = $null
+    AmigaTempDrive = '.\Temp\AmigaDrives'
+    LocationofAmigaFiles = '.\AmigaFiles'
     QuickStart_URL = "https://mja65.github.io/Emu68-Imager/quickstart.html"
     Documentation_URL = "https://mja65.github.io/Emu68-Imager/"
     #DefaultImageLocation = 
@@ -29,9 +31,14 @@ $Script:Settings = [PSCustomObject]@{
 }
 
 $Script:GUIActions = [PSCustomObject]@{
+    ScreenModetoUse = $null
+    ScreenModetoUseFriendlyName =$null
     AvailableKickstarts = $null
+    AvailableScreenModes = $null
     KickstartVersiontoUse = $null
     KickstartVersiontoUseFriendlyName = $null
+    SSID = $null
+    WifiPassword = $null
     FoundADFstoUse = $null  
     FoundKickstarttoUse = $null
     StorageADF = "E:\Emulators\Amiga Files\Shared\adf\amiga-os-310-storage.adf"
