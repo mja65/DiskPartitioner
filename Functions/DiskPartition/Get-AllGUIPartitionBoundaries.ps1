@@ -105,7 +105,7 @@ function Get-AllGUIPartitionBoundaries {
         }
         else{
             $AllPartitionBoundaries_MBR[$i].PixelsAvailableRight = $WPF_DP_Disk_MBR.RightDiskBoundary - $AllPartitionBoundaries_MBR[$i].RightMargin
-            $AllPartitionBoundaries_MBR[$i].BytesAvailableRight =  $WPF_DP_Disk_MBR.DiskSizeBytes - $AllPartitionBoundaries_MBR[$i].EndingPositionBytes -2048
+            $AllPartitionBoundaries_MBR[$i].BytesAvailableRight =  $WPF_DP_Disk_MBR.DiskSizeBytes - $AllPartitionBoundaries_MBR[$i].EndingPositionBytes - 2097152
         }                  
      }
 

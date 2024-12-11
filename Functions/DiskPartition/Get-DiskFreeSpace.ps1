@@ -24,7 +24,7 @@ function Get-DiskFreeSpace {
             return $PartitionstoCheck[$PartitionstoCheck.Count-1].BytesAvailableRight
         }
         else{
-            return $Disk.DiskSizeBytes-2048
+            return $Disk.DiskSizeBytes - 2097152
         }
     }
     else{
