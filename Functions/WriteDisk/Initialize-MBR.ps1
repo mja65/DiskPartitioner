@@ -1,11 +1,14 @@
 function Initialize-MBR {
     param (
-        $Path
+        $DiskNumber
     
     )
-    $Command = @()
-    $Command += "mbr init $Path"
+    # $Command = @()
+    # $Command += "mbr init $Path"
 
-    return $Command
+    # return $Command
+
+    Write-InformationMessage -Message "Initialising Disk. Disk Number: $DiskNumber"
+    Initialize-Disk -Number $DiskNumber -PartitionStyle MBR
 
 }

@@ -101,11 +101,12 @@ function Get-WorkbenchExtractionCommands {
     
     $OutputCommands = @()
     
-    # $AmigaDrivetoUse = "$($Script:GUIActions.OutputPath)\mbr\2\rdb\sdh0"
+    # $AmigaDrivetoUse = "$($Script:GUIActions.OutputPath)\$(Get-AmigaDrivePath)"
     # $AmigaTempDrivetoUse = "$($Script:Settings.AmigaTempDrive)\SDH0"
     $ListofInstallFiles = Get-ListofInstallFiles -ListofInstallFilesCSV $Script:Settings.ListofInstallFiles -IncludePath | Where-Object {$_.Kickstart_Version -eq $Script:GUIActions.KickstartVersiontoUse}
 
     Foreach($InstallFileLine in $ListofInstallFiles){
+        
         $SourcePathtoUse = "$($InstallFileLine.Path)\$($InstallFileLine.AmigaFiletoInstall -replace '/','\')"
         if (($InstallFileLine.NewFileName -ne "")  -or ($InstallFileLine.ModifyScript -ne 'FALSE') -or ($InstallFileLine.ModifyInfoFileTooltype -ne 'FALSE')){
             if ($InstallFileLine.LocationtoInstall.Length -eq 0){
@@ -162,7 +163,9 @@ function Write-AmigaWorkbenchFileChanges {
     }
 }
 
-# Get-WorkbenchExtractionCommands -AmigaDrivetoUse "$($Script:GUIActions.OutputPath)\mbr\2\rdb\sdh0" -AmigaTempDrivetoUse "$($Script:Settings.AmigaTempDrive)\SDH0"
+
+
+# Get-WorkbenchExtractionCommands -AmigaDrivetoUse "$($Script:GUIActions.OutputPath)\$(Get-AmigaDrivePath)" -AmigaTempDrivetoUse "$($Script:Settings.AmigaTempDrive)\SDH0"
 # Write-AmigaWorkbenchFileChanges -AmigaTempDrivetoUse "$($Script:Settings.AmigaTempDrive)\SDH0"
 
 

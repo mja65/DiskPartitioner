@@ -85,7 +85,7 @@ function Get-ListofPackagestoInstall {
 
 # $ListofPackagestoInstall = Get-ListofPackagestoInstall -ListofPackagestoInstallCSV ($Script:Settings.ListofPackagestoInstall) | Where-Object {$_.InstallFlag -eq 'TRUE' -and $_.InstallType -ne 'CopyOnly' -and $_.InstallType -ne 'StartupSequenceOnly'}
 
-# $InstallLocationtoUse = "$($Script:GUIActions.OutputPath)\mbr\2\rdb\dh0"
+# $InstallLocationtoUse = "$($Script:GUIActions.OutputPath)\$(Get-AmigaDrivePath)"
 
 # $PackageDownloadsLocation = "$($Script:ExternalProgramSettings.TempFolder)\PackageDownloads"
 # if (-not(Test-Path $PackageDownloadsLocation)){

@@ -5,11 +5,11 @@ function Add-RDBFileSystem {
     )
 
     if ($DosType -eq 'PFS\3'){
-        $FileSystemPath = $Script:ExternalProgramSettings.PFS3AIOPath
+        $FileSystemPath = Resolve-Path $Script:ExternalProgramSettings.PFS3AIOPath
         $DosTypetoAdd = 'pfs3'
     }
     elseif ($DosType -eq 'PDS\3'){
-        $FileSystemPath = $Script:ExternalProgramSettings.PFS3AIOPath
+        $FileSystemPath = Resolve-Path $Script:ExternalProgramSettings.PFS3AIOPath
         $DosTypetoAdd = 'pds3'
     }
 

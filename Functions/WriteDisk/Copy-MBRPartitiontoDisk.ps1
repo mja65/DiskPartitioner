@@ -8,7 +8,6 @@ function Copy-MBRPartitiontoDisk {
     )
     
     $Command = @()
-    $Command += "mbr part add $DestinationPath '0x76' $SizeBytes`B"
     $Command += "mbr part clone $SourcePath $SourcePartitionNumber $DestinationPath $DestinationPartitionNumber"
 
     return $Command

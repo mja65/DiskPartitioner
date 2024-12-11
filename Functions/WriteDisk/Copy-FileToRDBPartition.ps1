@@ -6,7 +6,7 @@ function Copy-FileToRDBPartition {
     
     #$SourcePath = 'C:\AMD\Chipset_Software\Binaries\GPIO2 Driver\W11x64\amdgpio2.sys'
 
-    #$SourcePath = '\disk6\mbr\2\rdb\dh0\Workbench'
+    #$SourcePath = "\disk6\$(Get-AmigaDrivePath)"
 
     if ($SourcePath.IndexOf('\disk') -ne -1 -and $SourcePath.IndexOf(':\') -eq -1){
         $DelimiterPosition = $SourcePath.Substring(1,($SourcePath.Length-1)).IndexOf('\')+1
