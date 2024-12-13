@@ -8,7 +8,7 @@ function Set-RevisedDiskValues {
     $NewSizeBytes = $SizeBytes
     if ( $NewSizeBytes -ge ($WPF_DP_Disk_MBR.DiskSizeBytes -$DiskFreeSpaceSize)){
         $WPF_DP_Disk_MBR.DiskSizeBytes = $NewSizeBytes
-        $WPF_DP_Disk_MBR.BytestoPixelFactor = $WPF_DP_Disk_MBR.DiskSizeBytes/$WPF_DP_Disk_MBR.DiskSizePixels 
+        $WPF_DP_Disk_MBR.BytestoPixelFactor = ($WPF_DP_Disk_MBR.DiskSizeBytes -$WPF_DP_Disk_MBR.MMBROverheadBytes) /$WPF_DP_Disk_MBR.DiskSizePixels 
 
         Get-AllGUIPartitions -PartitionType 'MBR' | ForEach-Object {
             $LeftMargin = $_.value.StartingPositionBytes/$WPF_DP_Disk_MBR.BytestoPixelFactor

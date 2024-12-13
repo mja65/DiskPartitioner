@@ -95,7 +95,8 @@ function New-GUIPartition {
     elseif ($PartitionType -eq 'Amiga'){
         $NewPartition.PartitionTypeMBRorAmiga='Amiga'
         $NewPartition | Add-Member -NotePropertyMembers @{
-            DeviceName =$null
+            PartitionSizeonDiskBytes = $null
+            DeviceName = $null
             Buffers = $null
             DosType = $null
             MaxTransfer = $null
@@ -112,7 +113,7 @@ function New-GUIPartition {
 
         }
         if ($DefaultAmigaWorkbenchPartition -eq $true){
-            $NewPartition.CanDelete = $false
+            $NewPartition.CanDelete = $true
             $NewPartition.CanResizeLeft = $true
             $NewPartition.CanResizeRight = $true
             $NewPartition.CanMove = $true

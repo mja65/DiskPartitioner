@@ -16,7 +16,7 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
         $null = Show-WarningorError -Msg_Header 'No Partition Selected' -Msg_Body 'You must select a partition!' -BoxTypeError -ButtonType_OK
     }
     else{
-        $AvailableFreeSpace = (Get-DiskFreeSpace -Disk (Get-Variable -Name $AmigaDiskName).Value -Position $AddType -PartitionNameNextto $Script:GUIActions.SelectedAmigaPartition)
+        $AvailableFreeSpace = (Get-AmigaDiskFreeSpace -Disk (Get-Variable -Name $AmigaDiskName).Value -Position $AddType -PartitionNameNextto $Script:GUIActions.SelectedAmigaPartition)
         if ($AvailableFreeSpace -lt $Script:SDCardMinimumsandMaximums.PFS3Minimum){
             $null = Show-WarningorError -Msg_Header 'No Free Space' -Msg_Body 'Insufficient freespace to create partition!' -BoxTypeError -ButtonType_OK
         }
@@ -28,7 +28,7 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
                 $SpacetoUse = $Script:SDCardMinimumsandMaximums.DefaultAddPFS3Size
         
             }
-            Add-GUIPartitiontoAmigaDisk -AmigaDiskName $AmigaDiskName -AddType $AddType -PartitionNameNextto $Script:GUIActions.SelectedAmigaPartition -SizeBytes $SpacetoUse -Buffers '300' -DosType 'PFS\3' -Bootable $false -NoMount $false -Priority 99 -MaxTransfer '0xffffff'      
+            Add-GUIPartitiontoAmigaDisk -AmigaDiskName $AmigaDiskName -AddType $AddType -PartitionNameNextto $Script:GUIActions.SelectedAmigaPartition -SizeBytes (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) -Buffers '300' -DosType 'PFS\3' -Bootable $false -NoMount $false -Priority 99 -MaxTransfer '0xffffff'      
         }
     }
 })

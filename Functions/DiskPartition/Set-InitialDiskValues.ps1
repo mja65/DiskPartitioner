@@ -23,8 +23,8 @@ function Set-InitialDiskValues {
 
                                                                 
     if (-not ($LoadSettings)){
-        Add-GUIPartitiontoMBRDisk -PartitionType 'FAT32' -AddType 'Initial' -DefaultPartition $true -SizeBytes $Script:SDCardMinimumsandMaximums.FAT32Default -VolumeName 'EMU68BOOT'
-        $RemainingSpace = ($WPF_DP_Disk_MBR.DiskSizeBytes - $Script:SDCardMinimumsandMaximums.FAT32Default) - 2097152
-        Add-GUIPartitiontoMBRDisk -PartitionType 'ID76' -AddType 'Initial' -DefaultPartition $true -SizeBytes $RemainingSpace    
+        Add-GUIPartitiontoMBRDisk -PartitionType 'FAT32' -AddType 'Initial' -DefaultPartition $true -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $Script:SDCardMinimumsandMaximums.FAT32Default) -VolumeName 'EMU68BOOT'
+        $RemainingSpace = ($WPF_DP_Disk_MBR.DiskSizeBytes - $WPF_DP_Disk_MBR.MBROverheadBytes - (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $Script:SDCardMinimumsandMaximums.FAT32Default))
+        Add-GUIPartitiontoMBRDisk -PartitionType 'ID76' -AddType 'Initial' -DefaultPartition $true -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $RemainingSpace)    
     }
 }

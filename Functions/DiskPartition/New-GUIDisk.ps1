@@ -17,15 +17,17 @@ function New-GUIDisk {
 
         $NewDisk_Grid | Add-Member -NotePropertyMembers @{
             DiskType = 'MBR'
+            MBROverheadBytes = 2097152
             NumberofPartitionsFAT32 = 0
             NumberofPartitionsID76 = 0
             NextPartitionFAT32Number = 1
             NextPartitionID76Number = 1
         }
     }
-    
+
     if ($DiskType -eq 'Amiga'){
         $NewDisk_Grid | Add-Member -NotePropertyMembers @{
+            RDBOverheadBytes = 16*63*512*2
             DiskType = 'Amiga'
             ID76PartitionParent = $null
             NextPartitionNumber = 1

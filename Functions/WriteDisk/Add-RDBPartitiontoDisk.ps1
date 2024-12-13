@@ -6,9 +6,9 @@ function Add-RDBPartitiontoDisk {
         $SizeBytes
     
     )
-    
+
     $Command = @()
-    $Command += "rdb part add $Path $Name $DosType $SizeBytes`B"
+    $Command += "rdb part add $Path $Name $($DosType.replace('\','')) $SizeBytes"
 
     return $Command
 

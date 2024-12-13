@@ -13,7 +13,7 @@ $WPF_DP_Button_AddNewID76Partition.add_click({
         $null = Show-WarningorError -Msg_Header 'No Partition Selected' -Msg_Body 'You must select a partition!' -BoxTypeError -ButtonType_OK
     }
     else {
-        $AvailableSpace = (Get-DiskFreeSpace -Disk $WPF_DP_Disk_MBR -Position $AddType -PartitionNameNextto $Script:GUIActions.SelectedMBRPartition)
+        $AvailableSpace = (Get-MBRDiskFreeSpace -Disk $WPF_DP_Disk_MBR -Position $AddType -PartitionNameNextto $Script:GUIActions.SelectedMBRPartition)
         if ($AvailableSpace -lt $Script:SDCardMinimumsandMaximums.ID76Minimum){
             $null = Show-WarningorError -Msg_Header 'No Free Space' -Msg_Body 'Insufficient freespace to create partition!' -BoxTypeError -ButtonType_OK
         }
@@ -24,7 +24,7 @@ $WPF_DP_Button_AddNewID76Partition.add_click({
             else {
                 $SpacetoUse = $Script:SDCardMinimumsandMaximums.DefaultAddID76Size
             }
-            Add-GUIPartitiontoMBRDisk -PartitionType 'ID76' -AddType $AddType -SizeBytes $SpacetoUse 
+            Add-GUIPartitiontoMBRDisk -PartitionType 'ID76' -AddType $AddType -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) 
         }
     }
 

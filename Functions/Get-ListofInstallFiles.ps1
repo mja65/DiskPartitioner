@@ -93,81 +93,16 @@ function Get-ListofInstallFiles {
 
 
 
-function Get-WorkbenchExtractionCommands {
-    param (
-        $AmigaDrivetoUse,
-        $AmigaTempDrivetoUse 
-    )
-    
-    $OutputCommands = @()
-    
-    # $AmigaDrivetoUse = "$($Script:GUIActions.OutputPath)\$(Get-AmigaDrivePath)"
-    # $AmigaTempDrivetoUse = "$($Script:Settings.AmigaTempDrive)\SDH0"
-    $ListofInstallFiles = Get-ListofInstallFiles -ListofInstallFilesCSV $Script:Settings.ListofInstallFiles -IncludePath | Where-Object {$_.Kickstart_Version -eq $Script:GUIActions.KickstartVersiontoUse}
+# $HSTScript = Get-ListofInstallFilesExtractionCommands -AmigaDrivetoUse "$($Script:GUIActions.OutputPath)\$(Get-AmigaDrivePath -DeviceName)" -AmigaTempDrivetoUse "$($Script:Settings.AmigaTempDrive)\$(Get-AmigaDrivePath -DeviceName)" -TempDriveFilesOnly
 
-    Foreach($InstallFileLine in $ListofInstallFiles){
-        
-        $SourcePathtoUse = "$($InstallFileLine.Path)\$($InstallFileLine.AmigaFiletoInstall -replace '/','\')"
-        if (($InstallFileLine.NewFileName -ne "")  -or ($InstallFileLine.ModifyScript -ne 'FALSE') -or ($InstallFileLine.ModifyInfoFileTooltype -ne 'FALSE')){
-            if ($InstallFileLine.LocationtoInstall.Length -eq 0){
-                $DestinationPathtoUse = $AmigaTempDrivetoUse
-            }
-            else {
-                $DestinationPathtoUse = "$AmigaTempDrivetoUse\$($InstallFileLine.LocationtoInstall -replace '/','\')" 
-            }    
-    
-        }
-        else {
-            if ($InstallFileLine.LocationtoInstall.Length -eq 0){
-                $DestinationPathtoUse = $AmigaDrivetoUse 
-            }
-            else {
-                $DestinationPathtoUse = "$AmigaDrivetoUse\$($InstallFileLine.LocationtoInstall -replace '/','\')" 
-            }    
-            
-        }
-        $OutputCommands += "fs extract $SourcePathtoUse $DestinationPathtoUse"  
-    }
-    
-    return $OutputCommands
-}
-
-function Write-AmigaWorkbenchFileChanges {
-    param (
-        $AmigaTempDrivetoUse 
-    )
-    
-    # $AmigaTempDrivetoUse = "$($Script:Settings.AmigaTempDrive)\SDH0"
-
-    $ListofInstallFiles = Get-ListofInstallFiles -ListofInstallFilesCSV $Script:Settings.ListofInstallFiles -IncludePath | Where-Object {$_.Kickstart_Version -eq $Script:GUIActions.KickstartVersiontoUse} | Where-Object {$_.NewFileName -ne "" -or $_.ModifyScript -ne 'FALSE' -or $_.ModifyInfoFileTooltype -ne 'FALSE'}
-    
-    Foreach($InstallFileLine in $ListofInstallFiles){
-        $LocationtoInstall = $InstallFileLine.LocationtoInstall -replace '/','\'
-        if ($InstallFileLine.NewFileName -ne ""){
-            $filename = $InstallFileLine.AmigaFiletoInstall.Split("/")[-1]
-            $null = rename-Item -Path "$AmigaTempDrivetoUse\$LocationtoInstall\$filename"  -NewName $InstallFileLine.NewFileName     
-        }
-        if ($InstallFileLine.ModifyInfoFileTooltype -eq 'Modify'){
-            Read-AmigaTooltypes -IconPath "$AmigaTempDrivetoUse\$LocationtoInstall$filename" -TooltypesPath "$($Script:ExternalProgramSettings.TempFolder)\$filename`.txt"              
-            $OldToolTypes = Get-Content "$($Script:ExternalProgramSettings.TempFolder)\$filename`.txt"           
-            $TooltypestoModify = Import-Csv "$($Script:Settings.LocationofAmigaFiles)\$LocationtoInstall\$filename`.txt" -Delimiter ';'
-            Get-ModifiedToolTypes -OriginalToolTypes $OldToolTypes -ModifiedToolTypes $TooltypestoModify | Out-File "$($Script:ExternalProgramSettings.TempFolder)\$filename`amendedtoimport.txt"    
-            Write-AmigaTooltypes -IconPath "$AmigaTempDrivetoUse\$LocationtoInstall$filename" -ToolTypesPath "$($Script:ExternalProgramSettings.TempFolder)\$filename`amendedtoimport.txt"    
-        }   
-        if ($InstallFileLine.ModifyScript -eq'Remove'){
-            Write-InformationMessage -Message  "Modifying $FileName for: $($InstallFileLine.ScriptNameofChange)"
-            $ScripttoEdit = Import-TextFileforAmiga -SystemType 'Amiga' -ImportFile "$AmigaTempDrivetoUse\$LocationtoInstall$filename"
-            $ScripttoEdit = Edit-AmigaScripts -ScripttoEdit $ScripttoEdit -Action 'remove' -name $InstallFileLine.ScriptNameofChange -Startpoint $InstallFileLine.ScriptInjectionStartPoint -Endpoint $InstallFileLine.ScriptInjectionEndPoint                    
-            Export-TextFileforAmiga -ExportFile "$AmigaTempDrivetoUse\$LocationtoInstall$filename" -DatatoExport $ScripttoEdit -AddLineFeeds 'TRUE'
-        }   
-    }
-}
+# Start-HSTImagerScript -Script $HSTScript 
 
 
 
-# Get-WorkbenchExtractionCommands -AmigaDrivetoUse "$($Script:GUIActions.OutputPath)\$(Get-AmigaDrivePath)" -AmigaTempDrivetoUse "$($Script:Settings.AmigaTempDrive)\SDH0"
-# Write-AmigaWorkbenchFileChanges -AmigaTempDrivetoUse "$($Script:Settings.AmigaTempDrive)\SDH0"
+# $AmigaDrivetoUse = "$($Script:GUIActions.OutputPath)\$(Get-AmigaDrivePath -DeviceName)"
+# $AmigaTempDrivetoUse = "$($Script:Settings.AmigaTempDrive)\$(Get-AmigaDrivePath -DeviceName)"
 
 
 
+# # Write-AmigaWorkbenchFileChanges -AmigaTempDrivetoUse "$($Script:Settings.AmigaTempDrive)\SDH0"
 

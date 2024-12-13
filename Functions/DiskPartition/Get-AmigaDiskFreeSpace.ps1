@@ -1,4 +1,4 @@
-function Get-DiskFreeSpace {
+function Get-AmigaDiskFreeSpace {
     param (
         $Disk,
         $Position,
@@ -24,7 +24,12 @@ function Get-DiskFreeSpace {
             return $PartitionstoCheck[$PartitionstoCheck.Count-1].BytesAvailableRight
         }
         else{
-            return $Disk.DiskSizeBytes - 2097152
+            if ($Disk.DiskType -eq 'MBR'){
+                return $Disk.DiskSizeBytes - 2097152
+            }
+            elseif ($Disk.DiskType -eq 'Amiga'){
+                
+            }
         }
     }
     else{
@@ -40,3 +45,5 @@ function Get-DiskFreeSpace {
 
 
 }
+
+

@@ -112,11 +112,16 @@ function Add-GUIPartitiontoMBRDisk {
        
         Add-AmigaDisktoID76Partition -ID76PartitionName $NewPartitionName
         if ($DefaultPartition -eq $true){
-            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault -AddType 'AtEnd' -PartitionTypeAmiga 'Workbench' -DeviceName 'SDH0' -VolumeName 'Workbench' -Buffers '300' -MaxTransfer '0xffffff' -DosType 'PFS\3' -Bootable $true -NoMount $false -Priority 1
+            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault) -AddType 'AtEnd' -PartitionTypeAmiga 'Workbench' -DeviceName 'SDH0' -VolumeName 'Workbench' -Buffers '300' -MaxTransfer '0xffffff' -DosType 'PFS\3' -Bootable $true -NoMount $false -Priority 1
             
-            $NumberofPartitions = [math]::Ceiling(($SizeBytes-$Script:SDCardMinimumsandMaximums.WorkbenchDefault)/$Script:SDCardMinimumsandMaximums.PFS3Maximum)
-            $SpacetoAllocatetoAmigaWorkPartition = ($SizeBytes-$Script:SDCardMinimumsandMaximums.WorkbenchDefault)/$NumberofPartitions 
-                       
+            $RemainingSpace = $SizeBytes-1032192- (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault) 
+
+            $NumberofPartitions = [math]::Ceiling($RemainingSpace/$Script:SDCardMinimumsandMaximums.PFS3Maximum)
+
+            $SpacetoAllocatetoAmigaWorkPartition =  Get-AmigaNearestSizeBytes -RoundDown -SizeBytes ($RemainingSpace/$NumberofPartitions) 
+            $LastPartitionSpacetoAllocate = Get-AmigaNearestSizeBytes -RoundDown -SizeBytes ($RemainingSpace-($SpacetoAllocatetoAmigaWorkPartition*($NumberofPartitions-1)))
+                     
+            $RemainingSpacetoAllocate = $SpacetoAllocatetoAmigaWorkPartition
             for ($i = 1; $i -le $NumberofPartitions; $i++) {
                 If ($NumberofPartitions -eq 1){
                     $WorkVolumeName = 'Work'
@@ -127,8 +132,11 @@ function Add-GUIPartitiontoMBRDisk {
                     $DeviceName = "SDH$i"
                 }
 
+                if ($i -eq $NumberofPartitions){
+                    $SpacetoAllocatetoAmigaWorkPartition = $LastPartitionSpacetoAllocate
+                }
+
                 Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes $SpacetoAllocatetoAmigaWorkPartition -PartitionTypeAmiga 'Work' -AddType 'AtEnd' -VolumeName $WorkVolumeName -DeviceName $DeviceName -Buffers '300' -MaxTransfer '0xffffff' -DosType 'PFS\3' -Bootable $false -NoMount $false -Priority 99
-                
             }
             
         }

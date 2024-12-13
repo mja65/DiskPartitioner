@@ -10,6 +10,6 @@ function Add-InitialMBRDisk {
         $Script:WPF_DP_Disk_MBR.RightDiskBoundary = $LeftDiskBoundary + $Script:WPF_DP_Disk_MBR.Children[0].Width
         $Script:WPF_DP_Disk_MBR.DiskSizePixels =  $WPF_DP_Disk_MBR.RightDiskBoundary-$WPF_DP_Disk_MBR.LefttDiskBoundary
         $Script:WPF_DP_Disk_MBR.DiskSizeBytes =  $DiskSizeBytes       
-        $Script:WPF_DP_Disk_MBR.BytestoPixelFactor = $Script:WPF_DP_Disk_MBR.DiskSizeBytes/$Script:WPF_DP_Disk_MBR.DiskSizePixels
+        $Script:WPF_DP_Disk_MBR.BytestoPixelFactor = ($Script:WPF_DP_Disk_MBR.DiskSizeBytes -$Script:WPF_DP_Disk_MBR.MBROverheadBytes) /$Script:WPF_DP_Disk_MBR.DiskSizePixels
     }
 }

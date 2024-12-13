@@ -76,7 +76,14 @@ function Set-GUIPartitionNewSize {
 
     if ($SizeBytes){                
        # Write-host 'Resizing based on bytes'
-        
+       
+       if ($PartitionType -eq 'MBR'){
+           $SizeBytes = Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SizeBytes 
+       }
+       elseif ($PartitionType -eq 'Amiga'){
+        $SizeBytes = Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $SizeBytes
+       }
+
         if ($SizeBytes -lt $MinimumSizeBytes){
             return $false
         }       
@@ -106,8 +113,13 @@ function Set-GUIPartitionNewSize {
             $SizePixelstoChange = $SizePixelstoChange * -1
         }
         
-        $BytestoChange = ($SizePixelstoChange * $BytestoPixelFactor)
-                
+        if ($PartitionType -eq 'MBR'){
+            $BytestoChange = Get-MBRNearestSizeBytes -SizeBytes ($SizePixelstoChange * $BytestoPixelFactor) -RoundDown
+        }
+        elseif ($PartitionType -eq 'Amiga'){
+            $BytestoChange = Get-AmigaNearestSizeBytes -SizeBytes ($SizePixelstoChange * $BytestoPixelFactor) -RoundDown
+        }
+                        
         if (($ActiontoPerform -eq 'MBR_ResizeFromRight') -or ($ActiontoPerform -eq 'Amiga_ResizeFromRight')) {
             if ($BytestoChange -gt $PartitionToCheck.BytesAvailableRight){
                 $BytestoChange = $PartitionToCheck.BytesAvailableRight

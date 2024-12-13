@@ -37,6 +37,7 @@ $Script:GUIActions = [PSCustomObject]@{
     AvailableScreenModes = $null
     KickstartVersiontoUse = $null
     KickstartVersiontoUseFriendlyName = $null
+    UseGlowIcons = $null
     SSID = $null
     WifiPassword = $null
     FoundADFstoUse = $null  

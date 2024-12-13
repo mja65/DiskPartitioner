@@ -37,40 +37,49 @@ $WPF_Window_Button_Run.Add_Click({
         }
         elseif ((Get-Variable -Name $MBRPartition.PartitionName).Value.PartitionType -eq 'ID76'){
             Write-InformationMessage -Message 'Adding ID76 Partition'
-            Add-MBRPartitiontoDisk -DiskNumber $PowershellDiskNumber -ID76 -PartitionNumber $$MBRPartitionCounter -SizeBytes $MBRPartition.PartitionSizeBytes -OffsetBytes $OffsetBytes -VolumeName (Get-Variable -Name $MBRPartition.PartitionName).Value.VolumeName -ImportedPartition (Get-Variable -Name $MBRPartition.PartitionName).Value.ImportedPartition
-            if ($MBRPartition.value.ImportedPartition -ne $True){
+            Add-MBRPartitiontoDisk -DiskNumber $PowershellDiskNumber -ID76 -PartitionNumber $MBRPartitionCounter -SizeBytes $MBRPartition.PartitionSizeBytes -OffsetBytes $OffsetBytes -VolumeName (Get-Variable -Name $MBRPartition.PartitionName).Value.VolumeName -ImportedPartition (Get-Variable -Name $MBRPartition.PartitionName).Value.ImportedPartition
+        }
+
+        $EndPreviousPartitionBytes = $_.EndingPositionBytes
+        $MBRPartitionCounter ++
+    }
+
+    $null = Dismount-DiskImage -ImagePath $Script:GUIActions.OutputPath
+    $MBRPartitionCounter = 1
+    
+    $HSTScript = @()
+
+    foreach ($MBRPartition in $MBRPartitionstoAddtoDisk) {
+        if ((Get-Variable -Name $MBRPartition.PartitionName).Value.PartitionType -eq 'ID76'){
+            if ((Get-Variable -Name $MBRPartition.PartitionName).Value.ImportedPartition -ne $True){
                 $RDBPartitionstoAddtoPartition = $RDBPartitionstoAddtoDisk | Where-Object {$_.name -match $MBRPartition.Value.PartitionName}
-                Initialize-RDB -Path "$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter"               
+                $HSTScript += Initialize-RDB -Path "$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter"               
                 $RDBPartitionstoAddtoPartition.value.DosType | Select-Object $_  -Unique | ForEach-Object {
-                    Add-RDBFileSystem -Path "$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter" -DosType $_                  
+                    $HSTScript += Add-RDBFileSystem -Path "$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter" -DosType $_                  
                 }
                 $RDBPartitionCounter = 1 
                 foreach ($RDBPartition in $RDBPartitionstoAddtoPartition) {               
-                    Add-RDBPartitiontoDisk -Path "$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter" -Name $RDBPartition.value.DeviceName -DosType $RDBPartition.value.DosType -SizeBytes $RDBPartition.value.PartitionSizeBytes
-                    Format-RDBPartition -Path "$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter" -PartitionNumber $RDBPartitionCounter -Name $RDBPartition.value.VolumeName
+                    $HSTScript += Add-RDBPartitiontoDisk -Path "$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter" -Name $RDBPartition.value.DeviceName -DosType $RDBPartition.value.DosType -SizeBytes $RDBPartition.value.PartitionSizeBytes
+                    $HSTScript += Format-RDBPartition -Path "$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter" -PartitionNumber $RDBPartitionCounter -Name $RDBPartition.value.VolumeName
                     if ($RDBPartition.Value.ImportedFiles){
                         foreach ($File in $RDBPartition.Value.ImportedFiles) {
-                            Copy-FileToRDBPartition -SourcePath $File.FullPath -DestinationPath "$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter\rdb\$($RDBPartition.value.DeviceName)"
+                            $HSTScript += Copy-FileToRDBPartition -SourcePath $File.FullPath -DestinationPath "$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter\rdb\$($RDBPartition.value.DeviceName)"
                             
                         }
                     }
-                    $EndPreviousPartitionBytes = $_.EndingPositionBytes
+                    
                     $RDBPartitionCounter ++
                 }
             }
             else{
-                Copy-MBRPartitiontoDisk -SourcePath $MBRPartition.value.ImportedPartitionPath -SourcePartitionNumber $MBRPartition.value.ImportedPartitionPath.ImportedMBRPartitionNumber -DestinationPath $Script:GUIActions.OutputPath -DestinationPartitionNumber $MBRPartitionCounter -SizeBytes $MBRPartition.value.PartitionSizeBytes
+                $HSTScript += Copy-MBRPartitiontoDisk -SourcePath $MBRPartition.value.ImportedPartitionPath -SourcePartitionNumber $MBRPartition.value.ImportedPartitionPath.ImportedMBRPartitionNumber -DestinationPath $Script:GUIActions.OutputPath -DestinationPartitionNumber $MBRPartitionCounter -SizeBytes $MBRPartition.value.PartitionSizeBytes
             }
-    
         }
-        
         $MBRPartitionCounter ++
     }
+    
+    Start-HSTImagerScript -Script $HSTScript 
+
 })   
-    
-        # New-Partition -DiskNumber 7 -MbrType FAT32 -Size 53149171712
-        # -Size 106300440576 -MbrType FAT32 
-        # -UseMaximumSize 
-        # $Script:GUIActions.ListofRemovableMedia
-    
+
 

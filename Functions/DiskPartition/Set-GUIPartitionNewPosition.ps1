@@ -39,8 +39,22 @@ function Set-GUIPartitionNewPosition {
                 }
             }
             $AmountMovedBytes = $BytestoPixelFactor*$AmountMovedPixels
+
+            if ($PartitionType -eq 'MBR'){
+                $AmountMovedBytes = Get-MBRNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+            }
+            elseif ($PartitionType -eq 'Amiga'){
+                $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+            }
+
         }
         elseif ($AmountMovedBytes){
+            if ($PartitionType -eq 'MBR'){
+                $AmountMovedBytes = Get-MBRNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+            }
+            elseif ($PartitionType -eq 'Amiga'){
+                $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+            }
             $AmountMovedPixels = $AmountMovedBytes/$BytestoPixelFactor
             Write-host "$AmountMovedPixels"
         }

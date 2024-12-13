@@ -19,7 +19,7 @@ function Set-DiskForImport {
         $AddType = 'Right'   
     }
     
-    $Script:GUIActions.AvailableSpaceforImportedPartitionBytes = (Get-DiskFreeSpace -Disk $WPF_DP_Disk_MBR -Position $AddType -PartitionNameNextto $Script:GUIActions.SelectedMBRPartition)
+    $Script:GUIActions.AvailableSpaceforImportedPartitionBytes = (Get-MBRDiskFreeSpace -Disk $WPF_DP_Disk_MBR -Position $AddType -PartitionNameNextto $Script:GUIActions.SelectedMBRPartition)
     $WPF_SD_FreeSpace_Value.Text = "$((Get-ConvertedSize -Size $Script:GUIActions.AvailableSpaceforImportedPartitionBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2).Size) $((Get-ConvertedSize -Size $Script:GUIActions.AvailableSpaceforImportedPartitionBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2).Scale)"
     $WPF_SD_FreeSpaceRemaining_Value.Text = $WPF_SD_FreeSpace_Value.Text
 
