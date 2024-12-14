@@ -8,7 +8,7 @@ function Get-HSTPartitionInfo {
     )
         
     # $Path = '\disk7\mbr\2' 
-    # $Path = "E:\Emulators\Amiga Files\Hard Drives\InstallProgs\CFD133.lha"
+    # $Path = "E:\Emulators\Amiga Files\Shared\hdf\workbench-311.hdf"
     # $Path = '\disk6\mbr\2'
     
     If ($MBRInfo){

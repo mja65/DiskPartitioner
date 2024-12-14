@@ -12,6 +12,10 @@ function Write-SettingsFile {
     $Output += "Setting;WifiPassword;$($Script:GUIActions.WifiPassword)"
     $Output += "Setting;ADFLocation;$($Script:GUIActions.ADFLocation)"
     $Output += "Setting;ROMLocation;$($Script:GUIActions.ROMLocation)"
+    $Output += "Setting;KickstartVersiontoUse;$($Script:GUIActions.KickstartVersiontoUse)"
+    $Output += "Setting;KickstartVersiontoUseFriendlyName;$($Script:GUIActions.KickstartVersiontoUseFriendlyName)" 
+    $Output += "Setting;UseGlowIcons;$($Script:GUIActions.UseGlowIcons)"
+    $Output += "Setting;IsDisclaimerAccepted;$($Script:GUIActions.IsDisclaimerAccepted)"
 
     $Output += "MBR;WPF_DP_Disk_MBR;$($WPF_DP_Disk_MBR.DiskSizeBytes);$($WPF_DP_Disk_MBR.NumberofPartitionsID76);$($WPF_DP_Disk_MBR.NextPartitionID76Number);$($WPF_DP_Disk_MBR.NumberofPartitionsFAT32);$($WPF_DP_Disk_MBR.NextPartitionFAT32Number)" 
     Get-Variable -name '*_AmigaDisk' | ForEach-Object{

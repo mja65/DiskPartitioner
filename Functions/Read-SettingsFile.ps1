@@ -72,13 +72,13 @@ function Read-SettingsFile {
         }
 
         $Settings | ForEach-Object {
-            if ($_.Setting -eq 'OutputPath'){
-                #$Script:GUIActions.OutputPath = $_.Value
-                (Get-Variable -Scope Script -Name "GUIActions.$_.Setting").value = $_.Value
-            }
+            (Get-Variable -Scope Script -Name "GUIActions").Value.$($_.Setting) = $_.Value       
         }
-
-         Set-InitialDiskValues -SizeBytes $MBR.DiskSizeBytes -LoadSettings
+        
+        $WPF_Setup_ScreenMode_Dropdown.SelectedItem = $Script:GUIActions.ScreenModetoUseFriendlyName
+        $WPF_Setup_KickstartVersion_Dropdown.SelectedItem = $Script:GUIActions.KickstartVersiontoUseFriendlyName
+        
+        Set-InitialDiskValues -SizeBytes $MBR.DiskSizeBytes -LoadSettings
         
         $WPF_DP_Disk_MBR.NumberofPartitionsFAT32 = $MBR.NumberofPartitionsFAT32
         $WPF_DP_Disk_MBR.NumberofPartitionsID76 = $MBR.NumberofPartitionsID76

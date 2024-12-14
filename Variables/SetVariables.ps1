@@ -90,6 +90,9 @@ $Script:SDCardMinimumsandMaximums = $null
 
 $Script:ExternalProgramSettings = [PSCustomObject]@{
     # HSTLocation = 'E:\Emu68Imager\Working Folder\Programs\HST-Imager'
+    SevenZipFilePath = '.\Programs\7z.exe'
+    FindFreeSpacePath = '.\Programs\FindFreeSpace.exe'
+    DDTCPath = '.\Programs\ddtc.exe'
     HSTImagerPath = '.\Programs\HSTImager\hst.imager.exe'
     HSTAmigaPath =  '.\Programs\HSTAmiga\Hst.amiga.exe'
     PFS3AIOPath= '.\Programs\HSTImager\pfs3aio'

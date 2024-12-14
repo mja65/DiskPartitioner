@@ -3,7 +3,8 @@ function Get-HSTVolumeName {
         $Path
     )
     
-    #$Path = "\disk6\mbr\2\rdb"
+    # $Path = "\disk6\mbr\2\rdb"
+    # $Path = "E:\Emulators\Amiga Files\Shared\hdf\workbench-311.hdf\rdb"
 
     $DatatoParse = & $Script:ExternalProgramSettings.HSTImagerPath fs dir $Path
 
@@ -11,6 +12,7 @@ function Get-HSTVolumeName {
 
     $HeadertoCheck = 'File system free'
     $Footertocheck = 'directories, '
+    $FootertoCheck2 = 'directory, '
 
     $PartitionDetails = @()
     $StartRow = 0
@@ -20,7 +22,7 @@ function Get-HSTVolumeName {
         if ($DataToParse[$i] -match $HeadertoCheck){
             $StartRow = $i+2
         }
-        if ($DataToParse[$i] -match $FootertoCheck){
+        if (($DataToParse[$i] -match $FootertoCheck) -or ($DataToParse[$i] -match $FootertoCheck2)){
             $EndRow = $i-2
             break
         }
