@@ -3,15 +3,9 @@ $WPF_TF_BrowseforFileLocation_Button.Add_Click({
     if ($WPF_TF_PhysicalvsImage_Dropdown.SelectedItem -eq 'Local Drive'){
         $Script:GUIActions.TransferSourceLocation = Get-FolderPath -Message 'Select Source'
         $Script:GUIActions.TransferSourceType = 'Windows'
-        $WPF_TF_RecurseDepth_Label.Visibility = 'Visible'
-        $WPF_TF_RecurseDepth_Label2.Visibility = 'Visible'
-        $WPF_TF_RecurseDepth_Value.Visibility = 'Visible'
     }
 
     else {
-        $WPF_TF_RecurseDepth_Label.Visibility = 'Hidden'
-        $WPF_TF_RecurseDepth_Label2.Visibility = 'Hidden'
-        $WPF_TF_RecurseDepth_Value.Visibility = 'Hidden'
         Remove-Variable -Name 'WPF_TFRDB_*'
 
         $WPF_SelectRDBSourceWindow = Get-XAML -WPFPrefix 'WPF_TFRDB_' -XMLFile '.\Assets\WPF\Window_BrowseFilesRDBSelection.xaml' -ActionsPath '.\UIActions\TFRDB\' -AddWPFVariables
@@ -51,12 +45,21 @@ $WPF_TF_BrowseforFileLocation_Button.Add_Click({
         # }
         
         elseif($Script:GUIActions.TransferSourceType -eq 'Windows'){            
-            (Get-ChildItem -Path $Script:GUIActions.TransferSourceLocation -Recurse -Depth $Script:GUIActions.TransferFilesRecurseDepth) | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
-                $FormattedSize = (Get-ConvertedSize -Size $_.Length -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)    
+            Get-ChildItem -Path $Script:GUIActions.TransferSourceLocation  | ForEach-Object {
+                if ($_.mode -match "d"){
+                    $SizeBytes = (Get-ChildItem -path $_.FullName -force -recurse | Where-Object { $_.PSIsContainer -eq $false }  | Measure-Object -property Length -sum).sum
+                    $FileType = 'Folder'
+                }
+                else{
+                    $SizeBytes = $_.Length
+                    $FileType = 'File'
+                }
+                $FormattedSize = (Get-ConvertedSize -Size $SizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)    
                 $TabletoPopulate += [PSCustomObject]@{
                     FullPath = $_.FullName
+                    FileType = $FileType
                     Size = "$($FormattedSize.Size) $($FormattedSize.Scale)"
-                    SizeBytes = $_.Length
+                    SizeBytes = $SizeBytes
                     CreationTime = ([datetime]$_.CreationTime).ToString("dd/MM/yyyy")
                     Source = 'PC'
                     PathHeader = $null

@@ -23,7 +23,7 @@
                 <TextBox x:Name="FreeSpaceRemaining_Value" HorizontalAlignment="Right" Margin="0,20,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="80"  Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
             </Grid>
         </GroupBox>
-        <GroupBox HorizontalAlignment="Left" Header="Source Files" Margin="10,100,0,0" VerticalAlignment="Top" >
+        <GroupBox HorizontalAlignment="Left" Header="Source Files" Margin="10,120,0,0" VerticalAlignment="Top" >
             <Grid x:Name="Grid_FileSource" Background="#FFE5E5E5" Visibility="Visible" Margin="0,0,0,0" Width ="450" Height="470" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <DataGrid x:Name="FileSource_DataGrid"  IsReadOnly="True" Height="300" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,0,0,0" />
                 <Button x:Name="Button_SelectAllFiles" Content="Select All Files" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Bottom"/>
@@ -33,11 +33,12 @@
                 <TextBox x:Name="SelectedFilesSpace_Value" HorizontalAlignment="Left" Margin="360,0,0,30" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="80"  Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
             </Grid>
         </GroupBox>
-        <GroupBox HorizontalAlignment="Right"  Header="Destination Partition for Files" VerticalAlignment="Top" Margin="0,100,10,0" >
-        <Grid x:Name="Grid_Destination" Background="#FFE5E5E5"   Visibility="Visible" Margin="0,0,0,0" Width ="450" Height="470" HorizontalAlignment="Right" VerticalAlignment="Top">
+        <GroupBox HorizontalAlignment="Right"  Header="Destination Partition for Files" VerticalAlignment="Top" Margin="0,120,10,0" >
+            <Grid x:Name="Grid_Destination" Background="#FFE5E5E5"   Visibility="Visible" Margin="0,0,0,0" Width ="450" Height="470" HorizontalAlignment="Right" VerticalAlignment="Top">
             <DataGrid x:Name="FileDestination_DataGrid" AutoGenerateColumns="False" IsReadOnly="True" Height="300" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,0,0,0" >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="FullPath" Binding="{Binding FullPath}"/>
+                    <DataGridTextColumn Header="FileType" Binding="{Binding FileType}"/>
                     <DataGridTextColumn Header="Size" Binding="{Binding Size}"/>
                     <DataGridTextColumn Header="CreationTime" Binding="{Binding CreationTime}"/>
                     <DataGridTextColumn Header="Source" Binding="{Binding Source}"/>
@@ -49,9 +50,5 @@
             <TextBox x:Name="CopiedFilesSpace_Value" HorizontalAlignment="Left" Margin="360,0,0,30" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="80"  Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
         </Grid>
         </GroupBox>
-        <TextBox x:Name="RecurseDepth_Value" HorizontalAlignment="Left" Margin="160,80,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50" Visibility = "Hidden" />
-        <TextBox x:Name="RecurseDepth_Label" HorizontalAlignment="Left" Margin="10,80,0,0" TextWrapping="Wrap" Text="Depth for Recursive Files" VerticalAlignment="Top" Width="150" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" Visibility = "Hidden"/>
-        <Button x:Name="Button_RecursiveRedo" Content="Refresh Source Files" Width ="120" HorizontalAlignment="Left" Margin="220,80,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="RecurseDepth_Label2" HorizontalAlignment="Left" Margin="350,80,0,0" TextWrapping="Wrap" Text="Note, a high number is likely to freeze your PC!" VerticalAlignment="Top" Width="280" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
     </Grid>
 </Window>

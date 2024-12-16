@@ -53,7 +53,6 @@ $Script:GUIActions = [PSCustomObject]@{
     ImportPartitionWindowStatus = $null
     SelectedPhysicalDiskforImport = $null
     ImportedImagePath = $null
-    TransferFilesRecurseDepth = $null
     TransferFilesImagePath = $null
     TransferSourceLocation = $null
     TransferSourceType = $null

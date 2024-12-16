@@ -1,0 +1,1393 @@
+
+FullPath     : C:\Users\Matt\Downloads\600GS
+FileType     : Folder
+Size         : 487.00 MiB
+SizeBytes    : 510659372
+CreationTime : 03/12/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\AmigaVision-2024.10.10-pre2
+FileType     : Folder
+Size         : 39.40 GiB
+SizeBytes    : 42309721399
+CreationTime : 17/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Amitools
+FileType     : Folder
+Size         : 1.14 MiB
+SizeBytes    : 1193173
+CreationTime : 16/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\AROS-20240818-amiga-m68k-boot-iso
+FileType     : Folder
+Size         : 155.38 MiB
+SizeBytes    : 162931112
+CreationTime : 19/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68_Imager
+FileType     : Folder
+Size         : 40 MiB
+SizeBytes    : 41943040
+CreationTime : 29/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68Imager
+FileType     : Folder
+Size         : 1.13 GiB
+SizeBytes    : 1213763477
+CreationTime : 30/07/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\EzEmu68Installer_SelfExtractor
+FileType     : Folder
+Size         : 198.61 KiB
+SizeBytes    : 203381
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\GTA Trilogy - Definitive Edition [FitGirl Repack]
+FileType     : Folder
+Size         : 0 B
+SizeBytes    : 
+CreationTime : 29/04/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Handle
+FileType     : Folder
+Size         : 1.48 MiB
+SizeBytes    : 1552386
+CreationTime : 06/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\hst-amiga_v0.3.163-7fb92e1_console_windows_x64
+FileType     : Folder
+Size         : 690.60 MiB
+SizeBytes    : 724148457
+CreationTime : 27/07/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\hst-imager_v1.2.396-2cc164a_console_windows_x64
+FileType     : Folder
+Size         : 118.99 MiB
+SizeBytes    : 124765160
+CreationTime : 30/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\https%3a%2f%2fcygwin.mirrors.hoobly.com%2f
+FileType     : Folder
+Size         : 51.98 MiB
+SizeBytes    : 54502493
+CreationTime : 12/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\HxCFloppyEmulator_soft
+FileType     : Folder
+Size         : 32.02 MiB
+SizeBytes    : 33577801
+CreationTime : 13/03/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\john-1.9.0-jumbo-1-win64
+FileType     : Folder
+Size         : 129.34 MiB
+SizeBytes    : 135618770
+CreationTime : 29/04/2022
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Locale.Emulator.2.5.0.1
+FileType     : Folder
+Size         : 772.23 KiB
+SizeBytes    : 790760
+CreationTime : 16/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Mame
+FileType     : Folder
+Size         : 632.15 MiB
+SizeBytes    : 662855956
+CreationTime : 13/01/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\MUI
+FileType     : Folder
+Size         : 1.82 MiB
+SizeBytes    : 1908656
+CreationTime : 30/07/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Old Dat files
+FileType     : Folder
+Size         : 1.67 MiB
+SizeBytes    : 1747079
+CreationTime : 15/04/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\PortableGit
+FileType     : Folder
+Size         : 388.05 MiB
+SizeBytes    : 406895238
+CreationTime : 12/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\SDCardFormatterv5_WinEN
+FileType     : Folder
+Size         : 6.81 MiB
+SizeBytes    : 7145112
+CreationTime : 04/06/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\spacesniffer_1_3_0_2
+FileType     : Folder
+Size         : 2.86 MiB
+SizeBytes    : 3000157
+CreationTime : 14/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Stray [FitGirl Repack]
+FileType     : Folder
+Size         : 0 B
+SizeBytes    : 
+CreationTime : 22/09/2022
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Test
+FileType     : Folder
+Size         : 7.91 MiB
+SizeBytes    : 8291719
+CreationTime : 14/04/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\THEA500- LinuxConsole-v3.2.1
+FileType     : Folder
+Size         : 101.81 MiB
+SizeBytes    : 106756134
+CreationTime : 29/04/2022
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\05219LV505.pdf
+FileType     : File
+Size         : 19.62 MiB
+SizeBytes    : 20576878
+CreationTime : 30/06/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\1.JPG
+FileType     : File
+Size         : 12.80 KiB
+SizeBytes    : 13111
+CreationTime : 11/04/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\2.JPG
+FileType     : File
+Size         : 58.24 KiB
+SizeBytes    : 59641
+CreationTime : 11/04/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\20241205213753_Emu68ImagerLog.txt
+FileType     : File
+Size         : 248.08 KiB
+SizeBytes    : 254038
+CreationTime : 06/12/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\600GS.rar
+FileType     : File
+Size         : 199.89 MiB
+SizeBytes    : 209598204
+CreationTime : 03/12/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\7CitiesOfGold.lha
+FileType     : File
+Size         : 60.07 KiB
+SizeBytes    : 61516
+CreationTime : 05/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\A0308540654657017-30Jun23.csv
+FileType     : File
+Size         : 1.77 KiB
+SizeBytes    : 1811
+CreationTime : 31/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Afis305.doc
+FileType     : File
+Size         : 33 KiB
+SizeBytes    : 33792
+CreationTime : 11/04/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\AGS_PiStorm32_v26.img.osfdelta.index
+FileType     : File
+Size         : 4.91 KiB
+SizeBytes    : 5024
+CreationTime : 13/05/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\AGS_PiStorm32_v26.img.osfdelta.raw
+FileType     : File
+Size         : 512 KiB
+SizeBytes    : 524288
+CreationTime : 13/05/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\akGIF-dt.lha
+FileType     : File
+Size         : 74.73 KiB
+SizeBytes    : 76528
+CreationTime : 02/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\akJFIF-dt.lha
+FileType     : File
+Size         : 126.24 KiB
+SizeBytes    : 129274
+CreationTime : 02/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\akPNG-dt (1).lha
+FileType     : File
+Size         : 130.75 KiB
+SizeBytes    : 133887
+CreationTime : 02/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\akPNG-dt.lha
+FileType     : File
+Size         : 130.75 KiB
+SizeBytes    : 133887
+CreationTime : 02/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\akPrefs.lha
+FileType     : File
+Size         : 20.98 KiB
+SizeBytes    : 21487
+CreationTime : 02/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\amiga-os-3x0-a1200.rom
+FileType     : File
+Size         : 512 KiB
+SizeBytes    : 524288
+CreationTime : 02/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\amigadx.zip
+FileType     : File
+Size         : 169.71 KiB
+SizeBytes    : 173786
+CreationTime : 24/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\AmigaVision-2024.10.10-pre2.7z
+FileType     : File
+Size         : 3.73 GiB
+SizeBytes    : 4007591909
+CreationTime : 17/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\AmiSSL-5.17-OS3.lha
+FileType     : File
+Size         : 3.72 MiB
+SizeBytes    : 3902086
+CreationTime : 05/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Amitools.zip
+FileType     : File
+Size         : 567.72 KiB
+SizeBytes    : 581343
+CreationTime : 16/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\AROS-20240818-amiga-m68k-boot-floppy.lha
+FileType     : File
+Size         : 780.57 KiB
+SizeBytes    : 799303
+CreationTime : 19/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\AROS-20240818-amiga-m68k-boot-iso.zip
+FileType     : File
+Size         : 74.67 MiB
+SizeBytes    : 78299150
+CreationTime : 19/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\AROS-20241005-amiga-m68k-boot-iso.zip
+FileType     : File
+Size         : 74.64 MiB
+SizeBytes    : 78268839
+CreationTime : 06/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Atari.50.The.Anniversary.Celebration.zip
+FileType     : File
+Size         : 11.21 GiB
+SizeBytes    : 12033551904
+CreationTime : 12/11/2022
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\AvaloniaVS.VS2022.vsix
+FileType     : File
+Size         : 7.16 MiB
+SizeBytes    : 7502961
+CreationTime : 27/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\barking_dog_log_sheet.pdf
+FileType     : File
+Size         : 58.27 KiB
+SizeBytes    : 59665
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\bootdisk-amiga-m68k.adf
+FileType     : File
+Size         : 880 KiB
+SizeBytes    : 901120
+CreationTime : 19/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Brave Borwo-Jaiks.stl
+FileType     : File
+Size         : 18.73 KiB
+SizeBytes    : 19184
+CreationTime : 09/06/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\bustest.lha
+FileType     : File
+Size         : 8.52 KiB
+SizeBytes    : 8725
+CreationTime : 26/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\CaffeineOS_Storm_9277.img.osfdelta.index
+FileType     : File
+Size         : 640 B
+SizeBytes    : 640
+CreationTime : 16/06/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\CaffeineOS_Storm_9277.img.osfdelta.raw
+FileType     : File
+Size         : 512 KiB
+SizeBytes    : 524288
+CreationTime : 06/06/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\CaffeineOS_Storm_9311.img
+FileType     : File
+Size         : 59.48 GiB
+SizeBytes    : 63864569856
+CreationTime : 16/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\CaffeineOS_Storm_9311.img.osfdelta.index
+FileType     : File
+Size         : 368 B
+SizeBytes    : 368
+CreationTime : 25/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\CaffeineOS_Storm_9311.img.osfdelta.raw
+FileType     : File
+Size         : 512 KiB
+SizeBytes    : 524288
+CreationTime : 25/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\CE14.lha
+FileType     : File
+Size         : 882 B
+SizeBytes    : 882
+CreationTime : 16/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Cecconoid.zip
+FileType     : File
+Size         : 450.77 MiB
+SizeBytes    : 472661614
+CreationTime : 19/06/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\check.dat
+FileType     : File
+Size         : 59.18 KiB
+SizeBytes    : 60600
+CreationTime : 28/09/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\check.txt
+FileType     : File
+Size         : 425.80 KiB
+SizeBytes    : 436016
+CreationTime : 19/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\dd-0.6beta3.zip
+FileType     : File
+Size         : 191.48 KiB
+SizeBytes    : 196080
+CreationTime : 13/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\dd.exe
+FileType     : File
+Size         : 347 KiB
+SizeBytes    : 355328
+CreationTime : 13/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\ddrelease64.exe
+FileType     : File
+Size         : 2.33 MiB
+SizeBytes    : 2444800
+CreationTime : 11/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Demo-FolderTreeView.psf
+FileType     : File
+Size         : 27.83 KiB
+SizeBytes    : 28500
+CreationTime : 04/12/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\DiskFlashbackInstall1020b.exe
+FileType     : File
+Size         : 20.02 MiB
+SizeBytes    : 20989744
+CreationTime : 08/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\dllexp-x64.zip
+FileType     : File
+Size         : 70.16 KiB
+SizeBytes    : 71840
+CreationTime : 18/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Dokan_x64.msi
+FileType     : File
+Size         : 8.90 MiB
+SizeBytes    : 9330688
+CreationTime : 10/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\DropboxInstaller.exe
+FileType     : File
+Size         : 783.55 KiB
+SizeBytes    : 802360
+CreationTime : 08/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\emu68_converted.img
+FileType     : File
+Size         : 492.87 MiB
+SizeBytes    : 516808704
+CreationTime : 18/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68_Format_tool_GUI-023.ps1
+FileType     : File
+Size         : 60.77 KiB
+SizeBytes    : 62228
+CreationTime : 28/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68-tools-20240730-a3f0e1.zip
+FileType     : File
+Size         : 2.03 MiB
+SizeBytes    : 2125663
+CreationTime : 10/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68Imager-0.01.zip
+FileType     : File
+Size         : 3.48 MiB
+SizeBytes    : 3646332
+CreationTime : 22/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68Imager-0.02 (1).zip
+FileType     : File
+Size         : 3.49 MiB
+SizeBytes    : 3656847
+CreationTime : 28/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68Imager-0.02.zip
+FileType     : File
+Size         : 3.49 MiB
+SizeBytes    : 3656847
+CreationTime : 28/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68Imager-0.9.zip
+FileType     : File
+Size         : 3.50 MiB
+SizeBytes    : 3665439
+CreationTime : 03/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68Imager-0.91.zip
+FileType     : File
+Size         : 3.50 MiB
+SizeBytes    : 3666753
+CreationTime : 03/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68Imager-1.0.1.zip
+FileType     : File
+Size         : 3.50 MiB
+SizeBytes    : 3664926
+CreationTime : 05/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68Imager-1.0.zip
+FileType     : File
+Size         : 3.50 MiB
+SizeBytes    : 3666515
+CreationTime : 04/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68Imager.7z
+FileType     : File
+Size         : 2.96 MiB
+SizeBytes    : 3107165
+CreationTime : 26/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68installer_bar_update.exe
+FileType     : File
+Size         : 222.5 KiB
+SizeBytes    : 227840
+CreationTime : 29/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68installer_bar_update.zip
+FileType     : File
+Size         : 169.16 KiB
+SizeBytes    : 173215
+CreationTime : 29/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Emu68Kickstart3.1.img.7z
+FileType     : File
+Size         : 10.97 MiB
+SizeBytes    : 11502072
+CreationTime : 26/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\events.txt
+FileType     : File
+Size         : 34.84 KiB
+SizeBytes    : 35681
+CreationTime : 29/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\EZ_Emu68_Installer (1).zip
+FileType     : File
+Size         : 279.62 KiB
+SizeBytes    : 286330
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\EZ_Emu68_Installer Signed.exe
+FileType     : File
+Size         : 399.70 KiB
+SizeBytes    : 409296
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\EZ_Emu68_Installer.exe
+FileType     : File
+Size         : 389 KiB
+SizeBytes    : 398336
+CreationTime : 21/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\EZ_Emu68_Installer.zip
+FileType     : File
+Size         : 279.62 KiB
+SizeBytes    : 286330
+CreationTime : 21/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\EzEmu68Installer_SelfExtractor.exe
+FileType     : File
+Size         : 313 KiB
+SizeBytes    : 320512
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\EzEmu68Installer_SelfExtractor.zip
+FileType     : File
+Size         : 251.69 KiB
+SizeBytes    : 257731
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\fat95 (1).lha
+FileType     : File
+Size         : 234.84 KiB
+SizeBytes    : 240480
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\fat95.lha
+FileType     : File
+Size         : 234.84 KiB
+SizeBytes    : 240480
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\filelist.zip
+FileType     : File
+Size         : 21.55 MiB
+SizeBytes    : 22596288
+CreationTime : 15/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\FileZilla_3.67.0_win64-setup.exe
+FileType     : File
+Size         : 11.81 MiB
+SizeBytes    : 12388016
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\FindFreeSpace.exe
+FileType     : File
+Size         : 143.57 KiB
+SizeBytes    : 147015
+CreationTime : 17/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\FindLock.exe
+FileType     : File
+Size         : 7.5 KiB
+SizeBytes    : 7680
+CreationTime : 06/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Functions-GUIhash.psm1
+FileType     : File
+Size         : 46.55 KiB
+SizeBytes    : 47664
+CreationTime : 08/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\GatherLogs.exe
+FileType     : File
+Size         : 1.30 MiB
+SizeBytes    : 1366744
+CreationTime : 05/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Handle.zip
+FileType     : File
+Size         : 729.82 KiB
+SizeBytes    : 747331
+CreationTime : 06/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\HDDRawCopy1.20Setup.exe
+FileType     : File
+Size         : 2.06 MiB
+SizeBytes    : 2162477
+CreationTime : 12/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\hippoplayerupdate (1).lha
+FileType     : File
+Size         : 406.33 KiB
+SizeBytes    : 416084
+CreationTime : 20/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\hippoplayerupdate.lha
+FileType     : File
+Size         : 406.33 KiB
+SizeBytes    : 416084
+CreationTime : 20/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Horrors.zip
+FileType     : File
+Size         : 46.49 KiB
+SizeBytes    : 47604
+CreationTime : 26/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Hotfix3.2.2.1.lha
+FileType     : File
+Size         : 16.89 MiB
+SizeBytes    : 17711289
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\hst-imager_v1.2.390-af2d4d0_console_windows_x64.zip
+FileType     : File
+Size         : 48.30 MiB
+SizeBytes    : 50649825
+CreationTime : 19/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\hst-imager_v1.2.396-2cc164a_console_windows_x64.zip
+FileType     : File
+Size         : 48.32 MiB
+SizeBytes    : 50662121
+CreationTime : 30/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\hst-imager_v1.2.396-2cc164a_gui_windows_x64_setup.exe
+FileType     : File
+Size         : 164.39 MiB
+SizeBytes    : 172373804
+CreationTime : 30/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\HSTImagefileforHenrik.7z
+FileType     : File
+Size         : 5.47 MiB
+SizeBytes    : 5738840
+CreationTime : 12/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\HSTImagefileforHenrik.img
+FileType     : File
+Size         : 300 MiB
+SizeBytes    : 314572800
+CreationTime : 13/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\hstwb-installer_1.6.3_packages_portable.zip
+FileType     : File
+Size         : 1.03 GiB
+SizeBytes    : 1104915688
+CreationTime : 12/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\HxDSetup.exe
+FileType     : File
+Size         : 3.29 MiB
+SizeBytes    : 3444957
+CreationTime : 11/02/2021
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\HxDSetup.zip
+FileType     : File
+Size         : 3.19 MiB
+SizeBytes    : 3348036
+CreationTime : 12/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\IconLib_46.4.lha
+FileType     : File
+Size         : 1.84 MiB
+SizeBytes    : 1924371
+CreationTime : 26/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\IdentifyUsr.lha
+FileType     : File
+Size         : 101.00 KiB
+SizeBytes    : 103421
+CreationTime : 02/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\infeZtation_v1.0.zip
+FileType     : File
+Size         : 511.88 KiB
+SizeBytes    : 524165
+CreationTime : 03/12/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\KS-ROMs.zip
+FileType     : File
+Size         : 14.89 MiB
+SizeBytes    : 15618077
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\LibreOffice_24.8.2_Win_x86-64.msi
+FileType     : File
+Size         : 346.47 MiB
+SizeBytes    : 363298816
+CreationTime : 09/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\ListofInstallFiles.csv
+FileType     : File
+Size         : 13.52 KiB
+SizeBytes    : 13842
+CreationTime : 08/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Locale.Emulator.2.5.0.1.zip
+FileType     : File
+Size         : 150.52 KiB
+SizeBytes    : 154135
+CreationTime : 16/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\manjaro-gnome-24.1.0-241001-linux610.iso
+FileType     : File
+Size         : 3.80 GiB
+SizeBytes    : 4084303872
+CreationTime : 07/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\MATest.lha
+FileType     : File
+Size         : 1 B
+SizeBytes    : 1
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Microsoft-Office-2010-Standard-x64-Eng.iso
+FileType     : File
+Size         : 660.16 MiB
+SizeBytes    : 692224000
+CreationTime : 27/07/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\New Text Document.txt
+FileType     : File
+Size         : 109 B
+SizeBytes    : 109
+CreationTime : 02/12/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Nintendo 64 - Super Mario 64 - Mario.zip
+FileType     : File
+Size         : 1.40 MiB
+SizeBytes    : 1470069
+CreationTime : 24/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\node-v22.11.0-x64.msi
+FileType     : File
+Size         : 28.89 MiB
+SizeBytes    : 30289920
+CreationTime : 12/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Notes.doc
+FileType     : File
+Size         : 41.5 KiB
+SizeBytes    : 42496
+CreationTime : 11/04/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Online
+FileType     : File
+Size         : 939 B
+SizeBytes    : 939
+CreationTime : 21/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Online (1)
+FileType     : File
+Size         : 939 B
+SizeBytes    : 939
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Optus Email 1.pdf
+FileType     : File
+Size         : 492.80 KiB
+SizeBytes    : 504628
+CreationTime : 16/06/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Optus Email 2.pdf
+FileType     : File
+Size         : 640.35 KiB
+SizeBytes    : 655715
+CreationTime : 16/06/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\osfmount.exe
+FileType     : File
+Size         : 15.28 MiB
+SizeBytes    : 16019608
+CreationTime : 13/05/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\pfs3aio.lha
+FileType     : File
+Size         : 74.12 KiB
+SizeBytes    : 75899
+CreationTime : 20/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\PistormDirDocumentation.zip
+FileType     : File
+Size         : 130.73 KiB
+SizeBytes    : 133868
+CreationTime : 27/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\PistormImagerGUI.ps1shay.ps1
+FileType     : File
+Size         : 307.39 KiB
+SizeBytes    : 314765
+CreationTime : 09/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\PistormImagerGUIhash.ps1
+FileType     : File
+Size         : 74.61 KiB
+SizeBytes    : 76399
+CreationTime : 08/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\PortableGit-2.46.0-64-bit.7z.exe
+FileType     : File
+Size         : 58.57 MiB
+SizeBytes    : 61419624
+CreationTime : 12/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\PS3 ISO TOOLS V2.2.rar
+FileType     : File
+Size         : 1.46 MiB
+SizeBytes    : 1531463
+CreationTime : 05/03/2022
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\pstoexeSetup.msi
+FileType     : File
+Size         : 2.88 MiB
+SizeBytes    : 3018752
+CreationTime : 20/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\python-3.12.6-amd64.exe
+FileType     : File
+Size         : 25.30 MiB
+SizeBytes    : 26527368
+CreationTime : 16/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\python-3.6.5.exe
+FileType     : File
+Size         : 29.31 MiB
+SizeBytes    : 30735232
+CreationTime : 10/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Q5.DOC
+FileType     : File
+Size         : 13.5 KiB
+SizeBytes    : 13824
+CreationTime : 11/04/2023
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\RapportSetup.exe
+FileType     : File
+Size         : 524.83 KiB
+SizeBytes    : 537424
+CreationTime : 05/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\rawwritewin-0.7.zip
+FileType     : File
+Size         : 209.75 KiB
+SizeBytes    : 214786
+CreationTime : 13/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Readme.txt
+FileType     : File
+Size         : 1.92 KiB
+SizeBytes    : 1965
+CreationTime : 31/03/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Release.zip
+FileType     : File
+Size         : 29.49 KiB
+SizeBytes    : 30196
+CreationTime : 10/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\rufus-4.5.exe
+FileType     : File
+Size         : 1.44 MiB
+SizeBytes    : 1513032
+CreationTime : 04/06/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\SD Card Formatter 5.0.2 Setup EN.exe
+FileType     : File
+Size         : 6.81 MiB
+SizeBytes    : 7145112
+CreationTime : 14/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\SDCardFormatterv5_WinEN.zip
+FileType     : File
+Size         : 6.13 MiB
+SizeBytes    : 6424321
+CreationTime : 14/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\setup-x86_64.exe
+FileType     : File
+Size         : 1.34 MiB
+SizeBytes    : 1407507
+CreationTime : 12/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Shaytan.e68
+FileType     : File
+Size         : 1.74 KiB
+SizeBytes    : 1786
+CreationTime : 26/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\spacesniffer_1_3_0_2.zip
+FileType     : File
+Size         : 1.58 MiB
+SizeBytes    : 1658900
+CreationTime : 14/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\tc4.e68
+FileType     : File
+Size         : 1.70 KiB
+SizeBytes    : 1740
+CreationTime : 25/09/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\tcmd1103x64.exe
+FileType     : File
+Size         : 6.23 MiB
+SizeBytes    : 6537552
+CreationTime : 24/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Test.e68
+FileType     : File
+Size         : 1.13 KiB
+SizeBytes    : 1153
+CreationTime : 07/12/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Test.hdf
+FileType     : File
+Size         : 291.87 MiB
+SizeBytes    : 306044928
+CreationTime : 18/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Test.hdf.7z
+FileType     : File
+Size         : 60.09 MiB
+SizeBytes    : 63009885
+CreationTime : 18/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Test.lha
+FileType     : File
+Size         : 81.84 KiB
+SizeBytes    : 83809
+CreationTime : 20/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Test.vhd
+FileType     : File
+Size         : 38.21 MiB
+SizeBytes    : 40062464
+CreationTime : 13/12/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Test2.lha
+FileType     : File
+Size         : 81.84 KiB
+SizeBytes    : 83809
+CreationTime : 20/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\TOSEC - DAT Pack - Complete (4245) (TOSEC-v2024-05-17).zip
+FileType     : File
+Size         : 88.94 MiB
+SizeBytes    : 93263588
+CreationTime : 26/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Trinity.lha
+FileType     : File
+Size         : 33.37 KiB
+SizeBytes    : 34171
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\TTTool.lha
+FileType     : File
+Size         : 3.40 KiB
+SizeBytes    : 3482
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\TuneFinder (1).lha
+FileType     : File
+Size         : 69.02 KiB
+SizeBytes    : 70676
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\TuneFinder (2).lha
+FileType     : File
+Size         : 69.02 KiB
+SizeBytes    : 70676
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\TuneFinder (3).lha
+FileType     : File
+Size         : 69.02 KiB
+SizeBytes    : 70676
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\TuneFinder (4).lha
+FileType     : File
+Size         : 69.02 KiB
+SizeBytes    : 70676
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\TuneFinder.lha
+FileType     : File
+Size         : 69.02 KiB
+SizeBytes    : 70676
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\ubuntu-24.10-desktop-amd64.iso
+FileType     : File
+Size         : 5.28 GiB
+SizeBytes    : 5665497088
+CreationTime : 11/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\Update3.2.2.lha
+FileType     : File
+Size         : 16.56 MiB
+SizeBytes    : 17365882
+CreationTime : 22/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\VisualStudioSetup.exe
+FileType     : File
+Size         : 4.22 MiB
+SizeBytes    : 4422840
+CreationTime : 27/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\WaitForTask
+FileType     : File
+Size         : 548 B
+SizeBytes    : 548
+CreationTime : 20/08/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\WHDLoad_Database.xlsx
+FileType     : File
+Size         : 1.99 MiB
+SizeBytes    : 2088575
+CreationTime : 16/10/2024
+Source       : PC
+PathHeader   : 
+
+FullPath     : C:\Users\Matt\Downloads\winrar-x64-701.exe
+FileType     : File
+Size         : 3.77 MiB
+SizeBytes    : 3948120
+CreationTime : 26/11/2024
+Source       : PC
+PathHeader   : 
+
