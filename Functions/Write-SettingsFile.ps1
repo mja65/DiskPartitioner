@@ -16,6 +16,10 @@ function Write-SettingsFile {
     $Output += "Setting;KickstartVersiontoUseFriendlyName;$($Script:GUIActions.KickstartVersiontoUseFriendlyName)" 
     $Output += "Setting;UseGlowIcons;$($Script:GUIActions.UseGlowIcons)"
     $Output += "Setting;IsDisclaimerAccepted;$($Script:GUIActions.IsDisclaimerAccepted)"
+    $Output += "Setting;WorkbenchFilesNeeded;$($Script:GUIActions.WorkbenchFilesNeeded)" 
+    $Output += "Setting;RomNeeded;$($Script:GUIActions.RomNeeded)" 
+    $Output += "Setting;InstallADFPath;$($Script:GUIActions.InstallADFPath)" 
+    $Output += "Setting;GlowIconsADFPath;$($Script:GUIActions.GlowIconsADFPath)" 
 
     $Output += "MBR;WPF_DP_Disk_MBR;$($WPF_DP_Disk_MBR.DiskSizeBytes);$($WPF_DP_Disk_MBR.NumberofPartitionsID76);$($WPF_DP_Disk_MBR.NextPartitionID76Number);$($WPF_DP_Disk_MBR.NumberofPartitionsFAT32);$($WPF_DP_Disk_MBR.NextPartitionFAT32Number)" 
     Get-Variable -name '*_AmigaDisk' | ForEach-Object{

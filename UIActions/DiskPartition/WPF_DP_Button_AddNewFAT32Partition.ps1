@@ -26,6 +26,7 @@ $WPF_DP_Button_AddNewFAT32Partition.add_click({
                 $SpacetoUse = $Script:SDCardMinimumsandMaximums.DefaultAddFAT32Size
             }
             Add-GUIPartitiontoMBRDisk -PartitionType 'FAT32' -AddType $AddType -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) 
+            $Script:GUIActions.WorkbenchFilesNeeded = (Confirm-DefaultOSFilesNeeded).WorkbenchFilesNeeded 
         }
     }
 })

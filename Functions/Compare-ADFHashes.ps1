@@ -39,8 +39,15 @@ and select this path to scan.
 
     $ADFHashes = Import-Csv $PathtoADFHashes -Delimiter ';' | Sort-Object -Property 'Sequence'
    
-    $RequiredADFsforInstall = Get-ListofInstallFiles $PathtoListofInstallFiles |  Where-Object {$_.Kickstart_Version -eq $KickstartVersion} | Select-Object ADF_Name, FriendlyName -Unique # Unique ADFs Required
-    
+    $RequiredOSFiles = Confirm-DefaultOSFilesNeeded
+
+    if ($RequiredOSFiles.WorkbenchInstallNeeded -eq 'All'){
+        $RequiredADFsforInstall = Get-ListofInstallFiles $PathtoListofInstallFiles |  Where-Object {$_.Kickstart_Version -eq $KickstartVersion} | Select-Object ADF_Name, FriendlyName -Unique # Unique ADFs Required
+    }
+    elseif ($RequiredOSFiles.WorkbenchInstallNeeded -eq 'InstallADFOnly') {
+        $RequiredADFsforInstall = Get-ListofInstallFiles $PathtoListofInstallFiles |  Where-Object {$_.Kickstart_Version -eq $KickstartVersion -and $_.ADF_Name -match 'install'}  | Select-Object ADF_Name, FriendlyName -Unique # Unique ADFs Required
+    }
+
     $RequiredADFandHashes = [System.Collections.Generic.List[PSCustomObject]]::New() # Allowing for if there are multiple hashes for the same ADF
     
     foreach ($ADFHash in $ADFHashes){

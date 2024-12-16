@@ -28,6 +28,10 @@ function Get-HSTVolumeName {
         }
     }
     
+    if ($StartRow -eq 0 -and $EndRow -eq 0){
+        return
+    }
+
     for ($i = $StartRow ; $i -le $EndRow; $i++) {
         $PartitionDetails += ConvertFrom-Csv -InputObject $DataToParse[$i] -Delimiter '|' -Header $HeadertoUse   
     }

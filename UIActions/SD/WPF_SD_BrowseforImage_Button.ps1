@@ -13,6 +13,11 @@ $WPF_SD_BrowseforImage_Button.add_click({
         else {
             $DatatoPopulate = Get-RDBInformation -DiskName $Script:GUIActions.ImportedImagePath -AmigaNativeDiskorImage
             if ($DatatoPopulate -ne 'NotRDB'){
+                $WPF_SD_TypeofPartition_Label.Text = 'Select MBR Partition to Import. If 0x76 Partition is selected, all RDB partitions will be imported'
+                $WPF_SD_TypeofPartition_Label.Visibility = 'Visible'
+                $WPF_SD_SourceofPartition_Label.Visibility = 'Visible'
+                $WPF_SD_SourceofPartition_Value.Visibility = 'Visible'
+                $WPF_SD_SourceofPartition_Value.Text = "Image `($($Script:GUIActions.ImportedImagePath)`)"
                 $Script:GUIActions.ActionToPerform = 'ImportMBRPartitionfromAmigaImage'
                 $Script:RDBPartitionTable = $DatatoPopulate
                 

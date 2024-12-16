@@ -8,4 +8,6 @@ $DropDownOptions += New-Object -TypeName pscustomobject -Property @{Option='DOS\
 foreach ($Option in $DropDownOptions){
     $WPF_DP_Amiga_DosType_Input_Dropdown.AddChild($Option.Option)
 }
-
+$WPF_DP_Amiga_DosType_Input_Dropdown.add_selectionChanged({
+    $Script:GUIActions.WorkbenchFilesNeeded = (Confirm-DefaultOSFilesNeeded).WorkbenchFilesNeeded 
+})

@@ -3,7 +3,7 @@ $WPF_TF_FileSource_DataGrid.add_selectionChanged({
     $TotalSize = 0
     $WPF_TF_FileSource_DataGrid.SelectedItems | ForEach-Object {
         if ($_.type -ne 'Directory'){
-            $TotalSize += $_.Size 
+            $TotalSize += $_.SizeBytes 
         }
     }
 

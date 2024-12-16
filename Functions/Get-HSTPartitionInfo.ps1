@@ -44,25 +44,31 @@ function Get-HSTPartitionInfo {
 
         $HashTableforMBR_1 = @{} # Clear Hash
         $MBR_1 | ForEach-Object {
-            $HashTableforMBR_1[$_.Number] = @($_.Id,$_.Type,$_.FileSystem,$_.Size,$_.StartSector,$_.EndSector,$_.Active,$_.Primary)
+            $HashTableforMBR_1[$_.Number] = @($_.Id.Trim(),$_.Type.Trim(),$_.FileSystem.Trim(),$_.Size.Trim(),$_.StartSector.Trim(),$_.EndSector.Trim(),$_.Active.Trim(),$_.Primary.Trim())
         }
 
         $MBR_2 | ForEach-Object {
+            if ($_.Type.Trim() -eq 'PiStorm RDB'){
+                $TypetoUse = 'ID 0x76 (Pistorm)'
+            }
+            else {
+                $TypetoUse = $_.Type
+            }
             if ($HashTableforMBR_1.ContainsKey($_.Number)){
                 $MBRPartitionTable += [PSCustomObject]@{
-                    Number = $_.Number
-                    ID = $HashTableforMBR_1.($_.Number)[0]
-                    Type = $_.Type
-                    FileSystem = $HashTableforMBR_1.($_.Number)[2]
-                    Size = $_.Size
-                    StartOffSet = $_.StartOffset                
-                    EndOffSet = $_.EndOffset
+                    Number = $_.Number.Trim()
+ #                   ID = $HashTableforMBR_1.($_.Number)[0]
+                    Type = $TypetoUse 
+ #                   FileSystem = $HashTableforMBR_1.($_.Number)[2]
+                    Size = $_.Size.Trim()
+                    StartOffSet = $_.StartOffset.Trim()                
+                    EndOffSet = $_.EndOffset.Trim()
                     TotalBytes = $_.EndOffset-$_.StartOffset 
-                    StartSector = $HashTableforMBR_1.($_.Number)[4]
-                    EndSector = $HashTableforMBR_1.($_.Number)[5]
-                    TotalSectors = $HashTableforMBR_1.($_.Number)[5]-$HashTableforMBR_1.($_.Number)[4]
-                    Active = $HashTableforMBR_1.($_.Number)[6]
-                    Primary = $HashTableforMBR_1.($_.Number)[7]
+#                    StartSector = $HashTableforMBR_1.($_.Number)[4]
+#                    EndSector = $HashTableforMBR_1.($_.Number)[5]
+#                    TotalSectors = $HashTableforMBR_1.($_.Number)[5]-$HashTableforMBR_1.($_.Number)[4]
+#                    Active = $HashTableforMBR_1.($_.Number)[6]
+#                    Primary = $HashTableforMBR_1.($_.Number)[7]
                 
                 }
             }
@@ -112,32 +118,32 @@ function Get-HSTPartitionInfo {
 
         $HashTableforRDB_1 = @{} # Clear Hash
         $RDB_1 | ForEach-Object {
-            $HashTableforRDB_1[$_.Number] = @($_.Name, $_.Size, $_.LowCyl, $_.HighCyl,$_.Reserved,$_.PreAlloc,$_.BlockSize,$_.Buffers,$_.DOSType,$_.MaxTransfer,$_.Bootable,$_.NoMount,$_.Priority)
+            $HashTableforRDB_1[$_.Number] = @($_.Name.Trim(), $_.Size.Trim(), $_.LowCyl.Trim(), $_.HighCyl.Trim(),$_.Reserved.Trim(),$_.PreAlloc.Trim(),$_.BlockSize.Trim(),$_.Buffers.Trim(),$_.DOSType.Trim(),$_.MaxTransfer.Trim(),$_.Bootable.Trim(),$_.NoMount.Trim(),$_.Priority.Trim())
         }
    
         $RDB_2 | ForEach-Object {
     
             if ($HashTableforRDB_1.ContainsKey($_.Number)){
                 $RDBPartitionTable += [PSCustomObject]@{
-                    Number = $_.Number
+                    Number = $_.Number.Trim()
                     Name = $HashTableforRDB_1.($_.Number)[0]
-                    Type = $_.Type
-                    Size = $_.Size
-                    StartOffSet = $_.StartOffSet
-                    EndOffSet = $_.EndOffSet
+                    Type = $_.Type.Trim()
+                    Size = $_.Size.Trim()
+                    StartOffSet = $_.StartOffSet.Trim()
+                    EndOffSet = $_.EndOffSet.Trim()
                     TotalBytes = $_.EndOffset-$_.StartOffset 
-                    LowCylinder = $HashTableforRDB_1.($_.Number)[2]
-                    HighCylinder = $HashTableforRDB_1.($_.Number)[3]
-                    TotalCylinders = $HashTableforRDB_1.($_.Number)[3] - $HashTableforRDB_1.($_.Number)[2] 
-                    Reserved = $HashTableforRDB_1.($_.Number)[4]
-                    PreAlloc = $HashTableforRDB_1.($_.Number)[5]
-                    BlockSize = $HashTableforRDB_1.($_.Number)[6]
-                    Buffers = $HashTableforRDB_1.($_.Number)[7]
-                    DOSType = $HashTableforRDB_1.($_.Number)[8]
-                    MaxTransfer = $HashTableforRDB_1.($_.Number)[9]
-                    Bootable = $HashTableforRDB_1.($_.Number)[10]
-                    NoMount = $HashTableforRDB_1.($_.Number)[11]
-                    Priority = $HashTableforRDB_1.($_.Number)[12]
+#                    LowCylinder = $HashTableforRDB_1.($_.Number)[2]
+#                    HighCylinder = $HashTableforRDB_1.($_.Number)[3]
+#                    TotalCylinders = $HashTableforRDB_1.($_.Number)[3] - $HashTableforRDB_1.($_.Number)[2] 
+#                    Reserved = $HashTableforRDB_1.($_.Number)[4]
+#                    PreAlloc = $HashTableforRDB_1.($_.Number)[5]
+#                    BlockSize = $HashTableforRDB_1.($_.Number)[6]
+#                    Buffers = $HashTableforRDB_1.($_.Number)[7]
+#                    DOSType = $HashTableforRDB_1.($_.Number)[8]
+#                    MaxTransfer = $HashTableforRDB_1.($_.Number)[9]
+#                    Bootable = $HashTableforRDB_1.($_.Number)[10]
+#                    NoMount = $HashTableforRDB_1.($_.Number)[11]
+#                    Priority = $HashTableforRDB_1.($_.Number)[12]
                 }
             }
 

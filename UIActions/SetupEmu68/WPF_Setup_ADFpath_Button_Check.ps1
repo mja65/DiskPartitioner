@@ -7,7 +7,7 @@ $WPF_Setup_ADFpath_Button_Check.Add_Click({
             $ADFPathtoUse = $Script:Settings.DefaultADFLocation
         }
         $Script:GUIActions.FoundADFstoUse = Compare-ADFHashes -PathtoADFFiles $ADFPathtoUse -PathtoADFHashes $Script:Settings.ADFHashes -KickstartVersion $Script:GUIActions.KickstartVersiontoUse -PathtoListofInstallFiles $Script:Settings.ListofInstallFiles  
-
+        
         if (($Script:GUIActions.FoundADFstoUse | Select-Object 'IsMatched' -unique).IsMatched -eq 'FALSE'){
             $Title = 'Missing ADFs'
             $Text = 'You have missing ADFs. You need to correct this before you can run the tool. List of ADFs located and missing is below'
@@ -15,6 +15,8 @@ $WPF_Setup_ADFpath_Button_Check.Add_Click({
         else {                         
             $Title = 'ADFs to be used'
             $Text = 'The following ADFs will be used:'
+            $Script:GUIActions.FoundADFStoUseType = $Script:GUIActions.WorkbenchFilesNeeded 
+            $Script:GUIActions.StorageADFPath = 'TBC'
         }
         
          $DatatoPopulate = $Script:GUIActions.FoundADFstoUse | Select-Object @{Name='Status';Expression='IsMatched'},@{Name='Source';Expression='Source'},@{Name='ADF Name';Expression='FriendlyName'},@{Name='Path';Expression='Path'},@{Name='MD5 Hash';Expression='Hash'} | Sort-Object -Property 'Status'

@@ -34,13 +34,16 @@ function Get-ConvertedSize {
         }
 
         if ($AutoScale){
-            if (([math]::abs($SizeBytes)) -le 1024) {
-                $Scaleto = 'KiB'
+            if (([math]::abs($SizeBytes)) -lt 1024) {
+                $Scaleto = 'B'
             }
-            elseif ((([math]::abs($SizeBytes)) -gt 1024) -and (([math]::abs($SizeBytes)) -le (1024*1024*1024))){
+            elseif ((([math]::abs($SizeBytes)) -ge 1024) -and (([math]::abs($SizeBytes)) -lt (1024*1024))){
+                $Scaleto = 'KiB'
+            }  
+            elseif ((([math]::abs($SizeBytes)) -ge 1024*1024) -and (([math]::abs($SizeBytes)) -lt (1024*1024*1024))){
                 $Scaleto = 'MiB'
             }  
-            elseif ((([math]::abs($SizeBytes)) -gt (1024*1024*1024)) -and (([math]::abs($SizeBytes)) -le (1024*1024*1024*1024))){
+            elseif ((([math]::abs($SizeBytes)) -ge (1024*1024*1024)) -and (([math]::abs($SizeBytes)) -lt (1024*1024*1024*1024))){
                 $Scaleto = 'GiB'
             }
             else{

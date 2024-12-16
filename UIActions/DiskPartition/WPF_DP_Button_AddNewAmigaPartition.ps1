@@ -28,7 +28,8 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
                 $SpacetoUse = $Script:SDCardMinimumsandMaximums.DefaultAddPFS3Size
         
             }
-            Add-GUIPartitiontoAmigaDisk -AmigaDiskName $AmigaDiskName -AddType $AddType -PartitionNameNextto $Script:GUIActions.SelectedAmigaPartition -SizeBytes (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) -Buffers '300' -DosType 'PFS\3' -Bootable $false -NoMount $false -Priority 99 -MaxTransfer '0xffffff'      
+            Add-GUIPartitiontoAmigaDisk -AmigaDiskName $AmigaDiskName -AddType $AddType -PartitionNameNextto $Script:GUIActions.SelectedAmigaPartition -SizeBytes (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) -Buffers '300' -DosType 'PFS\3' -Bootable $false -NoMount $false -Priority 99 -MaxTransfer '0xffffff' 
+            $Script:GUIActions.WorkbenchFilesNeeded = (Confirm-DefaultOSFilesNeeded).WorkbenchFilesNeeded      
         }
     }
 })

@@ -65,4 +65,3 @@ $WPF_MainWindow.ShowDialog() | out-null
 # # # $WPF_MainWindow.Close()
 # # # [System.Windows.Controls.ComboBox].GetEvents() | Select-Object Name, *Method, EventHandlerType
 # # # Get-variable -name WPF_SetupEmu68
-

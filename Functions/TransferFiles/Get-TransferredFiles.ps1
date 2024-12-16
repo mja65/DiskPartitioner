@@ -15,6 +15,8 @@ function Get-TransferredFiles {
 
     $WPF_TF_CopiedFilesSpace_Value.Text = "$((Get-ConvertedSize -Size ((Get-variable -name $Script:GUIActions.SelectedAmigaPartition).ImportedFilesSpaceBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2).Size) $((Get-ConvertedSize -Size ((Get-variable -name $Script:GUIActions.SelectedAmigaPartition).ImportedFilesSpaceBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2).Scale)"
 
+    $Script:GUIActions.TransferFilesRecurseDepth = 1
+    
     $WPF_SelectDiskWindow.ShowDialog() | out-null
     
 }

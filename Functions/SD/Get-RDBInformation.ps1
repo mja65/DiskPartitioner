@@ -11,7 +11,7 @@ function Get-RDBInformation {
     if ($PiStormDiskorImage){
         $MBRPartitions = Get-HSTPartitionInfo -MBRInfo -Path $DiskName
         $MBRPartitions | ForEach-Object {
-            if ($_.Type -match 'PiStorm RDB'){
+            if ($_.Type -eq 'ID 0x76 (Pistorm)'){
                 $RDBPartitionTable += Get-HSTPartitionInfo -RDBInfo -Path "$DiskName\mbr\$($_.Number)"
             }
         }
