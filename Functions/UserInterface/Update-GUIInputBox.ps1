@@ -30,6 +30,7 @@ function Update-GUIInputBox {
                     else{
                        Set-RevisedDiskValues -SizeBytes ((Get-ConvertedSize -Size ($WPF_DP_Input_DiskSize_Value.Text) -ScaleFrom ($WPF_DP_Input_DiskSize_SizeScale_Dropdown.SelectedItem) -Scaleto 'B').Size)
                     }
+                    $InputBox.Background = 'White'
                     Update-UI -UpdateInputBoxes
                 }
                 if (($MBRResize) -or ($AmigaResize)){

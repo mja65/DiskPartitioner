@@ -54,7 +54,7 @@ function Update-UI {
             $WPF_Setup_Rompath_Button_Check.Foreground = 'Black'
         }
         
-        if ($Script:GUIActions.FoundADFstoUse -and ($Script:GUIActions.WorkbenchFilesNeeded -eq $Script:GUIActions.FoundADFStoUseType -or $Script:GUIActions.FoundADFStoUseType -eq 'All')){
+        if (($Script:GUIActions.FoundADFstoUse) -and ($Script:GUIActions.WorkbenchFilesNeeded -eq $Script:GUIActions.FoundADFStoUseType -or $Script:GUIActions.FoundADFStoUseType -eq 'All')){
             $WPF_Setup_ADFpath_Button_Check.Background = 'Green'
             $WPF_Setup_ADFpath_Button_Check.Foreground = 'White'
         }
@@ -62,7 +62,7 @@ function Update-UI {
             $WPF_Setup_ADFpath_Button_Check.Background = '#FFDDDDDD'
             $WPF_Setup_ADFpath_Button_Check.Foreground = 'Black'
         }
-        if ($Script:GUIActions.WorkbenchFilesNeeded -eq 'All' -or $Script:GUIActions.WorkbenchFilesNeeded -eq 'InstallADFOnly'){
+        if (($Script:GUIActions.WorkbenchFilesNeeded -eq 'All') -or ($null -eq $Script:GUIActions.WorkbenchFilesNeeded) -or ($Script:GUIActions.WorkbenchFilesNeeded -eq 'InstallADFOnly')){
             $WPF_Setup_ADFpath_Button_Check.IsEnabled = "TRUE"
             $WPF_Setup_ADFPath_Button.IsEnabled = "TRUE"
         } 
