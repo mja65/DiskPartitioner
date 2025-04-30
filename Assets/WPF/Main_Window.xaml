@@ -5,10 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp27"
         mc:Ignorable="d"
-   Title="Partition Disk" Height="900" Width="1200" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
+   Title="Emu68 Imager" Height="900" Width="1200" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
     <Window.Resources>
+        
+        <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
+        <Style x:Key="GroupBoxStyle1" TargetType="{x:Type GroupBox}">
+            <Setter Property="BorderBrush" Value="#D5DFE5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupBox}">
+                        <Grid SnapsToDevicePixels="true">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="6"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="6"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="6"/>
+                            </Grid.RowDefinitions>
+                            <Border Background="{TemplateBinding Background}" BorderBrush="DarkGray" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="3" Grid.Row="1"/>
+                            <Border BorderBrush="White" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" Grid.ColumnSpan="4" Grid.RowSpan="3" Grid.Row="1">
+                                <!-- <Border.OpacityMask>
+                                    <MultiBinding ConverterParameter="7" Converter="{StaticResource BorderGapMaskConverter}">
+                                        <Binding ElementName="Header" Path="ActualWidth"/>
+                                        <Binding Path="ActualWidth" RelativeSource="{RelativeSource Mode=Self}"/>
+                                        <Binding Path="ActualHeight" RelativeSource="{RelativeSource Mode=Self}"/>
+                                    </MultiBinding>
+                                </Border.OpacityMask> -->
+                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                                    <Border BorderBrush="White" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3"/>
+                                </Border>
+                            </Border>
+                            <Border x:Name="Header" Grid.Column="1" Padding="3,1,3,0" Grid.RowSpan="2" Grid.Row="0">
+                                <ContentPresenter ContentSource="Header" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                            <ContentPresenter Grid.Column="1" Grid.ColumnSpan="2" Margin="{TemplateBinding Padding}" Grid.Row="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <VisualBrush 
-      x:Key="DefaultFAT32Brush" TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute" Viewbox="0,0,10,10" ViewboxUnits="Absolute">
+      x:Key="DefaultMBRBrush" TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute" Viewbox="0,0,10,10" ViewboxUnits="Absolute">
             <VisualBrush.Visual>
                 <Canvas>
                     <Rectangle Fill="#FF3B67A2" Width="10" Height="10" />
@@ -38,7 +81,7 @@
             </VisualBrush.Visual>
         </VisualBrush>
         <VisualBrush 
-      x:Key="ImportedFAT32Brush" TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute" Viewbox="0,0,10,10" ViewboxUnits="Absolute">
+      x:Key="ImportedMBRBrush" TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute" Viewbox="0,0,10,10" ViewboxUnits="Absolute">
             <VisualBrush.Visual>
                 <Canvas>
                     <Rectangle Fill="#FF3B67A2" Width="10" Height="10" />
@@ -68,14 +111,14 @@
         </VisualBrush>
     </Window.Resources>
     <Grid x:Name ="Main" Background="#FFE5E5E5">
-        <Grid x:Name="Grid_Welcome" Margin="200,0,0,0" HorizontalAlignment="Left" >
-            <TextBox />
-        </Grid>
-        <Button x:Name="Button_LoadSettings" Content="Load Settings" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="Button_SaveSettings" Content="Save Settings" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="Button_Run" Content="Run" HorizontalAlignment="Center" Margin="0,795,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="Button_SetupDisk" Content="Setup Disk" HorizontalAlignment="Left" Margin="10,140,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="Button_SetupEmu68" Content="Configure Emu68" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="Button_StartPage" Content="Start" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Height="20" Width="100"/>
+        <Button x:Name="Button_LoadSettings" Content="Load Settings" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Height="20" Width="100"/>
+        <Button x:Name="Button_SaveSettings" Content="Save Settings" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Height="20" Width="100"/>
+        <Button x:Name="Button_SetupDisk" Content="Setup Disk" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top" Height="20" Width="100"/>
+        <Button x:Name="Button_SetupEmu68" Content="Configure Emu68" HorizontalAlignment="Left" Margin="10,220,0,0" VerticalAlignment="Top" Height="20" Width="100" />
+        <Button x:Name="Button_PackageSelection" Content="Select Packages" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top" Height="20" Width="100"/>
+        <Label x:Name="label" Content="Emu68 Imager" HorizontalAlignment="Left" Margin="7,5,0,0" VerticalAlignment="Top" FontSize="24" FontWeight="Bold" Width="200"/>
+        <Button x:Name="Button_Run" Content="Missing information in order to run tool! Press button to see further details" Background = '#FFFF0000' Foreground = '#FF000000' HorizontalAlignment="Center" Margin="0,810,0,0" VerticalAlignment="Top" Height="40" Width="900" />
     </Grid>
 
 </Window>

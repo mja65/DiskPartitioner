@@ -1,0 +1,151 @@
+function Update-GUIInputBox {
+    param (
+        $InputBox,
+        $DropDownBox,
+        [Switch]$MBRResize,
+        [Switch]$AmigaResize,
+        [Switch]$MBRMove_SpaceatBeginning,
+        [Switch]$MBRMove_SpaceatEnd,
+        [Switch]$AmigaMove_SpaceatBeginning,
+        [Switch]$AmigaMove_SpaceatEnd,
+        [Switch]$SetDiskValues,
+        $DiskType        
+    )
+
+    if (($SetDiskValues) -and (-not ($DiskType))){
+        Write-Host "Error in coding - Update-GUIInputBox!"
+        $WPF_MainWindow.Close()
+        exit
+    } 
+
+    # $InputBox = $WPF_DP_SelectedSize_Input
+    # $DropDownBox = $WPF_DP_SelectedSize_Input_SizeScale_Dropdown
+     
+
+    # InputEntry  User clicked on box
+    # InputEntryChanged  User actually changed something
+    # InputEntryInvalid  Entry is not valid
+    # InputEntryScaleChanged  Scale was changed
+
+    if ($InputBox.InputEntry -eq  $true -and $InputBox.InputEntryChanged -eq $true){
+        If (($InputBox.EntryType -eq 'Numeric') -and ((Get-IsValueNumber -TexttoCheck $InputBox.Text) -eq $false)) {
+            Write-Host "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
+            $InputBox.InputEntryInvalid = $true #Temp only
+            $InputBox.Background = 'Red'
+            $InputBox.InputEntry = $false
+            $InputBox.InputEntryChanged = $false
+            $InputBox.InputEntryInvalid = $false
+            $InputBox.InputEntryScaleChanged = $false
+            return
+        }
+        elseif (($InputBox.EntryType -eq 'Hexadecimal') -and ((Confirm-IsHexadecimal -value $InputBox.Text) -eq $false -or $InputBox.Text.Length -ne $InputBox.EntryLength)) {
+            Write-Host "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
+            $InputBox.InputEntryInvalid = $true #Temp only
+            $InputBox.Background = 'Red'
+            $InputBox.InputEntry = $false
+            $InputBox.InputEntryChanged = $false
+            $InputBox.InputEntryInvalid = $false
+            $InputBox.InputEntryScaleChanged = $false
+            return
+        }
+        elseif (($InputBox.EntryType -eq 'AlphaNumeric') -and ((Get-IsValueAlphaNumeric -ValueToTest $InputBox.Text) -eq $false -or $InputBox.Text.Length -ne $InputBox.EntryLength)) {
+            Write-Host "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
+            $InputBox.InputEntryInvalid = $true #Temp only
+            $InputBox.Background = 'Red'
+            $InputBox.InputEntry = $false
+            $InputBox.InputEntryChanged = $false
+            $InputBox.InputEntryInvalid = $false
+            $InputBox.InputEntryScaleChanged = $false
+            return
+        }
+        elseif (($InputBox.EntryType -eq 'Alpha') -and ((Get-IsValueAlph -ValueToTest $InputBox.Text) -eq $false -or $InputBox.Text.Length -ne $InputBox.EntryLength)) {
+            Write-Host "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
+            $InputBox.InputEntryInvalid = $true #Temp only
+            $InputBox.Background = 'Red'
+            $InputBox.InputEntry = $false
+            $InputBox.InputEntryChanged = $false
+            $InputBox.InputEntryInvalid = $false
+            $InputBox.InputEntryScaleChanged = $false
+            return
+        }
+    }
+    
+    if ($InputBox.InputEntry -eq  $true -and $InputBox.InputEntryChanged -eq $true){
+        if ($SetDiskValues){
+            if (-not $Script:GUIActions.DiskSizeSelected -eq $true){
+                Set-InitialDiskValues -SizeBytes ((Get-ConvertedSize -Size ($WPF_DP_Input_DiskSize_Value.Text) -ScaleFrom ($WPF_DP_Input_DiskSize_SizeScale_Dropdown.SelectedItem) -Scaleto 'B').Size) -DiskType $DiskType
+            }
+            else{
+               Set-RevisedDiskValues -SizeBytes ((Get-ConvertedSize -Size ($WPF_DP_Input_DiskSize_Value.Text) -ScaleFrom ($WPF_DP_Input_DiskSize_SizeScale_Dropdown.SelectedItem) -Scaleto 'B').Size)
+            }
+            $InputBox.Background = 'White'
+            Update-UI -UpdateInputBoxes
+        }
+        if (($MBRResize) -or ($AmigaResize)){                    
+            if ($MBRResize){
+                if ($Script:Settings.DebugMode){
+                    Write-Host 'Changing size based on input - MBR'
+                }
+                if (-not ($Script:GUICurrentStatus.SelectedGPTMBRPartition)){
+                    return
+                }
+                $ResizeCheck = (Set-GUIPartitionNewSize -ResizeBytes -PartitionName $Script:GUICurrentStatus.SelectedGPTMBRPartition -SizeBytes (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size -PartitionType 'MBR' -ActiontoPerform 'MBR_ResizeFromRight')
+            }
+            elseif ($AmigaResize){
+                if ($Script:Settings.DebugMode){
+                    Write-Host 'Changing size based on input - Amiga'
+                }
+                if (-not ($Script:GUICurrentStatus.SelectedAmigaPartition)){
+                    return
+                }
+                $ResizeCheck = (Set-GUIPartitionNewSize -ResizeBytes -PartitionName $Script:GUICurrentStatus.SelectedAmigaPartition -SizeBytes (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size -PartitionType 'Amiga' -ActiontoPerform 'Amiga_ResizeFromRight')
+            }
+            if ($ResizeCheck -eq $false){
+                Write-host "Invalid Size"
+                $InputBox.Background = 'Yellow'
+            }
+            else{
+                $InputBox.Background = 'White'
+            }
+        }
+        if (($MBRMove_SpaceatBeginning) -or ($MBRMove_SpaceatEnd) -or ($AmigaMove_SpaceatBeginning) -or ($AmigaMove_SpaceatEnd)){
+            if (($MBRMove_SpaceatBeginning) -or ($MBRMove_SpaceatEnd)){
+                $PartitiontoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'MBR' -and $_.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition}
+            }
+            elseif (($AmigaMove_SpaceatBeginning) -or ($AmigaMove_SpaceatEnd)){
+                $PartitiontoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition}
+            }
+            if (($MBRMove_SpaceatBeginning) -or ($AmigaMove_SpaceatBeginning)){
+                $AmounttoMove = (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size-$PartitiontoCheck.BytesAvailableLeft
+            }
+            elseif (($MBRMove_SpaceatEnd) -or ($AmigaMove_SpaceatEnd)){
+                $AmounttoMove = (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size-$PartitiontoCheck.BytesAvailableRight
+                
+            }
+            Write-Host 'Moving partition based on input'
+            Write-Host "Amount to Move is: $AmounttoMove"
+            if (($AmounttoMove -gt 0 -and $AmounttoMove -gt $PartitiontoCheck.BytesAvailableRight) -or ($AmounttoMove -lt 0 -and ($AmounttoMove*-1) -gt $PartitiontoCheck.BytesAvailableLeft)){
+                Write-Host "Space available right is: $($PartitiontoCheck.BytesAvailableRight)"
+                Write-Host "Space available left is: $($PartitiontoCheck.BytesAvailableLeft)"
+                Write-host "Invalid Size"
+                $InputBox.Background = 'Yellow'
+            }
+            else {
+                $InputBox.Background = 'White'
+                Set-GUIPartitionNewPosition -PartitionName $Script:GUICurrentStatus.SelectedGPTMBRPartition -AmountMovedBytes $AmounttoMove -PartitionType 'MBR'
+            }                                  
+        }
+
+        $InputBox.InputEntry = $false
+        $InputBox.InputEntryChanged = $false
+        $InputBox.InputEntryInvalid = $false
+        $InputBox.InputEntryScaleChanged = $false
+
+    }
+}
+
+# $ValueTotest = '0xffffff'
+# $ValuetoTest = '0x7ffffffe'
+
+# Confirm-IsHexadecimal -value $ValuetoTest 
+
