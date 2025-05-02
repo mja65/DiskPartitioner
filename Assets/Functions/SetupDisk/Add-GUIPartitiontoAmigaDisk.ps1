@@ -49,7 +49,7 @@ function Add-GUIPartitiontoAmigaDisk {
         }
     }
     else{
-        $PartitionNameNexttoDetails = (Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -eq $PartitionNameNextto}) 
+        $PartitionNameNexttoDetails = (Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -eq $PartitionNameNextto}) 
         if ($AddType -eq 'Right'){
             $LeftMargin = $PartitionNameNexttoDetails.RightMargin
             $StartingPositionBytes = $PartitionNameNexttoDetails.EndingPositionBytes

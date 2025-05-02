@@ -14,10 +14,10 @@ function Get-NextGUIPartition {
         else{
             $AmigaDiskName = ($Script:GUICurrentStatus.SelectedGPTMBRPartition+'_AmigaDisk')
         }
-        $PartitionstoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq $PartitionType -and $_.PartitionName -match $AmigaDiskName }
+        $PartitionstoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq $PartitionType -and $_.PartitionName -match $AmigaDiskName }
     }
     elseif ($PartitionType -eq 'MBR'){
-        $PartitionstoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq $PartitionType}
+        $PartitionstoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq $PartitionType}
     }
     
     if ($PartitionNametoCheck){

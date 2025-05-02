@@ -52,8 +52,7 @@ $WPF_Window_Button_SetupDisk.Add_Click({
             $WPF_Window_Main.AddChild($WPF_Partition)
         }
         
-        update-ui -WindowButtons
-        Update-UI -Emu68Settings
+        update-ui -MainWindowButtons -DiskPartitionWindow
 
 })
  

@@ -3,7 +3,7 @@ function Set-RevisedDiskValues {
         $SizeBytes
     )
     
-    $PartitionsToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'MBR'}
+    $PartitionsToCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'MBR'}
     $DiskFreeSpaceSize = (Get-ConvertedSize -Size (($PartitionsToCheck[$PartitionsToCheck.Count-1]).BytesAvailableRight) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2).size
     $NewSizeBytes = $SizeBytes
     if ( $NewSizeBytes -ge ($WPF_DP_Disk_GPTMBR.DiskSizeBytes -$DiskFreeSpaceSize)){

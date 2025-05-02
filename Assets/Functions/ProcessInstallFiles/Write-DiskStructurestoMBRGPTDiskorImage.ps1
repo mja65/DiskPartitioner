@@ -13,7 +13,7 @@ function Write-DiskStructurestoMBRGPTDiskorImage {
     }
 
     if ($Script:GUIActions.DiskTypeSelected -eq 'PiStorm - MBR'){
-        $MBRPartitionstoAddtoDisk = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'MBR'}
+        $MBRPartitionstoAddtoDisk = Get-AllGUIPartitions -partitiontype 'MBR'
         $RDBPartitionstoAddtoDisk = Get-AllGUIPartitions -PartitionType 'Amiga' 
     }
     elseif ($Script:GUIActions.DiskTypeSelected -eq 'PiStorm - GPT'){

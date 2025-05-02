@@ -1,4 +1,4 @@
 $WPF_DP_MBRPartitionSelect_RightArrow.add_click({
     $Script:GUICurrentStatus.SelectedGPTMBRPartition = (Get-NextGUIPartition -Side 'Right' -PartitionNametoCheck $Script:GUICurrentStatus.SelectedGPTMBRPartition -PartitionType 'MBR')
-    Update-UI -All
+    update-ui -DiskPartitionWindow
 })

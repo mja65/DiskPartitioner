@@ -102,6 +102,7 @@ function New-GUIPartition {
             $NewPartition | Add-Member -NotePropertyName AmigaDiskName -NotePropertyValue $null  
         }
         if ($DefaultGPTMBRPartition -eq $true){
+            $NewPartition.CanRenameVolume = $false
             $NewPartition.CanImportFiles = $false
             $NewPartition.CanDelete = $false
             $NewPartition.CanResizeRight = $true
@@ -116,6 +117,7 @@ function New-GUIPartition {
         }
         elseif ($ImportedPartition){
             $NewPartition.CanImportFiles = $false
+            $NewPartition.CanRenameVolume = $false
             $NewPartition.CanDelete = $true
             $NewPartition.CanResizeLeft = $false
             $NewPartition.CanResizeRight = $false
@@ -127,6 +129,12 @@ function New-GUIPartition {
             $NewPartition.CanResizeRight = $true
             $NewPartition.CanResizeLeft =$true
             $NewPartition.CanMove = $true
+            if ($PartitionSubType -eq 'FAT32'){
+                $NewPartition.CanRenameVolume = $true
+            }
+            else {
+                $NewPartition.CanRenameVolume = $false
+            }
         }
     }
     elseif ($PartitionType -eq 'Amiga'){
@@ -173,8 +181,8 @@ function New-GUIPartition {
             $NewPartition.CanChangeBuffers = $true
             $NewPartition.CanChangePriority = $true
             $NewPartition.CanChangeMountable = $false
-            $NewPartition.CanRenameDevice =$false
-            $NewPartition.CanRenameVolume =$false
+            $NewPartition.CanRenameDevice = $false
+            $NewPartition.CanRenameVolume = $false
             $NewPartition.CanChangeMaxTransfer = $true
         }
         elseif ($DefaultAmigaWorkPartition -eq $true){

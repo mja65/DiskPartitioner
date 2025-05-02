@@ -22,6 +22,6 @@ $WPF_Window_Button_StartPage.Add_Click({
     if ($IsChild -ne $true){
         $WPF_Window_Main.AddChild($WPF_StartPage)
     }
-    update-ui -WindowButtons
+    update-ui -MainWindowButtons
 })
 

@@ -5,8 +5,15 @@ $WPF_Window_Button_PackageSelection.Add_Click({
         return
     }
 
-    $Script:GUICurrentStatus.CurrentWindow = 'PackageSelection'
+    $Script:GUICurrentStatus.CurrentWindow = 'PackageSelection' 
 
+    If ($Script:GUIActions.AvailablePackages.Rows.Count -eq 0) {
+        If ($Script:Settings.DebugMode){
+            Write-host "Populating Available Packages"
+        }
+        Get-SelectablePackages 
+    }
+    
     # if (-not ($Script:WPF_PackageSelection)){
     #     $Script:WPF_PackageSelection = Get-XAML -WPFPrefix 'WPF_PackageSelection_' -XMLFile '.\Assets\WPF\Grid_PackageSelection.xaml' -ActionsPath '.\Assets\UIActions\PackageSelection\' -AddWPFVariables
     # }
@@ -36,7 +43,7 @@ $WPF_Window_Button_PackageSelection.Add_Click({
     
     $WPF_PackageSelection_Datagrid.ItemsSource = $Script:GUIActions.AvailablePackages.DefaultView 
 
-    update-ui -WindowButtons
+    update-ui -MainWindowButtons
 })
 
 

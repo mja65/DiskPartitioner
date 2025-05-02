@@ -58,7 +58,7 @@ function Update-GUIInputBox {
             $InputBox.InputEntryScaleChanged = $false
             return
         }
-        elseif (($InputBox.EntryType -eq 'Alpha') -and ((Get-IsValueAlph -ValueToTest $InputBox.Text) -eq $false -or $InputBox.Text.Length -ne $InputBox.EntryLength)) {
+        elseif (($InputBox.EntryType -eq 'Alpha') -and ((Get-IsValueAlpha -ValueToTest $InputBox.Text) -eq $false -or $InputBox.Text.Length -ne $InputBox.EntryLength)) {
             Write-Host "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
             $InputBox.InputEntryInvalid = $true #Temp only
             $InputBox.Background = 'Red'
@@ -110,10 +110,10 @@ function Update-GUIInputBox {
         }
         if (($MBRMove_SpaceatBeginning) -or ($MBRMove_SpaceatEnd) -or ($AmigaMove_SpaceatBeginning) -or ($AmigaMove_SpaceatEnd)){
             if (($MBRMove_SpaceatBeginning) -or ($MBRMove_SpaceatEnd)){
-                $PartitiontoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'MBR' -and $_.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition}
+                $PartitiontoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'MBR' -and $_.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition}
             }
             elseif (($AmigaMove_SpaceatBeginning) -or ($AmigaMove_SpaceatEnd)){
-                $PartitiontoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition}
+                $PartitiontoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition}
             }
             if (($MBRMove_SpaceatBeginning) -or ($AmigaMove_SpaceatBeginning)){
                 $AmounttoMove = (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size-$PartitiontoCheck.BytesAvailableLeft

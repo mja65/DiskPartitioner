@@ -17,7 +17,7 @@ function Set-GUIPartitionNewPosition {
         return $false
     }
     else{
-        $PartitionBoundary = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
+        $PartitionBoundary = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -eq $PartitionName}
     
         if ($PartitionType -eq 'MBR'){
             $BytestoPixelFactor = $WPF_DP_Disk_GPTMBR.BytestoPixelFactor

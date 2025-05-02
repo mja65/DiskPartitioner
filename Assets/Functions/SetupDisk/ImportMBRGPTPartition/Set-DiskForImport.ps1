@@ -25,6 +25,12 @@ function Set-DiskForImport {
 
     Set-BrowseforDiskDropdown -ImportPartition
 
+    $WPF_DP_ID_SourceofPartition_Label.Visibility = 'Hidden'
+    $WPF_DP_ID_SourceofPartition_Value.Visibility = 'Hidden'
+    $WPF_DP_ID_TypeofPartition_Label.Visibility = 'Hidden'
+    $WPF_DP_ID_MBR_DataGrid.Visibility = 'Hidden'
+    $WPF_DP_ID_RDB_DataGrid.Visibility = 'Hidden'
+
     $WPF_SelectDiskWindow.ShowDialog() | out-null
     #  $WPF_SelectDiskWindow.Close()
  

@@ -7,11 +7,8 @@ function Update-UITextbox {
         $CanChangeParameter
     )
     
-
-
-
     # $NameofPartition = $Script:GUICurrentStatus.SelectedAmigaPartition
-    # $TextBoxControl = $WPF_DP_Amiga_Buffers_Input
+    # $TextBoxControl = $WPF_DP_Amiga_DeviceName_Input
     # $Value = 'buffers'
     # $CanChangeParameter = 'CanChangeBuffers'
     # $DropdownControl =  $WPF_DP_Amiga_DosType_Input_Dropdown
@@ -34,6 +31,18 @@ function Update-UITextbox {
         if ($TextBoxControl){
             $TextBoxControl.IsReadOnly = ''
             $TextBoxControl.Background = 'White'
+            if (($TextBoxControl.EntryType -eq 'Numeric') -and ((Get-IsValueNumber -TexttoCheck $TextBoxControl.Text) -eq $false)) {
+                $TextBoxControl.Background = 'Red'
+            }
+            elseif (($TextBoxControl.EntryType -eq 'Hexadecimal') -and ((Confirm-IsHexadecimal -value $TextBoxControl.Text) -eq $false -or $TextBoxControl.Text.Length -ne $TextBoxControl.EntryLength)) {
+                $TextBoxControl.Background = 'Red'
+            }
+            elseif (($TextBoxControl.EntryType -eq 'AlphaNumeric') -and (((Get-IsValueAlphaNumeric -ValueToTest $TextBoxControl.Text) -eq $false) -or ($TextBoxControl.Text.Length -gt $TextBoxControl.EntryLength))) {
+                $TextBoxControl.Background = 'Red'
+            }
+            elseif (($TextBoxControl.EntryType -eq 'Alpha') -and ((Get-IsValueAlpha -ValueToTest $TextBoxControl.Text) -eq $false -or $TextBoxControl.Text.Length -gt $TextBoxControl.EntryLength)) {
+                $TextBoxControl.Background = 'Red'
+            }   
         }
         elseif ($DropdownControl){
            # $DropdownControl.IsReadOnly = ''

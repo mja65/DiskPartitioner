@@ -61,7 +61,7 @@ function Get-InputCSVs {
         $CSVtoReturn = $CSV | Select-Object 'IncludeorExclude','ExcludeMessage','Kickstart_Version','Sequence','Hash','FriendlyName','FAT32Name' | Where-Object {$_.Kickstart_Version -eq $Script:GUIActions.KickstartVersiontoUse}
     }
     elseif ($InstallMediaHashes){
-        $CSVtoReturn = $CSV | Select-Object 'Sequence', 'WorkbenchVersion', 'Hash', 'InstallMedia', 'ADF_Name', 'FriendlyName', 'ADFSource', 'ADFDescription' 
+        $CSVtoReturn = $CSV | Select-Object 'Sequence', 'WorkbenchVersion', 'Hash', 'TypeofCheck','FilesChecked','FileCheckDetails','InstallMedia', 'ADF_Name', 'FriendlyName', 'ADFSource', 'ADFDescription' 
     }
     elseif ($PackagestoInstall){
         

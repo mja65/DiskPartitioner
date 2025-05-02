@@ -12,7 +12,7 @@ function Get-MBRDiskFreeSpace {
 
     #$PartitionstoCheck = [System.Collections.Generic.List[PSCustomObject]]::New()
     
-    $PartitionstoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq $Disk.DiskType} 
+    $PartitionstoCheck = Get-AllGUIPartitionBoundaries  | Where-Object {$_.PartitionType -eq $Disk.DiskType} 
           
     if ($Position -eq 'AtEnd'){
         if ($PartitionstoCheck){

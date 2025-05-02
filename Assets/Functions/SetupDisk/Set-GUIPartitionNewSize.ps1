@@ -50,7 +50,7 @@ function Set-GUIPartitionNewSize {
         $BytestoPixelFactor = (Get-Variable -name $AmigaDiskName).Value.BytestoPixelFactor 
     }
 
-    $PartitionToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
+    $PartitionToCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -eq $PartitionName}
 
     if (($ResizeBytes) -and ($SizeBytes -eq $PartitionToCheck.PartitionSizeBytes)){
         if ($Script:Settings.DebugMode){
@@ -65,7 +65,7 @@ function Set-GUIPartitionNewSize {
             $MinimumSizeBytes = $SDCardMinimumsandMaximums.MBRMinimum
         }
         elseif ((Get-Variable -name $PartitionName).Value.PartitionSubType -eq 'ID76'){
-            $AmigaPartitionstoCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionName -match $PartitionName -and $_.PartitionType -eq 'Amiga'}
+            $AmigaPartitionstoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -match $PartitionName -and $_.PartitionType -eq 'Amiga'}
             $TotalSpaceofAmigaPartitions = 0
             for ($i = 0; $i -lt $AmigaPartitionstoCheck.Count; $i++) {
                 $TotalSpaceofAmigaPartitions += $AmigaPartitionstoCheck[$i].PartitionSizeBytes

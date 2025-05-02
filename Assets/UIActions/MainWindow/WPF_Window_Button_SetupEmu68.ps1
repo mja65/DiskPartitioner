@@ -30,7 +30,7 @@ $WPF_Window_Button_SetupEmu68.Add_Click({
         $WPF_Window_Main.AddChild($WPF_SetupEmu68)
     }
 
-    update-ui -WindowButtons
+    update-ui -MainWindowButtons
 
 })
 

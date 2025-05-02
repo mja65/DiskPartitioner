@@ -1,18 +1,21 @@
 function Get-AllGUIPartitionBoundaries {
     param (
-        $MainPartitionWindowGrid,
-        $WindowGridMBR,
-        $WindowGridAmiga,
-        $DiskGridMBR,
-        $DiskGridAmiga
 
     )
     
-    # $MainPartitionWindowGrid = $WPF_Partition
-    # $WindowGridMBR = $WPF_DP_GridGPTMBR
-    # $WindowGridAmiga = $WPF_DP_GridAmiga
-    # $DiskGridMBR = $WPF_DP_DiskGrid_GPTMBR
-    # $DiskGridAmiga = $WPF_DP_DiskGrid_Amiga
+    $DiskPartitionGridMargins = $WPF_Partition.Margin
+
+    $GroupBoxGPTMBRMargins = $WPF_DP_GPTMBR_GroupBox.Margin
+    $DiskGridGPTMBRMargins = $WPF_DP_DiskGrid_GPTMBR.Margin
+
+    $GroupBoxAmigaMargins = $WPF_DP_Amiga_GroupBox.Margin
+    $DiskGridAmigaMargins = $WPF_DP_DiskGrid_Amiga.Margin
+
+    $GPTMBRLeftMargin = $DiskPartitionGridMargins.Left + $GroupBoxGPTMBRMargins.Left + $DiskGridGPTMBRMargins.Left
+    $GPTMBRTopMargin = $DiskPartitionGridMargins.Top + $GroupBoxGPTMBRMargins.Top + $DiskGridGPTMBRMargins.Top
+
+    $AmigaLeftMargin = $DiskPartitionGridMargins.Left + $GroupBoxAmigaMargins.Left + $DiskGridAmigaMargins.Left 
+    $AmigaTopMargin = $DiskPartitionGridMargins.Top + $GroupBoxAmigaMargins.Top + $DiskGridAmigaMargins.Top 
 
     $AllPartitionBoundaries_MBR = [System.Collections.Generic.List[PSCustomObject]]::New()
     $AllPartitionBoundaries_Amiga = [System.Collections.Generic.List[PSCustomObject]]::New()
@@ -20,10 +23,10 @@ function Get-AllGUIPartitionBoundaries {
 
     Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {
         $PartitionType = 'Amiga'
-        $LeftMarginWindow = ($MainPartitionWindowGrid.Margin.Left + $WindowGridAmiga.Margin.Left + $DiskGridAmiga.Margin.Left) + $_.Value.Margin.Left
-        $TopMarginWindow = ($MainPartitionWindowGrid.Margin.Top + $WindowGridAmiga.Margin.Top + $DiskGridAmiga.Margin.Top)
-        $RightMarginWindow = ($MainPartitionWindowGrid.Margin.Left + $WindowGridAmiga.Margin.Left + $DiskGridAmiga.Margin.Left) + $_.Value.Margin.Left + (Get-GUIPartitionWidth -Partition $_.Value)
-        $BottomMarginWindow = ($MainPartitionWindowGrid.Margin.Top + $WindowGridAmiga.Margin.Top + $DiskGridAmiga.Margin.Top) + $_.Value.ActualHeight
+        $LeftMarginWindow = $AmigaLeftMargin + $_.Value.Margin.Left
+        $TopMarginWindow = $AmigaTopMargin 
+        $RightMarginWindow = $AmigaLeftMargin + $_.Value.Margin.Left + (Get-GUIPartitionWidth -Partition $_.Value)
+        $BottomMarginWindow = $AmigaTopMargin  + $_.Value.ActualHeight
 
         $AllPartitionBoundaries_Amiga += [PSCustomObject]@{
             PartitionName = $_.Name
@@ -58,10 +61,10 @@ function Get-AllGUIPartitionBoundaries {
 
     Get-AllGUIPartitions -PartitionType 'MBR' | ForEach-Object {   
         $PartitionType = 'MBR'
-        $LeftMarginWindow = ($MainPartitionWindowGrid.Margin.Left + $WindowGridMBR.Margin.Left + $DiskGridMBR.Margin.Left) + $_.Value.Margin.Left
-        $TopMarginWindow = ($MainPartitionWindowGrid.Margin.Top + $WindowGridMBR.Margin.Top + $DiskGridMBR.Margin.Top)
-        $RightMarginWindow = ($MainPartitionWindowGrid.Margin.Left + $WindowGridMBR.Margin.Left + $DiskGridMBR.Margin.Left) + $_.Value.Margin.Left + (Get-GUIPartitionWidth -Partition $_.Value)
-        $BottomMarginWindow = ($MainPartitionWindowGrid.Margin.Top + $WindowGridMBR.Margin.Top + $DiskGridMBR.Margin.Top) + $_.Value.ActualHeight
+        $LeftMarginWindow = $GPTMBRLeftMargin + $_.Value.Margin.Left
+        $TopMarginWindow = $GPTMBRTopMargin 
+        $RightMarginWindow = $GPTMBRLeftMargin + $_.Value.Margin.Left + (Get-GUIPartitionWidth -Partition $_.Value)
+        $BottomMarginWindow = $GPTMBRTopMargin  + $_.Value.ActualHeight
 
         $AllPartitionBoundaries_MBR += [PSCustomObject]@{
             PartitionName = $_.Name
@@ -154,4 +157,4 @@ function Get-AllGUIPartitionBoundaries {
 
 }
 
-# Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga 
+# Get-AllGUIPartitionBoundaries 

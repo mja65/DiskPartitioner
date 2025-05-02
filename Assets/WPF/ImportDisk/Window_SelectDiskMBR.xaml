@@ -5,14 +5,17 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:local="clr-namespace:WpfApp14"
             mc:Ignorable="d"
-               Title="Select Disk" Height="500" Width="800" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
+               Title="Select Imported Partition" Height="500" Width="1000" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
     <Grid x:Name="MainGrid" Background="#FFE5E5E5">
         <GroupBox Header="Select Source" HorizontalAlignment="Left" VerticalAlignment="Top" >
             <Grid>
-                <TextBox x:Name="BrowseforImage_Label" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Image" VerticalAlignment="Top" Height="20" Width="120" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" HorizontalContentAlignment="Center" FontWeight="Bold"/>
-                <Button x:Name="BrowseforImage_Button" Content="Browse for Image File" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="120" Margin="10,30,0,0"/>
-                <TextBox x:Name="BrowseforDisk_Label" HorizontalAlignment="Left" Margin="130,0,0,0" TextWrapping="Wrap" Text="Disk" VerticalAlignment="Top" Height="20" Width="120" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" HorizontalContentAlignment="Center" FontWeight="Bold"/>
-                <ComboBox x:Name="BrowseforDisk_DropDown" HorizontalAlignment="Left" Margin="130,30,0,0" VerticalAlignment="Top" Width="120"/>
+                <TextBox x:Name="BrowseforImage_Label" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Image" VerticalAlignment="Top" Height="20" Width="150" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" HorizontalContentAlignment="Center" FontWeight="Bold"/>
+                <Button x:Name="BrowseforImage_Button" Content="Browse for Image File" HorizontalAlignment="Left" VerticalAlignment="Top"  Width="150" Margin="10,30,0,0" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
+                <TextBox x:Name="BrowseforDisk_Label" HorizontalAlignment="Left" Margin="170,0,0,0" TextWrapping="Wrap" Text="Disk" VerticalAlignment="Top" Height="20" Width="280" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" HorizontalContentAlignment="Center" FontWeight="Bold"/>
+                <ComboBox x:Name="BrowseforDisk_DropDown" HorizontalAlignment="Left" Margin="170,30,0,0" VerticalAlignment="Top" Width="120"/>
+                <Button x:Name="MediaSelect_Refresh" ToolTip="Refresh available SD cards on your PC"  HorizontalAlignment="Left" Margin="300,30,0,0" VerticalAlignment="Top" Width="150" Height="20" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent" Visibility="Visible">
+                    <TextBlock Text="Refresh Available Media" TextWrapping="Wrap" TextAlignment="Center"/>
+                </Button>
             </Grid>
         </GroupBox>
         <GroupBox Header="Available Space" HorizontalAlignment="Right" VerticalAlignment="Top" >
@@ -26,14 +29,13 @@
             </Grid>
         </GroupBox>
         <TextBox x:Name="SourceofPartition_Label" HorizontalAlignment="Left" Margin="10,80,0,0" Visibility="Visible" TextWrapping="Wrap" Text="Source:" VerticalAlignment="Top" Width="50" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" FontWeight="Bold"/>
-        <TextBox x:Name="SourceofPartition_Value" HorizontalAlignment="Left" Margin="60,80,0,0" Visibility="Visible" TextWrapping="Wrap" Text="Disk" VerticalAlignment="Top" Width="150" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+        <TextBox x:Name="SourceofPartition_Value" HorizontalAlignment="Left" Margin="60,80,0,0" Visibility="Visible" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="920" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
 
-        <TextBox x:Name="TypeofPartition_Label" HorizontalAlignment="Right" Margin="0,80,10,0" Visibility="Visible" TextWrapping="Wrap" Text="Free Space available for imported Partition" VerticalAlignment="Top" Width="550" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent"/>
+        <TextBox x:Name="TypeofPartition_Label" HorizontalAlignment="Center" Margin="0,110,0,0" Visibility="Visible" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" Height="20"/>
 
         <Button x:Name="OK_Button" Content="OK" HorizontalAlignment="Left" Margin="50,0,0,5" VerticalAlignment="Bottom" Width="40"/>
         <Button x:Name="Cancel_Button" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,50,5" VerticalAlignment="Bottom" Width="40"/>
-        <Grid x:Name="Grid_MBR" Margin="0,120,0,0" VerticalAlignment="Top" Height="110" >
-            <DataGrid x:Name="MBR_DataGrid" AutoGenerateColumns="False" IsReadOnly = "True" Height="100" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,0,0,0" SelectionMode="Single">
+            <DataGrid x:Name="MBR_DataGrid" AutoGenerateColumns="False" IsReadOnly = "True" Height="100" HorizontalAlignment="Center" Visibility="Visible"  VerticalAlignment="Top" Margin="0,140,0,0" SelectionMode="Single">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Partition Number" Binding="{Binding PartitionNumber}"/>
                     <DataGridTextColumn Header="Partition Type" Binding="{Binding PartitionType}"/>
@@ -41,18 +43,16 @@
                     <DataGridTextColumn Header="SizeBytes" Binding="{Binding SizeBytes}" Visibility = "Hidden"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </Grid>
-        <Grid x:Name="Grid_RDB" Margin="0,250,0,0" VerticalAlignment="Top" Height="110" >
-            <DataGrid x:Name="RDB_DataGrid" AutoGenerateColumns="False"  IsReadOnly = "True" Height="100" HorizontalAlignment="Center" Visibility="Hidden"  VerticalAlignment="Top" Margin="0,0,0,0" SelectionMode="Single" IsHitTestVisible="False">
+            <DataGrid x:Name="RDB_DataGrid" AutoGenerateColumns="False"  IsReadOnly = "True" HorizontalAlignment="Center" Visibility="Visible"  VerticalAlignment="Top" Margin="0,260,0,0" SelectionMode="Single" IsHitTestVisible="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="MBRPartitionNumber" Binding="{Binding MBRPartitionNumber}" Visibility = "Hidden"/>
                     <DataGridTextColumn Header="DeviceName" Binding="{Binding DeviceName}"/>
                     <DataGridTextColumn Header="VolumeName" Binding="{Binding VolumeName}"/>
-                    <DataGridTextColumn Header="LowCylinder" Binding="{Binding LowCylinder}"/>
-                    <DataGridTextColumn Header="HighCylinder" Binding="{Binding HighCylinder}"/>
+                    <DataGridTextColumn Header="LowCylinder" Binding="{Binding LowCylinder}" Visibility = "Hidden"/>
+                    <DataGridTextColumn Header="HighCylinder" Binding="{Binding HighCylinder}" Visibility = "Hidden"/>
                     <DataGridTextColumn Header="Size" Binding="{Binding Size}"/>
-                    <DataGridTextColumn Header="StartOffset" Binding="{Binding StartOffset}"/>
-                    <DataGridTextColumn Header="EndOffset" Binding="{Binding EndOffset}"/>
+                    <DataGridTextColumn Header="StartOffset" Binding="{Binding StartOffset}" Visibility = "Hidden"/>
+                    <DataGridTextColumn Header="EndOffset" Binding="{Binding EndOffset}" Visibility = "Hidden"/>
                     <DataGridTextColumn Header="Buffers" Binding="{Binding Buffers}"/>
                     <DataGridTextColumn Header="DosType" Binding="{Binding DosType}"/>
                     <DataGridTextColumn Header="MaxTransfer" Binding="{Binding MaxTransfer}"/>
@@ -62,7 +62,6 @@
                     <DataGridTextColumn Header="SizeBytes" Binding="{Binding SizeBytes}" Visibility = "Hidden"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </Grid>
 
     </Grid>
 

@@ -15,8 +15,8 @@ function Set-InitialDiskValues {
 
     $Script:GUIActions.DiskSizeSelected = $true
     $Script:GUIActions.DiskTypeSelected = $DiskType
-    #$WPF_DP_GridAmiga.Visibility = 'Visible'
-    $WPF_DP_GridGPTMBR.Visibility = 'Visible'
+    #$WPF_DP_Amiga_GroupBox.Visibility = 'Visible'
+    $WPF_DP_GPTMBR_GroupBox.Visibility = 'Visible'
 
     if ($DiskType -eq 'PiStorm - MBR'){
         $DiskTypetouse = 'MBR'

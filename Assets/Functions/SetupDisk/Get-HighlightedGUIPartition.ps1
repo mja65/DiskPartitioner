@@ -15,7 +15,7 @@ function Get-HighlightedGUIPartition {
         ResizeZone = $null
     }
     
-    $PartitionDetails = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga 
+    $PartitionDetails = Get-AllGUIPartitionBoundaries 
     $FoundPartition = $null
 
     if ($Script:GUICurrentStatus.SelectedGPTMBRPartition -or $Script:GUICurrentStatus.SelectedAmigaPartition){

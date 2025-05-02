@@ -98,6 +98,7 @@ function Get-MBRandRDBPartitionsforSelection  {
         }
         elseif ($PhysicalDisk){
             $PathtoUse =  $Script:GUICurrentStatus.SelectedPhysicalDiskforImport
+            $WPF_DP_ID_SourceofPartition_Value.Text = "Disk"
         }                
 
         $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Clear()

@@ -91,9 +91,9 @@ $WPF_DP_ID_OK_Button.Add_Click({
         }   
     }
 
-    $GUICurrentStatus.ImportedImagePath = $null
-    $GUICurrentStatus.ImportedPartitionType = $null
-    $GUICurrentStatus.SelectedPhysicalDiskforImport = $null
+    $Script:GUICurrentStatus.ImportedImagePath = $null
+    $Script:GUICurrentStatus.ImportedPartitionType = $null
+    $Script:GUICurrentStatus.SelectedPhysicalDiskforImport = $null
 
     $WPF_SelectDiskWindow.Close()
 })

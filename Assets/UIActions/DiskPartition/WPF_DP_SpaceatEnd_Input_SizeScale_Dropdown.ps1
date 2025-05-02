@@ -7,6 +7,9 @@ $DropDownScaleOptions += New-Object -TypeName pscustomobject -Property @{Scale='
 $DropDownScaleOptions += New-Object -TypeName pscustomobject -Property @{Scale='B'}
 
 foreach ($Option in $DropDownScaleOptions){
+    If ($Script:Settings.DebugMode -eq $true){
+        Write-Host "SpaceatEndDropdown"
+    }
     $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown.AddChild($Option.Scale)
     Update-GUIInputBox -InputBox $WPF_DP_SpaceatEnd_Input -DropDownBox $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown -MBRMove_SpaceatEnd
     Update-UI -UpdateInputBoxes

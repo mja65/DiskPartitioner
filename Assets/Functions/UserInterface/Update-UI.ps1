@@ -1,16 +1,23 @@
 function Update-UI {
     param (
-        [Switch]$All,
-        [switch]$WindowButtons,
+        [switch]$MainWindowButtons,
         [Switch]$Emu68Settings,
+        [Switch]$DiskPartitionWindow,
         [Switch]$HighlightSelectedPartitions,
-        [Switch]$ShowGrids,
         [Switch]$UpdateInputBoxes,
         [Switch]$Buttons,
+        [Switch]$PhysicalvsImage,
         [Switch]$CheckforRunningImage
     )
    
-    if (($All) -or ($WindowButtons)){
+    if (($Emu68Settings) -and (-not ($Script:GUICurrentStatus.CurrentWindow -eq 'Emu68Settings'))){
+        return
+    }
+    if ((($DiskPartitionWindow) -or ($HighlightSelectedPartitions) -or ($UpdateInputBoxes) -or ($Buttons)) -and (-not ($Script:GUICurrentStatus.CurrentWindow -eq 'DiskPartition'))){
+        return
+    }
+
+    if ($MainWindowButtons){
         $WPF_Window_Button_LoadSettings.Background = '#FFDDDDDD'
         $WPF_Window_Button_LoadSettings.Foreground = '#FF000000'
 
@@ -29,26 +36,26 @@ function Update-UI {
         $WPF_Window_Button_SetupEmu68.Background = '#FFDDDDDD'
         $WPF_Window_Button_SetupEmu68.Foreground = '#FF000000'
 
-        if ($GUICurrentStatus.CurrentWindow -eq "StartPage"){
+        if ($Script:GUICurrentStatus.CurrentWindow -eq "StartPage"){
             $WPF_Window_Button_StartPage.Background = '#FF017998' 
             $WPF_Window_Button_StartPage.Foreground = '#FFFFFFFF'
         }
-        elseif ($GUICurrentStatus.CurrentWindow -eq 'PackageSelection'){
+        elseif ($Script:GUICurrentStatus.CurrentWindow -eq 'PackageSelection'){
             $WPF_Window_Button_PackageSelection.Background = '#FF017998' 
             $WPF_Window_Button_PackageSelection.Foreground = '#FFFFFFFF'
         }
-        elseif ($GUICurrentStatus.CurrentWindow -eq 'DiskPartition'){
+        elseif ($Script:GUICurrentStatus.CurrentWindow -eq 'DiskPartition'){
             $WPF_Window_Button_SetupDisk.Background = '#FF017998' 
             $WPF_Window_Button_SetupDisk.Foreground = '#FFFFFFFF'
         }
-        elseif ($GUICurrentStatus.CurrentWindow -eq 'Emu68Settings'){
+        elseif ($Script:GUICurrentStatus.CurrentWindow -eq 'Emu68Settings'){
             $WPF_Window_Button_SetupEmu68.Background = '#FF017998' 
             $WPF_Window_Button_SetupEmu68.Foreground = '#FFFFFFFF'
         }
        
     }
 
-    if ($All -or $CheckforRunningImage){
+    if ($CheckforRunningImage){
 
         $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Clear()
 
@@ -113,109 +120,140 @@ function Update-UI {
 
     }
 
-    if (($All) -or ($Emu68Settings)){
-        if ($Script:GUIActions.ROMLocation){
-            $WPF_Setup_RomPath_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUIActions.ROMLocation
-            $WPF_Setup_RomPath_Button.Background = 'Green'
-            $WPF_Setup_RomPath_Button.Foreground = 'White'
-        }
-        else {
-            $WPF_Setup_RomPath_Label.Text = 'Using default Kickstart folder'
-            $WPF_Setup_RomPath_Button.Foreground = 'Black'
-            $WPF_Setup_RomPath_Button.Background = '#FFDDDDDD'
-        }
-        if ($Script:GUIActions.InstallMediaLocation){
-            $WPF_Setup_ADFPath_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUIActions.InstallMediaLocation
-            $WPF_Setup_ADFPath_Button.Background = 'Green'
-            $WPF_Setup_ADFPath_Button.Foreground = 'White'
-
-        }
-        else {           
-            $WPF_Setup_ADFPath_Label.Text = 'Using default install media folder'
-            $WPF_Setup_ADFPath_Button.Foreground = 'Black'
-            $WPF_Setup_ADFPath_Button.Background = '#FFDDDDDD'       
-        }
-
-        if ($Script:GUIActions.FoundKickstarttoUse){
-            $WPF_Setup_ROMpath_Button_Check.Background = 'Green'
-            $WPF_Setup_ROMpath_Button_Check.Foreground = 'White'
-        }
-        else{
-            $WPF_Setup_Rompath_Button_Check.Background = '#FFDDDDDD'
-            $WPF_Setup_Rompath_Button_Check.Foreground = 'Black'
-        }
-        
-        if ($Script:GUIActions.FoundInstallMediatoUse){
-            $WPF_Setup_ADFpath_Button_Check.Background = 'Green'
-            $WPF_Setup_ADFpath_Button_Check.Foreground = 'White'
-        }
-        else{
-            $WPF_Setup_ADFpath_Button_Check.Background = '#FFDDDDDD'
-            $WPF_Setup_ADFpath_Button_Check.Foreground = 'Black'
-        }
-
-        if (($Script:GUIActions.SSID) -and (-not ($WPF_Setup_SSID_Textbox.Text))){
-            $WPF_Setup_SSID_Textbox.Text = $Script:GUIActions.SSID 
-        }
-        if (($Script:GUIActions.WifiPassword) -and (-not ($WPF_Setup_Password_Textbox.Text))){
-            $WPF_Setup_Password_Textbox.Text = $Script:GUIActions.WifiPassword 
-        }
-        
-        if (($Script:GUIActions.ScreenModetoUseFriendlyName) -and (-not ($WPF_Setup_ScreenMode_Dropdown.SelectedItem))) {
-           $WPF_Setup_ScreenMode_Dropdown.SelectedItem = $Script:GUIActions.ScreenModetoUseFriendlyName
-        }
-    }
-
-    if (($All) -or ($HighlightSelectedPartitions)){
-        Get-AllGUIPartitions -PartitionType 'All' | ForEach-Object {
-            $TotalChildren = ((Get-Variable -Name $_.Name).Value).Children.Count-1
-            for ($i = 0; $i -le $TotalChildren; $i++) {
-                if  ((((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'TopBorder_Rectangle') -or `
-                    (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'BottomBorder_Rectangle') -or `
-                    (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'LeftBorder_Rectangle') -or `
-                    (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'RightBorder_Rectangle'))
-                {
-                    if ($Script:GUICurrentStatus.SelectedGPTMBRPartition -eq $_.Name -or $Script:GUICurrentStatus.SelectedAmigaPartition -eq $_.Name ){
-                       ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Red'
-                       if ($Script:Settings.DebugMode){
-                           Write-Host "Highlighting Partition"                       
-                       }                      
-                    } 
-                    else{
-                       ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Black'
-                    }
-                }
-            
-            }  
-        }
-    }
-
-    if (($All) -or ($ShowGrids)){
-        if ($Script:GUICurrentStatus.SelectedGPTMBRPartition){
-            If ((get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSubType -eq 'ID76'){
-                $WPF_DP_DiskGrid_Amiga.Visibility ='Visible'
-                $WPF_DP_GridAmiga.Visibility ='Visible'
-                $TotalChildren = $WPF_DP_DiskGrid_Amiga.Children.Count-1
-                for ($i = 0; $i -le $TotalChildren; $i++) {
-                    $WPF_DP_DiskGrid_Amiga.Children.Remove($WPF_DP_DiskGrid_Amiga.Children[$i])
-                }
-                $WPF_DP_DiskGrid_Amiga.AddChild(((Get-Variable -Name ($Script:GUICurrentStatus.SelectedGPTMBRPartition+'_AmigaDisk')).value))
+    if ($Emu68Settings){
+            if ($Script:GUIActions.ROMLocation){
+                $WPF_Setup_RomPath_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUIActions.ROMLocation
+                $WPF_Setup_RomPath_Button.Background = 'Green'
+                $WPF_Setup_RomPath_Button.Foreground = 'White'
+            }
+            else {
+                $WPF_Setup_RomPath_Label.Text = 'Using default Kickstart folder'
+                $WPF_Setup_RomPath_Button.Foreground = 'Black'
+                $WPF_Setup_RomPath_Button.Background = '#FFDDDDDD'
+            }
+            if ($Script:GUIActions.InstallMediaLocation){
+                $WPF_Setup_ADFPath_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUIActions.InstallMediaLocation
+                $WPF_Setup_ADFPath_Button.Background = 'Green'
+                $WPF_Setup_ADFPath_Button.Foreground = 'White'
+    
+            }
+            else {           
+                $WPF_Setup_ADFPath_Label.Text = 'Using default install media folder'
+                $WPF_Setup_ADFPath_Button.Foreground = 'Black'
+                $WPF_Setup_ADFPath_Button.Background = '#FFDDDDDD'       
+            }
+    
+            if ($Script:GUIActions.FoundKickstarttoUse){
+                $WPF_Setup_ROMpath_Button_Check.Background = 'Green'
+                $WPF_Setup_ROMpath_Button_Check.Foreground = 'White'
             }
             else{
-                $WPF_DP_DiskGrid_Amiga.Visibility ='Hidden'
-                $WPF_DP_GridAmiga.Visibility ='Hidden'
+                $WPF_Setup_Rompath_Button_Check.Background = '#FFDDDDDD'
+                $WPF_Setup_Rompath_Button_Check.Foreground = 'Black'
             }
-            $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Visible'
-          
+            
+            if ($Script:GUIActions.FoundInstallMediatoUse){
+                $WPF_Setup_ADFpath_Button_Check.Background = 'Green'
+                $WPF_Setup_ADFpath_Button_Check.Foreground = 'White'
+            }
+            else{
+                $WPF_Setup_ADFpath_Button_Check.Background = '#FFDDDDDD'
+                $WPF_Setup_ADFpath_Button_Check.Foreground = 'Black'
+            }
+    
+            if (($Script:GUIActions.SSID) -and (-not ($WPF_Setup_SSID_Textbox.Text))){
+                $WPF_Setup_SSID_Textbox.Text = $Script:GUIActions.SSID 
+            }
+            if (($Script:GUIActions.WifiPassword) -and (-not ($WPF_Setup_Password_Textbox.Text))){
+                $WPF_Setup_Password_Textbox.Text = $Script:GUIActions.WifiPassword 
+            }
+            
+            if (($Script:GUIActions.ScreenModetoUseFriendlyName) -and (-not ($WPF_Setup_ScreenMode_Dropdown.SelectedItem))) {
+               $WPF_Setup_ScreenMode_Dropdown.SelectedItem = $Script:GUIActions.ScreenModetoUseFriendlyName
+            }
+    }
+
+    if (($DiskPartitionWindow) -or ($HighlightSelectedPartitions)){
+        if ($Script:GUIActions.DiskSizeSelected){
+            Get-AllGUIPartitions -PartitionType 'All' | ForEach-Object {
+                $TotalChildren = ((Get-Variable -Name $_.Name).Value).Children.Count-1
+                for ($i = 0; $i -le $TotalChildren; $i++) {
+                    if  ((((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'TopBorder_Rectangle') -or `
+                        (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'BottomBorder_Rectangle') -or `
+                        (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'LeftBorder_Rectangle') -or `
+                        (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'RightBorder_Rectangle'))
+                    {
+                        if ($Script:GUICurrentStatus.SelectedGPTMBRPartition -eq $_.Name -or $Script:GUICurrentStatus.SelectedAmigaPartition -eq $_.Name ){
+                           ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Red'
+                           if ($Script:Settings.DebugMode){
+                               Write-Host "Highlighting Partition"                       
+                           }                      
+                        } 
+                        else{
+                           ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Black'
+                        }
+                    }
+                
+                }  
+            }
+    
+            if ($Script:GUICurrentStatus.SelectedGPTMBRPartition){
+                If ((get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSubType -eq 'ID76'){
+                    #$WPF_DP_DiskGrid_Amiga.Visibility ='Visible'
+                    $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Visible'
+                    $WPF_DP_Amiga_GroupBox.Visibility ='Visible'
+                    $WPF_DP_AmigaSettings_GroupBox.Visibility = 'Hidden'
+                    $TotalChildren = $WPF_DP_DiskGrid_Amiga.Children.Count-1
+                    for ($i = 0; $i -le $TotalChildren; $i++) {
+                        $WPF_DP_DiskGrid_Amiga.Children.Remove($WPF_DP_DiskGrid_Amiga.Children[$i])
+                    }
+                    $WPF_DP_DiskGrid_Amiga.AddChild(((Get-Variable -Name ($Script:GUICurrentStatus.SelectedGPTMBRPartition+'_AmigaDisk')).value))
+                }
+                else{
+                    #$WPF_DP_DiskGrid_Amiga.Visibility ='Hidden'
+                    $WPF_DP_Amiga_GroupBox.Visibility ='Hidden'
+                }
+                $WPF_DP_GPTMBR_GroupBox.Visibility = 'Visible'
+              
+            }
+            else{
+               # $WPF_DP_DiskGrid_Amiga.Visibility = 'Hidden'
+                $WPF_DP_Amiga_GroupBox.Visibility = 'Hidden'
+                $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Hidden'
+                $WPF_DP_AmigaSettings_GroupBox.Visibility = 'Hidden'
+                #$WPF_DP_GPTMBR_GroupBox.Visibility = 'Hidden'
+            }
+            if ($Script:GUICurrentStatus.SelectedAmigaPartition){
+                $WPF_DP_AmigaSettings_GroupBox.Visibility = 'Visible'
+            }
         }
-        else{
-            $WPF_DP_DiskGrid_Amiga.Visibility = 'Hidden'
-            $WPF_DP_GridAmiga.Visibility = 'Hidden'
+        else {
+            $WPF_DP_GPTMBR_GroupBox.Visibility = 'Hidden'
+            $WPF_DP_Amiga_GroupBox.Visibility = 'Hidden'
             $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Hidden'
+            $WPF_DP_AmigaSettings_GroupBox.Visibility = 'Hidden'            
         }
+   
     }
     
-    if (($All) -or ($UpdateInputBoxes)){
+    if (($DiskPartitionWindow) -or ($PhysicalvsImage)){
+        if ($Script:GUIActions.OutputType -eq 'Image'){
+            $WPF_DP_DiskSizeImage_GroupBox.Visibility = 'Visible'
+            $WPF_DP_DiskSizePhysicalDisk_GroupBox.Visibility = 'Hidden'
+
+        }
+        elseif ($Script:GUIActions.OutputType -eq 'Disk'){
+            $WPF_DP_DiskSizeImage_GroupBox.Visibility = 'Hidden'
+            $WPF_DP_DiskSizePhysicalDisk_GroupBox.Visibility = 'Visible'
+        }
+        else {
+            $WPF_DP_DiskSizeImage_GroupBox.Visibility = 'Hidden'
+            $WPF_DP_DiskSizePhysicalDisk_GroupBox.Visibility = 'Hidden'
+        }
+
+    }
+
+    if (($DiskPartitionWindow) -or ($UpdateInputBoxes)){
         if ($Script:GUICurrentStatus.SelectedGPTMBRPartition){
             if (-not $WPF_DP_SelectedSize_Input.InputEntry -eq $true){
                 $SizetoReturn =  (Get-ConvertedSize -Size ((get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSizeBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
@@ -224,7 +262,7 @@ function Update-UI {
                 $WPF_DP_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
             }
            
-            $PartitionsToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'MBR'}
+            $PartitionsToCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'MBR'}
                        
             $PartitionToCheck = $PartitionsToCheck | Where-Object {$_.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition}
             $SpaceatBeginning = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableLeft -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
@@ -245,9 +283,9 @@ function Update-UI {
 
         }
         else {
-            if ($WPF_DP_GridGPTMBR.Visibility -eq 'Visible'){
+            if ($WPF_DP_GPTMBR_GroupBox.Visibility -eq 'Visible'){
                 $DiskSize = (Get-ConvertedSize -Size $WPF_DP_Disk_GPTMBR.DiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
-                $PartitionsToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'MBR'}
+                $PartitionsToCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'MBR'}
                 $DiskFreeSpaceSize = (Get-ConvertedSize -Size (($PartitionsToCheck[$PartitionsToCheck.Count-1]).BytesAvailableRight) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_SpaceatBeginning_Input.Background = 'White'
                 $WPF_DP_SpaceatBeginning_Input.Text =''
@@ -271,8 +309,8 @@ function Update-UI {
             }
             else {
                 $WPF_DP_Button_ImportFiles_Label.Text = 'No imported folder selected'
-                $WPF_DP_Button_ImportFiles.Background = '#FFDDDDDD'
-                $WPF_DP_Button_ImportFiles.Foreground = 'Black'
+                $WPF_DP_Button_ImportFiles.Background = "#FF6688BB"
+                $WPF_DP_Button_ImportFiles.Foreground = 'White'
             }
 
             if (-not $WPF_DP_Amiga_SelectedSize_Input.InputEntry -eq $true){
@@ -282,7 +320,7 @@ function Update-UI {
                 $WPF_DP_Amiga_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
             }
 
-            $PartitionsToCheck = Get-AllGUIPartitionBoundaries -MainPartitionWindowGrid  $WPF_Partition -WindowGridMBR  $WPF_DP_GridGPTMBR -WindowGridAmiga $WPF_DP_GridAmiga -DiskGridMBR $WPF_DP_DiskGrid_GPTMBR -DiskGridAmiga $WPF_DP_DiskGrid_Amiga | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition}
+            $PartitionsToCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition}
 
             $PartitionToCheck = $PartitionsToCheck | Where-Object {$_.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition}
             $SpaceatBeginning = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableLeft -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
@@ -347,7 +385,7 @@ function Update-UI {
 
         }    
         else {
-            if ($WPF_DP_GridAmiga.Visibility -eq 'Visible'){
+            if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){
                 $WPF_DP_Amiga_SpaceatBeginning_Input.Background = 'White'
                 $WPF_DP_Amiga_SpaceatBeginning_Input.Text =''
                 $WPF_DP_Amiga_SpaceatBeginning_Input_SizeScale_Dropdown.SelectedItem  = ''
@@ -363,14 +401,14 @@ function Update-UI {
         }    
     }
 
-    if (($All) -or ($Buttons)){
+    if (($DiskPartitionWindow) -or ($Buttons)){
         if ($Script:GUIActions.OutputPath){
             $WPF_DP_Button_SaveImage.Background = 'Green'
             $WPF_DP_Button_SaveImage.Foreground = 'White'
         }
         else{
-            $WPF_DP_Button_SaveImage.Background = '#FFDDDDDD'
-            $WPF_DP_Button_SaveImage.Foreground = 'Black'          
+            $WPF_DP_Button_SaveImage.Background = "#FF6688BB"
+            $WPF_DP_Button_SaveImage.Foreground = "White"         
         }
     }
 }

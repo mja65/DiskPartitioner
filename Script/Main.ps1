@@ -96,7 +96,7 @@ $Script:GUICurrentStatus.ProcessImageStatus = $false
 $WPF_Window_Main.AddChild($WPF_StartPage)
 $Script:GUICurrentStatus.CurrentWindow = 'StartPage'
 
-update-ui -WindowButtons
+update-ui -MainWindowButtons
 
 $WPF_MainWindow.ShowDialog() | out-null
 
@@ -109,4 +109,3 @@ $WPF_MainWindow.ShowDialog() | out-null
 # $WPF_DP_Partition_MBR_2_AmigaDisk.DiskSizeBytes
 
 ############################################################################
-
