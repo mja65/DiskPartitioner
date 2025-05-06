@@ -68,6 +68,7 @@ function New-GUIPartition {
         PartitionType = $PartitionType
         PartitionSubType = $PartitionSubType 
         StartingPositionBytes = $null
+        StartingPositionSector = $null
         PartitionSizeBytes = $null  
         PartitionTypeGPTMBRorAmiga = $null
         DefaultGPTMBRPartition = $DefaultGPTMBRPartition
@@ -104,13 +105,14 @@ function New-GUIPartition {
         if ($DefaultGPTMBRPartition -eq $true){
             $NewPartition.CanRenameVolume = $false
             $NewPartition.CanImportFiles = $false
-            $NewPartition.CanDelete = $false
             $NewPartition.CanResizeRight = $true
             if ($PartitionSubType -eq 'FAT32'){
+                $NewPartition.CanDelete = $false
                 $NewPartition.CanMove = $false
                 $NewPartition.CanResizeLeft =$false
             }
             else{
+                $NewPartition.CanDelete = $true
                 $NewPartition.CanMove = $true
                 $NewPartition.CanResizeLeft =$true
             }
@@ -171,7 +173,7 @@ function New-GUIPartition {
 
         if ($DefaultAmigaWorkbenchPartition -eq $true){
             $NewPartition.CanImportFiles = $false
-            $NewPartition.CanDelete = $false
+            $NewPartition.CanDelete = $true
             $NewPartition.CanResizeLeft = $true
             $NewPartition.CanResizeRight = $true
             $NewPartition.CanMove = $true

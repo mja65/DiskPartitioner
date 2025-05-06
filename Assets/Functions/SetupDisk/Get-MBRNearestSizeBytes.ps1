@@ -5,7 +5,10 @@ function Get-MBRNearestSizeBytes {
         [Switch]$RoundDown
     )
     
-    $SizeBytesBlock = 1*1024*1024
+    # $RoundDown = $true
+    # $SizeBytes = 106954240
+    
+    $SizeBytesBlock = $Script:Settings.MBRSectorSizeBytes
 
     if ($RoundDown){
         $NumberofBlocks = [math]::Floor($SizeBytes/$SizeBytesBlock)

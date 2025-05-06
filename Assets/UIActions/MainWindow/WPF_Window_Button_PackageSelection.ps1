@@ -7,13 +7,14 @@ $WPF_Window_Button_PackageSelection.Add_Click({
 
     $Script:GUICurrentStatus.CurrentWindow = 'PackageSelection' 
 
-    If ($Script:GUIActions.AvailablePackages.Rows.Count -eq 0) {
+    if ($Script:GUICurrentStatus.AvailablePackagesNeedingGeneration -eq $true){
         If ($Script:Settings.DebugMode){
             Write-host "Populating Available Packages"
         }
         Get-SelectablePackages 
+        $Script:GUICurrentStatus.AvailablePackagesNeedingGeneration = $false
     }
-    
+   
     # if (-not ($Script:WPF_PackageSelection)){
     #     $Script:WPF_PackageSelection = Get-XAML -WPFPrefix 'WPF_PackageSelection_' -XMLFile '.\Assets\WPF\Grid_PackageSelection.xaml' -ActionsPath '.\Assets\UIActions\PackageSelection\' -AddWPFVariables
     # }
@@ -41,8 +42,22 @@ $WPF_Window_Button_PackageSelection.Add_Click({
         $WPF_Window_Main.AddChild($WPF_PackageSelection)
     }
     
-    $WPF_PackageSelection_Datagrid.ItemsSource = $Script:GUIActions.AvailablePackages.DefaultView 
+    $WPF_PackageSelection_Datagrid_Packages.ItemsSource = $Script:GUIActions.AvailablePackages.DefaultView  
+    $WPF_PackageSelection_Datagrid_IconSets.ItemsSource = $Script:GUIActions.AvailableIconSets.DefaultView
+    
+     if (-not ($WPF_PackageSelection_Datagrid_IconSets.SelectedItem)){
+      #  Write-Host 'No Selected Item'
+         for ($i = 0; $i -lt $Script:GUIActions.AvailableIconSets.DefaultView.Count; $i++) {
+             if ($Script:GUIActions.AvailableIconSets.DefaultView[$i].IconSetDefaultInstall -eq $true){
+                 $DefaultRowNumber = $i
+             }
+         }  
+         
+        # Write-Host "Selected Row number is $DefaultRowNumber"
+         $WPF_PackageSelection_Datagrid_IconSets.SelectedItem = $Script:GUIActions.AvailableIconSets.DefaultView[$DefaultRowNumber]
 
+     }
+    
     update-ui -MainWindowButtons
 })
 

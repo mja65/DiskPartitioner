@@ -8,6 +8,8 @@ function Set-GUIPartitionNewPosition {
     
     # $PartitionName = 'WPF_DP_Partition_ID76_1'
     # $PartitionName = 'WPF_DP_Partition_ID76_1_AmigaDisk_Partition_2'
+    $AmountMovedBytes = 10240000
+
     if ($Script:Settings.DebugMode){
         Write-host ""
         Write-host "Function Set-GUIPartitionNewPosition PartitionName:$PartitionName AmountMovedBytes:$AmountMovedBytes AmountMovedPixels:$AmountMovedPixels"
@@ -64,6 +66,9 @@ function Set-GUIPartitionNewPosition {
             
         (Get-Variable -Name $PartitionName).value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
         (Get-Variable -Name $PartitionName).value.StartingPositionBytes = (Get-Variable -Name $PartitionName).value.StartingPositionBytes + $AmountMovedBytes
+        if ($PartitionType -eq 'MBR'){
+            (Get-Variable -Name $PartitionName).value.StartingPositionSector = (Get-Variable -Name $PartitionName).value.StartingPositionBytes/$Script:Settings.MBRSectorSizeBytes
+        }
         return $true
     }
 

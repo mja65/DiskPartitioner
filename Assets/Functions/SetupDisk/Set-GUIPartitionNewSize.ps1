@@ -9,13 +9,13 @@ function Set-GUIPartitionNewSize {
         $SizePixelstoChange
     )
     
-    # $PartitionName = 'WPF_DP_Partition_ID76_1'
+    # $PartitionName = 'WPF_DP_Partition_MBR_2'
+    # $PartitionName = 'WPF_DP_Partition_MBR_2_AmigaDisk_Partition_2'
     # $SizeBytes = 536870912
     # $ActiontoPerform = 'MBR_ResizeFromRight'
     # $PartitionType = 'MBR'
    
     if ($Script:Settings.DebugMode){
-        Write-host ""
          Write-host "Function Set-GUIPartitionNewSize Partition:$PartitionName PartitionType:$PartitionType SizeBytes:$SizeBytes SizePixelstoChange:$SizePixelstoChange ActiontoPerform:$ActiontoPerform"
     }
     if (($ResizePixels) -and ($SizePixelstoChange -eq 0)){
@@ -66,7 +66,8 @@ function Set-GUIPartitionNewSize {
         }
         elseif ((Get-Variable -name $PartitionName).Value.PartitionSubType -eq 'ID76'){
             $AmigaPartitionstoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -match $PartitionName -and $_.PartitionType -eq 'Amiga'}
-            $TotalSpaceofAmigaPartitions = 0
+            $AmigatoGPTMBROverhead = (Get-Variable -name ($PartitionName+'_AmigaDisk')).value.DiskSizeAmigatoGPTMBROverhead
+            $TotalSpaceofAmigaPartitions = $AmigatoGPTMBROverhead
             for ($i = 0; $i -lt $AmigaPartitionstoCheck.Count; $i++) {
                 $TotalSpaceofAmigaPartitions += $AmigaPartitionstoCheck[$i].PartitionSizeBytes
             }
@@ -79,7 +80,12 @@ function Set-GUIPartitionNewSize {
         }
     }
     elseif ($PartitionType -eq 'Amiga'){
-        $MinimumSizeBytes = $SDCardMinimumsandMaximums.PFS3Minimum
+        if ($SDCardMinimumsandMaximums.PFS3Minimum -gt (Get-Variable -name $PartitionName).Value.ImportedFilesSpaceBytes){
+            $MinimumSizeBytes = $SDCardMinimumsandMaximums.PFS3Minimum
+        }
+        else {
+            $MinimumSizeBytes = (Get-Variable -name $PartitionName).Value.ImportedFilesSpaceBytes
+        }
     }
 
     # Write-Host "Minimum Size bytes is $MinimumSizeBytes"

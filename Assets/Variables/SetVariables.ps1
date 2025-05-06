@@ -3,6 +3,9 @@ $Script:DP_Settings = [PSCustomObject]@{
 }
 
 $Script:Settings = [PSCustomObject]@{
+    MBRSectorSizeBytes = 512
+    MBROverheadBytes = 1048576+50688 # Allowing for partition to start at sectoe 2048 and leave space HST Imager appears to require
+    MBRFirstPartitionStartSector = 2048
     PartitionPixelBuffer = 5 # To account for not exact mouse pointer precision
     DebugMode = $false
     Version = $null
@@ -39,6 +42,10 @@ $Script:Settings = [PSCustomObject]@{
     OSVersionstoInstallCSV = [PSCustomObject]@{
         Path = '.\InputFiles\OSVersionstoInstall.CSV'
         GID = '280506415'
+    }
+    IconSetsCSV = [PSCustomObject]@{
+        Path = '.\InputFiles\IconSets.CSV'
+        GID = '26108954'
     }
     ROMHashesCSV = [PSCustomObject]@{
         Path = '.\InputFiles\RomHashes.CSV'
@@ -81,11 +88,15 @@ $Script:Settings = [PSCustomObject]@{
 
 $Script:GUICurrentStatus = [PSCustomObject]@{
     HSTCommandstoProcess = [PSCustomObject]@{
-        NewDiskorImage = @()
-        DiskStructures = @()
-        CopyImportedFiles = @()
-        WriteFilestoDisk = @()
+        ExtractOSFiles =  [System.Collections.Generic.List[PSCustomObject]]::New()
+        CopyIconFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
+        NewDiskorImage = [System.Collections.Generic.List[PSCustomObject]]::New()
+        DiskStructures = [System.Collections.Generic.List[PSCustomObject]]::New()
+        CopyImportedFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
+        WriteFilestoDisk = [System.Collections.Generic.List[PSCustomObject]]::New()      
     }
+    AvailablePackagesNeedingGeneration = $true
+    RunOptionstoReport = New-Object System.Data.DataTable
     IssuesFoundBeforeProcessing = New-Object System.Data.DataTable
     ProcessImageStatus = $false
     PathstoRDBPartitions = [System.Collections.Generic.List[PSCustomObject]]::New()
@@ -115,6 +126,8 @@ $Script:GUICurrentStatus = [PSCustomObject]@{
 #   MBRPartitionContextMenuEnabled = $false
 #    AmigaPartitionContextMenuEnabled = $false
 }
+$Script:GUICurrentStatus.RunOptionstoReport.Columns.Add((New-Object System.Data.DataColumn "Setting",([string])))
+$Script:GUICurrentStatus.RunOptionstoReport.Columns.Add((New-Object System.Data.DataColumn "Value",([string])))
 $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Columns.Add((New-Object System.Data.DataColumn "Area",([string])))
 $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Columns.Add((New-Object System.Data.DataColumn "Issue",([string])))
 $Script:GUICurrentStatus.MBRPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "PartitionNumber",([string])))
@@ -127,7 +140,6 @@ for ($i = 0; $i -lt $Script:GUICurrentStatus.MBRPartitionstoImportDataTable.Colu
         $Script:GUICurrentStatus.MBRPartitionstoImportDataTable.Columns[$i].ColumnMapping= [System.Data.MappingType]::Hidden
     }
 }
-
 
 $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”MBRPartitionNumber”,([string])))
 $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”DeviceName”,([string]))) 
@@ -164,10 +176,12 @@ $Script:GUIActions = [PSCustomObject]@{
     AvailableKickstarts = $null
     AvailableScreenModes = $null
     AvailablePackages = New-Object System.Data.DataTable
+    AvailableIconSets = New-Object System.Data.DataTable # NEED TO ADD TO LOAD AND SAVE!
+    SelectedIconSet = $null # NEED TO ADD TO LOAD AND SAVE!
     KickstartVersiontoUse = $null
     KickstartVersiontoUseFriendlyName = $null
     OSInstallMediaType = $null
-    UseGlowIcons = $null
+    #UseGlowIcons = $null
     SSID = $null
     WifiPassword = $null
     FoundInstallMediatoUse = $null
@@ -188,12 +202,49 @@ $Script:GUIActions = [PSCustomObject]@{
     OutputType = $null
     InstallMediaLocation = $null
     ROMLocation = $null
+    InstallOSFiles = $true # NEED TO ADD TO LOAD AND SAVE!
     # SelectedGPTMBRPartitionforImport = $null
     # MBRPartitionIsSelectedAction = $false
     # MBRPartitionIsUnselectedAction =$false
     # AmigaPartitionIsSelectedAction = $false
     # AmigaPartitionIsUnselectedAction =$false
     # IsAmigaPartitionShowing = $false
+}
+
+$Script:GUIActions.AvailableIconSets.Columns.Add((New-Object System.Data.DataColumn "IconSet",([String])))
+$Script:GUIActions.AvailableIconSets.Columns.Add((New-Object System.Data.DataColumn "IconSetDescription",([String])))
+$Script:GUIActions.AvailableIconSets.Columns.Add((New-Object System.Data.DataColumn "IconSetDefaultInstall",([Bool])))
+$Script:GUIActions.AvailableIconSets.Columns.Add((New-Object System.Data.DataColumn "IconSetUserSelected",([Bool])))
+for ($i = 0; $i -lt $Script:GUIActions.AvailableIconSets.Columns.Count; $i++) {
+    if (($Script:GUIActions.AvailableIconSets.Columns[$i].ColumnName) -eq 'IconSet'){
+        $Script:GUIActions.AvailableIconSets.Columns[$i].ReadOnly = $true
+    }
+    if (($Script:GUIActions.AvailableIconSets.Columns[$i].ColumnName) -eq 'IconSetDescription'){
+        $Script:GUIActions.AvailableIconSets.Columns[$i].ReadOnly = $true
+    }
+    if (($Script:GUIActions.AvailableIconSets.Columns[$i].ColumnName) -eq 'IconSetUserSelected'){
+        $Script:GUIActions.AvailableIconSets.Columns[$i].ReadOnly = $false
+    }
+}
+
+$Script:GUIActions.AvailablePackages.Columns.Add((New-Object System.Data.DataColumn "PackageNameUserSelected",([bool])))
+$Script:GUIActions.AvailablePackages.Columns.Add((New-Object System.Data.DataColumn "PackageNameDefaultInstall",([bool])))
+$Script:GUIActions.AvailablePackages.Columns.Add((New-Object System.Data.DataColumn "PackageNameFriendlyName",([string])))
+$Script:GUIActions.AvailablePackages.Columns.Add((New-Object System.Data.DataColumn "PackageNameGroup",([string])))
+$Script:GUIActions.AvailablePackages.Columns.Add((New-Object System.Data.DataColumn "PackageNameDescription",([string])))
+for ($i = 0; $i -lt $Script:GUIActions.AvailablePackages.Columns.Count; $i++) {
+    if (($Script:GUIActions.AvailablePackages.Columns[$i].ColumnName) -eq 'PackageNameFriendlyName'){
+        $Script:GUIActions.AvailablePackages.Columns[$i].ReadOnly = $true
+    }
+    if (($Script:GUIActions.AvailablePackages.Columns[$i].ColumnName) -eq 'PackageNameGroup'){
+        $Script:GUIActions.AvailablePackages.Columns[$i].ReadOnly = $true
+    }
+    if (($Script:GUIActions.AvailablePackages.Columns[$i].ColumnName) -eq 'PackageNameDescription'){
+        $Script:GUIActions.AvailablePackages.Columns[$i].ReadOnly = $true
+    }
+    if (($Script:GUIActions.AvailablePackages.Columns[$i].ColumnName) -eq 'PackageNameUserSelected'){
+        $Script:GUIActions.AvailablePackages.Columns[$i].ReadOnly = $false
+    }
 }
 
 $Script:GUIVisuals = [PSCustomObject]@{

@@ -26,8 +26,9 @@ function Expand-Packages {
     elseif ($Local) {
         $ArchivestoExtract = [System.Collections.Generic.List[PSCustomObject]]::New()
         $ListofPackages | ForEach-Object {
+            $FiletoExtract = Split-Path $_.SourceLocation -leaf  
             $FileExtension = $_.SourceLocation.Substring($_.SourceLocation.Length -4,4)
-            $DestinationFolder = "$($Script:Settings.LocationofAmigaFiles)\$($_.SourceLocation.Substring(0,$_.SourceLocation.Length -4))" 
+            $DestinationFolder = "$($Script:Settings.LocalPackagesDownloadLocation)\$($FiletoExtract.substring(0,$FiletoExtract.length-4))" 
             $ArchivestoExtract += [PSCustomObject]@{
                 SourceLocation = "$($Script:Settings.LocationofAmigaFiles)\$($_.SourceLocation)" 
                 FoldertoExtract = $DestinationFolder 

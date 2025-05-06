@@ -5,11 +5,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:WpfApp14"
     mc:Ignorable="d">
-      <GroupBox x:Name="SourceFiles_GroupBox" Header="Source Files" Height="200" Background="Transparent" Margin="7,235,0,128" Width="500" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <GroupBox x:Name="OSSelection_GroupBox" Header="OS Selection"  Background="Transparent" Margin="7,100,0,128" Width="500" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <Grid Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <TextBox x:Name="KickstartVersion_Label" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Select OS Version" VerticalAlignment="Top" Width="200" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    <TextBox x:Name="KickstartVersion_Label" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Select OS Version" VerticalAlignment="Top" Width="200" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="14"/>
                     <ComboBox x:Name="KickstartVersion_DropDown" ToolTip="Select the Kickstart version you wish to use (e.g. 3.1 or 3.2)" HorizontalAlignment="Left" Margin="10,32,0,0" VerticalAlignment="Top" Width="245"/>
 
+                </Grid>
+            </GroupBox>
+      <GroupBox x:Name="SourceFiles_GroupBox" Header="Source Files" Background="Transparent" Margin="7,235,0,128" Width="500" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Grid Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Button x:Name="ADFpath_Button" Content="Click to set Install Media folder" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top"  Width="200" Height="30"/>
                     <Button x:Name="ADFpath_Button_Check" ToolTip="Check availability of Install files" Content="Check" HorizontalAlignment="Left" Margin="215,94,0,0" VerticalAlignment="Top"  Width="40" Height="30" FontSize="10"/>
                     <TextBox x:Name="ADFPath_Label" HorizontalAlignment="Left" Margin="263,100,0,0" TextWrapping="Wrap" Text="Using default install media folder" VerticalAlignment="Top" Width="260" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>

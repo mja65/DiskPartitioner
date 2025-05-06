@@ -1,6 +1,37 @@
 $WPF_Window_Button_SetupEmu68.Add_Click({
 
     $Script:GUICurrentStatus.CurrentWindow = 'Emu68Settings'
+    If ($Script:GUIActions.InstallOSFiles -eq $true){
+        $WPF_Setup_OSSelection_GroupBox.Visibility = 'Visible'
+        $WPF_Setup_SourceFiles_GroupBox.Visibility = 'Visible'
+        $WPF_Setup_Settings_GroupBox.Visibility = 'Visible'
+
+        if ($Script:GUICurrentStatus.InstallMediaRequiredFromUserSelectablePackages){
+           
+            If ($Script:GUIActions.FoundInstallMediatoUse){
+                $HashTableforInstallMedia = @{} # Clear Hash
+                $Script:GUIActions.FoundInstallMediatoUse | ForEach-Object {
+                    $HashTableforInstallMedia[$_.ADF_Name] = @($_.FriendlyName) 
+                }
+                
+                $Script:GUICurrentStatus.InstallMediaRequiredFromUserSelectablePackages | ForEach-Object {
+                    if  (-not ($HashTableforInstallMedia.ContainsKey($_.SourceLocation) -and $_.Source -eq 'ADF')){
+                        Write-host "Install Media requirements changed"
+                        $Script:GUIActions.FoundInstallMediatoUse = $null
+                        break               
+                    } 
+                 }
+            }
+               
+        }
+
+
+    }
+    elseif ($Script:GUIActions.InstallOSFiles -eq $false){
+        $WPF_Setup_OSSelection_GroupBox.Visibility = 'Visible'
+        $WPF_Setup_SourceFiles_GroupBox.Visibility = 'Hidden'
+        $WPF_Setup_Settings_GroupBox.Visibility = 'Visible'
+    }
 
     # if (-not ($Script:WPF_SetupEmu68)){
     #     $Script:WPF_SetupEmu68 = Get-XAML -WPFPrefix 'WPF_Setup_' -XMLFile '.\Assets\WPF\Grid_SetupEmu68.xaml' -ActionsPath '.\Assets\UIActions\SetupEmu68\' -AddWPFVariables

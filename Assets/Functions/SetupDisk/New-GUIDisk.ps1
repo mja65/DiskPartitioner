@@ -24,7 +24,7 @@ function New-GUIDisk {
         $NewDisk_Grid | Add-Member -NotePropertyMembers @{
             CanAddPartition = $null
             DiskType = 'MBR'
-            MBROverheadBytes = 2097152
+            MBROverheadBytes = $Script:Settings.MBROverheadBytes
             GPTOverheadBytes = 0
             NumberofPartitionsMBR = 0
             NumberofPartitionsGPT = 0
@@ -49,6 +49,7 @@ function New-GUIDisk {
     
     $NewDisk_Grid | Add-Member -NotePropertyMembers @{
         DiskSizeBytes = 0
+        DiskSizeAmigatoGPTMBROverhead = 0
         DiskSizePixels = 0
         BytestoPixelFactor = 0
         LeftDiskBoundary = $null

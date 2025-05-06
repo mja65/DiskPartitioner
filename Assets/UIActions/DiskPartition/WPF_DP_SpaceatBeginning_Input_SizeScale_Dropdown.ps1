@@ -8,6 +8,10 @@ $DropDownScaleOptions += New-Object -TypeName pscustomobject -Property @{Scale='
 
 foreach ($Option in $DropDownScaleOptions){
     $WPF_DP_SpaceatBeginning_Input_SizeScale_Dropdown.AddChild($Option.Scale)
-    Update-GUIInputBox -InputBox $WPF_DP_SpaceatBeginning_Input -DropDownBox $WPF_DP_SpaceatBeginning_Input_SizeScale_Dropdown -MBRMove_SpaceatBeginning
-    Update-UI -UpdateInputBoxes
 }
+
+$WPF_DP_SpaceatBeginning_Input_SizeScale_Dropdown.add_selectionChanged({
+    $WPF_DP_SpaceatBeginning_Input.InputEntryScaleChanged = $true
+   # Update-GUIInputBox -InputBox $WPF_DP_SpaceatBeginning_Input -DropDownBox $WPF_DP_SpaceatBeginning_Input_SizeScale_Dropdown -MBRMove_SpaceatBeginning
+
+ })

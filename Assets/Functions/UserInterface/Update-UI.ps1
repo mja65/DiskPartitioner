@@ -56,7 +56,7 @@ function Update-UI {
     }
 
     if ($CheckforRunningImage){
-
+        $Script:GUICurrentStatus.ProcessImageStatus = $true
         $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Clear()
 
         If (-not ($Script:GUIActions.KickstartVersiontoUse)){
@@ -80,16 +80,36 @@ function Update-UI {
             $Script:GUICurrentStatus.ProcessImageStatus = $false
         }        
 
+                
         $AmigaDriveDetailsToTest  = [System.Collections.Generic.List[PSCustomObject]]::New()
         
+        $SystemDeviceName = (Get-InputCSVs -Diskdefaults | Where-Object {$_.Disk -eq 'System'}).DeviceName
+        $DefaultID76Partition = Get-AllGUIPartitions -PartitionType 'MBR' | Where-Object {$_.value.defaultgptmbrpartition -eq $true -and $_.value.PartitionSubType -eq 'ID76'}
+
         Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {            
             $AmigaDriveDetailsToTest += [PSCustomObject]@{
                 Disk = ($_.Name -split '_AmigaDisk_')[0]
                 DeviceName = $_.value.DeviceName
                 VolumeName = $_.value.VolumeName
+                Priority = $_.value.Priority
             }
         }
         
+        $TopPriorityonDefaultDrive = $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | Sort-Object 'Priority'| Select-Object -first 1
+        
+        if ($TopPriorityonDefaultDrive.DeviceName -ne $SystemDeviceName) {
+            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is not the highest priority device on the RDB.")
+            $Script:GUICurrentStatus.ProcessImageStatus = $false
+        }
+        else {
+            $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | ForEach-Object {
+                if (($_.Disk -eq $TopPriorityonDefaultDrive.Disk) -and ($_.DeviceName -ne $TopPriorityonDefaultDrive.DeviceName)  -and ($_.Priority -eq $TopPriorityonDefaultDrive.Priority)){
+                    $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is set to the same priority as one or more volumes on the same Amiga disk.")
+                    $Script:GUICurrentStatus.ProcessImageStatus = $false
+                }
+            }
+        }
+
         $UniqueVolumeNamesPerDisk = $AmigaDriveDetailsToTest | Group-Object 'Disk','VolumeName' 
         
         $UniqueVolumeNamesPerDisk | ForEach-Object {
@@ -198,9 +218,9 @@ function Update-UI {
             }
     
             if ($Script:GUICurrentStatus.SelectedGPTMBRPartition){
+                $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Visible'
                 If ((get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSubType -eq 'ID76'){
                     #$WPF_DP_DiskGrid_Amiga.Visibility ='Visible'
-                    $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Visible'
                     $WPF_DP_Amiga_GroupBox.Visibility ='Visible'
                     $WPF_DP_AmigaSettings_GroupBox.Visibility = 'Hidden'
                     $TotalChildren = $WPF_DP_DiskGrid_Amiga.Children.Count-1
@@ -303,14 +323,21 @@ function Update-UI {
         if ($Script:GUICurrentStatus.SelectedAmigaPartition){
 
             if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesPath){
+                $SpaceImportedFilesConverted = (Get-ConvertedSize -Size ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesSpaceBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_Button_ImportFiles.Background = 'Green'
                 $WPF_DP_Button_ImportFiles.Foreground = 'White'
                 $WPF_DP_Button_ImportFiles_Label.Text = Get-FormattedPathforGUI -PathtoTruncate ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesPath) -Length 15
+                $WPF_DP_ImportFilesSize_Label.Visibility = 'Visible'
+                $WPF_DP_ImportFilesSize_Value.Visibility = 'Visible'
+                $WPF_DP_ImportFilesSize_Value.Text = "$($SpaceImportedFilesConverted.Size) $($SpaceImportedFilesConverted.Scale)"
             }
             else {
                 $WPF_DP_Button_ImportFiles_Label.Text = 'No imported folder selected'
                 $WPF_DP_Button_ImportFiles.Background = "#FF6688BB"
                 $WPF_DP_Button_ImportFiles.Foreground = 'White'
+                $WPF_DP_ImportFilesSize_Label.Visibility = 'Hidden'
+                $WPF_DP_ImportFilesSize_Value.Visibility = 'Hidden'
+                $WPF_DP_ImportFilesSize_Value.Text = ''
             }
 
             if (-not $WPF_DP_Amiga_SelectedSize_Input.InputEntry -eq $true){
@@ -411,4 +438,33 @@ function Update-UI {
             $WPF_DP_Button_SaveImage.Foreground = "White"         
         }
     }
+
+    If ($DiskPartitionWindow){
+        $FreeSpaceBytes_MBR = 0
+        $FreeSpaceBytes_Amiga = 0
+        Get-AllGUIPartitionBoundaries | ForEach-Object {
+            if ($_.PartitionType -eq 'MBR'){
+                $FreeSpaceBytes_MBR += $_.BytesAvailableLeft
+           }
+           elseif ($_.PartitionType -eq 'Amiga'){
+               $FreeSpaceBytes_Amiga += $_.BytesAvailableLeft               
+           }
+        }
+
+        If ($FreeSpaceBytes_MBR -eq 0){
+            $WPF_DP_MBR_FreeSpaceBetweenPartitions_Label.Visibility = 'hidden'
+        }
+        else {
+            $WPF_DP_MBR_FreeSpaceBetweenPartitions_Label.Visibility = 'visible'
+        }
+        
+        If ($FreeSpaceBytes_Amiga -eq 0){
+            $WPF_DP_Amiga_FreeSpaceBetweenPartitions_Label.Visibility = 'hidden'
+        }
+        else {
+            $WPF_DP_Amiga_FreeSpaceBetweenPartitions_Label.Visibility = 'visible'
+        }
+
+    }   
+    
 }

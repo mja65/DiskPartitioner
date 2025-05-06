@@ -8,9 +8,9 @@ $WPF_Window_Button_SetupDisk.Add_Click({
     #     Set-PartitionGridActions
     # }
 
+    $Script:GUICurrentStatus.CurrentWindow = 'DiskPartition'
 
-        $Script:GUICurrentStatus.CurrentWindow = 'DiskPartition'
-    
+    If ($Script:GUIActions.InstallOSFiles -eq $true){
         if ($Script:GUICurrentStatus.InstallMediaRequiredFromUserSelectablePackages){
            
             If ($Script:GUIActions.FoundInstallMediatoUse){
@@ -29,6 +29,7 @@ $WPF_Window_Button_SetupDisk.Add_Click({
             }
                
         }
+    }
         for ($i = 0; $i -lt $WPF_Window_Main.Children.Count; $i++) {        
             if ($WPF_Window_Main.Children[$i].Name -eq $WPF_SetupEmu68.Name){
                 $WPF_Window_Main.Children.Remove($WPF_SetupEmu68)

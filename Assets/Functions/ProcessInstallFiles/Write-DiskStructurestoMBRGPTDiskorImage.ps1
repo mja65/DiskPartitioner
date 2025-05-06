@@ -9,7 +9,7 @@ function Write-DiskStructurestoMBRGPTDiskorImage {
     
     if ($OutputLocationType -eq 'Local'){}
     elseif ($OutputLocationType -eq 'Physical Disk'){
-        $PowershellDiskNumber = $Script:GUIActions.OutputPath.Substring(5,($Script:GUIActions.OutputPath.length-5))
+        #$PowershellDiskNumber = $Script:GUIActions.OutputPath.Substring(5,($Script:GUIActions.OutputPath.length-5))
     }
 
     if ($Script:GUIActions.DiskTypeSelected -eq 'PiStorm - MBR'){
@@ -27,7 +27,7 @@ function Write-DiskStructurestoMBRGPTDiskorImage {
         exit
     }
 
-    $MBRPartitionCounter = 1
+   
     
     $Script:Settings.CurrentTaskNumber += 1
     $Script:Settings.CurrentTaskName = "Setting up Disk or Image"
@@ -36,32 +36,43 @@ function Write-DiskStructurestoMBRGPTDiskorImage {
     
     $Script:Settings.TotalNumberofSubTasks = 3
     
-    $Script:Settings.CurrentSubTaskNumber = 1
-    $Script:Settings.CurrentSubTaskName = "Initialising Image"
+    # $Script:Settings.CurrentSubTaskNumber = 1
+    # $Script:Settings.CurrentSubTaskName = "Initialising Image"
     
-    Write-StartSubTaskMessage
+    # Write-StartSubTaskMessage
     
-    #Initialize-Disk -Number $PowershellDiskNumber -PartitionStyle MBR -ErrorAction Ignore
+    # #Initialize-Disk -Number $PowershellDiskNumber -PartitionStyle MBR -ErrorAction Ignore
     
-    $EndPreviousPartitionBytes = $null
+    #$EndPreviousPartitionBytes = $null
     
     $Script:Settings.CurrentSubTaskNumber = 2
     $Script:Settings.CurrentSubTaskName = "Creating MBR Partitions"
     
     Write-StartSubTaskMessage
+
+    $MBRPartitionCounter = 1
     
+    $StartingSector = $Script:Settings.MBRFirstPartitionStartSector
+
     foreach ($MBRPartition in $MBRPartitionstoAddtoDisk) {
-        if ($MBRPartition.PartitionSubType -eq 'FAT32'){
+        if ($MBRPartition.value.PartitionSubType -eq 'FAT32'){
             $PartitionTypetoUse = "0xb"
     
         }
-        elseif ($MBRPartition.PartitionSubType -eq 'ID76'){
+        elseif ($MBRPartition.value.PartitionSubType -eq 'ID76'){
             $PartitionTypetoUse = "0x76"            
         }
+        Write-InformationMessage -Message "Adding command to create partition #$MBRPartitionCounter of type $PartitionTypetoUse"
+
+        $MBRPartitionStartSector = $MBRPartition.value.StartingPositionSector + $StartingSector
     
-        $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += "mbr part add $($Script:GUIActions.OutputPath) $PartitionTypetoUse $($MBRPartition.partitionsizebytes)"
+        $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
+            Command = "mbr part add $($Script:GUIActions.OutputPath) $PartitionTypetoUse $($MBRPartition.value.partitionsizebytes) --start-sector $MBRPartitionStartSector"
+            Sequence = 1      
+        }  
+        $MBRPartitionCounter ++
     }
-    
+
     $Script:Settings.CurrentSubTaskNumber = 3
     $Script:Settings.CurrentSubTaskName = "Importing MBR Partitions"
     
@@ -70,12 +81,15 @@ function Write-DiskStructurestoMBRGPTDiskorImage {
     $MBRPartitionCounter = 1
     
     foreach ($MBRPartition in $MBRPartitionstoAddtoDisk) {
-        if ($MBRPartition.ImportedPartition -eq 'TRUE' -and $MBRPartition.ImportedPartitionMethod -eq 'Direct'){
-            $Startpoint = $MBRPartition.ImportedPartitionPath.IndexOf("\MBR\")
-            $SubstringLength = $MBRPartition.ImportedPartitionPath.length-($Startpoint+5)
-            $MBRPartitionNumbertoImport = $MBRPartition.ImportedPartitionPath.Substring(($Startpoint+5),$SubstringLength)
-            $PathofImage = $MBRPartition.ImportedPartitionPath.Substring(0,$Startpoint)
-            $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += "mbr part clone $PathofImage $MBRPartitionNumbertoImport $($Script:GUIActions.OutputPath) $MBRPartitionCounter"
+        if ($MBRPartition.value.ImportedPartition -eq $true -and $MBRPartition.value.ImportedPartitionMethod -eq 'Direct'){
+            $Startpoint = $MBRPartition.value.ImportedPartitionPath.IndexOf("\MBR\")
+            $SubstringLength = $MBRPartition.value.ImportedPartitionPath.length-($Startpoint+5)
+            $MBRPartitionNumbertoImport = $MBRPartition.value.ImportedPartitionPath.Substring(($Startpoint+5),$SubstringLength)
+            $PathofImage = $MBRPartition.value.ImportedPartitionPath.Substring(0,$Startpoint)
+            $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
+                Command = "mbr part clone $PathofImage $MBRPartitionNumbertoImport $($Script:GUIActions.OutputPath) $MBRPartitionCounter"
+                Sequence = 2      
+            }  
         }
         $MBRPartitionCounter ++   
     }
@@ -117,18 +131,24 @@ function Write-DiskStructurestoMBRGPTDiskorImage {
    $MBRPartitionCounter = 1
   
    foreach ($MBRPartition in $MBRPartitionstoAddtoDisk) {
-       if ($MBRPartition.PartitionSubType -eq 'ID76'){
+       if ($MBRPartition.value.PartitionSubType -eq 'ID76'){
            $RDBPartitionCounter = 1       
-           Write-InformationMessage -Message "Preparing commands for $($MBRPartition.PartitionName) - MBR Partition Number: $MBRPartitionCounter"
-           if ($MBRPartition.ImportedPartition -ne 'True'){
-               $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += "rdb init $($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter"
+           Write-InformationMessage -Message "Preparing commands for $($MBRPartition.Name) - MBR Partition Number: $MBRPartitionCounter"
+           if ($MBRPartition.value.ImportedPartition -ne $true){
+               $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
+                   Command = "rdb init $($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter"
+                   Sequence = 3    
+               }  
                foreach ($FileSystem in $FileSystemstoAdd){
-                   if ($FileSystem.GPTMBRPartition -eq $MBRPartition.PartitionName){
-                    $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += "rdb fs add `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter`" $($FileSystem.FileSystemPath) $DosTypetoUse"                                                                      
+                   if ($FileSystem.GPTMBRPartition -eq $MBRPartition.Name){
+                       $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
+                           Command = "rdb fs add `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter`" $($FileSystem.FileSystemPath) $DosTypetoUse"    
+                           Sequence = 3      
+                       }            
                    }               
                }
                foreach ($RDBPartition in $RDBPartitionstoAddtoDisk) {
-                    if (($RDBPartition.Name -split '_AmigaDisk_')[0] -eq $MBRPartition.PartitionName){
+                    if (($RDBPartition.Name -split '_AmigaDisk_')[0] -eq $MBRPartition.Name){
                         $Script:GUICurrentStatus.PathstoRDBPartitions  += [PSCustomObject]@{
                             MBRPartitionNumber = $MBRPartitionCounter
                             RDBPartitionNumber = $RDBPartitionCounter
@@ -152,11 +172,24 @@ function Write-DiskStructurestoMBRGPTDiskorImage {
                                $bootableflagtouse = ""
                            }
                            $BootPrioritytouse = $RDBPartition.value.Priority
-                           if (test-path ($RDBPartition.value.ImportedFilesPath)){
-                               $Script:GUICurrentStatus.HSTCommandstoProcess.CopyImportedFiles += "fs copy $($RDBPartition.value.ImportedFilesPath) $($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter\rdb\$($RDBPartition.value.DeviceName)"
-                           }                                                   
-                           $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += "rdb part add `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter`" $($RDBPartition.value.DeviceName) $DosTypetoUse $($RDBPartition.value.PartitionSizeBytes) --buffers $bufferstouse --max-transfer $maxtransfertouse --mask $masktouse$nomountflagtouse $bootableflagtouse--boot-priority $BootPrioritytouse"
-                           $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += "rdb part format `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter`" $RDBPartitionCounter $($RDBPartition.value.VolumeName)"
+                           If ($RDBPartition.value.ImportedFilesPath){
+                               if (test-path ($RDBPartition.value.ImportedFilesPath)){
+                                   $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
+                                       Command = "fs copy $($RDBPartition.value.ImportedFilesPath) $($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter\rdb\$($RDBPartition.value.DeviceName)"
+                                       Sequence = 1      
+                                   }  
+                               }
+                           }
+                           
+                           $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
+                               Command = "rdb part add `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter`" $($RDBPartition.value.DeviceName) $DosTypetoUse $($RDBPartition.value.PartitionSizeBytes) --buffers $bufferstouse --max-transfer $maxtransfertouse --mask $masktouse$nomountflagtouse $bootableflagtouse--boot-priority $BootPrioritytouse"
+                               Sequence = 1      
+                            }
+                            
+                            $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
+                                Command = "rdb part format `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter`" $RDBPartitionCounter $($RDBPartition.value.VolumeName)"
+                                Sequence = 1      
+                            }
                            $RDBPartitionCounter++   
                     }   
                 }
@@ -167,11 +200,6 @@ function Write-DiskStructurestoMBRGPTDiskorImage {
 
 }
 
-
-
-
-
-
     #     $IsMounted = (Get-DiskImage -ImagePath $Script:GUIActions.OutputPath -ErrorAction Ignore).Attached
     #     if ($IsMounted -eq $false){
     #         Write-InformationMessage -Message "Mounting image: $($Script:GUIActions.OutputPath)"
@@ -179,11 +207,7 @@ function Write-DiskStructurestoMBRGPTDiskorImage {
     #         $PowershellDiskNumber = $DeviceDetails.Number
     #     }
      
-
-    
-
-
-#    if ($HSTCommandstoProcess) {
+ #    if ($HSTCommandstoProcess) {
 #        $HSTCommandstoProcess | Out-File -FilePath $HSTCommandScriptPath -Force
 #        $Logoutput = "$($Script:Settings.TempFolder)\LogOutputTemp.txt"
 #        Write-InformationMessage -Message "Creating new RDB disk and partitions"

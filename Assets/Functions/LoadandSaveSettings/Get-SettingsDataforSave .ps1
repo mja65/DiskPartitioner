@@ -3,8 +3,9 @@ function Get-SettingsDataforSave {
        
     )
 
-    if (($Script:GUIActions.KickstartVersiontoUse) -and   ($Script:GUIActions.AvailablePackages.Rows.Count -eq 0)){
-        Get-SelectablePackage
+    if (($Script:GUIActions.KickstartVersiontoUse) -and  $Script:GUICurrentStatus.AvailablePackagesNeedingGeneration -eq $true){
+        Get-SelectablePackages
+        $Script:GUICurrentStatus.AvailablePackagesNeedingGeneration = $false
     }
 
     $Output = @()

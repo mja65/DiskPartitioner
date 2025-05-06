@@ -83,6 +83,7 @@ function Get-AllGUIPartitionBoundaries {
             PixelsAvailableLeft = $null
             PixelsAvailableRight = $null
             StartingPositionBytes = $_.Value.StartingPositionBytes
+            StartingPositionSector = $_.Value.StartingPositionSector
             PartitionSizeBytes = $_.Value.PartitionSizeBytes
             EndingPositionBytes = $_.Value.StartingPositionBytes + $_.Value.PartitionSizeBytes
             LeftMargin = $_.Value.Margin.Left

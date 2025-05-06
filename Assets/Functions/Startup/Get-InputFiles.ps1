@@ -6,6 +6,7 @@ function Get-InputFiles {
     Write-InformationMessage "Checking for existence of InputFileCSVs and downloading where missing or changed"
     Update-InputCSV -PathtoGoogleDrive $Script:Settings.InputFiles.InputFileSpreadsheetURL -GidValue $Script:Settings.StartupFilesCSV.GID -ExistingCSV  $Script:Settings.StartupFilesCSV.Path
     Update-InputCSV -PathtoGoogleDrive $Script:Settings.InputFiles.InputFileSpreadsheetURL -GidValue $Script:Settings.OSVersionstoInstallCSV.GID -ExistingCSV  $Script:Settings.OSVersionstoInstallCSV.Path
+    Update-InputCSV -PathtoGoogleDrive $Script:Settings.InputFiles.InputFileSpreadsheetURL -GidValue $Script:Settings.IconSetsCSV.GID -ExistingCSV  $Script:Settings.IconSetsCSV.Path
     Update-InputCSV -PathtoGoogleDrive $Script:Settings.InputFiles.InputFileSpreadsheetURL -GidValue $Script:Settings.ROMHashesCSV.GID -ExistingCSV  $Script:Settings.ROMHashesCSV.Path
     Update-InputCSV -PathtoGoogleDrive $Script:Settings.InputFiles.InputFileSpreadsheetURL -GidValue $Script:Settings.InstallMediaHashesCSV.GID -ExistingCSV  $Script:Settings.InstallMediaHashesCSV.Path
     Update-InputCSV -PathtoGoogleDrive $Script:Settings.InputFiles.InputFileSpreadsheetURL -GidValue $Script:Settings.ListofPackagestoInstallCSV.GID -ExistingCSV $Script:Settings.ListofPackagestoInstallCSV.Path

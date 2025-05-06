@@ -16,6 +16,7 @@ $WPF_DP_Button_ImportFiles.add_click({
                 }
                 else {
                     (get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesPath = $PathtoPopulate 
+                    (get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesSpaceBytes = $SpaceofFolderBytes
                     Update-UI -UpdateInputBoxes
                 }
             }

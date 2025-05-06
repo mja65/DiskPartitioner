@@ -37,7 +37,7 @@ in your install path for the tool and select this path to scan.
 #    $KickstartVersion = '3.2.3'
 #    $MaximumFilestoCheck = 40
 
-#    $PathtoADFFiles = 'E:\Emulators\Amiga Files\3.9'0
+#    $PathtoADFFiles = 'E:\Emulators\Amiga Files\3.9'
 #    $KickstartVersion = '3.9'
 #    $MaximumFilestoCheck = 40
 
@@ -69,15 +69,17 @@ in your install path for the tool and select this path to scan.
    $RequiredADFsforInstall = Confirm-RequiredSources | Where-Object {($_.Source -eq 'ADF' -or $_.Source -eq 'CD' -or $_.Source -eq 'Archive' -or $_.Source -eq 'ArchiveinArchive') -and ($_.RequiredFlagUserSelectable -eq 'True' -or $_.RequiredFlagUserSelectable -eq 'Mandatory')} | Select-Object @{label='ADF_Name';expression={$_.SourceLocation}} -Unique
    
     $HashTableforInstallMedia = @{} # Clear Hash
-    $ADFHashes| ForEach-Object {
-        $HashTableforInstallMedia[$_.ADF_Name] = @($_.FriendlyName,$_.TypeofCheck) 
+    $ADFHashes | ForEach-Object {
+        $HashTableforInstallMedia[$_.ADF_Name] = @($_.FriendlyName,$_.TypeofCheck,$_.InstallMedia) 
     }
     
     $RequiredADFsforInstall| Add-Member -NotePropertyName 'FriendlyName' -NotePropertyValue $null
+    $RequiredADFsforInstall| Add-Member -NotePropertyName 'InstallMedia' -NotePropertyValue $null
         
     $RequiredADFsforInstall | ForEach-Object {
         if ($HashTableforInstallMedia.ContainsKey($_.ADF_Name)){
             $_.FriendlyName = $HashTableforInstallMedia.($_.ADF_Name)[0]
+            $_.InstallMedia = $HashTableforInstallMedia.($_.ADF_Name)[2]
         } 
     } 
        
@@ -99,6 +101,7 @@ in your install path for the tool and select this path to scan.
 
                 $RequiredADFandHashes += [PSCustomObject]@{
                     ADF_Name = $ADFHash.ADF_Name
+                    InstallMedia = $ADFHash.InstallMedia
                     FriendlyName = $ADFHash.FriendlyName
                     TypeofCheck = $ADFHash.TypeofCheck                    
                     FilesChecked = $7zStringtoUse
@@ -128,6 +131,7 @@ in your install path for the tool and select this path to scan.
                                 Path = $ADFFiletoCheck.Path
                                 ADF_Name = $_.ADF_Name
                                 FriendlyName = $_.FriendlyName 
+                                InstallMedia = $_.InstallMedia 
                                 Source = $_.ADFSource
                                 Sequence = $_.Sequence
                             }
@@ -140,7 +144,7 @@ in your install path for the tool and select this path to scan.
             
     $HashTableforADFHashestoFind = @{} # Clear Hash
     $RequiredADFandHashes | Sort-Object -Property 'Sequence'| ForEach-Object {
-        $HashTableforADFHashestoFind[$_.Hash] = @($_.ADF_Name,$_.FriendlyName,$_.ADFSource,$_.Sequence)
+        $HashTableforADFHashestoFind[$_.Hash] = @($_.ADF_Name,$_.FriendlyName,$_.ADFSource,$_.Sequence,$_.InstallMedia)
     }
 
     $ListofADFFilestoCheck | ForEach-Object {
@@ -151,6 +155,7 @@ in your install path for the tool and select this path to scan.
                 Path = $_.Path
                 ADF_Name = $HashTableforADFHashestoFind.($_.Hash)[0]
                 FriendlyName = $HashTableforADFHashestoFind.($_.Hash)[1]
+                InstallMedia = $HashTableforADFHashestoFind.($_.Hash)[4]
                 Source = $HashTableforADFHashestoFind.($_.Hash)[2]
                 Sequence = $HashTableforADFHashestoFind.($_.Hash)[3]
             
@@ -171,6 +176,7 @@ in your install path for the tool and select this path to scan.
                     Path = $FoundADF.Path
                     ADF_Name = $FoundADF.ADF_Name
                     FriendlyName = $FoundADF.FriendlyName
+                    InstallMedia = $FoundADF.InstallMedia
                     Source = $FoundADF.Source
                     IsMatched = 'TRUE'
                 }
@@ -184,6 +190,8 @@ in your install path for the tool and select this path to scan.
                 Path = ''
                 ADF_Name = $_.ADF_Name
                 FriendlyName = $_.FriendlyName
+                InstallMedia = $null
+                Source = $null
                 IsMatched = 'False'                
             }
         }            

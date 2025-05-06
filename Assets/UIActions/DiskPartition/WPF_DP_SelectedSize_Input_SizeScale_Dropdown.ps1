@@ -11,11 +11,8 @@ foreach ($Option in $DropDownScaleOptions){
 }
 
 $WPF_DP_SelectedSize_Input_SizeScale_Dropdown.add_selectionChanged({
-    Write-Host "DropDown Changed"
-    $WPF_DP_SelectedSize_Input.InputEntryChanged = $true
-    $WPF_DP_SelectedSize_Input.InputEntry = $true
-    $WPF_DP_SelectedSize_Input.InputEntryInvalid = $null
-    Update-GUIInputBox -InputBox $WPF_DP_SelectedSize_Input -DropDownBox $WPF_DP_SelectedSize_Input_SizeScale_Dropdown -MBRResize
-    Update-UI -UpdateInputBoxes
+    $WPF_DP_SelectedSize_Input.InputEntryScaleChanged = $true
+    # Update-GUIInputBox -InputBox $WPF_DP_SelectedSize_Input -DropDownBox $WPF_DP_SelectedSize_Input_SizeScale_Dropdown -MBRResize
+    # Update-UI -UpdateInputBoxes
 })
 

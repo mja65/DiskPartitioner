@@ -1,6 +1,7 @@
 function Get-InputCSVs {
     param (
       [switch]$OSestoInstall,
+      [switch]$IconSets,
       [Switch]$Diskdefaults,
       [switch]$ROMHashes,
       [switch]$InstallMediaHashes,
@@ -13,6 +14,9 @@ function Get-InputCSVs {
 
     if ($OSestoInstall){
         $Pathtouse = $Script:Settings.OSVersionstoInstallCSV.Path 
+    }
+    elseif ($IconSets){
+        $Pathtouse = $Script:Settings.IconSetsCSV.Path 
     }
     elseif ($Diskdefaults){
         $Pathtouse = $Script:Settings.DiskDefaultsCSV.Path
@@ -33,7 +37,6 @@ function Get-InputCSVs {
         $Pathtouse = $Script:Settings.ListofPackagestoInstallCSV.Path
     }
 
-    
     $CSV = @()
     
     import-csv -path $Pathtouse -Delimiter ";" | ForEach-Object {
@@ -47,6 +50,87 @@ function Get-InputCSVs {
     if ($OSestoInstall){
         $CSVtoReturn = $CSV | Select-Object 'Kickstart_Version','Kickstart_VersionFriendlyName','InstallMedia','NewFolderIconSource','NewFolderIconSourceType','NewFolderIconSourcePath','WorkbenchIconSource','WorkbenchIconSourceType','WorkbenchIconSourcePath','WorkbenchModifyInfoFileType','WorkIconSource','WorkIconSourceType','WorkIconSourcePath','WorkModifyInfoFileType','Emu68BootIconSource','Emu68BootIconSourceType','Emu68BootIconSourcePath','Emu68BootModifyInfoFileType'
 
+    }
+    elseif ($IconSets){
+
+        $CSVtoReturn = [System.Collections.Generic.List[PSCustomObject]]::New()
+
+        $CSV | ForEach-Object {
+            $CountofVariables = ([regex]::Matches($_.KickstartVersion, "," )).count
+            if ($CountofVariables -gt 0){
+                $Counter = 0
+                do {
+                    $CSVtoReturn += [PSCustomObject]@{                              
+                        MinimumInstallerVersion = [system.version]$_.MinimumInstallerVersion
+                        InstallerVersionLessThan = [system.version]$_.InstallerVersionLessThan
+                        KickstartVersion = [system.version](($_.KickstartVersion -split ',')[$Counter]) 
+
+                        IconsetName = $_.IconsetName
+                        IconSetDescription  = $_.IconSetDescription
+                        IconsDefaultInstall = $_.IconsDefaultInstall
+                        NewFolderIconSource = $_.NewFolderIconSource
+                        NewFolderIconSourceLocation = $_.NewFolderIconSourceLocation
+                        NewFolderIconInstallMedia = $_.NewFolderIconInstallMedia
+                        NewFolderIconFilestoInstall = $_.NewFolderIconFilestoInstall
+                        NewFolderIconModifyInfoFileType = $_.NewFolderIconModifyInfoFileType
+                        SystemDiskIconSource = $_.SystemDiskIconSource
+                        SystemDiskIconSourceLocation = $_.SystemDiskIconSourceLocation
+                        SystemDiskIconInstallMedia = $_.SystemDiskIconInstallMedia
+                        SystemDiskIconFilestoInstall = $_.SystemDiskIconFilestoInstall
+                        SystemDiskIconModifyInfoFileType = $_.SystemDiskIconModifyInfoFileType
+                        WorkDiskIconSource = $_.WorkDiskIconSource
+                        WorkDiskIconSourceLocation = $_.WorkDiskIconSourceLocation
+                        WorkDiskIconInstallMedia = $_.WorkDiskIconInstallMedia
+                        WorkDiskIconFilestoInstall = $_.WorkDiskIconFilestoInstall
+                        WorkDiskIconModifyInfoFileType = $_.WorkDiskIconModifyInfoFileType
+                        Emu68BootDiskIconSource = $_.Emu68BootDiskIconSource
+                        Emu68BootDiskIconSourceLocation = $_.Emu68BootDiskIconSourceLocation
+                        Emu68BootDiskIconInstallMedia = $_.Emu68BootDiskIconInstallMedia
+                        Emu68BootDiskIconFilestoInstall = $_.Emu68BootDiskIconFilestoInstall
+                        Emu68BootModifyInfoFileType = $_.Emu68BootModifyInfoFileType                                     
+                    }
+                    $counter ++
+                 } until (
+                        $Counter -eq ($CountofVariables+1)
+                    )
+            }
+            else {        
+                $CSVtoReturn += [PSCustomObject]@{
+                    MinimumInstallerVersion = [system.version]$_.MinimumInstallerVersion
+                    InstallerVersionLessThan = [system.version]$_.InstallerVersionLessThan
+                    KickstartVersion = [system.version]$_.KickstartVersion   
+
+
+                    IconsetName = $_.IconsetName
+                    IconSetDescription  = $_.IconSetDescription
+                    IconsDefaultInstall = $_.IconsDefaultInstall
+                    NewFolderIconSource = $_.NewFolderIconSource
+                    NewFolderIconSourceLocation = $_.NewFolderIconSourceLocation
+                    NewFolderIconInstallMedia = $_.NewFolderIconInstallMedia
+                    NewFolderIconFilestoInstall = $_.NewFolderIconFilestoInstall
+                    NewFolderIconModifyInfoFileType = $_.NewFolderIconModifyInfoFileType
+                    SystemDiskIconSource = $_.SystemDiskIconSource
+                    SystemDiskIconSourceLocation = $_.SystemDiskIconSourceLocation
+                    SystemDiskIconInstallMedia = $_.SystemDiskIconInstallMedia
+                    SystemDiskIconFilestoInstall = $_.SystemDiskIconFilestoInstall
+                    SystemDiskIconModifyInfoFileType = $_.SystemDiskIconModifyInfoFileType
+                    WorkDiskIconSource = $_.WorkDiskIconSource
+                    WorkDiskIconSourceLocation = $_.WorkDiskIconSourceLocation
+                    WorkDiskIconInstallMedia = $_.WorkDiskIconInstallMedia
+                    WorkDiskIconFilestoInstall = $_.WorkDiskIconFilestoInstall
+                    WorkDiskIconModifyInfoFileType = $_.WorkDiskIconModifyInfoFileType
+                    Emu68BootDiskIconSource = $_.Emu68BootDiskIconSource
+                    Emu68BootDiskIconSourceLocation = $_.Emu68BootDiskIconSourceLocation
+                    Emu68BootDiskIconInstallMedia = $_.Emu68BootDiskIconInstallMedia
+                    Emu68BootDiskIconFilestoInstall = $_.Emu68BootDiskIconFilestoInstall
+                    Emu68BootModifyInfoFileType = $_.Emu68BootModifyInfoFileType                                 
+                }
+            }
+        }
+
+       
+        $CSVtoReturn = $CSVtoReturn | Where-Object {$_.KickstartVersion -eq $Script:GUIActions.KickstartVersiontoUse}
+        
     }
     elseif ($FileSystems) {
         $CSVtoReturn = $CSV
@@ -76,6 +160,7 @@ function Get-InputCSVs {
                         MinimumInstallerVersion = [system.version]$_.MinimumInstallerVersion
                         InstallerVersionLessThan = [system.version]$_.InstallerVersionLessThan
                         KickstartVersion = [system.version](($_.KickstartVersion -split ',')[$Counter]) 
+                        IconSetName = $_.IconSetName
                         PackageName = $_.PackageName
                         PackageMandatory =	$_.PackageMandatory
                         PackageNameDefaultInstall = $_.PackageNameDefaultInstall 
@@ -126,6 +211,7 @@ function Get-InputCSVs {
                     MinimumInstallerVersion = [system.version]$_.MinimumInstallerVersion
                     InstallerVersionLessThan = [system.version]$_.InstallerVersionLessThan
                     KickstartVersion = [system.version]$_.KickstartVersion
+                    IconSetName = $_.IconSetName
                     PackageName = $_.PackageName
                     PackageMandatory =	$_.PackageMandatory
                     PackageNameDefaultInstall = $_.PackageNameDefaultInstall 

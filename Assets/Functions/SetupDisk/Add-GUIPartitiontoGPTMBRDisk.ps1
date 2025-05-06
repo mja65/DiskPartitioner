@@ -97,6 +97,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
         $NewPartition.VolumeName = $VolumeName
     }
     $NewPartition.StartingPositionBytes = $StartingPositionBytes
+    $NewPartition.StartingPositionSector = $StartingPositionBytes/$Script:Settings.MBRSectorSizeBytes
 
     if ($ImportedPartition){
         $NewPartition.ImportedPartition = $true
@@ -132,7 +133,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
             $SystemDefaultValues = Get-InputCSVs -Diskdefaults | Where-Object {$_.Type -eq "Amiga" -and $_.Disk -eq 'System'}
             $WorkDefaultValues = Get-InputCSVs -Diskdefaults | Where-Object {$_.Type -eq "Amiga" -and $_.Disk -eq 'Work'}
 
-            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault) -AddType 'AtEnd' -PartitionTypeAmiga 'Workbench' -DeviceName $SystemDefaultValues.DeviceName -VolumeName $SystemDefaultValues.VolumeName  -Buffers $SystemDefaultValues.Buffers -MaxTransfer $SystemDefaultValues.MaxTransfer -DosType $SystemDefaultValues.DosType -Bootable $SystemDefaultValues.BootableFlag -NoMount $SystemDefaultValues.NoMountFlag -Priority ([int]$WorkDefaultValues.Priority) -mask ($SystemDefaultValues.Mask)
+            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($NewPartitionName+'_AmigaDisk') -SizeBytes (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault) -AddType 'AtEnd' -PartitionTypeAmiga 'Workbench' -DeviceName $SystemDefaultValues.DeviceName -VolumeName $SystemDefaultValues.VolumeName  -Buffers $SystemDefaultValues.Buffers -MaxTransfer $SystemDefaultValues.MaxTransfer -DosType $SystemDefaultValues.DosType -Bootable $SystemDefaultValues.BootableFlag -NoMount $SystemDefaultValues.NoMountFlag -Priority ([int]$SystemDefaultValues.Priority) -mask ($SystemDefaultValues.Mask)
             
             $RemainingSpace = $SizeBytes-1032192- (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $Script:SDCardMinimumsandMaximums.WorkbenchDefault) 
 
