@@ -55,77 +55,93 @@ function Update-UI {
        
     }
 
-    if ($CheckforRunningImage){
+    if (($CheckforRunningImage) -or ($DiskPartitionWindow)){
         $Script:GUICurrentStatus.ProcessImageStatus = $true
         $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Clear()
 
-        If (-not ($Script:GUIActions.KickstartVersiontoUse)){
-            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","No OS selected")
-            $Script:GUICurrentStatus.ProcessImageStatus = $false
-        }
-        If (-not ($Script:GUIActions.FoundInstallMediatoUse)){
-            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","OS file(s) have not been located")
-            $Script:GUICurrentStatus.ProcessImageStatus = $false
-        }   
-        If (-not ($Script:GUIActions.FoundKickstarttoUse)){
-            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","Kickstart file has not been located")
-            $Script:GUICurrentStatus.ProcessImageStatus = $false
-        }
-        If (-not ($Script:GUIActions.OutputPath)){
-            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","No Output location has been defined")
-            $Script:GUICurrentStatus.ProcessImageStatus = $false
-        }
-        If (-not ($Script:GUIActions.DiskSizeSelected)){
-            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","Disk Partitioning has not been performed")
-            $Script:GUICurrentStatus.ProcessImageStatus = $false
-        }        
+        if ($Script:GUIActions.InstallOSFiles -eq $true){
 
-                
-        $AmigaDriveDetailsToTest  = [System.Collections.Generic.List[PSCustomObject]]::New()
-        
-        $SystemDeviceName = (Get-InputCSVs -Diskdefaults | Where-Object {$_.Disk -eq 'System'}).DeviceName
-        $DefaultID76Partition = Get-AllGUIPartitions -PartitionType 'MBR' | Where-Object {$_.value.defaultgptmbrpartition -eq $true -and $_.value.PartitionSubType -eq 'ID76'}
-
-        Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {            
-            $AmigaDriveDetailsToTest += [PSCustomObject]@{
-                Disk = ($_.Name -split '_AmigaDisk_')[0]
-                DeviceName = $_.value.DeviceName
-                VolumeName = $_.value.VolumeName
-                Priority = $_.value.Priority
+            If (-not ($Script:GUIActions.KickstartVersiontoUse)){
+                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","No OS selected")
+                $Script:GUICurrentStatus.ProcessImageStatus = $false
             }
+            If (-not ($Script:GUIActions.FoundInstallMediatoUse)){
+                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","OS file(s) have not been located")
+                $Script:GUICurrentStatus.ProcessImageStatus = $false
+            }   
+            If (-not ($Script:GUIActions.FoundKickstarttoUse)){
+                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","Kickstart file has not been located")
+                $Script:GUICurrentStatus.ProcessImageStatus = $false
+            }
+            If (-not ($Script:GUIActions.OutputPath)){
+                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","No Output location has been defined")
+                $Script:GUICurrentStatus.ProcessImageStatus = $false
+            }
+            If (-not ($Script:GUIActions.DiskSizeSelected)){
+                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","Disk Partitioning has not been performed")
+                $Script:GUICurrentStatus.ProcessImageStatus = $false
+            }        
         }
-        
-        $TopPriorityonDefaultDrive = $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | Sort-Object 'Priority'| Select-Object -first 1
-        
-        if ($TopPriorityonDefaultDrive.DeviceName -ne $SystemDeviceName) {
-            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is not the highest priority device on the RDB.")
-            $Script:GUICurrentStatus.ProcessImageStatus = $false
-        }
-        else {
-            $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | ForEach-Object {
-                if (($_.Disk -eq $TopPriorityonDefaultDrive.Disk) -and ($_.DeviceName -ne $TopPriorityonDefaultDrive.DeviceName)  -and ($_.Priority -eq $TopPriorityonDefaultDrive.Priority)){
-                    $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is set to the same priority as one or more volumes on the same Amiga disk.")
-                    $Script:GUICurrentStatus.ProcessImageStatus = $false
+
+
+        if ($DiskSizeSelected){
+
+            $AmigaDriveDetailsToTest  = [System.Collections.Generic.List[PSCustomObject]]::New()
+            
+            $SystemDeviceName = (Get-InputCSVs -Diskdefaults | Where-Object {$_.Disk -eq 'System'}).DeviceName
+            $DefaultID76Partition = Get-AllGUIPartitions -PartitionType 'MBR' | Where-Object {$_.value.defaultgptmbrpartition -eq $true -and $_.value.PartitionSubType -eq 'ID76'}
+    
+            Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {            
+                $AmigaDriveDetailsToTest += [PSCustomObject]@{
+                    Disk = ($_.Name -split '_AmigaDisk_')[0]
+                    DeviceName = $_.value.DeviceName
+                    VolumeName = $_.value.VolumeName
+                    Priority = $_.value.Priority
                 }
             }
-        }
+            
+            if ($AmigaDriveDetailsToTest) {
 
-        $UniqueVolumeNamesPerDisk = $AmigaDriveDetailsToTest | Group-Object 'Disk','VolumeName' 
+                $TopPriorityonDefaultDrive = $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | Sort-Object 'Priority'| Select-Object -first 1
+                
+                if ($TopPriorityonDefaultDrive.DeviceName -ne $SystemDeviceName) {
+                    $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is not the highest priority device on the RDB.")
+                    $Script:GUICurrentStatus.ProcessImageStatus = $false
+                }
+                else {
+                    $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | ForEach-Object {
+                        if (($_.Disk -eq $TopPriorityonDefaultDrive.Disk) -and ($_.DeviceName -ne $TopPriorityonDefaultDrive.DeviceName)  -and ($_.Priority -eq $TopPriorityonDefaultDrive.Priority)){
+                            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is set to the same priority as one or more volumes on the same Amiga disk.")
+                            $Script:GUICurrentStatus.ProcessImageStatus = $false
+                        }
+                    }
+                }
         
-        $UniqueVolumeNamesPerDisk | ForEach-Object {
-            if ($_.Count -gt 1){       
-                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The same volume name `"$(($_.Name -split ', ')[1])`" has been used accross more than one partition on the same disk")
+                $UniqueVolumeNamesPerDisk = $AmigaDriveDetailsToTest | Group-Object 'Disk','VolumeName' 
+                
+                $UniqueVolumeNamesPerDisk | ForEach-Object {
+                    if ($_.Count -gt 1){       
+                        $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The same volume name `"$(($_.Name -split ', ')[1])`" has been used accross more than one partition on the same disk")
+                        $Script:GUICurrentStatus.ProcessImageStatus = $false
+                    }
+                }
+                
+                $UniqueDeviceNames = $AmigaDriveDetailsToTest | group-object 'DeviceName'
+                $UniqueDeviceNames | ForEach-Object {
+                    if ($_.Count -gt 1){
+                        $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The same device name $($_.Name) has been used on more than one device. Note this could be on multiple disks")
+                        $Script:GUICurrentStatus.ProcessImageStatus = $false
+                    }      
+                }
+
+            } 
+            else {
+                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","No Amiga disks present")
                 $Script:GUICurrentStatus.ProcessImageStatus = $false
             }
+            
         }
-        
-        $UniqueDeviceNames = $AmigaDriveDetailsToTest | group-object 'DeviceName'
-        $UniqueDeviceNames | ForEach-Object {
-            if ($_.Count -gt 1){
-                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The same device name $($_.Name) has been used on more than one device. Note this could be on multiple disks")
-                $Script:GUICurrentStatus.ProcessImageStatus = $false
-            }      
-        }
+                
         
         if ($Script:GUICurrentStatus.ProcessImageStatus -eq $false){
             $WPF_Window_Button_Run.Background = '#FFFF0000'

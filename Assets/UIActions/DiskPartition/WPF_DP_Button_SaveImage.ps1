@@ -3,5 +3,5 @@ $WPF_DP_Button_SaveImage.add_click({
     if ($LocationSelected){
         $Script:GUIActions.OutputPath = $LocationSelected
     }
-    update-ui -buttons
+    update-ui -buttons -CheckforRunningImage
 })

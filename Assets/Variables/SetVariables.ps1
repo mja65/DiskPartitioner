@@ -99,6 +99,7 @@ $Script:GUICurrentStatus = [PSCustomObject]@{
     RunOptionstoReport = New-Object System.Data.DataTable
     IssuesFoundBeforeProcessing = New-Object System.Data.DataTable
     ProcessImageStatus = $false
+    ProcessImageConfirmedbyUser = $false
     PathstoRDBPartitions = [System.Collections.Generic.List[PSCustomObject]]::New()
     InstallMediaRequiredFromUserSelectablePackages = @()
     StartTimeForRunningInstall = $null

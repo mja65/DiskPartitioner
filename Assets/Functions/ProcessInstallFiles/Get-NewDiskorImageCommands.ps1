@@ -1,12 +1,11 @@
-function New-DiskorImage {
+function Get-NewDiskorImageCommands {
     param (
-
+        $OutputLocationType
     )
     
     # $Script:GUIActions.OutputPath = "C:\Users\Matt\OneDrive\Documents\EmuImager2\UserFiles\SavedOutputImages\test.vhd"
 
-    $OutputLocationType = Confirm-NetworkLocalorDisk -PathtoCheck $Script:GUIActions.OutputPath
-    
+  
     $TempFoldertouse = [System.IO.Path]::GetFullPath($Script:Settings.TempFolder)
     $DiskSizeBytestouse = $WPF_DP_Disk_GPTMBR.DiskSizeBytes 
     
@@ -16,7 +15,7 @@ function New-DiskorImage {
     $Script:Settings.CurrentTaskName = "Preparing Commands for setting up image or disk"
     Write-StartTaskMessage
 
-    if ($OutputLocationType -eq 'Local'){
+    if (($OutputLocationType -eq 'VHDImage') -or ($OutputLocationType -eq 'IMGImage')){
         Write-InformationMessage -Message "Virtualised disk being used"
         Write-InformationMessage -Message "Creating a Virtual Image at: $($Script:GUIActions.OutputPath)"
         if (Test-Path $Script:GUIActions.OutputPath){
@@ -53,11 +52,11 @@ function New-DiskorImage {
         $WPF_MainWindow.Close()
         exit
     }
-    Write-InformationMessage -Message 'Adding command to initialise disk'
-    $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage += [PSCustomObject]@{
-        Command = "mbr init $($Script:GUIActions.OutputPath)"
-        Sequence = 3           
-     }
+    # Write-InformationMessage -Message 'Adding command to initialise disk'
+    # $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage += [PSCustomObject]@{
+    #     Command = "mbr init $($Script:GUIActions.OutputPath)"
+    #     Sequence = 3           
+    #  }
 
     Write-TaskCompleteMessage
     

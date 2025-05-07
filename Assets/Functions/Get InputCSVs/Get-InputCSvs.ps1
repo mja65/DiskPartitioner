@@ -7,6 +7,7 @@ function Get-InputCSVs {
       [switch]$InstallMediaHashes,
       [switch]$ScreenModes,
       [switch]$PackagestoInstall,
+      [switch]$PackagestoInstallEmu68Only,
       [switch]$FileSystems
 
     )
@@ -33,7 +34,7 @@ function Get-InputCSVs {
     elseif ($InstallMediaHashes){
         $Pathtouse = $Script:Settings.InstallMediaHashesCSV.Path
     }
-    elseif ($PackagestoInstall){
+    elseif (($PackagestoInstall) -or ($PackagestoInstallEmu68Only)){
         $Pathtouse = $Script:Settings.ListofPackagestoInstallCSV.Path
     }
 
@@ -147,7 +148,8 @@ function Get-InputCSVs {
     elseif ($InstallMediaHashes){
         $CSVtoReturn = $CSV | Select-Object 'Sequence', 'WorkbenchVersion', 'Hash', 'TypeofCheck','FilesChecked','FileCheckDetails','InstallMedia', 'ADF_Name', 'FriendlyName', 'ADFSource', 'ADFDescription' 
     }
-    elseif ($PackagestoInstall){
+
+    elseif (($PackagestoInstall) -or ($PackagestoInstallEmu68Only)){
         
         $CSVtoReturn = [System.Collections.Generic.List[PSCustomObject]]::New()
 
@@ -255,7 +257,12 @@ function Get-InputCSVs {
             }
         }
 
-        $CSVtoReturn = $CSVtoReturn | Where-Object {$_.KickstartVersion -eq $Script:GUIActions.KickstartVersiontoUse}
+        if ($PackagestoInstall){
+            $CSVtoReturn = $CSVtoReturn | Where-Object {$_.KickstartVersion -eq $Script:GUIActions.KickstartVersiontoUse}
+        } 
+        elseif ($PackagestoInstallEmu68Only){
+            $CSVtoReturn = $CSVtoReturn | Where-Object {$_.DrivetoInstall -eq 'Emu68Boot'}
+        }
 
     }
 

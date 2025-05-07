@@ -8,52 +8,46 @@ function Write-AmigaFilestoInterimDrive {
        [switch]$CopyRemainingFiles
     )
     
-    $DownloadFilesFromInternet = $true
-    $DownloadLocalFiles = $true
-    $ExtractADFFilesandIconFiles = $true
-    $AdjustingScriptsandInfoFiles = $true
-    $ProcessDownloadedFiles = $true
-    $CopyRemainingFiles = $true
-
-
-    $Script:GUICurrentStatus.StartTimeForRunningInstall = (Get-Date -Format HH:mm:ss)
-
-    Write-InformationMessage "Started processing at: $($Script:GUICurrentStatus.StartTimeForRunningInstall)"
-
     $Script:Settings.CurrentTaskNumber += 1
     $Script:Settings.CurrentTaskName = "Determining list of OS files, local install files, and files from internet to be installed"
 
     Write-StartTaskMessage
 
+    if ($Script:GUIActions.InstallOSFiles -eq $false){
+        $ListofPackagestoInstall = Get-InputCSVs -PackagestoInstallEmu68Only
+    }
+    else {
 
-    $ListofPackagestoInstall = Get-InputCSVs -PackagestoInstall | Where-Object {(($_.KickstartVersion -eq $Script:GUIActions.KickstartVersiontoUse) -and ($_.IconsetName -eq "" -or $_.IconsetName -eq $Script:GUIActions.SelectedIconSet))} 
-    $ListofPackagestoInstall | Add-Member -NotePropertyName 'InstallMediaPath' -NotePropertyValue $null
-    $ListofPackagestoInstall | Add-Member -NotePropertyName 'PackageNameUserSelected' -NotePropertyValue $null
-    
-    
-    $HashTableforSelectedPackages = @{} # Clear Hash
-    $Script:GUIActions.AvailablePackages | ForEach-Object {
-        $HashTableforSelectedPackages[$_.PackageNameFriendlyName] = @($_.PackageNameUserSelected)
-    }
-    
-    $HashTableforInstallMedia = @{} # Clear Hash
-    $Script:GUIActions.FoundInstallMediatoUse | ForEach-Object {
-        $HashTableforInstallMedia[$_.ADF_Name] = @($_.Path) 
-    }
-    
-    $ListofPackagestoInstall| ForEach-Object {
-        if ($HashTableforInstallMedia.ContainsKey($_.SourceLocation)){
-            $_.InstallMediaPath = $HashTableforInstallMedia.($_.SourceLocation)[0]
-        } 
-        if ($HashTableforSelectedPackages.ContainsKey($_.PackageNameFriendlyName)){
-            $_.PackageNameUserSelected = $HashTableforSelectedPackages.($_.PackageNameFriendlyName)[0]
+        $ListofPackagestoInstall = Get-InputCSVs -PackagestoInstall | Where-Object {(($_.KickstartVersion -eq $Script:GUIActions.KickstartVersiontoUse) -and ($_.IconsetName -eq "" -or $_.IconsetName -eq $Script:GUIActions.SelectedIconSet))} 
+        $ListofPackagestoInstall | Add-Member -NotePropertyName 'InstallMediaPath' -NotePropertyValue $null
+        $ListofPackagestoInstall | Add-Member -NotePropertyName 'PackageNameUserSelected' -NotePropertyValue $null
+        
+        
+        $HashTableforSelectedPackages = @{} # Clear Hash
+        $Script:GUIActions.AvailablePackages | ForEach-Object {
+            $HashTableforSelectedPackages[$_.PackageNameFriendlyName] = @($_.PackageNameUserSelected)
         }
-        else {
-            $_.PackageNameUserSelected = $true
-        }        
-    }
+        
+        $HashTableforInstallMedia = @{} # Clear Hash
+        $Script:GUIActions.FoundInstallMediatoUse | ForEach-Object {
+            $HashTableforInstallMedia[$_.ADF_Name] = @($_.Path) 
+        }
+        
+        $ListofPackagestoInstall| ForEach-Object {
+            if ($HashTableforInstallMedia.ContainsKey($_.SourceLocation)){
+                $_.InstallMediaPath = $HashTableforInstallMedia.($_.SourceLocation)[0]
+            } 
+            if ($HashTableforSelectedPackages.ContainsKey($_.PackageNameFriendlyName)){
+                $_.PackageNameUserSelected = $HashTableforSelectedPackages.($_.PackageNameFriendlyName)[0]
+            }
+            else {
+                $_.PackageNameUserSelected = $true
+            }        
+        }
+    
+        $ListofPackagestoInstall = $ListofPackagestoInstall | Where-Object {$_.PackageNameUserSelected -eq $true}
 
-    $ListofPackagestoInstall = $ListofPackagestoInstall | Where-Object {$_.PackageNameUserSelected -eq $true}
+    }
 
     Write-TaskCompleteMessage 
 
@@ -496,22 +490,5 @@ function Write-AmigaFilestoInterimDrive {
 
     Write-TaskCompleteMessage 
    }
-
-   $Script:GUICurrentStatus.EndTimeForRunningInstall = (Get-Date -Format HH:mm:ss)
-   $ElapsedTime = (New-TimeSpan -Start $Script:GUICurrentStatus.StartTimeForRunningInstall -end $Script:GUICurrentStatus.EndTimeForRunningInstall).TotalSeconds
- 
-   Write-InformationMessage -Message "Processing Complete!"    
-   Write-InformationMessage -message "Started at: $($Script:GUICurrentStatus.StartTimeForRunningInstall) Finished at: $($Script:GUICurrentStatus.EndTimeForRunningInstall). Total time to run (in seconds) was: $ElapsedTime" 
-   Write-InformationMessage -message "The tool has finished running. A log file was created and has been stored in the log subfolder."
-   Write-InformationMessage -message "The full path to the file is: $([System.IO.Path]::GetFullPath($Script:Settings.LogLocation))"
-        
-    # $OutputPath = "C:\Users\Matt\OneDrive\Documents\EmuImager2\Test.vhd"
-    # $DiskPartitionTypeEmu68Boot = 'MBR'
-    # $PartitionNumberEmu68Boot = '1'
-    # $PartitionNumberSystem = '1'
-    # $DestinationPathPrefix = "$OutputPath\$DiskPartitionTypeEmu68Boot\$PartitionNumberEmu68Boot"
-    # $InterimFilePath = "$($Script:Settings.TempFolder)\InterimInstallFiles"
-    
-
 
 }

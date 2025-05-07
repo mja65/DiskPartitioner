@@ -1,4 +1,4 @@
-function Get-OptionsBeforeRunningImage.ps1 {
+function Get-OptionsBeforeRunningImage {
     param (
        
     )
@@ -15,9 +15,6 @@ function Get-OptionsBeforeRunningImage.ps1 {
 
     $WPF_RunWindow_RunOptions_Datagrid.ItemsSource = $Script:GUICurrentStatus.RunOptionstoReport.DefaultView
     
-    $WPF_RunWindow.ShowDialog() | out-null
+     $WPF_RunWindow.ShowDialog() | out-null
     
-\
-    
-
 }

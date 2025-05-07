@@ -1,33 +1,22 @@
-function Write-AmigaFilestoDiskorImage {
+function Get-CopyFilestoAmigaDiskCommands {
     param (
         $OutputLocationType 
     )
     
-    if ($OutputLocationType -eq 'Physical Disk'){
-        $PowershellDiskNumber = $Script:GUIActions.OutputPath.Substring(5,($Script:GUIActions.OutputPath.length-5))
-        Add-PartitionAccessPath -DiskNumber $PowershellDiskNumber -PartitionNumber 1 -AssignDriveLetter 
-        $Emu68BootPath = ((Get-Partition -DiskNumber $PowershellDiskNumber -PartitionNumber 1).DriveLetter)+':\'
-    }
-    elseif ($OutputLocationType -eq 'Local'){
-        
-    }
-
-    $DiskIconsPath = [System.IO.Path]::GetFullPath("$($Script:Settings.TempFolder)\IconFiles")
-
-    $Script:Settings.CurrentTaskNumber += 1
-    $Script:Settings.CurrentTaskName = "Copying Files to Emu68 Boot Partition"
-    
-    Write-StartTaskMessage
-
-    $null = Copy-Item "$($Script:Settings.InterimAmigaDrives)\Emu68Boot\*" -Destination $Emu68BootPath -Recurse
-    $null = Copy-Item "$DiskIconsPath\Emu68Disk.info" -Destination "$Emu68BootPath\disk.info"
-
     $Script:Settings.CurrentTaskNumber += 1
     $Script:Settings.CurrentTaskName = "Copying Files to Amiga Partitions"
     
     Write-StartTaskMessage
 
     $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk.Clear()
+
+    if ($OutputLocationType -eq 'VHDImage'){
+        $IsMounted = (Get-DiskImage -ImagePath $Script:GUIActions.OutputPath -ErrorAction Ignore).Attached
+        if ($IsMounted -eq $true){
+            Write-InformationMessage -Message "Dismounting existing image: $($Script:GUIActions.OutputPath)"
+            $null = Dismount-DiskImage -ImagePath $Script:GUIActions.OutputPath 
+        }
+    }
 
     $HashTableforPathstoRDBPartitions = @{} # Clear Hash
     $Script:GUICurrentStatus.PathstoRDBPartitions | ForEach-Object {
@@ -45,7 +34,11 @@ function Write-AmigaFilestoDiskorImage {
         }
         $SourcePath = [System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\$($_.Disk)\`*")
         if (Test-Path -Path $SourcePath){
-            $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += "fs copy `"$SourcePath`" `"$DestinationPath`"" 
+            $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
+                Command = "fs copy `"$SourcePath`" `"$DestinationPath`"" 
+                Sequence = 5
+            }
+            
         }
     }
    
@@ -62,7 +55,11 @@ function Write-AmigaFilestoDiskorImage {
             $SourcePath = "$DiskIconsPath\WorkDisk.info"
         }
         $DestinationPath = "$($Script:GUIActions.OutputPath)\MBR\$($_.MBRPartitionNumber)\rdb\$($_.DeviceName)\disk.info"
-        $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk  += "fs copy $SourcePath $DestinationPath"
+        $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
+            Command = "fs copy $SourcePath $DestinationPath"
+            Sequence = 6
+        }
+       
     }
     
     # if ($HSTCommandstoProcess) {

@@ -5,6 +5,7 @@
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:local="clr-namespace:WpfApp14"
  mc:Ignorable="d">
+       <Button x:Name="ResettoDefault" Content="Reset to Start" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="120" Height="40" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
        <GroupBox x:Name="GPTMBR_GroupBox" Header="MBR Partitioning" Width="1175" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,100,0,0" Visibility="Visible">
            <Grid>
                <TextBox x:Name="MBRPartitionSelect_Label" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Previous or Next Partition" VerticalAlignment="Top" Width="160" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" FontWeight="Bold"/>
@@ -227,25 +228,27 @@
            </Grid>
        </GroupBox>
 
-       <GroupBox x:Name="DiskType_GroupBox" Header="Disk Type" Width="350" Height="100" HorizontalAlignment="Left" VerticalAlignment="Top">
-           <Grid>
-               <TextBox x:Name="Disk_Type_Label" HorizontalAlignment="Left" Margin="10,16,0,0" TextWrapping="Wrap" Text="Select Disk Type" VerticalAlignment="Top" Width="100" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
-               <ComboBox x:Name="Disk_Type_DropDown"  HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="100" Visibility="Visible" Height="20" />
-               <TextBox x:Name="MediaSelect_Type_Label" HorizontalAlignment="Left" Margin="124,17,0,0" TextWrapping="Wrap" Text="Select Physical vs Image for Output" VerticalAlignment="Top" Width="223" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
-               <ComboBox x:Name="MediaSelect_Type_DropDown"  HorizontalAlignment="Left" Margin="121,40,0,0" VerticalAlignment="Top" Width="195" Visibility="Visible" Height="20" />
+        <GroupBox x:Name="DiskType_GroupBox" Header="Disk Type" Height="100" Width ="510" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid>
+                <TextBox x:Name="Disk_Type_Label" HorizontalAlignment="Left" Margin="10,16,0,0" TextWrapping="Wrap" Text="Select Disk Type" VerticalAlignment="Top" Width="130" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
+                <ComboBox x:Name="Disk_Type_DropDown"  HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="130" Visibility="Visible" Height="20" />
+                <TextBox x:Name="MediaSelect_Type_Label" HorizontalAlignment="Left" Margin="145,17,0,0" TextWrapping="Wrap" Text="Select Physical vs Image for Output" VerticalAlignment="Top" Width="223" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
+                <ComboBox x:Name="MediaSelect_Type_DropDown"  HorizontalAlignment="Left" Margin="145,40,0,0" VerticalAlignment="Top" Width="195" Visibility="Visible" Height="20" />
 
-           </Grid>
-       </GroupBox>
-       <GroupBox x:Name="DiskSizePhysicalDisk_GroupBox" Header="Disk Values" Width="550" Height="100" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Hidden">
-           <Grid>
-               <TextBox x:Name="MediaSelect_Label" HorizontalAlignment="Left" Margin="7,16,0,0" TextWrapping="Wrap" Text="Select Media to Use" VerticalAlignment="Top" Width="140" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" Visibility="Visible"/>
-               <ComboBox x:Name="MediaSelect_DropDown" ToolTip="Select the SD card you wish to use" HorizontalAlignment="Left" Margin="7,40,0,0" VerticalAlignment="Top" Width="340" Visibility="Visible"/>
-               <Button x:Name="MediaSelect_Refresh" ToolTip="Refresh available SD cards on your PC"  HorizontalAlignment="Left" Margin="375,20,0,0" VerticalAlignment="Top" Width="150" Height="40" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent" Visibility="Visible">
-                   <TextBlock Text="Refresh Available Media" TextWrapping="Wrap" TextAlignment="Center"/>
-               </Button>
-           </Grid>
-       </GroupBox>
-       <GroupBox x:Name="DiskSizeImage_GroupBox" Header="Image Values" Width="550" Height="100" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Hidden">
+            </Grid>
+        </GroupBox>
+
+        <GroupBox x:Name="DiskSizePhysicalDisk_GroupBox" Header="Disk Values" Width="510" Height="100" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Visible">
+            <Grid>
+                <TextBox x:Name="MediaSelect_Label" HorizontalAlignment="Left" Margin="7,16,0,0" TextWrapping="Wrap" Text="Select Media to Use" VerticalAlignment="Top" Width="140" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" Visibility="Visible"/>
+                <ComboBox x:Name="MediaSelect_DropDown" ToolTip="Select the SD card you wish to use" HorizontalAlignment="Left" Margin="7,40,0,0" VerticalAlignment="Top" Width="340" Visibility="Visible"/>
+                <Button x:Name="MediaSelect_Refresh" ToolTip="Refresh available SD cards on your PC"  HorizontalAlignment="Left" Margin="352,20,0,0" VerticalAlignment="Top" Width="150" Height="40" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent" Visibility="Visible">
+                    <TextBlock Text="Refresh Available Media" TextWrapping="Wrap" TextAlignment="Center"/>
+                </Button>
+            </Grid>
+        </GroupBox>
+
+       <GroupBox x:Name="DiskSizeImage_GroupBox" Header="Image Values" Width="510" Height="100" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Hidden">
            <Grid>
 
                <TextBox x:Name="Input_DiskSize_Label" HorizontalAlignment="Left" Margin="7,16,0,0" TextWrapping="Wrap" Text="Select Size of Image" VerticalAlignment="Top" Width="126" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
