@@ -8,7 +8,7 @@ function Write-AmigaFilestoInterimDrive {
        [switch]$CopyRemainingFiles
     )
     
-    $Script:Settings.CurrentTaskNumber += 1
+    $Script:Settings.CurrentTaskNumber ++
     $Script:Settings.CurrentTaskName = "Determining list of OS files, local install files, and files from internet to be installed"
 
     Write-StartTaskMessage
@@ -53,7 +53,7 @@ function Write-AmigaFilestoInterimDrive {
 
     if ($DownloadFilesFromInternet){
 
-        $Script:Settings.CurrentTaskNumber += 1
+        $Script:Settings.CurrentTaskNumber ++
         $Script:Settings.CurrentTaskName = "Getting Packages from Internet"
         
         Write-StartTaskMessage
@@ -64,7 +64,7 @@ function Write-AmigaFilestoInterimDrive {
         
         Write-TaskCompleteMessage 
 
-        $Script:Settings.CurrentTaskNumber += 1
+        $Script:Settings.CurrentTaskNumber ++
         $Script:Settings.CurrentTaskName = "Extracting Packages from Internet"
         
         Write-StartTaskMessage
@@ -77,7 +77,7 @@ function Write-AmigaFilestoInterimDrive {
 
    if ($DownloadLocalFiles){
 
-       $Script:Settings.CurrentTaskNumber += 1
+       $Script:Settings.CurrentTaskNumber ++
        $Script:Settings.CurrentTaskName = "Extracting Local Packages"
        
        Write-StartTaskMessage
@@ -92,12 +92,12 @@ function Write-AmigaFilestoInterimDrive {
     
    if ($ExtractADFFilesandIconFiles){
    
-       $Script:Settings.CurrentTaskNumber += 1
+       $Script:Settings.CurrentTaskNumber ++
        $Script:Settings.CurrentTaskName = "Extracting files from ADFs and Icon Files and copying to interim Amiga Drive"
        
        Write-StartTaskMessage
        
-       $Script:Settings.TotalNumberofSubTasks = 4
+       $Script:Settings.TotalNumberofSubTasks = 3
        
        $Script:Settings.CurrentSubTaskNumber = 1
        $Script:Settings.CurrentSubTaskName = "Removing Existing Files"
@@ -109,12 +109,12 @@ function Write-AmigaFilestoInterimDrive {
        }
    
    
-       $Script:Settings.CurrentSubTaskNumber += 1
+       $Script:Settings.CurrentSubTaskNumber ++
        $Script:Settings.CurrentSubTaskName = 'Preparing extraction commands for files from ADFs to interim drives'
    
        Write-StartSubTaskMessage
    
-       $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles.Clear()
+       $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
            
        $ListofPackagestoInstall | Where-Object {$_.Source -eq "ADF"} | ForEach-Object{
            $SourcePath  = "$($_.InstallMediaPath)\$($_.FilestoInstall)"
@@ -142,7 +142,7 @@ function Write-AmigaFilestoInterimDrive {
        
        }
 
-       $Script:Settings.CurrentSubTaskNumber += 1
+       $Script:Settings.CurrentSubTaskNumber ++
        $Script:Settings.CurrentSubTaskName = 'Preparing extraction commands for files from Install Media for Icons to interim drives and processing copy commands'
    
        Write-StartSubTaskMessage
@@ -150,7 +150,7 @@ function Write-AmigaFilestoInterimDrive {
        $DestinationPath = [System.IO.Path]::GetFullPath("$($Script:Settings.TempFolder)\IconFiles")
        $IconsPaths = Get-IconPaths
 
-       $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles.Clear()
+       $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
    
        if (Test-Path -Path $DestinationPath -PathType Container){
            $null = Remove-Item -Path  $DestinationPath -Force -Recurse
@@ -226,20 +226,31 @@ function Write-AmigaFilestoInterimDrive {
     
    if ($ProcessDownloadedFiles){
        
-       $Script:Settings.CurrentTaskNumber += 1
+       $Script:Settings.CurrentTaskNumber ++
        $Script:Settings.CurrentTaskName = "Processing Downloaded Files"
        
        Write-StartTaskMessage
        
-       $Script:Settings.CurrentSubTaskNumber += 1
+       $Script:Settings.TotalNumberofSubTasks = 3
+       $Script:Settings.CurrentSubTaskNumber = 1
        $Script:Settings.CurrentSubTaskName = 'Preparing default icon files for future use'
     
+       if (-not (test-path "$DestinationPath\Emu68BootDrive" -PathType Container)){
+           $null = New-Item "$DestinationPath\Emu68BootDrive" -ItemType Directory
+       }
+       if (-not (test-path "$DestinationPath\SystemDrive" -PathType Container)){
+           $null = New-Item "$DestinationPath\SystemDrive" -ItemType Directory
+       }
+       if (-not (test-path "$DestinationPath\WorkDrive" -PathType Container)){
+           $null = New-Item "$DestinationPath\WorkDrive" -ItemType Directory           
+       }
+
        $null = copy-item -path "$DestinationPath\NewFolderIcon\$(Split-Path -Path $IconsPaths.NewFolderIconFilestoInstall -Leaf)" -Destination "$DestinationPath\NewFolder.info" -Force
-       $null = copy-item -path "$DestinationPath\Emu68BootDiskIcon\$(Split-Path -Path $IconsPaths.Emu68BootDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\Emu68Disk.info" -Force
-       $null = copy-item -path "$DestinationPath\SystemDiskIcon\$(Split-Path -Path $IconsPaths.SystemDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\SystemDisk.info" -Force
-       $null = copy-item -path "$DestinationPath\WorkDiskIcon\$(Split-Path -Path $IconsPaths.WorkDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\WorkDisk.info" -Force
+       $null = copy-item -path "$DestinationPath\Emu68BootDiskIcon\$(Split-Path -Path $IconsPaths.Emu68BootDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\Emu68BootDrive\disk.info" -Force
+       $null = copy-item -path "$DestinationPath\SystemDiskIcon\$(Split-Path -Path $IconsPaths.SystemDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\SystemDrive\disk.info" -Force
+       $null = copy-item -path "$DestinationPath\WorkDiskIcon\$(Split-Path -Path $IconsPaths.WorkDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\WorkDrive\disk.info" -Force
     
-       $Script:Settings.CurrentSubTaskNumber += 1
+       $Script:Settings.CurrentSubTaskNumber ++
        $Script:Settings.CurrentSubTaskName = 'Renaming extracted files where needed'
     
        $PathtoExtractedFilesFilestoRename = [System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\ADFRenameFiles")
@@ -267,7 +278,7 @@ function Write-AmigaFilestoInterimDrive {
        }
     
        if (($Script:GUIActions.OSInstallMediaType -eq 'Disk') -and ([system.version]$Script:GUIActions.KickstartVersiontoUse -ge [system.version]3.2) -and ([system.version]$Script:GUIActions.KickstartVersiontoUse -lt [system.version]3.3)){
-           $Script:Settings.CurrentSubTaskNumber += 1
+           $Script:Settings.CurrentSubTaskNumber ++
            $Script:Settings.CurrentSubTaskName = "Uncompressing .Z Files"
            Write-StartSubTaskMessage
            
@@ -279,7 +290,7 @@ function Write-AmigaFilestoInterimDrive {
     }
  
    if ($CopyRemainingFiles) {
-    $Script:Settings.CurrentTaskNumber += 1
+    $Script:Settings.CurrentTaskNumber ++
     $Script:Settings.CurrentTaskName = "Copy Remaining files to Interim Drive"
     
     Write-StartTaskMessage
@@ -389,11 +400,12 @@ function Write-AmigaFilestoInterimDrive {
    }
 
    if ($AdjustingScriptsandInfoFiles){
-    $Script:Settings.CurrentTaskNumber += 1
+    $Script:Settings.CurrentTaskNumber ++
     $Script:Settings.CurrentTaskName = "Adjusting scripts and .info files"
     
     Write-StartTaskMessage
 
+    $Script:Settings.TotalNumberofSubTasks = 3
     $Script:Settings.CurrentSubTaskNumber = 1
     $Script:Settings.CurrentSubTaskName = "Modifying scripts"
     Write-StartSubTaskMessage
@@ -425,7 +437,7 @@ function Write-AmigaFilestoInterimDrive {
         }
     }
 
-    $Script:Settings.CurrentSubTaskNumber += 1
+    $Script:Settings.CurrentSubTaskNumber ++
     $Script:Settings.CurrentSubTaskName = "Modifying tooltypes"
     Write-StartSubTaskMessage
            
@@ -471,7 +483,7 @@ function Write-AmigaFilestoInterimDrive {
         }
     }
 
-    $Script:Settings.CurrentSubTaskNumber += 1
+    $Script:Settings.CurrentSubTaskNumber ++
     $Script:Settings.CurrentSubTaskName = "Creating new folders and/or adding .info files where needed"
 
     Write-StartSubTaskMessage

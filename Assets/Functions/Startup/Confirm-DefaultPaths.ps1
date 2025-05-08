@@ -17,7 +17,7 @@ function Confirm-DefaultPaths {
 
     Write-InformationMessage "Checking for existence of default folders"
     Write-InformationMessage ""
-
+    
     foreach ($PathtoCheck in $LocationstoCheck) {
         if (-not(Test-Path $PathtoCheck -PathType Container)){
             Write-InformationMessage "Folder $(Split-Path -Path $PathtoCheck -Leaf) does not exist! Creating folder."
@@ -25,6 +25,22 @@ function Confirm-DefaultPaths {
         } 
     }
 
+    Write-InformationMessage "Checking for temporary files from previous use and removing"
+    Write-InformationMessage ""
+    Get-ChildItem -Path $Script:Settings.TempFolder | ForEach-Object {
+        if ($_.Name -ne "WebPackagesDownload"){
+            $null = Remove-Item $_.FullName -Recurse -Force
+            
+        }
+    }
+    
+    Get-ChildItem -Path "$($Script:Settings.TempFolder)\WebPackagesDownload" | ForEach-Object {
+        if ($_.PSIsContainer){
+            $null = Remove-Item $_.FullName -Recurse -Force
+        } 
+    }
+    
+    
     Write-InformationMessage "Checking for existence of default folders - Complete"
     Write-InformationMessage ""
 

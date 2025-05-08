@@ -10,6 +10,9 @@ $WPF_Window_Button_Run.Add_Click({
       Get-OptionsBeforeRunningImage
       if ($Script:GUICurrentStatus.ProcessImageConfirmedbyUser -eq $true){
 
+        # $Script:GUIActions.OutputType = "Disk"
+        # $Script:GUIActions.OutputPath = "\disk6"
+
          $Script:GUICurrentStatus.StartTimeForRunningInstall = (Get-Date -Format HH:mm:ss)
 
          Write-InformationMessage "Started processing at: $($Script:GUICurrentStatus.StartTimeForRunningInstall)"
@@ -24,45 +27,109 @@ $WPF_Window_Button_Run.Add_Click({
             $OutputTypetoUse = "Physical Disk"
          }
          
+         $Script:Settings.TotalNumberofTasks = 22
+         $Script:Settings.CurrentTaskNumber = 0 
+
          if ($Script:GUIActions.InstallOSFiles -eq $false){
-            Write-AmigaFilestoInterimDrive -DownloadFilesFromInternet
+            Write-AmigaFilestoInterimDrive -DownloadFilesFromInternet # 15 tasks
          }
          elseif ($Script:GUIActions.InstallOSFiles -eq $true){
             Write-AmigaFilestoInterimDrive -DownloadFilesFromInternet -DownloadLocalFiles -ExtractADFFilesandIconFiles -AdjustingScriptsandInfoFiles -ProcessDownloadedFiles -CopyRemainingFiles
          }
 
-         Get-NewDiskorImageCommands -OutputLocationType $OutputTypetoUse #Commands not run yet
+         $Script:Settings.CurrentTaskNumber ++
+         $Script:Settings.CurrentTaskName = "Downloading and copying Emu68 Documentation to Amiga Disk"
+        
+         Write-StartTaskMessage
 
-         if (($OutputTypetoUse -eq "Physical Disk") -or ($OutputTypetoUse -eq "VHDImage")){
-            if ($OutputTypetoUse -eq "Physical Disk"){
-               $Message = "Running HST Imager to wipe disk of any existing partitions"
-            } 
-            elseif ($OutputTypetoUse -eq "VHDImage"){
-               $Message = "Running HST Imager to create image"
-            }
+         if ((Get-Emu68ImagerDocumentation -LocationtoDownload ([System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\System\PiStorm\Docs\"))) -eq $false){
+            Write-ErrorMessage -Message 'Documentation could not be created! You will not be able to access on the Amiga'
+         }
+        
+         Write-TaskCompleteMessage 
+
+         $Script:Settings.CurrentTaskNumber ++
+         $Script:Settings.CurrentTaskName = "Preparing Commands for setting up image or disk and running"
+        
+         Write-StartTaskMessage
+         
+         $Script:Settings.TotalNumberofSubTasks = 3
+
+         Get-NewDiskorImageCommands -OutputLocationType $OutputTypetoUse #Commands not run yet # 1 task
+         
+         $Script:Settings.CurrentSubTaskNumber ++
+         $Script:Settings.CurrentSubTaskName = "Running HST commands"
+         
+         Write-StartSubTaskMessage
+
+         if ($OutputTypetoUse -eq "VHDImage"){
+            $Message = "Running HST Imager to create image"
             Start-HSTCommands -HSTScript $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage -Message $Message          
          }
+                 
+         $Script:Settings.CurrentSubTaskNumber ++
+         $Script:Settings.CurrentSubTaskName = "Initialising disk"
+        
+         Write-StartSubTaskMessage
 
          Initialize-MBRDisk -OutputLocationType $OutputTypetoUse
 
-         if ($OutputTypetoUse -eq "ImgImage"){
+         if (($OutputTypetoUse -eq "ImgImage") -or ($OutputTypetoUse -eq "Physical Disk")){
+            if ($OutputTypetoUse -eq "ImgImage"){
+               $Message = "Running HST Imager to create and initialise Image"
+            } 
+            elseif ($OutputTypetoUse -eq "Physical Disk"){
+               $Message = "Running HST Imager to create and initialise Disk"
+            }
             Start-HSTCommands -HSTScript $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage -Message "Running HST Imager to create and initialise Image"
-         } 
+         }
     
+         Write-TaskCompleteMessage 
+
+         $Script:Settings.CurrentTaskNumber ++
+         $Script:Settings.CurrentTaskName = "Setting up Disk or Image and copying files"
+         
+         Write-StartTaskMessage
+         
+         $Script:Settings.TotalNumberofSubTasks = 4
+
+         if ($OutputTypetoUse -eq "IMGImage"){
+            $Script:Settings.TotalNumberofSubTasks --
+         }
+
+         $Script:Settings.CurrentSubTaskNumber = 0
+
          Get-DiskStructurestoMBRGPTDiskorImageCommands #Commands not run yet
 
          Get-CopyFilestoAmigaDiskCommands -OutputLocationType $OutputTypetoUse #Commands not run yet
 
          if (($OutputTypetoUse -eq "Physical Disk") -or ($OutputTypetoUse -eq "VHDImage")){
+            $Script:Settings.CurrentSubTaskNumber ++
+            $Script:Settings.CurrentTaskName = 'Processing Commands on Disk'
+
+            Write-StartSubTaskMessage
+
+            if ($OutputTypetoUse -eq 'VHDImage'){
+               $IsMounted = (Get-DiskImage -ImagePath $Script:GUIActions.OutputPath -ErrorAction Ignore).Attached
+               if ($IsMounted -eq $true){
+                   Write-InformationMessage -Message "Dismounting existing image: $($Script:GUIActions.OutputPath)"
+                   $null = Dismount-DiskImage -ImagePath $Script:GUIActions.OutputPath 
+               }
+           }
+
             $HSTCommandstoRun = $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures + $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk
-            Start-HSTCommands -HSTScript $HSTCommandstoRun 'Doing shit'
+            Start-HSTCommands -HSTScript $HSTCommandstoRun 'Processing commands'
          }
 
          Copy-EMU68BootFiles -OutputLocationType $OutputTypetoUse #Commands not run yet for IMG
 
          if ($OutputTypetoUse -eq "IMGImage"){
+            $Script:Settings.CurrentSubTaskNumber ++
+            $Script:Settings.CurrentTaskName = 'Processing Commands on Disk'
+
+            Write-StartSubTaskMessage
             $HSTCommandstoRun = $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures + $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk
-            Start-HSTCommands -HSTScript $HSTCommandstoRun 'Doing shit'
+            Start-HSTCommands -HSTScript $HSTCommandstoRun 'Processing commands'
          }
 
          $Script:GUICurrentStatus.EndTimeForRunningInstall = (Get-Date -Format HH:mm:ss)

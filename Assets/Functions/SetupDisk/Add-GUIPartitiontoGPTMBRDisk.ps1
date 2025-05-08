@@ -169,8 +169,8 @@ function Add-GUIPartitiontoGPTMBRDisk {
     if (-not ($LoadSettings)){
         if ($PartitionType -eq 'MBR'){
             $NewPartitionNumber = $Script:WPF_DP_Disk_GPTMBR.NextPartitionMBRNumber
-            $Script:WPF_DP_Disk_GPTMBR.NextPartitionMBRNumber += 1
-            $Script:WPF_DP_Disk_GPTMBR.NumberofPartitionsMBR += 1
+            $Script:WPF_DP_Disk_GPTMBR.NextPartitionMBRNumber ++
+            $Script:WPF_DP_Disk_GPTMBR.NumberofPartitionsMBR ++
         }
         elseif ($PartitionType -eq 'GPT'){
             Write-Host "Coding Error - Add-GUIPartitiontoGPTMBRDisk!"

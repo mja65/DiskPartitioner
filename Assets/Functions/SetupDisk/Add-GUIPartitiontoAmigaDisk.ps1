@@ -125,7 +125,7 @@ function Add-GUIPartitiontoAmigaDisk {
     (Get-Variable -Name $AmigaDiskName).Value.AddChild(((Get-Variable -name $NewPartitionName).value))
 
     if (-not ($LoadSettings)){
-        (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber += 1
+        (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber ++
     }
        
 }

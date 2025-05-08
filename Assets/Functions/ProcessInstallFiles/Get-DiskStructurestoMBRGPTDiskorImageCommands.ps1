@@ -4,7 +4,8 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
     )
 
     
-    $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures.Clear()
+    $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures = [System.Collections.Generic.List[PSCustomObject]]::New()
+    $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk = [System.Collections.Generic.List[PSCustomObject]]::New()
 
     if ($Script:GUIActions.DiskTypeSelected -eq 'PiStorm - MBR'){
         $MBRPartitionstoAddtoDisk = Get-AllGUIPartitions -partitiontype 'MBR'
@@ -20,26 +21,9 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
         $WPF_MainWindow.Close()
         exit
     }
-  
-    
-    $Script:Settings.CurrentTaskNumber += 1
-    $Script:Settings.CurrentTaskName = "Setting up Disk or Image"
-    
-    Write-StartTaskMessage
-    
-    $Script:Settings.TotalNumberofSubTasks = 3
-    
-    # $Script:Settings.CurrentSubTaskNumber = 1
-    # $Script:Settings.CurrentSubTaskName = "Initialising Image"
-    
-    # Write-StartSubTaskMessage
-    
-    # #Initialize-Disk -Number $PowershellDiskNumber -PartitionStyle MBR -ErrorAction Ignore
-    
-    #$EndPreviousPartitionBytes = $null
-    
-    $Script:Settings.CurrentSubTaskNumber = 2
-    $Script:Settings.CurrentSubTaskName = "Creating MBR Partitions"
+        
+    $Script:Settings.CurrentSubTaskNumber ++
+    $Script:Settings.CurrentSubTaskName = "Getting commands to create MBR Partitions"
     
     Write-StartSubTaskMessage
 
@@ -63,10 +47,13 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
             Command = "mbr part add $($Script:GUIActions.OutputPath) $PartitionTypetoUse $($MBRPartition.value.partitionsizebytes) --start-sector $MBRPartitionStartSector"
             Sequence = 1      
         }  
-        $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
-            Command = "mbr part format $($Script:GUIActions.OutputPath) $MBRPartitionCounter $($MBRPartition.value.VolumeName)"
-            Sequence = 1      
-        }  
+        if ($MBRPartition.value.PartitionSubType -eq 'FAT32'){
+            Write-InformationMessage -Message "Adding command to format FAT32 partition for partition #$MBRPartitionCounter"
+            $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
+                Command = "mbr part format $($Script:GUIActions.OutputPath) $MBRPartitionCounter $($MBRPartition.value.VolumeName)"
+                Sequence = 1      
+            }  
+        }
         if ($MBRPartition.value.ImportedPartition -eq $true -and $MBRPartition.value.ImportedPartitionMethod -eq 'Direct'){
             $Startpoint = $MBRPartition.value.ImportedPartitionPath.IndexOf("\MBR\")
             $SubstringLength = $MBRPartition.value.ImportedPartitionPath.length-($Startpoint+5)
@@ -81,8 +68,8 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
         $MBRPartitionCounter ++
     }
 
-    $Script:Settings.CurrentSubTaskNumber = 4
-    $Script:Settings.CurrentSubTaskName = "Creating RDB Partitions"
+    $Script:Settings.CurrentSubTaskNumber ++
+    $Script:Settings.CurrentSubTaskName = "Getting commands to create RDB Partitions"
 
     Write-StartSubTaskMessage
     
@@ -115,7 +102,7 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
 
     Write-InformationMessage -Message "Preparing HST Commands to run"
   
-   $Script:GUICurrentStatus.PathstoRDBPartitions.Clear()
+   $Script:GUICurrentStatus.PathstoRDBPartitions = [System.Collections.Generic.List[PSCustomObject]]::New()
    
    $MBRPartitionCounter = 1
   
@@ -168,9 +155,10 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
                            $BootPrioritytouse = $RDBPartition.value.Priority
                            If ($RDBPartition.value.ImportedFilesPath){
                                if (test-path ($RDBPartition.value.ImportedFilesPath)){
-                                   $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
+                                Write-InformationMessage -Message "Adding command to import files from $($RDBPartition.value.ImportedFilesPath) to RDB Partition $($RDBPartition.value.DeviceName)"
+                                   $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
                                        Command = "fs copy $($RDBPartition.value.ImportedFilesPath) $($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter\rdb\$($RDBPartition.value.DeviceName)"
-                                       Sequence = 1      
+                                       Sequence = 5      
                                    }  
                                }
                            }

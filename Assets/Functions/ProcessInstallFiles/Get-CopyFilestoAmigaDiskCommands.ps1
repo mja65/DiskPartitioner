@@ -3,22 +3,13 @@ function Get-CopyFilestoAmigaDiskCommands {
         $OutputLocationType 
     )
     
-    $Script:Settings.CurrentTaskNumber += 1
-    $Script:Settings.CurrentTaskName = "Copying Files to Amiga Partitions"
+    $Script:Settings.CurrentSubTaskNumber ++
+    $Script:Settings.CurrentSubTaskName = "Getting commands for copying Files to Amiga Partitions" 
     
-    Write-StartTaskMessage
-
-    $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk.Clear()
-
-    if ($OutputLocationType -eq 'VHDImage'){
-        $IsMounted = (Get-DiskImage -ImagePath $Script:GUIActions.OutputPath -ErrorAction Ignore).Attached
-        if ($IsMounted -eq $true){
-            Write-InformationMessage -Message "Dismounting existing image: $($Script:GUIActions.OutputPath)"
-            $null = Dismount-DiskImage -ImagePath $Script:GUIActions.OutputPath 
-        }
-    }
-
+    Write-StartSubTaskMessage
+    
     $HashTableforPathstoRDBPartitions = @{} # Clear Hash
+
     $Script:GUICurrentStatus.PathstoRDBPartitions | ForEach-Object {
         $HashTableforPathstoRDBPartitions[$_.VolumeName] = @($_.RDBPartitionNumber,$_.DeviceName,$_.MBRPartitionNumber) 
     }
@@ -34,6 +25,7 @@ function Get-CopyFilestoAmigaDiskCommands {
         }
         $SourcePath = [System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\$($_.Disk)\`*")
         if (Test-Path -Path $SourcePath){
+            Write-InformationMessage -Message "Adding commands for copying file(s) to $RDBDeviceName"
             $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
                 Command = "fs copy `"$SourcePath`" `"$DestinationPath`"" 
                 Sequence = 5
@@ -47,14 +39,17 @@ function Get-CopyFilestoAmigaDiskCommands {
         $HashTableforAmigaDiskstoWrite[$_.VolumeName] = @($_.Disk) 
     }
 
+    $DiskIconsPath = [System.IO.Path]::GetFullPath("$($Script:Settings.TempFolder)\IconFiles")
+    
     $Script:GUICurrentStatus.PathstoRDBPartitions | ForEach-Object {
         if ($HashTableforAmigaDiskstoWrite.ContainsKey($_.VolumeName)){
-            $SourcePath = "$DiskIconsPath\$($HashTableforAmigaDiskstoWrite.($_.VolumeName)[0])Disk.info"
+            $SourcePath = "$DiskIconsPath\$($HashTableforAmigaDiskstoWrite.($_.VolumeName)[0])Drive\disk.info"
         }
         else {
-            $SourcePath = "$DiskIconsPath\WorkDisk.info"
+            $SourcePath = "$DiskIconsPath\WorkDrive\disk.info"
         }
-        $DestinationPath = "$($Script:GUIActions.OutputPath)\MBR\$($_.MBRPartitionNumber)\rdb\$($_.DeviceName)\disk.info"
+        $DestinationPath = "$($Script:GUIActions.OutputPath)\MBR\$($_.MBRPartitionNumber)\rdb\$($_.DeviceName)"
+        Write-InformationMessage -Message "Adding commands for copying icon file(s) to $RDBDeviceName"
         $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
             Command = "fs copy $SourcePath $DestinationPath"
             Sequence = 6
@@ -62,17 +57,5 @@ function Get-CopyFilestoAmigaDiskCommands {
        
     }
     
-    # if ($HSTCommandstoProcess) {
-    #     $HSTCommandstoProcess | Out-File -FilePath $HSTCommandScriptPath -Force
-    #     $Logoutput = "$($Script:Settings.TempFolder)\LogOutputTemp.txt"
-    #     Write-InformationMessage -Message "Creating new RDB disk and partitions"
-    #     & $Script:ExternalProgramSettings.HSTImagerPath script $HSTCommandScriptPath >$Logoutput
-    #     if ((Confirm-HSTNoErrors -PathtoLog $Logoutput -HSTImager) -eq $false){
-    #         exit
-    #     }
-    #     $null = Remove-Item $HSTCommandScriptPath -Force
-    # }
-    
-    Write-TaskCompleteMessage
    
 }

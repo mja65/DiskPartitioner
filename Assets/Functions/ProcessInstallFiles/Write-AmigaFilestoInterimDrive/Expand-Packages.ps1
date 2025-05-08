@@ -37,10 +37,10 @@ function Expand-Packages {
         }
     }
 
-    $Script:Settings.TotalNumberofSubTasks += 1         
+    $Script:Settings.TotalNumberofSubTasks ++         
     $Script:Settings.CurrentSubTaskName = "Removing any existing extracted files"
     Write-StartSubTaskMessage
-    $Script:Settings.CurrentSubTaskNumber += 1
+    $Script:Settings.CurrentSubTaskNumber ++
     
     $ArchivestoExtract | ForEach-Object {
         if (Test-Path -Path $_.FoldertoExtract -PathType Container){

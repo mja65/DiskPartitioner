@@ -17,7 +17,7 @@ function Confirm-HSTNoErrors {
     $ErrorCount = 0
     foreach ($ErrorLine in $CheckforError){
         if ($ErrorLine -match " ERR]"){
-            $ErrorCount += 1
+            $ErrorCount ++
             Write-ErrorMessage -Message "Error in $($Name): $ErrorLine"           
         }
     }

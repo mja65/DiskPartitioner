@@ -40,7 +40,9 @@ Write-Emu68ImagerLog -start
 
 Show-Disclaimer
 
-$Script:Settings.CurrentTaskNumber += 1
+$Script:Settings.TotalNumberofTasks = 3
+
+$Script:Settings.CurrentTaskNumber ++
 $Script:Settings.CurrentTaskName = "Checking Prerequisites for Using Emu68 Imager"
 Write-StartTaskMessage
 
@@ -48,7 +50,7 @@ Write-StartTaskMessage
 
 Write-TaskCompleteMessage
 
-$Script:Settings.CurrentTaskNumber += 1
+$Script:Settings.CurrentTaskNumber ++
 $Script:Settings.CurrentTaskName = "Startup Checks"
 Write-StartTaskMessage
 

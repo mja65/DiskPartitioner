@@ -9,11 +9,12 @@ function Get-NewDiskorImageCommands {
     $TempFoldertouse = [System.IO.Path]::GetFullPath($Script:Settings.TempFolder)
     $DiskSizeBytestouse = $WPF_DP_Disk_GPTMBR.DiskSizeBytes 
     
-    $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage.Clear()
+    $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage = [System.Collections.Generic.List[PSCustomObject]]::New()
     
-    $Script:Settings.CurrentTaskNumber += 1
-    $Script:Settings.CurrentTaskName = "Preparing Commands for setting up image or disk"
-    Write-StartTaskMessage
+    $Script:Settings.CurrentSubTaskNumber = 1
+    $Script:Settings.CurrentSubTaskName = "Getting HST commands"
+    
+    Write-StartSubTaskMessage
 
     if (($OutputLocationType -eq 'VHDImage') -or ($OutputLocationType -eq 'IMGImage')){
         Write-InformationMessage -Message "Virtualised disk being used"
@@ -34,12 +35,16 @@ function Get-NewDiskorImageCommands {
          }
    
     }
+      
     elseif ($OutputLocationType -eq 'Physical Disk'){
         Write-InformationMessage -Message "Physical disk being used"
-      #  $PowershellDiskNumber = $Script:GUIActions.OutputPath.Substring(5,($Script:GUIActions.OutputPath.Length-5))
+        if (test-path "$TempFoldertouse\Clean.vhd"){
+            $null = Remove-Item "$TempFoldertouse\Clean.vhd"
+        }
         Write-InformationMessage -Message 'Adding commands to wipe disk'
+      
         $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage += [PSCustomObject]@{
-            Command = "blank $TempFoldertouse\Clean.vhd 10mb"
+            Command = "blank $TempFoldertouse\Clean.vhd 5mb"
             Sequence = 1
         }
         $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage += [PSCustomObject]@{
@@ -52,12 +57,5 @@ function Get-NewDiskorImageCommands {
         $WPF_MainWindow.Close()
         exit
     }
-    # Write-InformationMessage -Message 'Adding command to initialise disk'
-    # $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage += [PSCustomObject]@{
-    #     Command = "mbr init $($Script:GUIActions.OutputPath)"
-    #     Sequence = 3           
-    #  }
-
-    Write-TaskCompleteMessage
-    
+      
 }

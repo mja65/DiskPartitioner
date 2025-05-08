@@ -71,7 +71,7 @@ $Script:Settings = [PSCustomObject]@{
         Path = '.\InputFiles\DiskDefaults.CSV'
         GID = '784658683'
     }
-    TotalNumberofTasks = 2
+    TotalNumberofTasks = $null
     CurrentTaskNumber = 0
     CurrentTaskName = $null
     TotalNumberofSubTasks = $null

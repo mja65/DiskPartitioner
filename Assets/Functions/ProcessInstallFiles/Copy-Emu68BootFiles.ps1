@@ -3,8 +3,14 @@ function Copy-EMU68BootFiles {
         $OutputLocationType
     )
        
-    $Script:Settings.CurrentTaskNumber += 1
-    $Script:Settings.CurrentTaskName = "Copying Files to Emu68 Boot Partition"
+    $Script:Settings.CurrentTaskNumber ++
+
+    if ($OutputLocationType -ne 'ImgImage'){
+        $Script:Settings.CurrentTaskName = "Copying Files to Emu68 Boot Partition"
+    }
+    else {
+        $Script:Settings.CurrentTaskName = "Getting commands for copying Files to Emu68 Boot Partition"
+    }
     
     Write-StartTaskMessage
 
@@ -17,7 +23,7 @@ function Copy-EMU68BootFiles {
             Command = "fs copy $SourcePath $DestinationPath"
             Sequence = 6
         }
-        $SourcePath = "$DiskIconsPath\Emu68Disk.info" 
+        $SourcePath = "$DiskIconsPath\Emu68BootDrive\disk.info" 
         $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
             Command = "fs copy $SourcePath $DestinationPath"
             Sequence = 6
@@ -33,17 +39,27 @@ function Copy-EMU68BootFiles {
                 else {
                     $PowershellDiskNumber = (Get-DiskImage -ImagePath $Script:GUIActions.OutputPath -ErrorAction Ignore).Number
                 }
+                Add-PartitionAccessPath -DiskNumber $PowershellDiskNumber -PartitionNumber 1 -AssignDriveLetter 
+                $Emu68BootPath = "$((Get-Partition -DiskNumber $PowershellDiskNumber -PartitionNumber 1).DriveLetter):\"        
         }
         
         elseif ($OutputLocationType -eq 'Physical Disk'){
             $PowershellDiskNumber = $Script:GUIActions.OutputPath.Substring(5,($Script:GUIActions.OutputPath.length-5))
+            $DriveLetterFound = (Get-Partition -DiskNumber 6 -PartitionNumber 1).DriveLetter
+            if ($DriveLetterFound){
+                $Emu68BootPath = "$($DriveLetterFound):\"
+            } 
+            else {
+                Add-PartitionAccessPath -DiskNumber $PowershellDiskNumber -PartitionNumber 1 -AssignDriveLetter 
+                $Emu68BootPath = "$((Get-Partition -DiskNumber $PowershellDiskNumber -PartitionNumber 1).DriveLetter):\"            
+            }
         }
-            Add-PartitionAccessPath -DiskNumber $PowershellDiskNumber -PartitionNumber 1 -AssignDriveLetter 
-            $Emu68BootPath = ((Get-Partition -DiskNumber $PowershellDiskNumber -PartitionNumber 1).DriveLetter)+':\'
-            $null = Copy-Item "$($Script:Settings.InterimAmigaDrives)\Emu68Boot\*" -Destination $Emu68BootPath -Recurse
-            $null = Copy-Item "$DiskIconsPath\Emu68Disk.info" -Destination "$Emu68BootPath\disk.info"
+        
+        $null = Copy-Item "$DiskIconsPath\Emu68BootDrive\disk.info" -Destination "$Emu68BootPath"
+        $null = Copy-Item "$($Script:Settings.InterimAmigaDrives)\Emu68Boot\*" -Destination $Emu68BootPath -Recurse
 
     }
 
-    Write-TaskCompleteMessage
 }
+
+
