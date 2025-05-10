@@ -37,7 +37,7 @@ function Set-InitialDiskValues {
                             -DefaultAddMBRSize 1073741824 `
                             -DefaultAddGPTSize $null `
                             -DefaultAddID76Size 1073741824 `
-                            -DefaultAddPFS3Size 1073741824
+                            -DefaultAddPFS3Size 536870912
  
     }
     elseif ($DiskType -eq 'PiStorm - GPT'){

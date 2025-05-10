@@ -3,7 +3,7 @@ function Read-SettingsFile {
         $SettingsFile
     )
     
-   # $SettingsFile = "C:\Users\Matt\OneDrive\Documents\EmuImager2\Settings\Test.e68"
+   # $SettingsFile = "C:\Users\Matt\OneDrive\Documents\DiskPartitioner\Settings\Test.e68"
 
    $ReadSettings = get-content -Path $SettingsFile
 
@@ -34,7 +34,8 @@ function Read-SettingsFile {
     $MBRPartitions = @()
     $RDBPartitions = @()
     $ImportFiles = @()
-    $AvailablePackages = @()
+    $AvailableIconSets = New-Object System.Data.DataTable
+    $AvailablePackages = New-Object System.Data.DataTable
     $FoundInstallMedia = @()
     $FoundKickstarttoUse = @()
 
@@ -59,6 +60,10 @@ function Read-SettingsFile {
             $HeaderValue = $_.Replace('RDBPartitionHeader;','')
             $RDBPartitionHeader = $HeaderValue.Split(';')
         }
+        elseif ($_.split(';')[0] -eq 'AvailableIconSetsUserSelectedHeader'){
+            $HeaderValue = $_.Replace('AvailableIconSetsUserSelectedHeader;','')
+            $AvailableIconSetsHeader = $HeaderValue.Split(';')
+        }        
         elseif ($_.split(';')[0] -eq 'AvailablePackagesUserSelectedHeader'){
             $HeaderValue = $_.Replace('AvailablePackagesUserSelectedHeader;','')
             $AvailablePackagesHeader = $HeaderValue.Split(';')
@@ -89,6 +94,9 @@ function Read-SettingsFile {
         elseif ($_.split(';')[0] -eq 'RDBPartitionDetails'){
             $RDBPartitions += ConvertFrom-Csv -InputObject $_ -Delimiter ';' -Header $RDBPartitionHeader
         }
+        elseif ($_.split(';')[0] -eq 'AvailableIconSetsUserSelectedDetails'){
+            $AvailableIconSets += ConvertFrom-Csv -InputObject $_.Replace('AvailableIconSetsUserSelectedDetails;','')   -Delimiter ';' -Header $AvailableIconSetsHeader 
+        }
         elseif ($_.split(';')[0] -eq 'AvailablePackagesUserSelectedDetails'){
             $AvailablePackages += ConvertFrom-Csv -InputObject $_.Replace('AvailablePackagesUserSelectedDetails;','')   -Delimiter ';' -Header $AvailablePackagesHeader 
         }
@@ -106,10 +114,10 @@ function Read-SettingsFile {
 
    $Script:GUICurrentStatus.ProcessImageStatus = $false
 
-    Remove-Variable -Name 'WPF_DP_Partition*'
+    Remove-Variable -Scope Script -Name 'WPF_DP_Partition*'
     
     if (test-path variable:script:WPF_DP_Disk_GPTMBR) {
-        Remove-Variable -Name 'WPF_DP_Disk_GPTMBR'
+        Remove-Variable -Scope Script -Name 'WPF_DP_Disk_GPTMBR'
     }
 
     $GPTMBR | ForEach-Object {
@@ -143,9 +151,7 @@ function Read-SettingsFile {
             (Get-Variable -Scope Script -Name "GUIActions").Value.$($_.Setting) = $_.Value
         }
     }  
-
-    get-filehash -path $FoundKickstarttoUse.KickstartPath -Algorithm MD5
-    
+   
     if (Test-Path $FoundKickstarttoUse.KickstartPath){
         if ((get-filehash -path $FoundKickstarttoUse.KickstartPath -Algorithm MD5).hash -eq (Get-InputCSVs -ROMHashes | Where-Object {$_.Kickstart_version -eq $Script:GUIActions.KickstartVersiontoUse}).hash){
             $Script:GUIActions.FoundKickstarttoUse = $FoundKickstarttoUse | Select-Object 'Kickstart_Version','FriendlyName','Sequence','IncludeorExclude','ExcludeMessage','Fat32Name','KickstartPath'            
@@ -176,7 +182,32 @@ function Read-SettingsFile {
         $Script:GUIActions.FoundInstallMediatoUse = $FoundInstallMedia 
     }
 
-    $Script:GUIActions.AvailablePackages = $AvailablePackages   
+
+    $Script:GUIActions.AvailablePackages.Clear()
+    
+    foreach ($line in $AvailablePackages ){
+        $Array = @()
+        $array += $line.PackageNameUserSelected
+        $array += $line.PackageNameDefaultInstall
+        $array += $line.PackageNameFriendlyName
+        $array += $line.PackageNameGroup
+        $array += $line.PackageNameDescription
+        [void]$Script:GUIActions.AvailablePackages.Rows.Add($array)
+    }
+    
+    $Script:GUIActions.AvailableIconSets.Clear() 
+     
+    foreach ($line in  $AvailableIconSets){
+       $Array = @()
+       $array += $line.IconSet
+       $array += $line.IconSetDescription
+       $array += $line.IconSetDefaultInstall
+      # $array += $line.IconSetUserSelected
+       [void]$Script:GUIActions.AvailableIconSets.Rows.Add($array)
+    }
+
+    
+    $Script:GUICurrentStatus.AvailablePackagesNeedingGeneration = $false
 
     $WPF_Setup_ScreenMode_Dropdown.SelectedItem = $Script:GUIActions.ScreenModetoUseFriendlyName
     $WPF_Setup_KickstartVersion_Dropdown.SelectedItem = $Script:GUIActions.KickstartVersiontoUseFriendlyName
@@ -243,6 +274,8 @@ function Read-SettingsFile {
         } 
 
     }            
+
+    Update-UI -MainWindowButtons -Emu68Settings -DiskPartitionWindow -UpdateInputBoxes -Buttons -PhysicalvsImage -CheckforRunningImage
 
     return $true
 

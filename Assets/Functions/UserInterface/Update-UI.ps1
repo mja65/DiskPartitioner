@@ -77,6 +77,18 @@ function Update-UI {
                 $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","No Output location has been defined")
                 $Script:GUICurrentStatus.ProcessImageStatus = $false
             }
+            else {
+                if ($Script:GUIActions.OutputType -eq 'Disk'){
+                    Get-AllGUIPartitions -partitiontype 'MBR' | ForEach-Object {
+                        if ($_.value.ImportedPartition -eq $true -and $_.value.ImportedPartitionMethod -eq 'Direct'){
+                           if ($_.value.ImportedPartitionPath -match $Script:GUIActions.OutputPath){
+                               $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","The output location is the same physical disk set for one or more imported partitions")
+                               $Script:GUICurrentStatus.ProcessImageStatus = $false
+                           }
+                        }         
+                   }
+                }
+            }
             If (-not ($Script:GUIActions.DiskSizeSelected)){
                 $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","Disk Partitioning has not been performed")
                 $Script:GUICurrentStatus.ProcessImageStatus = $false
@@ -450,8 +462,8 @@ function Update-UI {
             $WPF_DP_Button_SaveImage.Foreground = 'White'
         }
         else{
-            $WPF_DP_Button_SaveImage.Background = "#FF6688BB"
-            $WPF_DP_Button_SaveImage.Foreground = "White"         
+            $WPF_DP_Button_SaveImage.Background = '#FFDDDDDD'
+            $WPF_DP_Button_SaveImage.Foreground = "Black"         
         }
     }
 

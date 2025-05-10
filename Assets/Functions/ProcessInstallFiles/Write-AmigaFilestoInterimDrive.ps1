@@ -5,7 +5,8 @@ function Write-AmigaFilestoInterimDrive {
        [switch]$ExtractADFFilesandIconFiles,
        [switch]$AdjustingScriptsandInfoFiles,
        [switch]$ProcessDownloadedFiles,
-       [switch]$CopyRemainingFiles
+       [switch]$CopyRemainingFiles,
+       [switch]$wifiprefs
     )
     
     $Script:Settings.CurrentTaskNumber ++
@@ -405,7 +406,12 @@ function Write-AmigaFilestoInterimDrive {
     
     Write-StartTaskMessage
 
-    $Script:Settings.TotalNumberofSubTasks = 3
+    $Script:Settings.TotalNumberofSubTasks = 4
+
+    If (-not ($wifiprefs)){
+        $Script:Settings.TotalNumberofSubTasks -- #No wifi
+    }
+
     $Script:Settings.CurrentSubTaskNumber = 1
     $Script:Settings.CurrentSubTaskName = "Modifying scripts"
     Write-StartSubTaskMessage
@@ -481,6 +487,18 @@ function Write-AmigaFilestoInterimDrive {
                 exit
             }     
         }
+    }
+
+    if ($wifiprefs){
+        $Script:Settings.CurrentSubTaskNumber ++
+        $Script:Settings.CurrentSubTaskName = "Creating Wifi Prefs"
+    
+        Write-StartSubTaskMessage
+
+        $WirelessPrefs = (Get-WirelessPrefs -SSID $Script:GUIActions.SSID -WifiPassword $Script:WifiPassword)
+
+        Export-TextFileforAmiga -DatatoExport $WirelessPrefs -AddLineFeeds 'TRUE' -ExportFile "$($Script:Settings.InterimAmigaDrives)\System\Prefs\Env-Archive\Sys\wireless.prefs"
+        
     }
 
     $Script:Settings.CurrentSubTaskNumber ++

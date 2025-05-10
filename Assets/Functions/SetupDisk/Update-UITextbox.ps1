@@ -8,10 +8,13 @@ function Update-UITextbox {
     )
     
     # $NameofPartition = $Script:GUICurrentStatus.SelectedAmigaPartition
-    # $TextBoxControl = $WPF_DP_Amiga_DeviceName_Input
-    # $Value = 'buffers'
-    # $CanChangeParameter = 'CanChangeBuffers'
-    # $DropdownControl =  $WPF_DP_Amiga_DosType_Input_Dropdown
+    # $TextBoxControl = $WPF_DP_Amiga_VolumeName_Input
+    # $Value = 'VolumeName'
+    # $CanChangeParameter = 'CanRenameVolume'
+
+    
+    # $NameofPartition = $Script:GUICurrentStatus.SelectedAmigaPartition
+    # $TextBoxControl = $WPF_DP_Amiga_DosType_Input
     # $Value = 'DosType' 
     # $CanChangeParameter = 'CanChangeDosType'
     
@@ -41,6 +44,9 @@ function Update-UITextbox {
                 $TextBoxControl.Background = 'Red'
             }
             elseif (($TextBoxControl.EntryType -eq 'Alpha') -and ((Get-IsValueAlpha -ValueToTest $TextBoxControl.Text) -eq $false -or $TextBoxControl.Text.Length -gt $TextBoxControl.EntryLength)) {
+                $TextBoxControl.Background = 'Red'
+            }   
+            elseif (($TextBoxControl.EntryType -eq 'AlphaNumericDosType') -and ((Get-IsValueAlphaNumeric -DosType -ValueToTest $TextBoxControl.Text) -eq $false -or $TextBoxControl.Text.Length -gt $TextBoxControl.EntryLength)) {
                 $TextBoxControl.Background = 'Red'
             }   
         }

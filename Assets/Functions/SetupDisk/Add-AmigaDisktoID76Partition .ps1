@@ -21,3 +21,4 @@ function Add-AmigaDisktoID76Partition {
     (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.DiskSizePixels = (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.RightDiskBoundary - (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.LeftDiskBoundary
     (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.BytestoPixelFactor = (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.DiskSizeBytes / (Get-Variable -name ($ID76PartitionName+'_AmigaDisk')).value.DiskSizePixels
 }
+

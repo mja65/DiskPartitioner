@@ -38,6 +38,8 @@ $Script:GUIActions.ScriptPath = (Split-Path -Path $PSScriptRoot -Parent)
 
 Write-Emu68ImagerLog -start
 
+<#
+
 Show-Disclaimer
 
 $Script:Settings.TotalNumberofTasks = 3
@@ -76,7 +78,7 @@ if (-not (Get-StartupFiles)){
 }
 
 Write-TaskCompleteMessage
-
+#>
 Remove-Variable -Name 'WPF_*'
 
 $WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\Assets\UIActions\MainWindow\' -AddWPFVariables
@@ -84,6 +86,7 @@ $WPF_StartPage = Get-XAML -WPFPrefix 'WPF_StartPage_' -XMLFile '.\Assets\WPF\Gri
 $WPF_Partition = Get-XAML -WPFPrefix 'WPF_DP_' -XMLFile '.\Assets\WPF\Grid_DiskPartition.xaml' -ActionsPath '.\Assets\UIActions\DiskPartition\' -AddWPFVariables
 $WPF_SetupEmu68 = Get-XAML -WPFPrefix 'WPF_Setup_' -XMLFile '.\Assets\WPF\Grid_SetupEmu68.xaml' -ActionsPath '.\Assets\UIActions\SetupEmu68\' -AddWPFVariables
 $WPF_PackageSelection = Get-XAML -WPFPrefix 'WPF_PackageSelection_' -XMLFile '.\Assets\WPF\Grid_PackageSelection.xaml' -ActionsPath '.\Assets\UIActions\PackageSelection\' -AddWPFVariables
+
 
 Set-PartitionGridActions
 

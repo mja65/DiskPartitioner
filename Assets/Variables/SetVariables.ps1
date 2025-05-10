@@ -4,6 +4,8 @@ $Script:DP_Settings = [PSCustomObject]@{
 
 $Script:Settings = [PSCustomObject]@{
     MBRSectorSizeBytes = 512
+    MBRPartitionsMaximum = 4
+    AmigaPartitionsperDiskMaximum = 10
     MBROverheadBytes = 1048576+50688 # Allowing for partition to start at sectoe 2048 and leave space HST Imager appears to require
     MBRFirstPartitionStartSector = 2048
     PartitionPixelBuffer = 5 # To account for not exact mouse pointer precision
@@ -152,6 +154,7 @@ $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object 
 $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”EndOffset”,([string]))) 
 $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”Buffers”,([string]))) 
 $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”DosType”,([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”Mask”,([string]))) 
 $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”MaxTransfer”,([string]))) 
 $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”Bootable”,([string]))) 
 $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”NoMount”,([string]))) 
@@ -177,8 +180,8 @@ $Script:GUIActions = [PSCustomObject]@{
     AvailableKickstarts = $null
     AvailableScreenModes = $null
     AvailablePackages = New-Object System.Data.DataTable
-    AvailableIconSets = New-Object System.Data.DataTable # NEED TO ADD TO LOAD AND SAVE!
-    SelectedIconSet = $null # NEED TO ADD TO LOAD AND SAVE!
+    AvailableIconSets = New-Object System.Data.DataTable 
+    SelectedIconSet = $null 
     KickstartVersiontoUse = $null
     KickstartVersiontoUseFriendlyName = $null
     OSInstallMediaType = $null
@@ -203,7 +206,7 @@ $Script:GUIActions = [PSCustomObject]@{
     OutputType = $null
     InstallMediaLocation = $null
     ROMLocation = $null
-    InstallOSFiles = $true # NEED TO ADD TO LOAD AND SAVE!
+    InstallOSFiles = $true 
     # SelectedGPTMBRPartitionforImport = $null
     # MBRPartitionIsSelectedAction = $false
     # MBRPartitionIsUnselectedAction =$false

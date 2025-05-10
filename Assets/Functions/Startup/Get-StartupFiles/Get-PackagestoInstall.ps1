@@ -3,37 +3,42 @@ function Get-PackagestoInstall {
         $ListofFilestoCheck
     )
     
+    # $ListofFilestoCheck = Import-Csv -Path $Script:Settings.StartupFilesCSV.Path -Delimiter ';'
+
+    $ListofPackages = $ListofFilestoCheck | Select-Object 'PackageName' -Unique
+
     $PackagestoUpdate = @()
 
-    $CurrentPackage = $null
-
-    Foreach ($FiletoCheck in $ListofFilestoCheck){
-        if ($CurrentPackage -ne $FiletoCheck.PackageName){
-            Write-Host "Starting check of $($FiletoCheck.PackageName)"
-            $CurrentPackageCheckComplete = $false
-        }
-        If ($CurrentPackageCheckComplete -eq $false){
-            if ($FiletoCheck.FileHash -ne ""){
-                $PathtoInstallFile = ".\$($FiletoCheck.LocationtoInstall)$($FiletoCheck.FilestoInstall)"
-                if (-not (Test-Path $PathtoInstallFile)){
-                    $PackagestoUpdate += $FiletoCheck.PackageName
-                    $CurrentPackageCheckComplete = $true
-                    Write-InformationMessage "$($FiletoCheck.PackageName) does not exist! Package will be installed."
-                }
-                else {
-                    $HashtoCheck = Get-FileHash -Path $PathtoInstallFile -Algorithm MD5
-                    if ($HashtoCheck -ne $HashtoCheck){
-                        $PackagestoUpdate += $FiletoCheck.PackageName
-                        Write-InformationMessage "$($FiletoCheck.PackageName) is out of date! Package will be reinstalled."
+    foreach ($Package in $ListofPackages) {
+        $PackageUptoDate = $true
+        $CurrentPackageCheckComplete = $false
+        Write-InformationMessage -Message "Starting check of Package: $($Package.PackageName)"
+        $ListofFilestoCheck | Where-Object {$_.PackageName -eq $Package.PackageName} | ForEach-Object {
+            if ($CurrentPackageCheckComplete -eq $false){
+                if ($_.FileHash -ne ""){
+                    Write-InformationMessage "Checking file: $($_.FilestoInstall)"
+                    $PathtoInstallFile = ".\$($_.LocationtoInstall)$($_.FilestoInstall)"   
+                    if (-not (Test-Path $PathtoInstallFile)){
+                        $PackagestoUpdate += $Package.PackageName
+                        $PackageUptoDate = $false
                         $CurrentPackageCheckComplete = $true
+                        Write-InformationMessage -Message "$($Package.PackageName) does not exist! Package will be installed."
                     }
-                    else {
-                        Write-InformationMessage "$($FiletoCheck.PackageName) is up to date"
-                    }
+                    else {                      
+                        $HashtoCheck = (Get-FileHash -Path $PathtoInstallFile -Algorithm MD5).hash
+                        if ($HashtoCheck -ne $_.FileHash){
+                            $PackagestoUpdate += $Package.PackageName
+                            Write-InformationMessage -message "$($FiletoCheck.PackageName) is out of date! Package will be reinstalled."
+                            $CurrentPackageCheckComplete = $true
+                            $PackageUptoDate = $false
+                        }
+                    }   
                 }
-            }
+            } 
         }
-        $CurrentPackage = $FiletoCheck.PackageName
+        if ($PackageUptoDate -eq $true){
+            Write-InformationMessage -Message "$($Package.PackageName) is up to date"
+        }
     }
 
     return $PackagestoUpdate

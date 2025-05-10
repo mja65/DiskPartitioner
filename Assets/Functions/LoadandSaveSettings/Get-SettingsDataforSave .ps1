@@ -19,7 +19,6 @@ function Get-SettingsDataforSave {
     $Output += "Setting;KickstartVersiontoUse;$($Script:GUIActions.KickstartVersiontoUse)"
     $Output += "Setting;KickstartVersiontoUseFriendlyName;$($Script:GUIActions.KickstartVersiontoUseFriendlyName)" 
     $Output += "Setting;OSInstallMediaType;$($Script:GUIActions.OSInstallMediaType)" 
-    $Output += "Setting;UseGlowIcons;$($Script:GUIActions.UseGlowIcons)"
     $Output += "Setting;SSID;$($Script:GUIActions.SSID)"
     $Output += "Setting;WifiPassword;$($Script:GUIActions.WifiPassword)"
     $Output += "Setting;DiskTypeSelected;$($Script:GUIActions.DiskTypeSelected)"
@@ -27,6 +26,8 @@ function Get-SettingsDataforSave {
     $Output += "Setting;OutputType;$($Script:GUIActions.OutputType)"
     $Output += "Setting;InstallMediaLocation;$($Script:GUIActions.InstallMediaLocation)"
     $Output += "Setting;ROMLocation;$($Script:GUIActions.ROMLocation)"
+    $Output += "Setting;SelectedIconSet;$($Script:GUIActions.SelectedIconSet)"
+    $Output += "Setting;InstallOSFiles;$($Script:GUIActions.InstallOSFiles)"
 
     $Output += "GPTMBR Disk Details:"
     $Output += "GPTMBRHeader;Type;GPTMBRDisk;DiskType;DiskSizeBytes;MBROverheadBytes;NumberofPartitionsMBR;NextPartitionMBRNumber"
@@ -73,7 +74,39 @@ function Get-SettingsDataforSave {
     else {
         $Output += "RDBPartitionDetails;NOTAVAILABLE"
     } 
+    
+    $AvailableIconsetsUserSelectedOutput = @()
+    $HeaderRow = "AvailableIconSetsUserSelectedHeader"
+
+    If ($Script:GUIActions.AvailableiconSets.Rows.Count -ne 0){
+        $Fields = ($Script:GUIActions.AvailableiconSets | Get-Member -MemberType Property).Name 
+           
+        foreach ($Field in $Fields) {
+            $HeaderRow +=  ";$field"
+        }
+       
+        $AvailableIconsetsUserSelectedOutput  += $HeaderRow 
         
+        $Script:GUIActions.AvailableiconSets | ForEach-Object {
+            $DetailRow = "AvailableIconSetsUserSelectedDetails"
+            foreach ($Field in $Fields) {
+                $DetailRow += ";$($_.$field)"
+            }
+            $AvailableIconsetsUserSelectedOutput += $DetailRow 
+        }
+        
+        
+    }
+    else {
+        $DetailRow = "AvailableIconSetsUserSelectedDetails;NOTAVAILABLE"
+      #  $AvailablePackagesUserSelectedOutput += $HeaderRow 
+      $AvailableIconsetsUserSelectedOutput += $DetailRow 
+        
+    }
+    
+    $Output += "AvailableIconSetsUserSelected:"
+    $Output += $AvailableIconsetsUserSelectedOutput
+
     $AvailablePackagesUserSelectedOutput = @()
     $HeaderRow = "AvailablePackagesUserSelectedHeader"
     

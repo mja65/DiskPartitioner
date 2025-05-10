@@ -106,10 +106,11 @@ function Get-HSTPartitionInfoRDB {
             BlockSizePartition = $_.Split("|")[7].Trim()
             Buffers = $_.Split("|")[8].Trim()
             DosType = $_.Split("|")[9].Trim()
-            MaxTransfer = $_.Split("|")[10].Trim()
-            Bootable = $_.Split("|")[11].Trim()
-            NoMount = $_.Split("|")[12].Trim()
-            Priority = $_.Split("|")[13].Trim()
+            Mask = $_.Split("|")[10].Trim()
+            MaxTransfer = $_.Split("|")[11].Trim()
+            Bootable = $_.Split("|")[12].Trim()
+            NoMount = $_.Split("|")[13].Trim()
+            Priority = $_.Split("|")[14].Trim()
             StartOffset = $null
             EndOffset = $null
             DeviceName = $null

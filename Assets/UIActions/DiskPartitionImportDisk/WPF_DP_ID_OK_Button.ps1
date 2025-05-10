@@ -70,8 +70,12 @@ $WPF_DP_ID_OK_Button.Add_Click({
                 $StartPoint_DosType = $_.DosType.IndexOf('(')+1
                 $Length_DosType  = ($_.DosType.Length-1)-$StartPoint_DosType
                 $DosType = $_.DosType.Substring($StartPoint_DosType,$Length_DosType)
+
+                $StartPoint_Mask = 0
+                $Length_Mask  = $_.Mask.IndexOf(' ')
+                $Mask  = $_.Mask.Substring($StartPoint_Mask,$Length_Mask)                
             
-                Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.SizeBytes -AddType 'AtEnd' -ImportedPartition -ImportedPartitionMethod 'Derived'  -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $DosType -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask '0x7ffffffe'
+                Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.SizeBytes -AddType 'AtEnd' -ImportedPartition -ImportedPartitionMethod 'Derived'  -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $DosType -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $mask
             }          
         }
     }
@@ -86,8 +90,12 @@ $WPF_DP_ID_OK_Button.Add_Click({
             $StartPoint_DosType = $_.DosType.IndexOf('(')+1
             $Length_DosType  = ($_.DosType.Length-1)-$StartPoint_DosType
             $DosType = $_.DosType.Substring($StartPoint_DosType,$Length_DosType)
+
+            $StartPoint_Mask = $_.Mask.IndexOf('(')+1
+            $Length_Mask  = $_.Mask.IndexOf(' ')
+            $Mask  = $_.Mask.Substring($StartPoint_Mask,$Length_Mask)
         
-            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.SizeBytes -AddType 'AtEnd' -ImportedPartition -ImportedPartitionMethod 'Derived'  -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $DosType -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask '0x7ffffffe'
+            Add-GUIPartitiontoAmigaDisk -AmigaDiskName ($PartitionName+'_AmigaDisk') -SizeBytes $_.SizeBytes -AddType 'AtEnd' -ImportedPartition -ImportedPartitionMethod 'Derived'  -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $DosType -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $mask
         }   
     }
 

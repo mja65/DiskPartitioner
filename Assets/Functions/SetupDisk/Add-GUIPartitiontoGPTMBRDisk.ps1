@@ -29,7 +29,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
         }
     }
     
-    $SizePixels = $SizeBytes/$Script:WPF_DP_Disk_GPTMBR.BytestoPixelFactor
+    $SizePixels = $SizeBytes / $Script:WPF_DP_Disk_GPTMBR.BytestoPixelFactor
     if ($SizePixels -gt 4){
         $SizePixels -= 4
     }

@@ -18,6 +18,7 @@ function New-GUIDisk {
     $NewDisk.Stroke="Black"
     $NewDisk.Fill="White"
     $NewDisk.Width="1000"
+    $NewDisk.Name = "DiskBackground"
     
     if ($DiskType -eq 'MBR'){
 

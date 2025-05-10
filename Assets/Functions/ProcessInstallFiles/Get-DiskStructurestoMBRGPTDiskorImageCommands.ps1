@@ -54,17 +54,6 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
                 Sequence = 1      
             }  
         }
-        if ($MBRPartition.value.ImportedPartition -eq $true -and $MBRPartition.value.ImportedPartitionMethod -eq 'Direct'){
-            $Startpoint = $MBRPartition.value.ImportedPartitionPath.IndexOf("\MBR\")
-            $SubstringLength = $MBRPartition.value.ImportedPartitionPath.length-($Startpoint+5)
-            $MBRPartitionNumbertoImport = $MBRPartition.value.ImportedPartitionPath.Substring(($Startpoint+5),$SubstringLength)
-            $PathofImage = $MBRPartition.value.ImportedPartitionPath.Substring(0,$Startpoint)
-            $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
-                Command = "mbr part clone $PathofImage $MBRPartitionNumbertoImport $($Script:GUIActions.OutputPath) $MBRPartitionCounter"
-                Sequence = 2      
-            }  
-        }
-
         $MBRPartitionCounter ++
     }
 
@@ -141,16 +130,16 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
                            $MaxTransfertoUse = $RDBPartition.value.MaxTransfer 
                            $BufferstoUse = $RDBPartition.value.Buffers
                            if ($RDBPartition.value.NoMount -eq 'True'){
-                               $NoMountflagtouse = "--no-mount " #Need space in case some partitions don't have flag
+                               $NoMountflagtouse = "--no-mount True " #Need space in case some partitions don't have flag
                            }
                            else {
-                               $NoMountflagtouse = ""
+                               $NoMountflagtouse = "--no-mount False " 
                            }
                            if ($RDBPartition.value.Bootable -eq 'True'){
-                               $bootableflagtouse = "--bootable " #Need space in case some partitions don't have flag
+                               $bootableflagtouse = "--bootable True " #Need space in case some partitions don't have flag
                            }
                            else {
-                               $bootableflagtouse = ""
+                               $bootableflagtouse = "--bootable False "
                            }
                            $BootPrioritytouse = $RDBPartition.value.Priority
                            If ($RDBPartition.value.ImportedFilesPath){
@@ -164,7 +153,7 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
                            }
                            Write-InformationMessage -Message "Adding command to create partition for Device:$($RDBPartition.value.DeviceName) of size(bytes):$($RDBPartition.value.PartitionSizeBytes)"
                            $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
-                               Command = "rdb part add `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter`" $($RDBPartition.value.DeviceName) $DosTypetoUse $($RDBPartition.value.PartitionSizeBytes) --buffers $bufferstouse --max-transfer $maxtransfertouse --mask $masktouse$nomountflagtouse $bootableflagtouse--boot-priority $BootPrioritytouse"
+                               Command = "rdb part add `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter`" $($RDBPartition.value.DeviceName) $DosTypetoUse $($RDBPartition.value.PartitionSizeBytes) --buffers $bufferstouse --max-transfer $maxtransfertouse --mask $masktouse $nomountflagtouse$bootableflagtouse--boot-priority $BootPrioritytouse"
                                Sequence = 4      
                             }
                             Write-InformationMessage -Message "Adding command to format Device:$($RDBPartition.value.DeviceName) with volume name:$($RDBPartition.value.VolumeName)"

@@ -22,7 +22,7 @@ $WPF_DP_Button_AddNewGPTMBRPartition.add_click({
         $null = Show-WarningorError -Msg_Header 'No Partition Selected' -Msg_Body 'You must select a partition!' -BoxTypeError -ButtonType_OK
     }
     else {
-        if ((Get-AllGUIPartitions -PartitionType 'MBR').count -eq 4){
+        if ((Get-AllGUIPartitions -PartitionType 'MBR').count -eq $Script:Settings.MBRPartitionsMaximum){
             $null = Show-WarningorError -Msg_Header 'Maximum Number of Partitions' -Msg_Body 'You have reached the maximum number of primary partitions allowed. Cannot create partition!' -BoxTypeError -ButtonType_OK
         }
         else {
@@ -45,7 +45,10 @@ $WPF_DP_Button_AddNewGPTMBRPartition.add_click({
                 else {
                     $SpacetoUse = $DefaultSize
                 }
-                Add-GUIPartitiontoGPTMBRDisk -PartitionSubType $PartitionSubtypetouse -PartitionType 'MBR' -AddType $AddType -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) 
+                if ($Script:Settings.DebugMode){
+                    Write-Host "Adding Partition with subtype:$PartitionSubtypetouse Addtype:$AddType Size:$(Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse)"
+                }
+                Add-GUIPartitiontoGPTMBRDisk -PartitionSubType $PartitionSubtypetouse -PartitionType 'MBR' -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition -AddType $AddType -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) 
             }
         }
     }

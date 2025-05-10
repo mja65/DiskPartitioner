@@ -4,6 +4,8 @@ function Get-MBRandRDBPartitionsforSelection  {
         [switch]$PhysicalDisk
     )
     
+    # $Image = $true
+
     if ($Image){
         $Script:GUICurrentStatus.ImportedPartitionType = Confirm-IsMDBRorRDB -Path $Script:GUICurrentStatus.ImportedImagePath -Image
 
@@ -57,6 +59,7 @@ function Get-MBRandRDBPartitionsforSelection  {
                     $NewRow.EndOffset = $_.EndOffset
                     $NewRow.Buffers = $_.Buffers
                     $NewRow.DosType = $_.DosType
+                    $NewRow.Mask = $_.Mask
                     $NewRow.MaxTransfer = $_.MaxTransfer
                     $NewRow.Bootable = $_.Bootable
                     $NewRow.NoMount = $_.NoMount
@@ -71,7 +74,7 @@ function Get-MBRandRDBPartitionsforSelection  {
         $WPF_DP_ID_RDB_DataGrid.Visibility = 'Hidden'
         $WPF_DP_ID_RDB_DataGrid.IsHitTestVisible = ''
         
-        $WPF_DP_ID_Grid_RDB.Margin = [System.Windows.Thickness]"0,250,0,0"
+        #$WPF_DP_ID_Grid_RDB.Margin = [System.Windows.Thickness]"0,250,0,0"
 
         $WPF_DP_ID_TypeofPartition_Label.Text = 'Select MBR Partition to Import. If 0x76 Partition is selected, all RDB partitions will be imported'
         $WPF_DP_ID_TypeofPartition_Label.Visibility = 'Visible'
@@ -116,6 +119,7 @@ function Get-MBRandRDBPartitionsforSelection  {
             $NewRow.EndOffset = $_.EndOffset
             $NewRow.Buffers = $_.Buffers
             $NewRow.DosType = $_.DosType
+            $NewRow.Mask = $_.Mask
             $NewRow.MaxTransfer = $_.MaxTransfer
             $NewRow.Bootable = $_.Bootable
             $NewRow.NoMount = $_.NoMount

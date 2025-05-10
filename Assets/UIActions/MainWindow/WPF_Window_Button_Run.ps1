@@ -27,14 +27,26 @@ $WPF_Window_Button_Run.Add_Click({
             $OutputTypetoUse = "Physical Disk"
          }
          
+         if (Get-AllGUIPartitions -partitiontype 'MBR' | Where-Object {$_.value.ImportedPartitionMethod -eq 'Direct'}){
+            $PartitionstoImport = $true
+         }
+         else {
+            $PartitionstoImport = $false
+         }
+
          $Script:Settings.TotalNumberofTasks = 22
+
+         if ($PartitionstoImport -eq $true){
+            $Script:Settings.TotalNumberofTasks ++
+         }
+
          $Script:Settings.CurrentTaskNumber = 0 
 
          if ($Script:GUIActions.InstallOSFiles -eq $false){
             Write-AmigaFilestoInterimDrive -DownloadFilesFromInternet # 15 tasks
          }
          elseif ($Script:GUIActions.InstallOSFiles -eq $true){
-            Write-AmigaFilestoInterimDrive -DownloadFilesFromInternet -DownloadLocalFiles -ExtractADFFilesandIconFiles -AdjustingScriptsandInfoFiles -ProcessDownloadedFiles -CopyRemainingFiles
+            Write-AmigaFilestoInterimDrive -DownloadFilesFromInternet -DownloadLocalFiles -ExtractADFFilesandIconFiles -AdjustingScriptsandInfoFiles -ProcessDownloadedFiles -CopyRemainingFiles -wifiprefs
          }
 
          $Script:Settings.CurrentTaskNumber ++
@@ -130,6 +142,22 @@ $WPF_Window_Button_Run.Add_Click({
             Write-StartSubTaskMessage
             $HSTCommandstoRun = $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures + $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk
             Start-HSTCommands -HSTScript $HSTCommandstoRun 'Processing commands'
+         }
+         
+         Write-TaskCompleteMessage 
+
+         if ($PartitionstoImport -eq $true){
+            $Script:Settings.CurrentTaskNumber ++
+            $Script:Settings.CurrentTaskName = "Importing partitions to disk"
+            
+            Write-StartTaskMessage
+
+            Write-InformationMessage -Message "This step could take a LONG time depending on the size of the partition!"
+
+            Import-MBRPartitiontoDisk
+
+            Write-TaskCompleteMessage 
+         
          }
 
          $Script:GUICurrentStatus.EndTimeForRunningInstall = (Get-Date -Format HH:mm:ss)

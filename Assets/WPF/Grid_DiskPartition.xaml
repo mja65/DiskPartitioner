@@ -255,10 +255,10 @@
                <TextBox x:Name="Input_DiskSize_Value" HorizontalAlignment="Left" Margin="7,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="70" Visibility="Visible" Height="20"/>
                <ComboBox x:Name="Input_DiskSize_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="85,40,0,0" VerticalAlignment="Top" Width="50" Visibility="Visible" Height="20"/>
 
-               <Button x:Name="Button_SaveImage" HorizontalAlignment="Left" Margin="200,21,0,0" VerticalAlignment="Top" Width="100" Height="45" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent">
+               <Button x:Name="Button_SaveImage" HorizontalAlignment="Left" Margin="200,21,0,0" VerticalAlignment="Top" Width="100" Height="45" Background='#FFDDDDDD' Foreground="Black" FontWeight="Bold" BorderBrush="Transparent">
                    <TextBlock Text="Set Location for Image" TextWrapping="Wrap" TextAlignment="Center"/>
                </Button>
-
+ 
 
            </Grid>
        </GroupBox>

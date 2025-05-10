@@ -1,5 +1,5 @@
 $WPF_DP_Amiga_DosType_Input | Add-Member -NotePropertyMembers @{
-    EntryType = 'Alpha'
+    EntryType = 'AlphaNumericDosType'
     EntryLength = 11
     InputEntry = $null
     InputEntryChanged = $null

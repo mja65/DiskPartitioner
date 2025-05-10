@@ -5,7 +5,7 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:local="clr-namespace:WpfApp14"
             mc:Ignorable="d"
-         Title="Run Options" Height="400" Width="800" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
+         Title="Run Options" Height="450" Width="850" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
 
     <Grid x:Name ="Main" Background="#FFE5E5E5">
         <TextBlock x:Name="RunOptions_Label" Text="The imager will be run with the following options.If you do not wish to run press the cancel button." TextWrapping="Wrap" HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,100,0,0" Height="35" TextAlignment="Center"/>
@@ -13,8 +13,8 @@
                   RowBackground="White" >
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Setting" Binding="{Binding Setting}" Width="100"/>
-                <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="300">
+                <DataGridTextColumn Header="Setting" Binding="{Binding Setting}" Width="210"/>
+                <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="380">
                     <DataGridTextColumn.ElementStyle>
                         <Style>
                             <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
@@ -24,7 +24,7 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="OK_Button" Content="OK" HorizontalAlignment="Right" Margin="0,0,50,5" VerticalAlignment="Bottom" Width="40"/>
-        <Button x:Name="Cancel_Button" Content="Cancel" HorizontalAlignment="Left" Margin="50,0,0,5" VerticalAlignment="Bottom" Width="40"/>
+        <Button x:Name="OK_Button" Content="OK" HorizontalAlignment="Right" Margin="0,0,50,5" VerticalAlignment="Bottom" Width="100" Height="50"/>
+        <Button x:Name="Cancel_Button" Content="Cancel" HorizontalAlignment="Left" Margin="50,0,0,5" VerticalAlignment="Bottom" Width="100" Height="50"/>
     </Grid>
 </Window>

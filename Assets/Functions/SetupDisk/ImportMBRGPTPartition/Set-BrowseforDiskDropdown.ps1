@@ -11,7 +11,9 @@ function Set-BrowseforDiskDropdown {
     if ($ImportPartition){
         if ($WPF_DP_ID_BrowseforDisk_DropDown){
             foreach ($Disk in $Script:GUIActions.ListofRemovableMedia){
-                $WPF_DP_ID_BrowseforDisk_DropDown.AddChild($Disk.FriendlyName)       
+                if ($Disk.HSTDiskName -ne $Script:GUIActions.OutputPath){
+                    $WPF_DP_ID_BrowseforDisk_DropDown.AddChild($Disk.FriendlyName)       
+                }
             }
         }
     }

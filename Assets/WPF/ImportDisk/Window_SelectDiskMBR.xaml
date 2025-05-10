@@ -60,6 +60,7 @@
                     <DataGridTextColumn Header="NoMount" Binding="{Binding NoMount}"/>
                     <DataGridTextColumn Header="Priority" Binding="{Binding Priority}"/>
                     <DataGridTextColumn Header="SizeBytes" Binding="{Binding SizeBytes}" Visibility = "Hidden"/>
+                    <DataGridTextColumn Header="Mask" Binding="{Binding Mask}" Visibility = "Hidden"/>
                 </DataGrid.Columns>
             </DataGrid>
 

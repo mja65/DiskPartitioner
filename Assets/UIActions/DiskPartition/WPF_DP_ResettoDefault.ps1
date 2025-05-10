@@ -18,7 +18,7 @@ $WPF_DP_ResettoDefault.Add_Click({
             Remove-Variable -Scope Script -Name 'WPF_DP_Partition*'
         
             if (test-path variable:script:WPF_DP_Disk_GPTMBR) {
-                Remove-Variable -Name 'WPF_DP_Disk_GPTMBR'
+                Remove-Variable -Scope Script -Name 'WPF_DP_Disk_GPTMBR'
             }
         
             Update-UI -DiskPartitionWindow
