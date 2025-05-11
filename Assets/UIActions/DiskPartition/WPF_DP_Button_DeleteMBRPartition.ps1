@@ -35,13 +35,14 @@ Press OK to continue otherwise cancel
         }
     
         if ($DeleteUnderlyingAmigaPartitions -eq $true){
+            $Script:GUICurrentStatus.SelectedAmigaPartition = $null
             $ListofPartitionstoDelete = (Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $Script:GUICurrentStatus.SelectedGPTMBRPartition} ).Name
             if ($ListofPartitionstoDelete){
                 $ListofPartitionstoDelete  | ForEach-Object {
-                    Remove-Variable -Name $_
+                    Remove-Variable -Scope Script -Name $_
                 }
         
-                Remove-Variable -Name  "$($Script:GUICurrentStatus.SelectedGPTMBRPartition)_AmigaDisk"
+                Remove-Variable -Scope Script -Name  "$($Script:GUICurrentStatus.SelectedGPTMBRPartition)_AmigaDisk"
             }
         }
 

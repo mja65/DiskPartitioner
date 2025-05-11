@@ -28,25 +28,24 @@ $WPF_DP_Button_AddNewGPTMBRPartition.add_click({
         else {
             if ($PartitionSubtypetouse -eq 'FAT32'){
                 $MinimumRequiredSpace = $Script:SDCardMinimumsandMaximums.MBRMinimum
-                $DefaultSize = $Script:SDCardMinimumsandMaximums.DefaultAddMBRSize
             }
             elseif ($PartitionSubtypetouse -eq 'ID76'){
                 $MinimumRequiredSpace = $Script:SDCardMinimumsandMaximums.ID76Minimum
-                $DefaultSize = $Script:SDCardMinimumsandMaximums.DefaultAddID76Size
             }
             $AvailableSpace = (Get-MBRDiskFreeSpace -Disk $WPF_DP_Disk_GPTMBR -Position $AddType -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition)
             if ($AvailableSpace -lt $MinimumRequiredSpace){
                 $null = Show-WarningorError -Msg_Header 'No Free Space' -Msg_Body 'Insufficient freespace to create partition!' -BoxTypeError -ButtonType_OK
             }
             else {
-                if ($AvailableSpace -lt $DefaultSize){
-                    $SpacetoUse = $MinimumRequiredSpace
+                $SpacetoUse = Get-NewPartitionSize -DefaultScale 'GiB' -MaximumSizeBytes $AvailableSpace -MinimumSizeBytes $MinimumRequiredSpace
+                if ($SpacetoUse){
+                    write-debug "Adding Partition with subtype:$PartitionSubtypetouse Addtype:$AddType Size:$(Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse)"
+                    Add-GUIPartitiontoGPTMBRDisk -PartitionSubType $PartitionSubtypetouse -PartitionType 'MBR' -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition -AddType $AddType -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) 
                 }
                 else {
-                    $SpacetoUse = $DefaultSize
+                    return
                 }
-                write-debug "Adding Partition with subtype:$PartitionSubtypetouse Addtype:$AddType Size:$(Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse)"
-                Add-GUIPartitiontoGPTMBRDisk -PartitionSubType $PartitionSubtypetouse -PartitionType 'MBR' -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition -AddType $AddType -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) 
+
             }
         }
     }

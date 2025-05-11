@@ -1,24 +1,25 @@
 function Get-AmigaDiskPixelOverhang {
     param (
-        $AmigaDisk
+        $AmigaDiskName
     )
 
-    # $AmigaDisk = $WPF_DP_Partition_MBR_2_AmigaDisk
+    # $AmigaDiskName = "WPF_DP_Partition_MBR_3_AmigaDisk"
 
-    $DiskBytestoPixelFactor = $AmigaDisk.BytestoPixelFactor 
+    $DiskBytestoPixelFactor = (get-variable -name $AmigaDiskName).value.BytestoPixelFactor 
     
     $OverhangPixelTotal = 0
     
-    Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {
+    Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $AmigaDiskName} | ForEach-Object {
         $SizeBytes = $_.value.PartitionSizeBytes
         $SizePixels = Get-GUIPartitionWidth -Partition $_.value
         $ExpectedSizePixels = $SizeBytes/$DiskBytestoPixelFactor 
         $OverhangPixels = $SizePixels - $ExpectedSizePixels
         $OverhangPixelTotal +=  $OverhangPixels
-        write-debug "Size of Partition:$SizeBytes Overhang:$OverhangPixels Size Pixels:$SizePixels Expected Size Pixels:$ExpectedSizePixels " 
+        write-host "Size of Partition (bytes):$SizeBytes Overhang:$OverhangPixels Size Pixels:$SizePixels Expected Size Pixels:$ExpectedSizePixels " 
     }
     
     return $OverhangPixelTotal
 
 }
 
+# Get-AmigaDiskPixelOverhang -AmigaDiskName WPF_DP_Partition_MBR_3_AmigaDisk

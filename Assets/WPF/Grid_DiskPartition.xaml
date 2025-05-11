@@ -8,6 +8,10 @@
        <Button x:Name="ResettoDefault" Content="Reset to Start" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="120" Height="40" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
        <GroupBox x:Name="GPTMBR_GroupBox" Header="MBR Partitioning" Width="1175" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,100,0,0" Visibility="Visible">
            <Grid>
+               
+                <TextBox x:Name="SelectedMBRPartition_Label" HorizontalAlignment="Left" Margin="850,0,0,0" TextWrapping="Wrap" Text="Currently Selected:" VerticalAlignment="Top" Width="115" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" FontWeight="Bold"/>
+                <TextBox x:Name="SelectedMBRPartition_Value" HorizontalAlignment="Left" Margin="970,0,0,0" TextWrapping="Wrap" Text="No partition selected" VerticalAlignment="Top" Width="175" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
+               
                <TextBox x:Name="MBRPartitionSelect_Label" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Previous or Next Partition" VerticalAlignment="Top" Width="160" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" FontWeight="Bold"/>
 
                <Button x:Name="MBRPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="35" Height="35" Margin="50,20,0,0">
@@ -115,6 +119,10 @@
        </GroupBox>
        <GroupBox x:Name="Amiga_GroupBox" Header="Amiga Partitioning" Width="1175" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,400,0,0" Visibility="Visible">
            <Grid>
+
+               <TextBox x:Name="SelectedAmigaPartition_Label" HorizontalAlignment="Left" Margin="850,0,0,0" TextWrapping="Wrap" Text="Currently Selected:" VerticalAlignment="Top" Width="115" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" FontWeight="Bold"/>
+               <TextBox x:Name="SelectedAmigaPartition_Value" HorizontalAlignment="Left" Margin="970,0,0,0" TextWrapping="Wrap" Text="No partition selected" VerticalAlignment="Top" Width="175" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
+
                <TextBox x:Name="AmigaPartitionSelect_Label" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Previous or Next Partition" VerticalAlignment="Top" Width="160" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" FontWeight="Bold"/>
                <Button x:Name="AmigaPartitionSelect_RightArrow" HorizontalAlignment="Left" VerticalAlignment ="Top" Width="35" Height="35" Margin="50,20,0,0">
                    <Path Fill="Black" Data="M 3,3 l 9,9 l -9,9 Z" RenderTransformOrigin="0.5,0.5" >
@@ -157,12 +165,12 @@
                <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition" HorizontalAlignment="Left" Margin="445,15,0,0" VerticalAlignment="Top" Width="140" Height="45" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
                <ComboBox x:Name="AddNewAmigaPartition_DropDown" HorizontalAlignment="Left" Margin="590,15,0,0" VerticalAlignment="Top" Width="170"/>
 
-               <Button x:Name="Button_ImportFiles" Content="Set Import Folder Location" HorizontalAlignment="Left" Margin="770,15,0,0" VerticalAlignment="Top" Height="20" Width="180" Background="#FFDDDDDD" Foreground="Black" BorderBrush="Transparent"/>
-               <Button x:Name="Button_ImportFilesCancel" Content="Cancel Import Folder Location" HorizontalAlignment="Left" Margin="770,40,0,0" VerticalAlignment="Top" Height="20" Width="180" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
+               <Button x:Name="Button_ImportFiles" Content="Set Import Folder Location" HorizontalAlignment="Left" Margin="770,20,0,0" VerticalAlignment="Top" Height="20" Width="180" Background="#FFDDDDDD" Foreground="Black" BorderBrush="Transparent"/>
+               <Button x:Name="Button_ImportFilesCancel" Content="Cancel Import Folder Location" HorizontalAlignment="Left" Margin="770,45,0,0" VerticalAlignment="Top" Height="20" Width="180" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
              
-               <TextBox x:Name="Button_ImportFiles_Label" HorizontalAlignment="Left" Margin="955,15,0,0" TextWrapping="Wrap" Text="No imported folder selected" VerticalAlignment="Top" Width="205" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
-               <TextBox x:Name="ImportFilesSize_Label" HorizontalAlignment="Left" Margin="955,40,0,0" TextWrapping="Wrap" Text="Imported File Size:" VerticalAlignment="Top" Width="110" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
-               <TextBox x:Name="ImportFilesSize_Value" HorizontalAlignment="Left" Margin="1070,40,0,0" TextWrapping="Wrap" Text="XXXX" VerticalAlignment="Top" Width="80" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
+               <TextBox x:Name="Button_ImportFiles_Label" HorizontalAlignment="Left" Margin="955,20,0,0" TextWrapping="Wrap" Text="No imported folder selected" VerticalAlignment="Top" Width="205" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
+               <TextBox x:Name="ImportFilesSize_Label" HorizontalAlignment="Left" Margin="955,45,0,0" TextWrapping="Wrap" Text="Imported File Size:" VerticalAlignment="Top" Width="110" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
+               <TextBox x:Name="ImportFilesSize_Value" HorizontalAlignment="Left" Margin="1070,45,0,0" TextWrapping="Wrap" Text="XXXX" VerticalAlignment="Top" Width="80" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
 
               <Rectangle x:Name="Legend_Workbench" HorizontalAlignment="Left" Height="35" Width="35" Margin="13,180,0,0" Stroke="Black" VerticalAlignment="Top" Fill="{DynamicResource DefaultAmigaWorkbenchPartitionBrush}" />
               <TextBox x:Name="Legend_Workbench_Label" HorizontalAlignment="Left" Margin="51,180,0,0" TextWrapping="Wrap" Text="Workbench (Default)" VerticalAlignment="Top" Width="70" Height="35" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False" BorderBrush="Transparent" />

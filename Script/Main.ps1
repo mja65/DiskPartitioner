@@ -79,7 +79,7 @@ if (-not (Get-StartupFiles)){
 
 Write-TaskCompleteMessage
 #>
-Remove-Variable -Name 'WPF_*'
+Remove-Variable -Scope Script -Name 'WPF_*'
 
 $WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\Assets\UIActions\MainWindow\' -AddWPFVariables
 $WPF_StartPage = Get-XAML -WPFPrefix 'WPF_StartPage_' -XMLFile '.\Assets\WPF\Grid_StartPage.xaml' -ActionsPath '.\Assets\UIActions\StartPage\' -AddWPFVariables

@@ -96,6 +96,9 @@ $Script:GUICurrentStatus = [PSCustomObject]@{
         CopyImportedFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
         WriteFilestoDisk = [System.Collections.Generic.List[PSCustomObject]]::New()      
     }
+    NewPartitionDefaultScale = $null
+    NewPartitionMinimumSizeBytes = $null
+    NewPartitionMaximumSizeBytes = $null
     AvailablePackagesNeedingGeneration = $true
     RunOptionstoReport = New-Object System.Data.DataTable
     IssuesFoundBeforeProcessing = New-Object System.Data.DataTable

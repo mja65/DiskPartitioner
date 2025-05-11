@@ -245,6 +245,14 @@ function Update-UI {
             }
     
             if ($Script:GUICurrentStatus.SelectedGPTMBRPartition){
+                $MBRPartitionCounter = 1
+                Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'MBR'} | ForEach-Object {
+                    If ($Script:GUICurrentStatus.SelectedGPTMBRPartition -eq $_.PartitionName){
+                        $WPF_DP_SelectedMBRPartition_Value.text = "Partition #$MBRPartitionCounter"
+                    }
+                    $MBRPartitionCounter ++
+                }
+
                 $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Visible'
                 If ((get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSubType -eq 'ID76'){
                     #$WPF_DP_DiskGrid_Amiga.Visibility ='Visible'
@@ -264,6 +272,7 @@ function Update-UI {
               
             }
             else{
+                $WPF_DP_SelectedMBRPartition_Value.text = "No partition selected"
                # $WPF_DP_DiskGrid_Amiga.Visibility = 'Hidden'
                 $WPF_DP_Amiga_GroupBox.Visibility = 'Hidden'
                 $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Hidden'
@@ -348,7 +357,13 @@ function Update-UI {
             }
         }
         if ($Script:GUICurrentStatus.SelectedAmigaPartition){
-
+                $RDBPartitionCounter = 1
+                Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition} | ForEach-Object {
+                    If ($Script:GUICurrentStatus.SelectedAmigaPartition -eq $_.PartitionName){
+                        $WPF_DP_SelectedAmigaPartition_Value.text = "Partition #$RDBPartitionCounter"
+                    }
+                    $RDBPartitionCounter ++
+                }
             if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesPath){
                 $SpaceImportedFilesConverted = (Get-ConvertedSize -Size ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesSpaceBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_Button_ImportFiles.Background = 'Green'
@@ -431,6 +446,7 @@ function Update-UI {
 
         }    
         else {
+            $WPF_DP_SelectedAmigaPartition_Value.text = "No partition selected"            
             if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){
                 $WPF_DP_Amiga_SpaceatBeginning_Input.Background = 'White'
                 $WPF_DP_Amiga_SpaceatBeginning_Input.Text =''

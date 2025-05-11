@@ -49,8 +49,9 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
 
     write-debug "Addtype is: $Addtype DiskName is: $AmigaDiskName Allows addition of partitions: $CanAddPartition" 
     
-      if ($EmptyAmigaDisk -eq $true){
+    if ($EmptyAmigaDisk -eq $true){
         $AvailableFreeSpace = (Get-Variable -name $AmigaDiskName).value.DiskSizeBytes
+        write-debug "Available free space is: $AvailableFreeSpace "
     }
     else {
         $AvailableFreeSpace = (Get-AmigaDiskFreeSpace -Disk (Get-Variable -Name $AmigaDiskName).Value -Position $AddType -PartitionNameNextto $PartitionNexttotouse)
@@ -60,20 +61,22 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
         $null = Show-WarningorError -Msg_Header 'No Free Space' -Msg_Body 'Insufficient freespace to create partition!' -BoxTypeError -ButtonType_OK
     }
     else {
-        if ($AvailableFreeSpace -lt $Script:SDCardMinimumsandMaximums.DefaultAddPFS3Size){
-            $SpacetoUse = $Script:SDCardMinimumsandMaximums.PFS3Minimum
-        }
-        else {
-            $SpacetoUse = $Script:SDCardMinimumsandMaximums.DefaultAddPFS3Size
+
+        $SpacetoUse = Get-NewPartitionSize -DefaultScale 'MiB' -MaximumSizeBytes $AvailableFreeSpace -MinimumSizeBytes $Script:SDCardMinimumsandMaximums.PFS3Minimum
+        if ($SpacetoUse){
+            $WorkDefaultValues = Get-InputCSVs -Diskdefaults | Where-Object {$_.Type -eq "Amiga" -and $_.Disk -eq 'Work'}
+            
+            $DeviceandVolumeNametoUse = (Get-DeviceandVolumeNametoUse)
     
+            Add-GUIPartitiontoAmigaDisk -AmigaDiskName $AmigaDiskName -AddType $AddType -DeviceName $DeviceandVolumeNametoUse.DeviceName -VolumeName $DeviceandVolumeNametoUse.VolumeName -PartitionNameNextto $PartitionNexttotouse -SizeBytes (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) -Buffers $WorkDefaultValues.Buffers -DosType $WorkDefaultValues.DosType -NoMount $WorkDefaultValues.NoMountFlag -Bootable $WorkDefaultValues.BootableFlag -Priority ([int]$WorkDefaultValues.Priority) -MaxTransfer $WorkDefaultValues.MaxTransfer -Mask $WorkDefaultValues.Mask
+    
+            Update-UI -DiskPartitionWindow
         }
-        $WorkDefaultValues = Get-InputCSVs -Diskdefaults | Where-Object {$_.Type -eq "Amiga" -and $_.Disk -eq 'Work'}
-        
-        $DeviceandVolumeNametoUse = (Get-DeviceandVolumeNametoUse)
 
-        Add-GUIPartitiontoAmigaDisk -AmigaDiskName $AmigaDiskName -AddType $AddType -DeviceName $DeviceandVolumeNametoUse.DeviceName -VolumeName $DeviceandVolumeNametoUse.VolumeName -PartitionNameNextto $PartitionNexttotouse -SizeBytes (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) -Buffers $WorkDefaultValues.Buffers -DosType $WorkDefaultValues.DosType -NoMount $WorkDefaultValues.NoMountFlag -Bootable $WorkDefaultValues.BootableFlag -Priority ([int]$WorkDefaultValues.Priority) -MaxTransfer $WorkDefaultValues.MaxTransfer -Mask $WorkDefaultValues.Mask
+        else {
+            return
+        }
 
-        Update-UI -DiskPartitionWindow
         #Set-AmigaDiskSizeOverhangPixels -AmigaDisk (Get-Variable -name $AmigaDiskName).Value
     }
     
