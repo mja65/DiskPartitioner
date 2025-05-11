@@ -47,7 +47,7 @@ function Get-GithubRelease {
     }
     $GithubDownloadURL =$GithubDetails_ForDownload[0].browser_download_url 
     Write-InformationMessage -Message ('Downloading Files for URL: '+$GithubDownloadURL)
-   # Write-host "GithubDownload: $GithubDownloadURL LocationforDownload: $LocationforDownload"
+    Write-debug "GithubDownload: $GithubDownloadURL LocationforDownload: $LocationforDownload"
     if ((Get-DownloadFile -DownloadURL $GithubDownloadURL -OutputLocation $LocationforDownload -NumberofAttempts 3) -eq $true){
         Write-InformationMessage -Message 'Download completed'  
     }

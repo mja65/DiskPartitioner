@@ -7,12 +7,6 @@ function Set-InitialDiskValues {
 
     $Emu68BootVolumeNametouse = (Get-InputCSVs -Diskdefaults | Where-Object {$_.Type -eq "Non-Amiga"} | Select-Object 'VolumeName').VolumeName
 
-    # if (($SetDiskValues) -and (-not ($DiskType))){
-    #     Write-Host "Error in coding - Set-InitialDiskValues!"
-    #     $WPF_MainWindow.Close()
-    #     exit
-    # } 
-
     $Script:GUIActions.DiskSizeSelected = $true
     $Script:GUIActions.DiskTypeSelected = $DiskType
     #$WPF_DP_Amiga_GroupBox.Visibility = 'Visible'
@@ -42,12 +36,12 @@ function Set-InitialDiskValues {
     }
     elseif ($DiskType -eq 'PiStorm - GPT'){
         $DiskTypetouse = 'GPT'
-        Write-Host "Error in coding - PiStorm - GPT!"
+        Write-ErrorMessage -Message "Error in coding - PiStorm - GPT!"
         $WPF_MainWindow.Close()
         exit
     }
     elseif ($DiskType -eq 'Amiga - RDB'){
-        Write-Host "Error in coding - Amiga - RDB!"
+        Write-ErrorMessage -Message "Error in coding - Amiga - RDB!"
         $WPF_MainWindow.Close()
         exit
     }

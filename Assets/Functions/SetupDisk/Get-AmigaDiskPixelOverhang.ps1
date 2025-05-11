@@ -15,9 +15,7 @@ function Get-AmigaDiskPixelOverhang {
         $ExpectedSizePixels = $SizeBytes/$DiskBytestoPixelFactor 
         $OverhangPixels = $SizePixels - $ExpectedSizePixels
         $OverhangPixelTotal +=  $OverhangPixels
-        if ($Script:Settings.DebugMode){
-            Write-host "Size of Partition:$SizeBytes Overhang:$OverhangPixels Size Pixels:$SizePixels Expected Size Pixels:$ExpectedSizePixels " 
-        }
+        write-debug "Size of Partition:$SizeBytes Overhang:$OverhangPixels Size Pixels:$SizePixels Expected Size Pixels:$ExpectedSizePixels " 
     }
     
     return $OverhangPixelTotal

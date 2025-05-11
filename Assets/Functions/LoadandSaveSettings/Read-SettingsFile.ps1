@@ -260,22 +260,22 @@ function Read-SettingsFile {
     $RDBPartitions | ForEach-Object {
         $AmigaDiskName = ($_.Name.Substring(0,($_.Name.IndexOf('_AmigaDisk_')+10)))
         if ($_.DefaultAmigaWorkbenchPartition -eq 'True'){
-            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -PartitionTypeAmiga 'Workbench' -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority             
+            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -PartitionTypeAmiga 'Workbench' -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.DosType -MaxTransfer $_.MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $_.Mask           
 
         }
         elseif ($_.DefaultAmigaWorkPartition -eq 'True'){
-            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -PartitionTypeAmiga 'Work' -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority 
+            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -PartitionTypeAmiga 'Work' -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.DosType -MaxTransfer $_.MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $_.Mask   
         }
         elseif ($_.ImportedPartition -eq 'True'){
-            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -ImportedPartition $true -ImportedPartitionMethod $_.ImportedPartitionMethod -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority
+            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -ImportedPartition $true -ImportedPartitionMethod $_.ImportedPartitionMethod -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.DosType -MaxTransfer $_.MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $_.Mask   
         }
         else {
-            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.Type -MaxTransfer $MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority 
+            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.DosType -MaxTransfer $_.MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $_.Mask   
         } 
 
     }            
 
-    Update-UI -MainWindowButtons -Emu68Settings -DiskPartitionWindow -UpdateInputBoxes -Buttons -PhysicalvsImage -CheckforRunningImage
+    Update-UI -MainWindowButtons -Emu68Settings -DiskPartitionWindow -UpdateInputBoxes -Buttons -PhysicalvsImage -CheckforRunningImage -freespacealert
 
     return $true
 

@@ -8,9 +8,7 @@ $WPF_Window_Button_PackageSelection.Add_Click({
     $Script:GUICurrentStatus.CurrentWindow = 'PackageSelection' 
 
     if ($Script:GUICurrentStatus.AvailablePackagesNeedingGeneration -eq $true){
-        If ($Script:Settings.DebugMode){
-            Write-host "Populating Available Packages"
-        }
+        write-debug "Populating Available Packages"
         Get-SelectablePackages 
         $Script:GUICurrentStatus.AvailablePackagesNeedingGeneration = $false
     }
@@ -46,14 +44,14 @@ $WPF_Window_Button_PackageSelection.Add_Click({
     $WPF_PackageSelection_Datagrid_IconSets.ItemsSource = $Script:GUIActions.AvailableIconSets.DefaultView
     
      if (-not ($WPF_PackageSelection_Datagrid_IconSets.SelectedItem)){
-      #  Write-Host 'No Selected Item'
+
          for ($i = 0; $i -lt $Script:GUIActions.AvailableIconSets.DefaultView.Count; $i++) {
              if ($Script:GUIActions.AvailableIconSets.DefaultView[$i].IconSetDefaultInstall -eq $true){
                  $DefaultRowNumber = $i
              }
          }  
          
-        # Write-Host "Selected Row number is $DefaultRowNumber"
+
          $WPF_PackageSelection_Datagrid_IconSets.SelectedItem = $Script:GUIActions.AvailableIconSets.DefaultView[$DefaultRowNumber]
 
      }

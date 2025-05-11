@@ -18,4 +18,6 @@ $WPF_DP_Button_AmigaRemoveFreeSpace.add_click({
         $EndingPositionBytesLastPartition = (Get-Variable -Name $Partition.PartitionName).value.StartingPositionBytes + (Get-Variable -Name $Partition.PartitionName).value.PartitionSizeBytes
     }
 
+    update-ui -FreeSpaceAlert
+
 })

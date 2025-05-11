@@ -15,7 +15,7 @@ function Copy-CDFiles {
 
     $TempFoldertoExtract = "$($Script:Settings.TempFolder)\CDFiles\"
 
-    # Write-host $TempFoldertoExtract
+    Write-debug "Temporary folder to extract to is: $TempFoldertoExtract"
 
     if (-not (Test-Path $TempFoldertoExtract)){
         $null = New-Item $TempFoldertoExtract -ItemType Directory -Force

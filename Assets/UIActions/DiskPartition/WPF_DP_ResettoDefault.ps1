@@ -21,7 +21,7 @@ $WPF_DP_ResettoDefault.Add_Click({
                 Remove-Variable -Scope Script -Name 'WPF_DP_Disk_GPTMBR'
             }
         
-            Update-UI -DiskPartitionWindow
+            Update-UI -DiskPartitionWindow -freespacealert
         
         }
         else {

@@ -8,9 +8,7 @@ function New-GUIPartition {
         $ImportedPartitionMethod
     )
     
-    if ($Script:Settings.DebugMode){
-        Write-Host "PartitionType is: $PartitionType PartitionSubType is:  $PartitionSubType DefaultPartition is: $DefaultPartition"
-    }
+    write-debug "PartitionType is: $PartitionType PartitionSubType is:  $PartitionSubType DefaultPartition is: $DefaultPartition"
     # $WPF_MainWindow.Close()
     # exit
 
@@ -24,12 +22,12 @@ function New-GUIPartition {
         $NewPartition_XML = get-content '.\Assets\WPF\SetupDisk\PartitionAmiga.xaml'
     }
     elseif ($PartitionType -eq 'GPT'){
-        Write-Host "Coding Error - New-GUIPartition!"
+        Write-ErrorMessage -Message "Coding Error - New-GUIPartition!"
         $WPF_MainWindow.Close()
         exit
     }
     else {
-        Write-Host "Coding Error - New-GUIPartition! Different MBR partitions?"
+        Write-ErrorMessage -Message "Coding Error - New-GUIPartition! Different MBR partitions?"
         $WPF_MainWindow.Close()
         exit
     }
@@ -209,7 +207,7 @@ function New-GUIPartition {
             $NewPartition.CanResizeLeft = $false
             $NewPartition.CanResizeRight = $false
             $NewPartition.CanMove = $true
-            $NewPartition.CanChangeMask = $false
+            $NewPartition.CanChangeMask = $true
             $NewPartition.CanChangeBootable = $true
             $NewPartition.CanChangeDosType = $false
             $NewPartition.CanChangeBuffers =$true
@@ -225,7 +223,7 @@ function New-GUIPartition {
             $NewPartition.CanResizeLeft = $false
             $NewPartition.CanResizeRight = $false
             $NewPartition.CanMove = $false
-            $NewPartition.CanChangeMask = $false
+            $NewPartition.CanChangeMask = $true
             $NewPartition.CanChangeBootable = $true
             $NewPartition.CanChangeDosType = $false
             $NewPartition.CanChangeBuffers =$true

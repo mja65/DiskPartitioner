@@ -157,7 +157,7 @@
                <Button x:Name="Button_AddNewAmigaPartition" Content="Add new partition" HorizontalAlignment="Left" Margin="445,15,0,0" VerticalAlignment="Top" Width="140" Height="45" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
                <ComboBox x:Name="AddNewAmigaPartition_DropDown" HorizontalAlignment="Left" Margin="590,15,0,0" VerticalAlignment="Top" Width="170"/>
 
-               <Button x:Name="Button_ImportFiles" Content="Set Import Folder Location" HorizontalAlignment="Left" Margin="770,15,0,0" VerticalAlignment="Top" Height="20" Width="180" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
+               <Button x:Name="Button_ImportFiles" Content="Set Import Folder Location" HorizontalAlignment="Left" Margin="770,15,0,0" VerticalAlignment="Top" Height="20" Width="180" Background="#FFDDDDDD" Foreground="Black" BorderBrush="Transparent"/>
                <Button x:Name="Button_ImportFilesCancel" Content="Cancel Import Folder Location" HorizontalAlignment="Left" Margin="770,40,0,0" VerticalAlignment="Top" Height="20" Width="180" Background="#FF6688BB" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
              
                <TextBox x:Name="Button_ImportFiles_Label" HorizontalAlignment="Left" Margin="955,15,0,0" TextWrapping="Wrap" Text="No imported folder selected" VerticalAlignment="Top" Width="205" Height="20"  BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
@@ -255,7 +255,7 @@
                <TextBox x:Name="Input_DiskSize_Value" HorizontalAlignment="Left" Margin="7,40,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="70" Visibility="Visible" Height="20"/>
                <ComboBox x:Name="Input_DiskSize_SizeScale_Dropdown" HorizontalAlignment="Left" Margin="85,40,0,0" VerticalAlignment="Top" Width="50" Visibility="Visible" Height="20"/>
 
-               <Button x:Name="Button_SaveImage" HorizontalAlignment="Left" Margin="200,21,0,0" VerticalAlignment="Top" Width="100" Height="45" Background='#FFDDDDDD' Foreground="Black" FontWeight="Bold" BorderBrush="Transparent">
+               <Button x:Name="Button_SaveImage" HorizontalAlignment="Left" Margin="200,21,0,0" VerticalAlignment="Top" Width="100" Height="45" Background='#FFDDDDDD' Foreground="Black" BorderBrush="Transparent">
                    <TextBlock Text="Set Location for Image" TextWrapping="Wrap" TextAlignment="Center"/>
                </Button>
  

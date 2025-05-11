@@ -16,9 +16,9 @@ $WPF_DP_Button_AddNewGPTMBRPartition.add_click({
         $PartitionSubtypetouse = 'ID76'
     } 
 
-    Write-Host  "$AddType $($Script:GUICurrentStatus.SelectedGPTMBRPartition)"
+    write-debug  "$AddType $($Script:GUICurrentStatus.SelectedGPTMBRPartition)"
     if (($AddType -ne 'AtEnd') -and (-not $Script:GUICurrentStatus.SelectedGPTMBRPartition)){
-        Write-Host "$($Script:GUICurrentStatus.SelectedGPTMBRPartition)"
+        write-debug "$($Script:GUICurrentStatus.SelectedGPTMBRPartition)"
         $null = Show-WarningorError -Msg_Header 'No Partition Selected' -Msg_Body 'You must select a partition!' -BoxTypeError -ButtonType_OK
     }
     else {
@@ -45,9 +45,7 @@ $WPF_DP_Button_AddNewGPTMBRPartition.add_click({
                 else {
                     $SpacetoUse = $DefaultSize
                 }
-                if ($Script:Settings.DebugMode){
-                    Write-Host "Adding Partition with subtype:$PartitionSubtypetouse Addtype:$AddType Size:$(Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse)"
-                }
+                write-debug "Adding Partition with subtype:$PartitionSubtypetouse Addtype:$AddType Size:$(Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse)"
                 Add-GUIPartitiontoGPTMBRDisk -PartitionSubType $PartitionSubtypetouse -PartitionType 'MBR' -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition -AddType $AddType -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) 
             }
         }

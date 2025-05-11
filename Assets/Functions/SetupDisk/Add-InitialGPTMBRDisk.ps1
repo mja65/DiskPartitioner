@@ -11,7 +11,7 @@ function Add-InitialGPTMBRDisk {
         $DiskTypetouse = 'GPT'        
     }
     else {
-        Write-Host "Error in coding - Add-InitialGPTMBRDisk!"
+        Write-ErrorMessage -Message "Error in coding - Add-InitialGPTMBRDisk!"
         $WPF_MainWindow.Close()
         exit
     }
@@ -19,10 +19,8 @@ function Add-InitialGPTMBRDisk {
     if (-not $WPF_DP_Disk_GPTMBR){
 
         $MBRSectorAdjustmentBytes = $DiskSizeBytes - (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $DiskSizeBytes) 
-        If ($Script:Settings.DebugMode){
-            Write-Host "Rounded down disksize by: $MBRSectorAdjustmentBytes"
+        write-debug "Rounded down disksize by: $MBRSectorAdjustmentBytes"
 
-        }
         $Script:WPF_DP_Disk_GPTMBR = New-GUIDisk -DiskType $DiskTypetouse
         $Script:WPF_DP_DiskGrid_GPTMBR.AddChild($WPF_DP_Disk_GPTMBR)      
         $Script:WPF_DP_Disk_GPTMBR.LeftDiskBoundary = 0 

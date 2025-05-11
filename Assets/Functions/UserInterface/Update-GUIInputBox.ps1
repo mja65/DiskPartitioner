@@ -13,7 +13,7 @@ function Update-GUIInputBox {
     )
 
     if (($SetDiskValues) -and (-not ($DiskType))){
-        Write-Host "Error in coding - Update-GUIInputBox!"
+        Write-ErrorMessage -Message "Error in coding - Update-GUIInputBox!"
         $WPF_MainWindow.Close()
         exit
     } 
@@ -29,7 +29,7 @@ function Update-GUIInputBox {
 
     if ($InputBox.InputEntry -eq  $true -and $InputBox.InputEntryChanged -eq $true){
         If (($InputBox.EntryType -eq 'Numeric') -and ((Get-IsValueNumber -TexttoCheck $InputBox.Text) -eq $false)) {
-            Write-Host "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
+            write-debug "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
             $InputBox.InputEntryInvalid = $true #Temp only
             $InputBox.Background = 'Red'
             $InputBox.InputEntry = $false
@@ -39,7 +39,7 @@ function Update-GUIInputBox {
             return
         }
         elseif (($InputBox.EntryType -eq 'Hexadecimal') -and ((Confirm-IsHexadecimal -value $InputBox.Text) -eq $false -or $InputBox.Text.Length -ne $InputBox.EntryLength)) {
-            Write-Host "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
+            write-debug "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
             $InputBox.InputEntryInvalid = $true #Temp only
             $InputBox.Background = 'Red'
             $InputBox.InputEntry = $false
@@ -49,7 +49,7 @@ function Update-GUIInputBox {
             return
         }
         elseif (($InputBox.EntryType -eq 'AlphaNumeric') -and ((Get-IsValueAlphaNumeric -ValueToTest $InputBox.Text) -eq $false -or $InputBox.Text.Length -ne $InputBox.EntryLength)) {
-            Write-Host "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
+            write-debug "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
             $InputBox.InputEntryInvalid = $true #Temp only
             $InputBox.Background = 'Red'
             $InputBox.InputEntry = $false
@@ -59,7 +59,7 @@ function Update-GUIInputBox {
             return
         }
         elseif (($InputBox.EntryType -eq 'Alpha') -and ((Get-IsValueAlpha -ValueToTest $InputBox.Text) -eq $false -or $InputBox.Text.Length -ne $InputBox.EntryLength)) {
-            Write-Host "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
+            write-debug "InputEntryInvalid:$($InputBox.InputEntryInvalid)"
             $InputBox.InputEntryInvalid = $true #Temp only
             $InputBox.Background = 'Red'
             $InputBox.InputEntry = $false
@@ -79,29 +79,25 @@ function Update-GUIInputBox {
                Set-RevisedDiskValues -SizeBytes ((Get-ConvertedSize -Size ($WPF_DP_Input_DiskSize_Value.Text) -ScaleFrom ($WPF_DP_Input_DiskSize_SizeScale_Dropdown.SelectedItem) -Scaleto 'B').Size)
             }
             $InputBox.Background = 'White'
-            Update-UI -UpdateInputBoxes
+            Update-UI -UpdateInputBoxes -freespacealert
         }
         if (($MBRResize) -or ($AmigaResize)){                    
             if ($MBRResize){
-                if ($Script:Settings.DebugMode){
-                    Write-Host 'Changing size based on input - MBR'
-                }
+                write-debug 'Changing size based on input - MBR'
                 if (-not ($Script:GUICurrentStatus.SelectedGPTMBRPartition)){
                     return
                 }
                 $ResizeCheck = (Set-GUIPartitionNewSize -ResizeBytes -PartitionName $Script:GUICurrentStatus.SelectedGPTMBRPartition -SizeBytes (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size -PartitionType 'MBR' -ActiontoPerform 'MBR_ResizeFromRight')
             }
             elseif ($AmigaResize){
-                if ($Script:Settings.DebugMode){
-                    Write-Host 'Changing size based on input - Amiga'
-                }
-                if (-not ($Script:GUICurrentStatus.SelectedAmigaPartition)){
+                write-debug 'Changing size based on input - Amiga'
+                  if (-not ($Script:GUICurrentStatus.SelectedAmigaPartition)){
                     return
                 }
                 $ResizeCheck = (Set-GUIPartitionNewSize -ResizeBytes -PartitionName $Script:GUICurrentStatus.SelectedAmigaPartition -SizeBytes (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size -PartitionType 'Amiga' -ActiontoPerform 'Amiga_ResizeFromRight')
             }
             if ($ResizeCheck -eq $false){
-                Write-host "Invalid Size"
+                write-debug "Invalid Size"
                 $InputBox.Background = 'Yellow'
             }
             else{
@@ -122,12 +118,12 @@ function Update-GUIInputBox {
                 $AmounttoMove = (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size-$PartitiontoCheck.BytesAvailableRight
                 
             }
-            Write-Host 'Moving partition based on input'
-            Write-Host "Amount to Move is: $AmounttoMove"
+            write-debug 'Moving partition based on input'
+            write-debug "Amount to Move is: $AmounttoMove"
             if (($AmounttoMove -gt 0 -and $AmounttoMove -gt $PartitiontoCheck.BytesAvailableRight) -or ($AmounttoMove -lt 0 -and ($AmounttoMove*-1) -gt $PartitiontoCheck.BytesAvailableLeft)){
-                Write-Host "Space available right is: $($PartitiontoCheck.BytesAvailableRight)"
-                Write-Host "Space available left is: $($PartitiontoCheck.BytesAvailableLeft)"
-                Write-host "Invalid Size"
+                write-debug "Space available right is: $($PartitiontoCheck.BytesAvailableRight)"
+                write-debug "Space available left is: $($PartitiontoCheck.BytesAvailableLeft)"
+                write-debug "Invalid Size"
                 $InputBox.Background = 'Yellow'
             }
             else {

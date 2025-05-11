@@ -31,7 +31,7 @@ Get-ChildItem -Path '.\Assets\Variables\' -Recurse | Where-Object { $_.PSIsConta
 Get-ChildItem -Path '.\Assets\Functions\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
     . ($_).fullname
 }
-
+$DebugPreference = 'SilentlyContinue'
 $Script:Settings.Version = [system.version]'2.0'
 
 $Script:GUIActions.ScriptPath = (Split-Path -Path $PSScriptRoot -Parent)

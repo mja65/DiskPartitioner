@@ -53,7 +53,7 @@ function Get-NewDiskorImageCommands {
         }
     }
     else {
-        Write-host "Error in Coding - WPF_Window_Button_Run !"
+        Write-ErrorMessage -Message "Error in Coding - WPF_Window_Button_Run !"
         $WPF_MainWindow.Close()
         exit
     }

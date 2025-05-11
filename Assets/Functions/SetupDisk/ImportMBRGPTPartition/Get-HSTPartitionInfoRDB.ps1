@@ -107,7 +107,7 @@ function Get-HSTPartitionInfoRDB {
             Buffers = $_.Split("|")[8].Trim()
             DosType = $_.Split("|")[9].Trim()
             Mask = $_.Split("|")[10].Trim()
-            MaxTransfer = $_.Split("|")[11].Trim()
+            MaxTransfer = $_.Split("|")[11].Trim().replace("0x00","0x")
             Bootable = $_.Split("|")[12].Trim()
             NoMount = $_.Split("|")[13].Trim()
             Priority = $_.Split("|")[14].Trim()

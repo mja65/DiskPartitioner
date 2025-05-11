@@ -24,9 +24,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
     # $PartitionNameNextto = 'WPF_DP_Partition_ID76_1'
 
     if ($ImportedPartition -eq $true){
-        if ($Script:Settings.DebugMode){
-            Write-host "Importing MBR Partition $PathtoImportedPartition"
-        }
+        write-debug "Importing MBR Partition $PathtoImportedPartition"
     }
     
     $SizePixels = $SizeBytes / $Script:WPF_DP_Disk_GPTMBR.BytestoPixelFactor
@@ -38,7 +36,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
         $NewPartitionNumber = $Script:WPF_DP_Disk_GPTMBR.NextPartitionMBRNumber
     }
     elseif ($PartitionType -eq 'GPT') {
-        Write-Host "Error in coding - Add-GUIPartitiontoGPTMBRDisk!"
+        Write-ErrorMessage -Message "Error in coding - Add-GUIPartitiontoGPTMBRDisk!"
         $WPF_MainWindow.Close()
         exit
     }
@@ -51,10 +49,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
         
     }
 
-    if ($Script:Settings.DebugMode){
-        Write-Host "New Partition Name is: $NewPartitionName"
-    }
-  
+    write-debug "New Partition Name is: $NewPartitionName" 
 
     if ($AddType -eq 'AtEnd' -or $AddType -eq 'Initial'){
         $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'MBR').EndingPositionPixels
@@ -173,7 +168,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
             $Script:WPF_DP_Disk_GPTMBR.NumberofPartitionsMBR ++
         }
         elseif ($PartitionType -eq 'GPT'){
-            Write-Host "Coding Error - Add-GUIPartitiontoGPTMBRDisk!"
+            Write-ErrorMessage -Message "Coding Error - Add-GUIPartitiontoGPTMBRDisk!"
             $WPF_MainWindow.Close()
             exit
         }

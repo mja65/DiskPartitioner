@@ -5,7 +5,8 @@ function Get-MBRandRDBPartitionsforSelection  {
     )
     
     # $Image = $true
-
+    # $Script:GUICurrentStatus.ImportedImagePath = "C:\Users\Matt\OneDrive\Documents\DiskPartitioner\Emu68Workbench3.1.img"
+    
     if ($Image){
         $Script:GUICurrentStatus.ImportedPartitionType = Confirm-IsMDBRorRDB -Path $Script:GUICurrentStatus.ImportedImagePath -Image
 
@@ -89,11 +90,11 @@ function Get-MBRandRDBPartitionsforSelection  {
     elseif ($Script:GUICurrentStatus.ImportedPartitionType -eq 'RDB'){
    
         $WPF_DP_ID_Grid_MBR.Visibility = "Hidden"
-        $WPF_DP_ID_Grid_RDB.Visibility = "Visible"
+    #    $WPF_DP_ID_Grid_RDB.Visibility = "Visible"
         $WPF_DP_ID_RDB_DataGrid.Visibility = 'Visible'
         $WPF_DP_ID_RDB_DataGrid.IsHitTestVisible = 'TRUE'
         
-        $WPF_DP_ID_Grid_RDB.Margin = [System.Windows.Thickness]"0,120,0,0"
+        #$WPF_DP_ID_Grid_RDB.Margin = [System.Windows.Thickness]"0,120,0,0"
 
         if ($Image){
             $PathtoUse = $Script:GUICurrentStatus.ImportedImagePath

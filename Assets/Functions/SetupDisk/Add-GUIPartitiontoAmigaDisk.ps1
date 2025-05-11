@@ -31,9 +31,7 @@ function Add-GUIPartitiontoAmigaDisk {
     }
 
     if ($ImportedPartition){
-        if ($Script:Settings.DebugMode){
-            Write-host "Importing Amiga Partition $PathtoImportedPartition"
-        }
+        write-debug "Importing Amiga Partition $PathtoImportedPartition"
    }
 
     $SizePixels = $SizeBytes / ((Get-Variable -name  $AmigaDiskName).value.BytestoPixelFactor)
@@ -44,9 +42,7 @@ function Add-GUIPartitiontoAmigaDisk {
     if ($AddType -eq 'AtEnd'){
         $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'Amiga' -AmigaDiskName $AmigaDiskName).EndingPositionPixels
         $StartingPositionBytes = (Get-GUIPartitionStartEnd -PartitionType 'Amiga' -AmigaDiskName $AmigaDiskName).EndingPositionBytes
-        if ($Script:Settings.DebugMode){
-            Write-host "Left Margin is: $LeftMargin. Starting Position Bytes is: $StartingPositionBytes"
-        }
+        write-debug "Left Margin is: $LeftMargin. Starting Position Bytes is: $StartingPositionBytes"
     }
     else{
         $PartitionNameNexttoDetails = (Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -eq $PartitionNameNextto}) 
@@ -68,9 +64,7 @@ function Add-GUIPartitiontoAmigaDisk {
         $NewPartitionName = ($AmigaDiskName+'_Partition_'+$PartitionNumber)
     }
 
-    if ($Script:Settings.DebugMode){
-        Write-Host "New Partition Name is: $NewPartitionName "
-    }
+    write-debug "New Partition Name is: $NewPartitionName "
 
     if ($DefaultPartition -eq $true){
         Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -DefaultPartition -PartitionType 'Amiga' -PartitionTypeAmiga $PartitionTypeAmiga)

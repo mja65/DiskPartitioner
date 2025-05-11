@@ -132,8 +132,6 @@ function Update-AmigaScripts {
         }
     }    
     
-    #Write-host $RevisedScript
-
     Export-TextFileforAmiga -ExportFile $ScripttoModifyPath  -DatatoExport $RevisedScript -AddLineFeeds 'TRUE'   
 
     return

@@ -4,7 +4,7 @@ function New-GUIDisk {
     )
 
     if (-not ($DiskType)){
-        Write-Host "Error in coding - New-GUIDisk!"
+        Write-ErrorMessage -Message "Error in coding - New-GUIDisk!"
         $WPF_MainWindow.Close()
         exit
     } 

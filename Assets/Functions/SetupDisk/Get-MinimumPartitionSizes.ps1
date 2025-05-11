@@ -20,7 +20,7 @@ function Get-MinimumPartitionSizes {
     )
 
     if  (-not ($DiskType)){
-        Write-Host "Error in coding - Set-MinimumPartitionSizes!"
+        Write-ErrorMessage -Message "Error in coding - Set-MinimumPartitionSizes!"
         $WPF_MainWindow.Close()
         exit
     } 
@@ -61,12 +61,12 @@ function Get-MinimumPartitionSizes {
         }
     }
     elseif ($DiskType -eq 'PiStorm - GPT'){
-        Write-Host "Error in coding - PiStorm - GPT!"
+        Write-ErrorMessage -Message "Error in coding - PiStorm - GPT!"
         $WPF_MainWindow.Close()
         exit
     }
     elseif ($DiskType -eq 'Amiga - RDB'){
-        Write-Host "Error in coding - Amiga - RDB!"
+        Write-ErrorMessage -Message "Error in coding - Amiga - RDB!"
         $WPF_MainWindow.Close()
         exit
     }

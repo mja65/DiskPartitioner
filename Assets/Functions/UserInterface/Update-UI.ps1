@@ -7,7 +7,8 @@ function Update-UI {
         [Switch]$UpdateInputBoxes,
         [Switch]$Buttons,
         [Switch]$PhysicalvsImage,
-        [Switch]$CheckforRunningImage
+        [Switch]$CheckforRunningImage,
+        [Switch]$FreeSpaceAlert
     )
    
     if (($Emu68Settings) -and (-not ($Script:GUICurrentStatus.CurrentWindow -eq 'Emu68Settings'))){
@@ -233,9 +234,7 @@ function Update-UI {
                     {
                         if ($Script:GUICurrentStatus.SelectedGPTMBRPartition -eq $_.Name -or $Script:GUICurrentStatus.SelectedAmigaPartition -eq $_.Name ){
                            ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Red'
-                           if ($Script:Settings.DebugMode){
-                               Write-Host "Highlighting Partition"                       
-                           }                      
+                           write-debug "Highlighting Partition"                                      
                         } 
                         else{
                            ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Black'
@@ -361,8 +360,8 @@ function Update-UI {
             }
             else {
                 $WPF_DP_Button_ImportFiles_Label.Text = 'No imported folder selected'
-                $WPF_DP_Button_ImportFiles.Background = "#FF6688BB"
-                $WPF_DP_Button_ImportFiles.Foreground = 'White'
+                $WPF_DP_Button_ImportFiles.Background = "#FFDDDDDD"
+                $WPF_DP_Button_ImportFiles.Foreground = 'Black'
                 $WPF_DP_ImportFilesSize_Label.Visibility = 'Hidden'
                 $WPF_DP_ImportFilesSize_Value.Visibility = 'Hidden'
                 $WPF_DP_ImportFilesSize_Value.Text = ''
@@ -393,27 +392,19 @@ function Update-UI {
             
             $WPF_DP_Amiga_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem = $SpaceatEnd.Scale
             if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.Bootable -eq $true){
-                if ($Script:Settings.DebugMode){
-                    Write-Host "Bootable is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
-                }
+                write-debug "Bootable is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
                 $WPF_DP_Amiga_Bootable.IsChecked = 'True'
             }
             elseif ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.Bootable -eq $false){
-                if ($Script:Settings.DebugMode){
-                    Write-Host "Bootable is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
-                }
+                write-debug "Bootable is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
                 $WPF_DP_Amiga_Bootable.IsChecked = ''
             }
             if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.NoMount -eq $true){
-                if ($Script:Settings.DebugMode){
-                    Write-Host "NoMount is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
-                }
+                write-debug "NoMount is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
                 $WPF_DP_Amiga_Mountable.IsChecked = ''
             }
             elseif ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.NoMount -eq $false){
-                if ($Script:Settings.DebugMode){
-                    Write-Host "NoMount is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
-                }
+                write-debug "NoMount is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
                 $WPF_DP_Amiga_Mountable.IsChecked = 'True'
             }
             if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.CanChangeMountable -eq $true){
@@ -467,7 +458,7 @@ function Update-UI {
         }
     }
 
-    If ($DiskPartitionWindow){
+    If ($FreeSpaceAlert){
         $FreeSpaceBytes_MBR = 0
         $FreeSpaceBytes_Amiga = 0
         Get-AllGUIPartitionBoundaries | ForEach-Object {
@@ -480,16 +471,20 @@ function Update-UI {
         }
 
         If ($FreeSpaceBytes_MBR -eq 0){
+            write-debug "No free space - MBR"
             $WPF_DP_MBR_FreeSpaceBetweenPartitions_Label.Visibility = 'hidden'
         }
         else {
+            write-debug "Free space MBR is:$FreeSpaceBytes_MBR"
             $WPF_DP_MBR_FreeSpaceBetweenPartitions_Label.Visibility = 'visible'
         }
         
         If ($FreeSpaceBytes_Amiga -eq 0){
+            write-debug "No free space - Amiga"
             $WPF_DP_Amiga_FreeSpaceBetweenPartitions_Label.Visibility = 'hidden'
         }
         else {
+            write-debug "Free space Amiga is:$FreeSpaceBytes_Amiga"
             $WPF_DP_Amiga_FreeSpaceBetweenPartitions_Label.Visibility = 'visible'
         }
 

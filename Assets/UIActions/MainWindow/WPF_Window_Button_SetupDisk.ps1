@@ -1,7 +1,6 @@
 $WPF_Window_Button_SetupDisk.Add_Click({
-    if ($Script:Settings.DebugMode){
-        Write-host "Set up Disk button pressed"
-    }
+    write-debug "Set up Disk button pressed"
+
 
     # if (-not ($Script:WPF_Partition)){
     #     $Script:WPF_Partition = Get-XAML -WPFPrefix 'WPF_DP_' -XMLFile '.\Assets\WPF\Grid_DiskPartition.xaml' -ActionsPath '.\Assets\UIActions\DiskPartition\' -AddWPFVariables
@@ -21,7 +20,7 @@ $WPF_Window_Button_SetupDisk.Add_Click({
                 
                 $Script:GUICurrentStatus.InstallMediaRequiredFromUserSelectablePackages | ForEach-Object {
                     if  (-not ($HashTableforInstallMedia.ContainsKey($_.SourceLocation) -and $_.Source -eq 'ADF')){
-                        Write-host "Install Media requirements changed"
+                        write-debug "Install Media requirements changed"
                         $Script:GUIActions.FoundInstallMediatoUse = $null
                         break               
                     } 
@@ -53,7 +52,7 @@ $WPF_Window_Button_SetupDisk.Add_Click({
             $WPF_Window_Main.AddChild($WPF_Partition)
         }
         
-        update-ui -MainWindowButtons -DiskPartitionWindow
+        update-ui -MainWindowButtons -DiskPartitionWindow -FreeSpaceAlert
 
 })
  

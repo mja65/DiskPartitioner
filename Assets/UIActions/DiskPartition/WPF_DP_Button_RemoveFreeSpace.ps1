@@ -11,6 +11,8 @@ $WPF_DP_Button_RemoveFreeSpace.add_click({
         $ExpectedPartitionStartingPosition += (Get-Variable -Name $_.PartitionName).value.PartitionSizeBytes
     }
     
+    update-ui -FreeSpaceAlert
+    
     # $EndingPositionBytesLastPartition = $null
     # foreach ($Partition in $PartitionstoAdjust){        
     #     if ($null -ne $EndingPositionBytesLastPartition){

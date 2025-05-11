@@ -9,7 +9,6 @@ $Script:Settings = [PSCustomObject]@{
     MBROverheadBytes = 1048576+50688 # Allowing for partition to start at sectoe 2048 and leave space HST Imager appears to require
     MBRFirstPartitionStartSector = 2048
     PartitionPixelBuffer = 5 # To account for not exact mouse pointer precision
-    DebugMode = $false
     Version = $null
     PowershellVersion = ((($PSVersionTable.PSVersion).Major).ToString()+'.'+(($PSVersionTable.PSVersion).Minor))
     NetFrameworkrelease = Get-ItemPropertyValue -LiteralPath 'HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full' -Name Release

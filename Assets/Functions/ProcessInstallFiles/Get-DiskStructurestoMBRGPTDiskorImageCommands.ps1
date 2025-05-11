@@ -12,12 +12,12 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
         $RDBPartitionstoAddtoDisk = Get-AllGUIPartitions -PartitionType 'Amiga' 
     }
     elseif ($Script:GUIActions.DiskTypeSelected -eq 'PiStorm - GPT'){
-        Write-host "Error in Coding - WPF_Window_Button_Run !"
+        Write-ErrorMessage -Message "Error in Coding - WPF_Window_Button_Run !"
         $WPF_MainWindow.Close()
         exit
     }
     elseif ($Script:GUIActions.DiskTypeSelected -eq 'Amiga - RDB'){
-        Write-host "Error in Coding - WPF_Window_Button_Run !"
+        Write-ErrorMessage -Message "Error in Coding - WPF_Window_Button_Run !"
         $WPF_MainWindow.Close()
         exit
     }

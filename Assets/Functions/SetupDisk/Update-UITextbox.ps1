@@ -18,11 +18,6 @@ function Update-UITextbox {
     # $Value = 'DosType' 
     # $CanChangeParameter = 'CanChangeDosType'
     
-    # if (((get-variable -name $NameofPartition).value.PartitionType) -eq 'Amiga' -and ((get-variable -name $NameofPartition).value.ImportedPartition) -eq 'TRUE'){
-    #     Write-host  "$NameofPartition"
-    #     (get-variable -name $NameofPartition).value.ImportedPartitionUpdatedValues = $true
-    # }
-
     if ($TextBoxControl){
         $TextBoxControl.Text = (get-variable -name $NameofPartition).value.$Value
     }

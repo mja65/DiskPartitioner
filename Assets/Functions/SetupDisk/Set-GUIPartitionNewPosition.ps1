@@ -11,10 +11,9 @@ function Set-GUIPartitionNewPosition {
     # $PartitionName = 'WPF_DP_Partition_MBR_3'
     # $PartitionName = 'WPF_DP_Partition_ID76_1_AmigaDisk_Partition_2'
     # $AmountMovedBytes = 10240000
-    Write-host "Function Set-GUIPartitionNewPosition PartitionName:$PartitionName AmountMovedBytes:$AmountMovedBytes AmountMovedPixels:$AmountMovedPixels"
+    
+    write-debug "Function Set-GUIPartitionNewPosition PartitionName:$PartitionName AmountMovedBytes:$AmountMovedBytes AmountMovedPixels:$AmountMovedPixels"
 
-    if ($Script:Settings.DebugMode){
-    }
     
     if ((Get-Variable -name $PartitionName).Value.CanMove -eq $false) {
         return $false
@@ -38,7 +37,7 @@ function Set-GUIPartitionNewPosition {
                 }
             }
             elseif ($AmountMovedPixels -lt 0){
-                Write-host "Available bytes left is:$($PartitionBoundary.BytesAvailableLeft)"
+                write-debug "Available bytes left is:$($PartitionBoundary.BytesAvailableLeft)"
                 if (($BytestoPixelFactor*$AmountMovedPixels*-1) -gt $PartitionBoundary.BytesAvailableLeft) {
                     $AmountMovedPixels = ($PartitionBoundary.BytesAvailableLeft/$BytestoPixelFactor*-1)
                 }
@@ -61,7 +60,7 @@ function Set-GUIPartitionNewPosition {
                 $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
             }
             $AmountMovedPixels = $AmountMovedBytes/$BytestoPixelFactor
-            Write-host "$AmountMovedPixels"
+            write-debug "$AmountMovedPixels"
         }
        
         $AmounttoSetLeft = (Get-Variable -Name $PartitionName).value.Margin.Left + $AmountMovedPixels
