@@ -144,20 +144,27 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
                            $BootPrioritytouse = $RDBPartition.value.Priority
                            If ($RDBPartition.value.ImportedFilesPath){
                                if (test-path ($RDBPartition.value.ImportedFilesPath)){
-                                   if (test-path "$($Script:Settings.TempFolder)\ImportedFiles.info"){
-                                       $null = Remove-Item "$($Script:Settings.TempFolder)\ImportedFiles.info"                                   
-                                   }                                                                  
-                                   $null = Copy-Item "$($Script:Settings.TempFolder)\IconFiles\NewFolder.info" "$($Script:Settings.TempFolder)\ImportedFiles.info"   
+                                   if ($Script:GUIActions.InstallOSFiles -eq $true){
+                                       if (test-path "$($Script:Settings.TempFolder)\ImportedFiles.info"){
+                                           $null = Remove-Item "$($Script:Settings.TempFolder)\ImportedFiles.info"                                   
+                                       }                                                                  
+                                       $null = Copy-Item "$($Script:Settings.TempFolder)\IconFiles\NewFolder.info" "$($Script:Settings.TempFolder)\ImportedFiles.info"   
+                                   }                                   
                                    Write-InformationMessage -Message "Adding command to import files from $($RDBPartition.value.ImportedFilesPath) to RDB Partition $($RDBPartition.value.DeviceName)"
                                    $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
                                        Command = "fs copy `"$($RDBPartition.value.ImportedFilesPath)\`*`" `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter\rdb\$($RDBPartition.value.DeviceName)\ImportedFiles`""
                                        Sequence = 5      
                                    }  
-                                   Write-InformationMessage -Message "Adding command to create .info file for imported files folder"
-                                   $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
-                                       Command = "fs copy `"$([System.IO.Path]::GetFullPath("$($Script:Settings.TempFolder)\ImportedFiles.info"))`" `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter\rdb\$($RDBPartition.value.DeviceName)`""
-                                       Sequence = 5      
-                                   }                                     
+                                   if ($Script:GUIActions.InstallOSFiles -eq $true){
+                                       Write-InformationMessage -Message "Adding command to create .info file for imported files folder"
+                                       $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
+                                           Command = "fs copy `"$([System.IO.Path]::GetFullPath("$($Script:Settings.TempFolder)\ImportedFiles.info"))`" `"$($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter\rdb\$($RDBPartition.value.DeviceName)`""
+                                           Sequence = 5      
+                                       }                                     
+                                   }
+                                   else {
+                                    Write-Warning -Message "Not creating .info file for imported files folder as icons not available (you haven't installed an OS)"
+                                   }
                                }
                                else {
                                 Write-ErrorMessage -Message "Path for imported files no longer exists! Cannot import files"

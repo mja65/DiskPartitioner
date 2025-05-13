@@ -55,8 +55,13 @@ function Copy-EMU68BootFiles {
             }
         }
         
-        $null = Copy-Item "$DiskIconsPath\Emu68BootDrive\disk.info" -Destination "$Emu68BootPath"
         $null = Copy-Item "$($Script:Settings.InterimAmigaDrives)\Emu68Boot\*" -Destination $Emu68BootPath -Recurse
+        if ($Script:GUIActions.InstallOSFiles -eq $true){
+            $null = Copy-Item "$DiskIconsPath\Emu68BootDrive\disk.info" -Destination "$Emu68BootPath"
+        }
+        else {
+            Write-Warning -Message "Not creating disk.info file for Emu68Boot folder as icons not available (you haven't installed an OS)"
+        }
 
     }
 
