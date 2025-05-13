@@ -2,9 +2,6 @@ $WPF_Window_Button_SetupEmu68.Add_Click({
 
     $Script:GUICurrentStatus.CurrentWindow = 'Emu68Settings'
     If ($Script:GUIActions.InstallOSFiles -eq $true){
-        $WPF_Setup_OSSelection_GroupBox.Visibility = 'Visible'
-        $WPF_Setup_SourceFiles_GroupBox.Visibility = 'Visible'
-        $WPF_Setup_Settings_GroupBox.Visibility = 'Visible'
 
         if ($Script:GUICurrentStatus.InstallMediaRequiredFromUserSelectablePackages){
            
@@ -26,11 +23,6 @@ $WPF_Window_Button_SetupEmu68.Add_Click({
         }
 
 
-    }
-    elseif ($Script:GUIActions.InstallOSFiles -eq $false){
-        $WPF_Setup_OSSelection_GroupBox.Visibility = 'Visible'
-        $WPF_Setup_SourceFiles_GroupBox.Visibility = 'Hidden'
-        $WPF_Setup_Settings_GroupBox.Visibility = 'Visible'
     }
 
     # if (-not ($Script:WPF_SetupEmu68)){

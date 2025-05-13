@@ -44,10 +44,10 @@ function Get-NextGUIPartition {
         }
     }
     else{
-        if ($Side -eq 'Left'){
+        if ($Side -eq 'Right'){
             $NextPartitionName = $PartitionstoCheck[0].PartitionName
         }
-        elseif ($Side -eq 'Right'){
+        elseif ($Side -eq 'Left'){
             $NextPartitionName = $PartitionstoCheck[$PartitionstoCheck.Count-1].PartitionName
         }
     }

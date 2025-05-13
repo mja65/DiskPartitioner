@@ -4,11 +4,15 @@ $WPF_Window_Button_Run.Add_Click({
 
    if ($Script:GUICurrentStatus.ProcessImageStatus -eq $false){
       Get-IssuesPriortoRunningImage
+      return
 
    }
    elseif ($Script:GUICurrentStatus.ProcessImageStatus -eq $true){
       Get-OptionsBeforeRunningImage
-      if ($Script:GUICurrentStatus.ProcessImageConfirmedbyUser -eq $true){
+      if ($Script:GUICurrentStatus.ProcessImageConfirmedbyUser -eq $false){
+         return
+      }
+      elseif ($Script:GUICurrentStatus.ProcessImageConfirmedbyUser -eq $true){
 
         # $Script:GUIActions.OutputType = "Disk"
         # $Script:GUIActions.OutputPath = "\disk6"
@@ -134,6 +138,14 @@ $WPF_Window_Button_Run.Add_Click({
          }
 
          Copy-EMU68BootFiles -OutputLocationType $OutputTypetoUse #Commands not run yet for IMG
+         
+         if ($OutputTypetoUse -eq 'VHDImage'){
+            $IsMounted = (Get-DiskImage -ImagePath $Script:GUIActions.OutputPath -ErrorAction Ignore).Attached
+            if ($IsMounted -eq $true){
+                Write-InformationMessage -Message "Dismounting existing image: $($Script:GUIActions.OutputPath)"
+                $null = Dismount-DiskImage -ImagePath $Script:GUIActions.OutputPath 
+            }
+        }         
 
          if ($OutputTypetoUse -eq "IMGImage"){
             $Script:Settings.CurrentSubTaskNumber ++
@@ -160,13 +172,25 @@ $WPF_Window_Button_Run.Add_Click({
          
          }
 
+         $FullListofCommands =   $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles +`
+                                 $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles + `
+                                 $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage +`
+                                 $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures + `
+ #                                $Script:GUICurrentStatus.HSTCommandstoProcess.CopyImportedFiles +`
+                                 $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk +`
+                                 $Script:GUICurrentStatus.HSTCommandstoProcess.AdjustParametersonImportedRDBPartitions                           
+                                                      
          $Script:GUICurrentStatus.EndTimeForRunningInstall = (Get-Date -Format HH:mm:ss)
          $ElapsedTime = (New-TimeSpan -Start $Script:GUICurrentStatus.StartTimeForRunningInstall -end $Script:GUICurrentStatus.EndTimeForRunningInstall).TotalSeconds
        
          Write-InformationMessage -Message "Processing Complete!"    
          Write-InformationMessage -message "Started at: $($Script:GUICurrentStatus.StartTimeForRunningInstall) Finished at: $($Script:GUICurrentStatus.EndTimeForRunningInstall). Total time to run (in seconds) was: $ElapsedTime" 
          Write-InformationMessage -message "The tool has finished running. A log file was created and has been stored in the log subfolder."
+
          Write-InformationMessage -message "The full path to the file is: $([System.IO.Path]::GetFullPath($Script:Settings.LogLocation))"
+
+        "HST imager commands ran:" |Out-File $Script:Settings.LogLocation -Append
+         $FullListofCommands| Out-File $Script:Settings.LogLocation -Append
 
       }
    }

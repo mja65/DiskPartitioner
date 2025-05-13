@@ -1,7 +1,9 @@
 $WPF_DP_Button_AddNewAmigaPartition.add_click({
     
     # $AmigaDiskName = 'WPF_DP_Partition_MBR_2_AmigaDisk'
-    
+
+    Set-AmigaDiskSizeOverhangPixels -AmigaDisk $AmigaDiskName
+
     if ($WPF_DP_AddNewAmigaPartition_DropDown.SelectedItem -eq 'At end of disk'){
         $AddType = 'AtEnd'     
         $AmigaDiskName = "$($Script:GUICurrentStatus.SelectedGPTMBRPartition)_AmigaDisk"
@@ -62,22 +64,25 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
     }
     else {
 
-        $SpacetoUse = Get-NewPartitionSize -DefaultScale 'MiB' -MaximumSizeBytes $AvailableFreeSpace -MinimumSizeBytes $Script:SDCardMinimumsandMaximums.PFS3Minimum
+        $SpacetoUse = Get-NewPartitionSize -DefaultScale 'MiB' -MaximumSizeBytes (Get-AmigaNearestSizeBytes -RoundDown $AvailableFreeSpace) -MinimumSizeBytes (Get-AmigaNearestSizeBytes -RoundDown $Script:SDCardMinimumsandMaximums.PFS3Minimum)
         if ($SpacetoUse){
             $WorkDefaultValues = Get-InputCSVs -Diskdefaults | Where-Object {$_.Type -eq "Amiga" -and $_.Disk -eq 'Work'}
             
             $DeviceandVolumeNametoUse = (Get-DeviceandVolumeNametoUse)
     
+            Write-Host "$AmigaDiskName $AddType $PartitionNexttotouse"
+
             Add-GUIPartitiontoAmigaDisk -AmigaDiskName $AmigaDiskName -AddType $AddType -DeviceName $DeviceandVolumeNametoUse.DeviceName -VolumeName $DeviceandVolumeNametoUse.VolumeName -PartitionNameNextto $PartitionNexttotouse -SizeBytes (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) -Buffers $WorkDefaultValues.Buffers -DosType $WorkDefaultValues.DosType -NoMount $WorkDefaultValues.NoMountFlag -Bootable $WorkDefaultValues.BootableFlag -Priority ([int]$WorkDefaultValues.Priority) -MaxTransfer $WorkDefaultValues.MaxTransfer -Mask $WorkDefaultValues.Mask
     
             Update-UI -DiskPartitionWindow
+
+            Set-AmigaDiskSizeOverhangPixels -AmigaDisk $AmigaDiskName
         }
 
         else {
             return
         }
-
-        #Set-AmigaDiskSizeOverhangPixels -AmigaDisk (Get-Variable -name $AmigaDiskName).Value
+        
     }
     
 })

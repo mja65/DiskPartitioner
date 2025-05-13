@@ -11,12 +11,12 @@ function Update-UI {
         [Switch]$FreeSpaceAlert
     )
    
-    if (($Emu68Settings) -and (-not ($Script:GUICurrentStatus.CurrentWindow -eq 'Emu68Settings'))){
-        return
-    }
-    if ((($DiskPartitionWindow) -or ($HighlightSelectedPartitions) -or ($UpdateInputBoxes) -or ($Buttons)) -and (-not ($Script:GUICurrentStatus.CurrentWindow -eq 'DiskPartition'))){
-        return
-    }
+    # if (($Emu68Settings) -and (-not ($Script:GUICurrentStatus.CurrentWindow -eq 'Emu68Settings'))){
+    #     return
+    # }
+    # if ((($DiskPartitionWindow) -or ($HighlightSelectedPartitions) -or ($UpdateInputBoxes) -or ($Buttons)) -and (-not ($Script:GUICurrentStatus.CurrentWindow -eq 'DiskPartition'))){
+    #     return
+    # }
 
     if ($MainWindowButtons){
         $WPF_Window_Button_LoadSettings.Background = '#FFDDDDDD'
@@ -60,42 +60,42 @@ function Update-UI {
         $Script:GUICurrentStatus.ProcessImageStatus = $true
         $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Clear()
 
+        
+        If (-not ($Script:GUIActions.KickstartVersiontoUse)){
+            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","No OS selected")
+            $Script:GUICurrentStatus.ProcessImageStatus = $false
+        }
+        If (-not ($Script:GUIActions.FoundKickstarttoUse)){
+            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","Kickstart file has not been located")
+            $Script:GUICurrentStatus.ProcessImageStatus = $false
+        }
         if ($Script:GUIActions.InstallOSFiles -eq $true){
-
-            If (-not ($Script:GUIActions.KickstartVersiontoUse)){
-                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","No OS selected")
-                $Script:GUICurrentStatus.ProcessImageStatus = $false
-            }
             If (-not ($Script:GUIActions.FoundInstallMediatoUse)){
                 $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","OS file(s) have not been located")
                 $Script:GUICurrentStatus.ProcessImageStatus = $false
             }   
-            If (-not ($Script:GUIActions.FoundKickstarttoUse)){
-                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","Kickstart file has not been located")
-                $Script:GUICurrentStatus.ProcessImageStatus = $false
-            }
-            If (-not ($Script:GUIActions.OutputPath)){
-                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","No Output location has been defined")
-                $Script:GUICurrentStatus.ProcessImageStatus = $false
-            }
-            else {
-                if ($Script:GUIActions.OutputType -eq 'Disk'){
-                    Get-AllGUIPartitions -partitiontype 'MBR' | ForEach-Object {
-                        if ($_.value.ImportedPartition -eq $true -and $_.value.ImportedPartitionMethod -eq 'Direct'){
-                           if ($_.value.ImportedPartitionPath -match $Script:GUIActions.OutputPath){
-                               $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","The output location is the same physical disk set for one or more imported partitions")
-                               $Script:GUICurrentStatus.ProcessImageStatus = $false
-                           }
-                        }         
-                   }
-                }
-            }
-            If (-not ($Script:GUIActions.DiskSizeSelected)){
-                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","Disk Partitioning has not been performed")
-                $Script:GUICurrentStatus.ProcessImageStatus = $false
-            }        
         }
-
+        
+        If (-not ($Script:GUIActions.OutputPath)){
+            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","No Output location has been defined")
+            $Script:GUICurrentStatus.ProcessImageStatus = $false
+        }
+        else {
+            if ($Script:GUIActions.OutputType -eq 'Disk'){
+                Get-AllGUIPartitions -partitiontype 'MBR' | ForEach-Object {
+                    if ($_.value.ImportedPartition -eq $true -and $_.value.ImportedPartitionMethod -eq 'Direct'){
+                       if ($_.value.ImportedPartitionPath -match $Script:GUIActions.OutputPath){
+                           $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","The output location is the same physical disk set for one or more imported partitions")
+                           $Script:GUICurrentStatus.ProcessImageStatus = $false
+                       }
+                    }         
+               }
+            }
+        }
+        If (-not ($Script:GUIActions.DiskSizeSelected)){
+            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","Disk Partitioning has not been performed")
+            $Script:GUICurrentStatus.ProcessImageStatus = $false
+        }        
 
         if ($DiskSizeSelected){
 
@@ -170,56 +170,72 @@ function Update-UI {
     }
 
     if ($Emu68Settings){
-            if ($Script:GUIActions.ROMLocation){
-                $WPF_Setup_RomPath_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUIActions.ROMLocation
-                $WPF_Setup_RomPath_Button.Background = 'Green'
-                $WPF_Setup_RomPath_Button.Foreground = 'White'
-            }
-            else {
-                $WPF_Setup_RomPath_Label.Text = 'Using default Kickstart folder'
-                $WPF_Setup_RomPath_Button.Foreground = 'Black'
-                $WPF_Setup_RomPath_Button.Background = '#FFDDDDDD'
-            }
-            if ($Script:GUIActions.InstallMediaLocation){
-                $WPF_Setup_ADFPath_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUIActions.InstallMediaLocation
-                $WPF_Setup_ADFPath_Button.Background = 'Green'
-                $WPF_Setup_ADFPath_Button.Foreground = 'White'
-    
-            }
-            else {           
-                $WPF_Setup_ADFPath_Label.Text = 'Using default install media folder'
-                $WPF_Setup_ADFPath_Button.Foreground = 'Black'
-                $WPF_Setup_ADFPath_Button.Background = '#FFDDDDDD'       
-            }
-    
-            if ($Script:GUIActions.FoundKickstarttoUse){
-                $WPF_Setup_ROMpath_Button_Check.Background = 'Green'
-                $WPF_Setup_ROMpath_Button_Check.Foreground = 'White'
-            }
-            else{
-                $WPF_Setup_Rompath_Button_Check.Background = '#FFDDDDDD'
-                $WPF_Setup_Rompath_Button_Check.Foreground = 'Black'
-            }
-            
-            if ($Script:GUIActions.FoundInstallMediatoUse){
-                $WPF_Setup_ADFpath_Button_Check.Background = 'Green'
-                $WPF_Setup_ADFpath_Button_Check.Foreground = 'White'
-            }
-            else{
-                $WPF_Setup_ADFpath_Button_Check.Background = '#FFDDDDDD'
-                $WPF_Setup_ADFpath_Button_Check.Foreground = 'Black'
-            }
-    
-            if (($Script:GUIActions.SSID) -and (-not ($WPF_Setup_SSID_Textbox.Text))){
-                $WPF_Setup_SSID_Textbox.Text = $Script:GUIActions.SSID 
-            }
-            if (($Script:GUIActions.WifiPassword) -and (-not ($WPF_Setup_Password_Textbox.Text))){
-                $WPF_Setup_Password_Textbox.Text = $Script:GUIActions.WifiPassword 
-            }
-            
-            if (($Script:GUIActions.ScreenModetoUseFriendlyName) -and (-not ($WPF_Setup_ScreenMode_Dropdown.SelectedItem))) {
-               $WPF_Setup_ScreenMode_Dropdown.SelectedItem = $Script:GUIActions.ScreenModetoUseFriendlyName
-            }
+        if ($Script:GUIActions.InstallOSFiles -eq $true){
+            $WPF_Setup_OSSelection_GroupBox.Visibility = 'Visible'
+            $WPF_Setup_SourceFiles_GroupBox.Visibility = 'Visible'
+            $WPF_Setup_ADFpath_Button.Visibility = 'Visible'
+            $WPF_Setup_ADFpath_Button_Check.Visibility = 'Visible'
+            $WPF_Setup_ADFPath_Label.Visibility = 'Visible'
+            $WPF_Setup_Settings_GroupBox.Visibility = 'Visible'
+        }
+        elseif ($Script:GUIActions.InstallOSFiles -eq $false){
+            $WPF_Setup_OSSelection_GroupBox.Visibility = 'Visible'
+            $WPF_Setup_SourceFiles_GroupBox.Visibility = 'Visible'
+            $WPF_Setup_ADFpath_Button.Visibility = 'Hidden'
+            $WPF_Setup_ADFpath_Button_Check.Visibility = 'Hidden'
+            $WPF_Setup_ADFPath_Label.Visibility = 'Hidden'
+            $WPF_Setup_Settings_GroupBox.Visibility = 'Visible'
+        }
+        if ($Script:GUIActions.ROMLocation){
+            $WPF_Setup_RomPath_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUIActions.ROMLocation
+            $WPF_Setup_RomPath_Button.Background = 'Green'
+            $WPF_Setup_RomPath_Button.Foreground = 'White'
+        }
+        else {
+            $WPF_Setup_RomPath_Label.Text = 'Using default Kickstart folder'
+            $WPF_Setup_RomPath_Button.Foreground = 'Black'
+            $WPF_Setup_RomPath_Button.Background = '#FFDDDDDD'
+        }
+        if ($Script:GUIActions.InstallMediaLocation){
+            $WPF_Setup_ADFPath_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUIActions.InstallMediaLocation
+            $WPF_Setup_ADFPath_Button.Background = 'Green'
+            $WPF_Setup_ADFPath_Button.Foreground = 'White'
+
+        }
+        else {           
+            $WPF_Setup_ADFPath_Label.Text = 'Using default install media folder'
+            $WPF_Setup_ADFPath_Button.Foreground = 'Black'
+            $WPF_Setup_ADFPath_Button.Background = '#FFDDDDDD'       
+        }
+
+        if ($Script:GUIActions.FoundKickstarttoUse){
+            $WPF_Setup_ROMpath_Button_Check.Background = 'Green'
+            $WPF_Setup_ROMpath_Button_Check.Foreground = 'White'
+        }
+        else{
+            $WPF_Setup_Rompath_Button_Check.Background = '#FFDDDDDD'
+            $WPF_Setup_Rompath_Button_Check.Foreground = 'Black'
+        }
+        
+        if ($Script:GUIActions.FoundInstallMediatoUse){
+            $WPF_Setup_ADFpath_Button_Check.Background = 'Green'
+            $WPF_Setup_ADFpath_Button_Check.Foreground = 'White'
+        }
+        else{
+            $WPF_Setup_ADFpath_Button_Check.Background = '#FFDDDDDD'
+            $WPF_Setup_ADFpath_Button_Check.Foreground = 'Black'
+        }
+
+        if (($Script:GUIActions.SSID) -and (-not ($WPF_Setup_SSID_Textbox.Text))){
+            $WPF_Setup_SSID_Textbox.Text = $Script:GUIActions.SSID 
+        }
+        if (($Script:GUIActions.WifiPassword) -and (-not ($WPF_Setup_Password_Textbox.Text))){
+            $WPF_Setup_Password_Textbox.Text = $Script:GUIActions.WifiPassword 
+        }
+        
+        if (($Script:GUIActions.ScreenModetoUseFriendlyName) -and (-not ($WPF_Setup_ScreenMode_Dropdown.SelectedItem))) {
+           $WPF_Setup_ScreenMode_Dropdown.SelectedItem = $Script:GUIActions.ScreenModetoUseFriendlyName
+        }
     }
 
     if (($DiskPartitionWindow) -or ($HighlightSelectedPartitions)){
@@ -255,6 +271,10 @@ function Update-UI {
 
                 $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Visible'
                 If ((get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSubType -eq 'ID76'){
+                    $AmigaDiskName = "$($Script:GUICurrentStatus.SelectedGPTMBRPartition)_AmigaDisk"
+                    if (Get-Variable -name $AmigaDiskName){
+                        Set-AmigaDiskSizeOverhangPixels -AmigaDiskName $AmigaDiskName
+                    }
                     #$WPF_DP_DiskGrid_Amiga.Visibility ='Visible'
                     $WPF_DP_Amiga_GroupBox.Visibility ='Visible'
                     $WPF_DP_AmigaSettings_GroupBox.Visibility = 'Hidden'
@@ -446,7 +466,10 @@ function Update-UI {
 
         }    
         else {
-            $WPF_DP_SelectedAmigaPartition_Value.text = "No partition selected"            
+            $WPF_DP_SelectedAmigaPartition_Value.text = "No partition selected"
+            $WPF_DP_ImportFilesSize_Label.Visibility = 'Hidden'
+            $WPF_DP_ImportFilesSize_Value.Visibility = 'Hidden'
+            $WPF_DP_ImportFilesSize_Value.Text = ''                            
             if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){
                 $WPF_DP_Amiga_SpaceatBeginning_Input.Background = 'White'
                 $WPF_DP_Amiga_SpaceatBeginning_Input.Text =''

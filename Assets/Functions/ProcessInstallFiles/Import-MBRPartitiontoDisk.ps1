@@ -2,29 +2,33 @@ function Import-MBRPartitiontoDisk {
     param (
 
     )
+
+    $Script:GUICurrentStatus.HSTCommandstoProcess.AdjustParametersonImportedRDBPartitions.Clear()
+
     $MBRPartitionstoAddtoDisk = Get-AllGUIPartitions -partitiontype 'MBR'
     
     $MBRPartitionCounter = 1
     
     foreach ($MBRPartition in $MBRPartitionstoAddtoDisk) {
-        $MBRPartitionCounter ++
         if ($MBRPartition.value.ImportedPartition -eq $true -and $MBRPartition.value.ImportedPartitionMethod -eq 'Direct'){
+            Write-InformationMessage -Message "Identified MBR Partition #$MBRPartitionCounter for importation"          
             $Startpoint = $MBRPartition.value.ImportedPartitionPath.IndexOf("\MBR\")
             $SubstringLength = $MBRPartition.value.ImportedPartitionPath.length-($Startpoint+5)
             $MBRPartitionNumbertoImport = $MBRPartition.value.ImportedPartitionPath.Substring(($Startpoint+5),$SubstringLength)
             $PathofImage = $MBRPartition.value.ImportedPartitionPath.Substring(0,$Startpoint)
-            Write-InformationMessage -Message "Running command to import partition"
-            Copy-MBRPartition -SourcePath $PathofImage  -SourcePartitionNumber $MBRPartitionNumbertoImport -DestinationPath $($Script:GUIActions.OutputPath) -DestinationPartitionNumber $MBRPartitionCounter
-            $RDBCounter = 0
+            Write-InformationMessage -Message "Running command to import partition from: `"$PathofImage`" MBR Partition #$MBRPartitionNumbertoImport to: MBR Partition #$MBRPartitionCounter"
+            Copy-MBRPartition -SourcePath $PathofImage -SourcePartitionNumber $MBRPartitionNumbertoImport -DestinationPath $($Script:GUIActions.OutputPath) -DestinationPartitionNumber $MBRPartitionCounter
+            
+            $RDBCounter = 0        
+            Write-InformationMessage -Message 'Adjusting Amiga disk parameters for imported partitions where required'
             Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $MBRPartition.name } | ForEach-Object {
                 $RDBCounter ++
                 $RDBUpdateString = $null
                 $RDBUpdateStringUsed = $false
-            
                 if ($_.value.DeviceName -ne $_.value.DeviceNameoriginalimportedvalue){
                     $RDBUpdateString += "--name $($_.value.DeviceName) "
-                    $RDBUpdateStringUsed = $true
-                }   
+                    $RDBUpdateStringUsed = $true                    
+                }
                 if ($_.value.buffers -ne $_.value.buffersoriginalimportedvalue){
                     $RDBUpdateString += "--buffers $($_.value.buffers) "
                     $RDBUpdateStringUsed = $true
@@ -62,19 +66,27 @@ function Import-MBRPartitiontoDisk {
                 if ($_.value.priority -ne $_.value.priorityoriginalimportedvalue){
                     $RDBUpdateStringUsed = $true
                     $RDBUpdateString += "--bootpriority $($_.value.priority) "        
-                }
-            
-                #$_.value.VolumeName - 
-                #$_.value.VolumeNameoriginalimportedvalue   
-                #"rdb update --name $($_.value.DeviceName) --dos-type $($_.value.dostype) --buffers $($_.value.buffers) --max-transfer $($_.value.MaxTransfer) --mask $($_.value.mask) $NoMountflagtouse$bootableflagtouse--bootpriority $($_.value.priority)"
-                
-                if ($RDBUpdateStringUsed -eq $true) {
-                    Update-RDBonImportedPartition -DestinationPath "$($Script:GUIActions.OutputPath)\MBR\$MBRPartitionCounter" -DestinationPartitionNumber $RDBCounter -Parameters $RDBUpdateString         
-                }
-            
-            }
+                }    
 
+                if ($RDBUpdateStringUsed -eq $true) {
+                    Write-InformationMessage -Message "Adding comamand for parameter changes for RDB partition #$RDBCounter"  
+                    $Script:GUICurrentStatus.HSTCommandstoProcess.AdjustParametersonImportedRDBPartition += [PSCustomObject]@{
+                        Command = "rdb part update $($Script:GUIActions.OutputPath)\MBR\$MBRPartitionCounter $RDBCounter $RDBUpdateString"
+                        Sequence = 1      
+                    }       
+                }
+                else {
+                    Write-InformationMessage -Message "No parameter changes for RDB partition #$RDBCounter"                   
+                }                
+            }
         }
+        $MBRPartitionCounter ++
     }
     
+    $HSTCommandstoRun = $Script:GUICurrentStatus.HSTCommandstoProcess.AdjustParametersonImportedRDBPartition
+    if ($HSTCommandstoRun){
+        Start-HSTCommands -HSTScript $HSTCommandstoRun 'Processing commands'
+    }
+
 }
+    

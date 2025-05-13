@@ -3,6 +3,7 @@ function Get-AllGUIPartitionBoundaries {
 
     )
     
+   
     $DiskPartitionGridMargins = $WPF_Partition.Margin
 
     $GroupBoxGPTMBRMargins = $WPF_DP_GPTMBR_GroupBox.Margin
@@ -28,6 +29,7 @@ function Get-AllGUIPartitionBoundaries {
         $TopMarginWindow = $AmigaTopMargin 
         $RightMarginWindow = $AmigaLeftMargin + $_.Value.Margin.Left + (Get-GUIPartitionWidth -Partition $_.Value)
         $BottomMarginWindow = $AmigaTopMargin  + $_.Value.ActualHeight
+        $AmigaDiskName = ($_.Name.Substring(0,($_.Name.IndexOf('_AmigaDisk_')+10)))
 
         $AllPartitionBoundaries_Amiga_Preliminary += [PSCustomObject]@{
             PartitionName = $_.Name
@@ -50,6 +52,9 @@ function Get-AllGUIPartitionBoundaries {
             LeftMargin = $_.Value.Margin.Left
             LeftMarginWindow = $LeftMarginWindow
             Width = Get-GUIPartitionWidth -Partition $_.Value 
+            ExpectedWidth = $_.Value.PartitionSizeBytes/ (Get-Variable -name $AmigaDiskName).value.BytestoPixelFactor 
+            OverhangPixels = (Get-GUIPartitionWidth -Partition $_.Value) - ($_.Value.PartitionSizeBytes/ (Get-Variable -name $AmigaDiskName).value.BytestoPixelFactor) 
+            OverhangPixelsAccumulated = $null
             RightMargin = ($_.Value.Margin.Left) + (Get-GUIPartitionWidth -Partition $_.Value)
             RightMarginWindow = $RightMarginWindow
             TopMargin = $_.Value.Margin.Top
@@ -90,6 +95,9 @@ function Get-AllGUIPartitionBoundaries {
             LeftMargin = $_.Value.Margin.Left
             LeftMarginWindow = $LeftMarginWindow
             Width = Get-GUIPartitionWidth -Partition $_.Value 
+            ExpectedWidth = $_.Value.PartitionSizeBytes/ $WPF_DP_Disk_GPTMBR.BytestoPixelFactor
+            OverhangPixels = ($_.Value.PartitionSizeBytes/ $WPF_DP_Disk_GPTMBR.BytestoPixelFactor) - (Get-GUIPartitionWidth -Partition $_.Value)
+            OverhangPixelsAccumulated = $null
             RightMargin = ($_.Value.Margin.Left) + (Get-GUIPartitionWidth -Partition $_.Value)
             RightMarginWindow = $RightMarginWindow
             TopMargin = $_.Value.Margin.Top
@@ -101,8 +109,12 @@ function Get-AllGUIPartitionBoundaries {
     }
 
     $AllPartitionBoundaries_MBR = $AllPartitionBoundaries_MBR | Sort-Object -property 'LeftMargin'
+    
+    $OverhangPixelsAccumulated = 0
 
     for ($i = 0; $i -lt $AllPartitionBoundaries_MBR.Count; $i++) {
+        $OverhangPixelsAccumulated += $AllPartitionBoundaries_MBR[$i].OverhangPixels
+        $AllPartitionBoundaries_MBR[$i].OverhangPixelsAccumulated = $OverhangPixelsAccumulated 
         if ($i -eq 0){
             $AllPartitionBoundaries_MBR[$i].BytesAvailableLeft = $AllPartitionBoundaries_MBR[$i].StartingPositionBytes
             $AllPartitionBoundaries_MBR[$i].PixelsAvailableLeft = $AllPartitionBoundaries_MBR[$i].LeftMargin
@@ -129,9 +141,12 @@ function Get-AllGUIPartitionBoundaries {
     $AmigaDisks = (get-variable -name "WPF*" | Where-Object {$_.Value.DiskType -eq 'Amiga'}).Name  
     
     foreach ($AmigaDisk in $AmigaDisks) {
+        $OverhangPixelsAccumulated = 0
         $PartitionstoCheck = $AllPartitionBoundaries_Amiga_Preliminary | Where-Object {$_.PartitionName -match $AmigaDisk}
         $RDBPartitionCounter = 1
         for ($i = 0; $i -lt $PartitionstoCheck.Count; $i++){
+            $OverhangPixelsAccumulated += $PartitionstoCheck[$i].OverhangPixels
+            $PartitionstoCheck[$i].OverhangPixelsAccumulated = $OverhangPixelsAccumulated             
             if ($RDBPartitionCounter -eq 1){
                 $PartitionstoCheck[$i].BytesAvailableLeft = $PartitionstoCheck[$i].StartingPositionBytes
                 $PartitionstoCheck[$i].PixelsAvailableLeft = $PartitionstoCheck[$i].LeftMargin

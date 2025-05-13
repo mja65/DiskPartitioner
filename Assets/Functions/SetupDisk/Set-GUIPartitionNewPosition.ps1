@@ -7,13 +7,15 @@ function Set-GUIPartitionNewPosition {
     )
     
   
+    If (-not ($PartitionName)){
+        return
+    }
 
     # $PartitionName = 'WPF_DP_Partition_MBR_3'
-    # $PartitionName = 'WPF_DP_Partition_ID76_1_AmigaDisk_Partition_2'
+    # $PartitionName = 'WPF_DP_Partition_MBR_3_AmigaDisk_Partition_6'
     # $AmountMovedBytes = 10240000
     
     write-debug "Function Set-GUIPartitionNewPosition PartitionName:$PartitionName AmountMovedBytes:$AmountMovedBytes AmountMovedPixels:$AmountMovedPixels"
-
     
     if ((Get-Variable -name $PartitionName).Value.CanMove -eq $false) {
         return $false
@@ -31,36 +33,37 @@ function Set-GUIPartitionNewPosition {
     
         if ($AmountMovedPixels){
             if ($AmountMovedPixels -gt 0){
+                write-debug "Available bytes Right is :$($PartitionBoundary.BytesAvailableRight) $($PartitionBoundary.PixelsAvailableRight)"
                 if (($BytestoPixelFactor*$AmountMovedPixels) -gt $PartitionBoundary.BytesAvailableRight) {
                     $AmountMovedPixels = $PartitionBoundary.BytesAvailableRight/$BytestoPixelFactor
                     
                 }
             }
             elseif ($AmountMovedPixels -lt 0){
-                write-debug "Available bytes left is:$($PartitionBoundary.BytesAvailableLeft)"
+                write-debug "Available bytes left is: $($PartitionBoundary.BytesAvailableLeft). Available pixels left is: $($PartitionBoundary.PixelsAvailableLeft)"
                 if (($BytestoPixelFactor*$AmountMovedPixels*-1) -gt $PartitionBoundary.BytesAvailableLeft) {
                     $AmountMovedPixels = ($PartitionBoundary.BytesAvailableLeft/$BytestoPixelFactor*-1)
                 }
             }
             $AmountMovedBytes = $BytestoPixelFactor*$AmountMovedPixels
 
-            if ($PartitionType -eq 'MBR'){
-                $AmountMovedBytes = Get-MBRNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
-            }
-            elseif ($PartitionType -eq 'Amiga'){
-                $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
-            }
+            # if ($PartitionType -eq 'MBR'){
+            #     $AmountMovedBytes = Get-MBRNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+            # }
+            # elseif ($PartitionType -eq 'Amiga'){
+            #     $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+            # }
 
         }
         elseif ($AmountMovedBytes){
-            if ($PartitionType -eq 'MBR'){
-                $AmountMovedBytes = Get-MBRNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
-            }
-            elseif ($PartitionType -eq 'Amiga'){
-                $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
-            }
+            # if ($PartitionType -eq 'MBR'){
+            #     $AmountMovedBytes = Get-MBRNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+            # }
+            # elseif ($PartitionType -eq 'Amiga'){
+            #     $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+            # }
             $AmountMovedPixels = $AmountMovedBytes/$BytestoPixelFactor
-            write-debug "$AmountMovedPixels"
+            write-debug "Moving by: $AmountMovedPixels pixels"
         }
        
         $AmounttoSetLeft = (Get-Variable -Name $PartitionName).value.Margin.Left + $AmountMovedPixels

@@ -6,7 +6,7 @@ function Get-OptionsBeforeRunningImage {
     Remove-Variable -Name 'WPF_RunWindow_*'
 
     $WPF_RunWindow = Get-XAML -WPFPrefix 'WPF_RunWindow_' -XMLFile '.\Assets\WPF\Window_RunOptions.xaml' -ActionsPath '.\Assets\UIActions\RunWindow\' -AddWPFVariables
-    
+
     $DiskSizetoReport = (Get-ConvertedSize -Size $WPF_DP_Disk_GPTMBR.DiskSizeBytes -ScaleFrom 'B' -AutoScale)
     $NumberofMBRPartitions = (Get-AllGUIPartitions -PartitionType 'MBR').Count
     if ($Script:GUIActions.WifiPassword){
@@ -51,7 +51,8 @@ function Get-OptionsBeforeRunningImage {
     
      $WPF_RunWindow.ShowDialog() | out-null
     
-#$WPF_RunWindow.Height
-#$WPF_RunWindow_RunOptions_Datagrid.Columns
+#$WPF_RunWindow.Width
+# $WPF_RunWindow_RunOptions_Datagrid.Columns
 
 }
+

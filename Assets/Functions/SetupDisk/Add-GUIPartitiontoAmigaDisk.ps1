@@ -9,6 +9,8 @@ function Add-GUIPartitiontoAmigaDisk {
         $PartitionTypeAmiga,
         [Switch]$ImportedPartition,
         $ImportedPartitionMethod,
+        $ImportedFilesPath,
+        $ImportedFilesSpaceBytes,
         $PathtoImportedPartition,
         $DeviceName,
         $VolumeName,
@@ -76,7 +78,10 @@ function Add-GUIPartitiontoAmigaDisk {
         Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -PartitionType 'Amiga')
     }
 
-
+    if ($ImportedFilesPath){
+        (Get-Variable -Name $NewPartitionName).Value.ImportedFilesPath = $ImportedFilesPath
+        (Get-Variable -Name $NewPartitionName).Value.ImportedFilesSpaceBytes = [int]$ImportedFilesSpaceBytes
+    }
 
     (Get-Variable -Name $NewPartitionName).Value.Margin = [System.Windows.Thickness]"$LeftMargin,0,0,0"
     (Get-Variable -Name $NewPartitionName).Value.PartitionSizeBytes = $SizeBytes

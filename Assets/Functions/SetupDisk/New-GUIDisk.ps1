@@ -17,7 +17,7 @@ function New-GUIDisk {
     $NewDisk.Height="100" 
     $NewDisk.Stroke="Black"
     $NewDisk.Fill="White"
-    $NewDisk.Width="1000"
+    $NewDisk.Width= $Script:Settings.DiskWidthPixels
     $NewDisk.Name = "DiskBackground"
     
     if ($DiskType -eq 'MBR'){

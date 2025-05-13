@@ -6,6 +6,7 @@ $Script:Settings = [PSCustomObject]@{
     MBRSectorSizeBytes = 512
     MBRPartitionsMaximum = 4
     AmigaPartitionsperDiskMaximum = 10
+    DiskWidthPixels = 1000
     MBROverheadBytes = 1048576+50688 # Allowing for partition to start at sectoe 2048 and leave space HST Imager appears to require
     MBRFirstPartitionStartSector = 2048
     PartitionPixelBuffer = 5 # To account for not exact mouse pointer precision
@@ -94,7 +95,8 @@ $Script:GUICurrentStatus = [PSCustomObject]@{
         NewDiskorImage = [System.Collections.Generic.List[PSCustomObject]]::New()
         DiskStructures = [System.Collections.Generic.List[PSCustomObject]]::New()
         CopyImportedFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
-        WriteFilestoDisk = [System.Collections.Generic.List[PSCustomObject]]::New()      
+        WriteFilestoDisk = [System.Collections.Generic.List[PSCustomObject]]::New() 
+        AdjustParametersonImportedRDBPartitions = [System.Collections.Generic.List[PSCustomObject]]::New()      
     }
     NewPartitionDefaultScale = $null
     NewPartitionMinimumSizeBytes = $null

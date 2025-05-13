@@ -3,7 +3,8 @@ function Read-SettingsFile {
         $SettingsFile
     )
     
-   # $SettingsFile = "C:\Users\Matt\OneDrive\Documents\DiskPartitioner\Settings\Test.e68"
+    
+   # $SettingsFile = "C:\Users\Matt\OneDrive\Documents\DiskPartitioner\Settings\Test2.e68"
 
    $ReadSettings = get-content -Path $SettingsFile
 
@@ -18,6 +19,10 @@ function Read-SettingsFile {
         Write-InformationMessage -Message "Settings File is for different version of Emu68 Imager!"
         return $false #File is for wrong version
     }
+
+
+    $Script:GUICurrentStatus.SelectedGPTMBRPartition = $null
+    $Script:GUICurrentStatus.SelectedAmigaPartition = $null
 
     $LoadedSettingsHeader = $null
     $GPTMBRHeader = $null
@@ -82,28 +87,28 @@ function Read-SettingsFile {
         if ($_.split(';')[0] -eq 'Setting'){
             $LoadedSettings += ConvertFrom-Csv -InputObject $_ -Delimiter ';' -Header $LoadedSettingsHeader 
         }
-        elseif ($_.split(';')[0] -eq 'GPTMBRDetails'){
+        elseif (($_.split(';')[0] -eq 'GPTMBRDetails') -and ($GPTMBRHeader)) {
             $GPTMBR += ConvertFrom-Csv -InputObject $_ -Delimiter ';' -Header $GPTMBRHeader
         }
-        elseif ($_.split(';')[0] -eq 'RDBDetails'){
+        elseif (($_.split(';')[0] -eq 'RDBDetails') -and ($RDBHeader)) {
             $RDB += ConvertFrom-Csv -InputObject $_ -Delimiter ';' -Header $RDBHeader
         }
-        elseif ($_.split(';')[0] -eq 'MBRPartitionDetails'){
+        elseif (($_.split(';')[0] -eq 'MBRPartitionDetails') -and ($MBRPartitionHeader)) {
             $MBRPartitions += ConvertFrom-Csv -InputObject $_ -Delimiter ';' -Header $MBRPartitionHeader
         }
-        elseif ($_.split(';')[0] -eq 'RDBPartitionDetails'){
+        elseif (($_.split(';')[0] -eq 'RDBPartitionDetails') -and ($RDBPartitionHeader)) {
             $RDBPartitions += ConvertFrom-Csv -InputObject $_ -Delimiter ';' -Header $RDBPartitionHeader
         }
-        elseif ($_.split(';')[0] -eq 'AvailableIconSetsUserSelectedDetails'){
+        elseif (($_.split(';')[0] -eq 'AvailableIconSetsUserSelectedDetails') -and ($AvailableIconSetsHeader)) {
             $AvailableIconSets += ConvertFrom-Csv -InputObject $_.Replace('AvailableIconSetsUserSelectedDetails;','')   -Delimiter ';' -Header $AvailableIconSetsHeader 
         }
-        elseif ($_.split(';')[0] -eq 'AvailablePackagesUserSelectedDetails'){
+        elseif (($_.split(';')[0] -eq 'AvailablePackagesUserSelectedDetails')  -and ($AvailablePackagesHeader)) {
             $AvailablePackages += ConvertFrom-Csv -InputObject $_.Replace('AvailablePackagesUserSelectedDetails;','')   -Delimiter ';' -Header $AvailablePackagesHeader 
         }
-        elseif ($_.split(';')[0] -eq 'FoundInstallMediatoUseDetails'){
+        elseif (($_.split(';')[0] -eq 'FoundInstallMediatoUseDetails')  -and ($FoundInstallMediaHeader)) {
             $FoundInstallMedia += ConvertFrom-Csv -InputObject $_.Replace('FoundInstallMediatoUseDetails;','')  -Delimiter ';' -Header $FoundInstallMediaHeader
         }
-        elseif ($_.split(';')[0] -eq 'FoundKickstarttoUseDetails'){
+        elseif (($_.split(';')[0] -eq 'FoundKickstarttoUseDetails') -and ($FoundKickstarttoUseHeader)) {
             $FoundKickstarttoUse += ConvertFrom-Csv -InputObject $_.replace('FoundKickstarttoUseDetails;','')  -Delimiter ';' -Header $FoundKickstarttoUseHeader
         }
     }
@@ -152,9 +157,11 @@ function Read-SettingsFile {
         }
     }  
    
-    if (Test-Path $FoundKickstarttoUse.KickstartPath){
-        if ((get-filehash -path $FoundKickstarttoUse.KickstartPath -Algorithm MD5).hash -eq (Get-InputCSVs -ROMHashes | Where-Object {$_.Kickstart_version -eq $Script:GUIActions.KickstartVersiontoUse}).hash){
-            $Script:GUIActions.FoundKickstarttoUse = $FoundKickstarttoUse | Select-Object 'Kickstart_Version','FriendlyName','Sequence','IncludeorExclude','ExcludeMessage','Fat32Name','KickstartPath'            
+    if ($FoundKickstarttoUse.KickstartPath){
+        if (Test-Path $FoundKickstarttoUse.KickstartPath){
+            if ((get-filehash -path $FoundKickstarttoUse.KickstartPath -Algorithm MD5).hash -eq (Get-InputCSVs -ROMHashes | Where-Object {$_.Kickstart_version -eq $Script:GUIActions.KickstartVersiontoUse}).hash){
+                $Script:GUIActions.FoundKickstarttoUse = $FoundKickstarttoUse | Select-Object 'Kickstart_Version','FriendlyName','Sequence','IncludeorExclude','ExcludeMessage','Fat32Name','KickstartPath'            
+            }
         }
     }
 
@@ -206,7 +213,6 @@ function Read-SettingsFile {
        [void]$Script:GUIActions.AvailableIconSets.Rows.Add($array)
     }
 
-    
     $Script:GUICurrentStatus.AvailablePackagesNeedingGeneration = $false
 
     $WPF_Setup_ScreenMode_Dropdown.SelectedItem = $Script:GUIActions.ScreenModetoUseFriendlyName
@@ -219,6 +225,19 @@ function Read-SettingsFile {
     $WPF_DP_Disk_GPTMBR.NumberofPartitionsMBR = $GPTMBR.NumberofPartitionsMBR
     $WPF_DP_Disk_GPTMBR.NextPartitionMBRNumber = $GPTMBR.NextPartitionMBRNumber
    
+    # $MBRPartitions | ForEach-Object {
+    #     if ($_.PartitionType -eq 'MBR' -and $_.PartitionSubType -eq 'FAT32'){}
+    #     elseif ($_.PartitionType -eq 'MBR' -and $_.PartitionSubType -eq 'ID76'){
+    #         foreach ($AmigaDisk in $RDB) {
+    #             if ($AmigaDisk.Name -eq "$($_.Name)_AmigaDisk"){
+    #                 (Get-Variable -name "$($_.Name)_AmigaDisk").Value.NextPartitionNumber = $AmigaDisk.NextPartitionNumber
+    #                 (Get-Variable -name "$($_.Name)_AmigaDisk").Value.ID76PartitionParent = $AmigaDisk.ID76PartitionParent
+    #                 break
+    #             }
+    #         }
+    #     }
+    # }
+            
     $MBRPartitions | ForEach-Object {
         if ($_.PartitionType -eq 'MBR' -and $_.PartitionSubType -eq 'FAT32'){
             if ($_.DefaultGPTMBRPartition -eq 'True'){
@@ -238,18 +257,17 @@ function Read-SettingsFile {
             }
             elseif ($_.ImportedPartition -eq 'True') {
                 Add-GUIPartitiontoGPTMBRDisk -LoadSettings -PartitionType $_.PartitionType -PartitionSubType $_.PartitionSubType -NewPartitionNameFromSettings $_.Name -AddType 'SpecificPosition' -PathtoImportedPartition $_.ImportedPartitionPath -ImportedPartition $true -ImportedPartitionMethod $_.ImportedPartitionMethod -SizeBytes ($($_.PartitionSizeBytes)) -StartingPositionBytes ($($_.StartingPositionBytes))
-                Add-AmigaDisktoID76Partition -ID76PartitionName $_.Name
+                Add-AmigaDisktoID76Partition -ID76PartitionName $_.Name -ImportedDisk
             }
             else {
                 Add-GUIPartitiontoGPTMBRDisk -LoadSettings -PartitionType $_.PartitionType -PartitionSubType $_.PartitionSubType -NewPartitionNameFromSettings $_.Name -AddType 'SpecificPosition' -SizeBytes ($($_.PartitionSizeBytes)) -StartingPositionBytes ($($_.StartingPositionBytes))
-                Add-AmigaDisktoID76Partition -ID76PartitionName $_.Name -ImportedDisk
+                Add-AmigaDisktoID76Partition -ID76PartitionName $_.Name 
             }
 
             foreach ($AmigaDisk in $RDB) {
-                if ($Disk.AmigaDisk -eq "$($_.Name)_AmigaDisk"){
-                    (Get-Variable -name "$($_.Name)_AmigaDisk").Value.NextPartitionNumber = $Disk.NextPartitionNumber
-                    (Get-Variable -name "$($_.Name)_AmigaDisk").Value.ID76PartitionParent = $Disk.ID76PartitionParent
-                    (Get-Variable -name "$($_.Name)_AmigaDisk").Value.NumberofPartitionsTotal = $Disk.NumberofPartitionsTotal
+                if ($AmigaDisk.Name -eq "$($_.Name)_AmigaDisk"){
+                    (Get-Variable -name "$($_.Name)_AmigaDisk").Value.NextPartitionNumber = [int]$AmigaDisk.NextPartitionNumber
+                    (Get-Variable -name "$($_.Name)_AmigaDisk").Value.ID76PartitionParent = $AmigaDisk.ID76PartitionParent
                     break
                 }
             } 
@@ -264,13 +282,13 @@ function Read-SettingsFile {
 
         }
         elseif ($_.DefaultAmigaWorkPartition -eq 'True'){
-            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -PartitionTypeAmiga 'Work' -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.DosType -MaxTransfer $_.MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $_.Mask   
+            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -PartitionTypeAmiga 'Work' -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.DosType -MaxTransfer $_.MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $_.Mask -ImportedFilesPath $_.ImportedFilesPath -ImportedFilesSpaceBytes $_.ImportedFilesSpaceBytes  
         }
         elseif ($_.ImportedPartition -eq 'True'){
             Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -ImportedPartition $true -ImportedPartitionMethod $_.ImportedPartitionMethod -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.DosType -MaxTransfer $_.MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $_.Mask   
         }
         else {
-            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.DosType -MaxTransfer $_.MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $_.Mask   
+            Add-GUIPartitiontoAmigaDisk -LoadSettings -NewPartitionNameFromSettings $_.Name -AmigaDiskName $AmigaDiskName -SizeBytes ($($_.PartitionSizeBytes)) -AddType 'AtEnd' -VolumeName $_.VolumeName -DeviceName $_.DeviceName -Buffers $_.Buffers -DosType $_.DosType -MaxTransfer $_.MaxTransfer -Bootable $_.Bootable -NoMount $_.NoMount -Priority $_.Priority -Mask $_.Mask -ImportedFilesPath $_.ImportedFilesPath -ImportedFilesSpaceBytes $_.ImportedFilesSpaceBytes  
         } 
 
     }            
