@@ -89,6 +89,7 @@ $Script:Settings = [PSCustomObject]@{
 }
 
 $Script:GUICurrentStatus = [PSCustomObject]@{
+    RunMode = $null
     HSTCommandstoProcess = [PSCustomObject]@{
         ExtractOSFiles =  [System.Collections.Generic.List[PSCustomObject]]::New()
         CopyIconFiles = [System.Collections.Generic.List[PSCustomObject]]::New()

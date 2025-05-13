@@ -16,6 +16,11 @@ $WPF_Window_Button_Run.Add_Click({
 
         # $Script:GUIActions.OutputType = "Disk"
         # $Script:GUIActions.OutputPath = "\disk6"
+        $WPF_MainWindow.Close()
+        
+        if ($Script:GUICurrentStatus.RunMode -eq 'CommandLine'){
+           get-process -id $Pid | set-windowstate -State SHOWDEFAULT
+         }
 
          $Script:GUICurrentStatus.StartTimeForRunningInstall = (Get-Date -Format HH:mm:ss)
 

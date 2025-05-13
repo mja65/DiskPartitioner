@@ -31,14 +31,21 @@ Get-ChildItem -Path '.\Assets\Variables\' -Recurse | Where-Object { $_.PSIsConta
 Get-ChildItem -Path '.\Assets\Functions\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
     . ($_).fullname
 }
+
 $DebugPreference = 'SilentlyContinue'
+
+if (($env:TERM_PROGRAM)  -or ($psISE)) {
+    $Script:GUICurrentStatus.RunMode = "VisualCodeorISE"
+}
+else {
+    $Script:GUICurrentStatus.RunMode = "CommandLine"
+}
+
 $Script:Settings.Version = [system.version]'2.0'
 
 $Script:GUIActions.ScriptPath = (Split-Path -Path $PSScriptRoot -Parent)
 
 Write-Emu68ImagerLog -start
-
-<#
 
 Show-Disclaimer
 
@@ -78,7 +85,11 @@ if (-not (Get-StartupFiles)){
 }
 
 Write-TaskCompleteMessage
-#>
+
+if ($Script:GUICurrentStatus.RunMode -eq 'CommandLine'){
+    get-process -id $Pid | set-windowstate -State MINIMIZE
+}
+
 Remove-Variable -Scope Script -Name 'WPF_*'
 
 $WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\Assets\UIActions\MainWindow\' -AddWPFVariables

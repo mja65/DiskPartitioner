@@ -162,7 +162,7 @@ function Update-UI {
             $WPF_Window_Button_Run.Content = 'Missing information in order to run tool! Press button to see further details'    
         }
         elseif ($Script:GUICurrentStatus.ProcessImageStatus -eq $true){
-            $WPF_Window_Button_Run.Background = '#FF00FF00'
+            $WPF_Window_Button_Run.Background = '#FF008000'
             $WPF_Window_Button_Run.foreground = '#FFFFFFFF'
             $WPF_Window_Button_Run.Content = 'Run Tool'    
         }        
