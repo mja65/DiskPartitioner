@@ -89,6 +89,7 @@ $Script:Settings = [PSCustomObject]@{
 }
 
 $Script:GUICurrentStatus = [PSCustomObject]@{
+    FileBoxOpen = $false
     RunMode = $null
     HSTCommandstoProcess = [PSCustomObject]@{
         ExtractOSFiles =  [System.Collections.Generic.List[PSCustomObject]]::New()

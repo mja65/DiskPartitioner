@@ -1,4 +1,7 @@
 $WPF_Window_Button_SetupEmu68.Add_Click({
+    if ($Script:GUICurrentStatus.FileBoxOpen -eq $true){
+        return
+    }
 
     $Script:GUICurrentStatus.CurrentWindow = 'Emu68Settings'
     If ($Script:GUIActions.InstallOSFiles -eq $true){

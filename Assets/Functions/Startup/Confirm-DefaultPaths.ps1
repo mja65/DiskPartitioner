@@ -29,14 +29,14 @@ function Confirm-DefaultPaths {
     Write-InformationMessage ""
     Get-ChildItem -Path $Script:Settings.TempFolder | ForEach-Object {
         if ($_.Name -ne "WebPackagesDownload"){
-            $null = Remove-Item $_.FullName -Recurse -Force
+            $null = Remove-Item $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
             
         }
     }
     
     Get-ChildItem -Path "$($Script:Settings.TempFolder)\WebPackagesDownload" | ForEach-Object {
         if ($_.PSIsContainer){
-            $null = Remove-Item $_.FullName -Recurse -Force
+            $null = Remove-Item $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
         } 
     }
     

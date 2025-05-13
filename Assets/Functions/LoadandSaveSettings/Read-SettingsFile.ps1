@@ -117,6 +117,9 @@ function Read-SettingsFile {
    
    # Remove existing Partitions 
 
+    $WPF_DP_MediaSelect_Type_DropDown.SelectedItem = ""
+    $WPF_DP_Input_DiskSize_Value.text =  ""
+
    $Script:GUICurrentStatus.ProcessImageStatus = $false
 
     Remove-Variable -Scope Script -Name 'WPF_DP_Partition*'
@@ -224,20 +227,7 @@ function Read-SettingsFile {
 
     $WPF_DP_Disk_GPTMBR.NumberofPartitionsMBR = $GPTMBR.NumberofPartitionsMBR
     $WPF_DP_Disk_GPTMBR.NextPartitionMBRNumber = $GPTMBR.NextPartitionMBRNumber
-   
-    # $MBRPartitions | ForEach-Object {
-    #     if ($_.PartitionType -eq 'MBR' -and $_.PartitionSubType -eq 'FAT32'){}
-    #     elseif ($_.PartitionType -eq 'MBR' -and $_.PartitionSubType -eq 'ID76'){
-    #         foreach ($AmigaDisk in $RDB) {
-    #             if ($AmigaDisk.Name -eq "$($_.Name)_AmigaDisk"){
-    #                 (Get-Variable -name "$($_.Name)_AmigaDisk").Value.NextPartitionNumber = $AmigaDisk.NextPartitionNumber
-    #                 (Get-Variable -name "$($_.Name)_AmigaDisk").Value.ID76PartitionParent = $AmigaDisk.ID76PartitionParent
-    #                 break
-    #             }
-    #         }
-    #     }
-    # }
-            
+              
     $MBRPartitions | ForEach-Object {
         if ($_.PartitionType -eq 'MBR' -and $_.PartitionSubType -eq 'FAT32'){
             if ($_.DefaultGPTMBRPartition -eq 'True'){
@@ -292,6 +282,19 @@ function Read-SettingsFile {
         } 
 
     }            
+
+    if ($Script:GUIActions.OutputType -eq "Disk"){
+        $WPF_DP_MediaSelect_Type_DropDown.SelectedItem = "Disk"
+    }
+    elseif ($Script:GUIActions.OutputType -eq "Image"){
+        $WPF_DP_MediaSelect_Type_DropDown.SelectedItem = "Image"
+    }
+
+    if ($WPF_DP_Disk_GPTMBR.DiskSizeBytes) {
+        $SizeToPopulate = (Get-ConvertedSize -Size $WPF_DP_Disk_GPTMBR.DiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 4)
+        $WPF_DP_Input_DiskSize_Value.text =  $SizeToPopulate.Size
+        $WPF_DP_Input_DiskSize_SizeScale_Dropdown.SelectedItem = $SizeToPopulate.Scale
+    }
 
     Update-UI -MainWindowButtons -Emu68Settings -DiskPartitionWindow -UpdateInputBoxes -Buttons -PhysicalvsImage -CheckforRunningImage -freespacealert
 

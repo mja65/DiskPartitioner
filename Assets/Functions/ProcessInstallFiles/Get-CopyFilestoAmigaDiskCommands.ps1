@@ -23,17 +23,16 @@ function Get-CopyFilestoAmigaDiskCommands {
             $RDBDeviceName = $HashTableforPathstoRDBPartitions.($_.VolumeName)[1]
             $DestinationPath = "$($Script:GUIActions.OutputPath)\MBR\$MBRNumber\rdb\$RDBDeviceName"
         }
-        $SourcePath = [System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\$($_.Disk)\`*")
-        if (Test-Path -Path $SourcePath){
-            Write-InformationMessage -Message "Adding commands for copying file(s) to $RDBDeviceName"
+        $SourcePath = "$([System.IO.Path]::GetFullPath($Script:Settings.InterimAmigaDrives))\$($_.Disk)\`*"
+        if (Test-path (Split-Path -Path $SourcePath -Parent)){
+            Write-InformationMessage -Message "Adding commands for copying file(s) to $RDBDeviceName for Drive $($_.Disk)"
             $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
                 Command = "fs copy `"$SourcePath`" `"$DestinationPath`"" 
                 Sequence = 5
             }
-            
         }
     }
-   
+
     $HashTableforAmigaDiskstoWrite = @{} # Clear Hash
     $AmigaDiskstoWrite  | ForEach-Object {
         $HashTableforAmigaDiskstoWrite[$_.VolumeName] = @($_.Disk) 

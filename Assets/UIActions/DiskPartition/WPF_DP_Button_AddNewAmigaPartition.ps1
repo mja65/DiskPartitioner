@@ -1,5 +1,7 @@
 $WPF_DP_Button_AddNewAmigaPartition.add_click({
-    
+        if ($Script:GUICurrentStatus.FileBoxOpen -eq $true){
+        return
+    }
     # $AmigaDiskName = 'WPF_DP_Partition_MBR_2_AmigaDisk'
 
     Set-AmigaDiskSizeOverhangPixels -AmigaDisk $AmigaDiskName

@@ -97,7 +97,7 @@ function Update-UI {
             $Script:GUICurrentStatus.ProcessImageStatus = $false
         }        
 
-        if ($DiskSizeSelected){
+        if ($Script:GUIActions.DiskSizeSelected){
 
             $AmigaDriveDetailsToTest  = [System.Collections.Generic.List[PSCustomObject]]::New()
             

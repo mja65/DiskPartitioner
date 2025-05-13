@@ -1,4 +1,7 @@
 $WPF_DP_Button_DeleteMBRPartition.add_click({
+        if ($Script:GUICurrentStatus.FileBoxOpen -eq $true){
+        return
+    }
     # $Script:GUICurrentStatus.SelectedGPTMBRPartition = 'WPF_DP_Partition_MBR_2'
     if ($Script:GUICurrentStatus.SelectedGPTMBRPartition){
         If (((Get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.DefaultGPTMBRPartition -eq $true) -and ((Get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSubType -eq 'ID76')){

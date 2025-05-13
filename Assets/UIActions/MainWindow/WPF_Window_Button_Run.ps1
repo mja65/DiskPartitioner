@@ -1,5 +1,7 @@
 $WPF_Window_Button_Run.Add_Click({
-   
+       if ($Script:GUICurrentStatus.FileBoxOpen -eq $true){
+        return
+    }
    Update-UI -CheckforRunningImage
 
    if ($Script:GUICurrentStatus.ProcessImageStatus -eq $false){

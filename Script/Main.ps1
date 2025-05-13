@@ -23,6 +23,7 @@ Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 
 Set-Location -Path (Split-Path -Path $PSScriptRoot -Parent)
+[System.IO.Directory]::SetCurrentDirectory((Split-Path -Path $PSScriptRoot -Parent)) # Needed for Powershell 5 Compatibility
 
 Get-ChildItem -Path '.\Assets\Variables\' -Recurse | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object {
     . ($_).fullname
@@ -55,7 +56,7 @@ $Script:Settings.CurrentTaskNumber ++
 $Script:Settings.CurrentTaskName = "Checking Prerequisites for Using Emu68 Imager"
 Write-StartTaskMessage
 
-# Confirm-Prerequisites
+Confirm-Prerequisites
 
 Write-TaskCompleteMessage
 

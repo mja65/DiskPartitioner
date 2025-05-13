@@ -1,4 +1,7 @@
 $WPF_DP_Button_AddNewGPTMBRPartition.add_click({
+        if ($Script:GUICurrentStatus.FileBoxOpen -eq $true){
+        return
+    }
     if ($WPF_DP_AddNewGPTMBRPartition_DropDown.SelectedItem -eq 'At end of disk'){
         $AddType = 'AtEnd'        
     }

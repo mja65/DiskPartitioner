@@ -1,4 +1,9 @@
 $WPF_Window_Button_SetupDisk.Add_Click({
+   
+        if ($Script:GUICurrentStatus.FileBoxOpen -eq $true){
+        return
+    }
+
     write-debug "Set up Disk button pressed"
 
 
