@@ -48,7 +48,7 @@ function Get-CopyFilestoAmigaDiskCommands {
             $SourcePath = "$DiskIconsPath\WorkDrive\disk.info"
         }
         $DestinationPath = "$($Script:GUIActions.OutputPath)\MBR\$($_.MBRPartitionNumber)\rdb\$($_.DeviceName)"
-        Write-InformationMessage -Message "Adding commands for copying icon file(s) to $RDBDeviceName"
+        Write-InformationMessage -Message "Adding commands for copying icon file(s) to $($_.DeviceName)"
         $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk += [PSCustomObject]@{
             Command = "fs copy $SourcePath $DestinationPath"
             Sequence = 6

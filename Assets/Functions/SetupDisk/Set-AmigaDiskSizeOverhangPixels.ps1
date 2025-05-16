@@ -4,6 +4,8 @@ function Set-AmigaDiskSizeOverhangPixels {
     )
     # $AmigaDiskName = 'WPF_DP_Partition_MBR_3_AmigaDisk'
     
+    Write-debug "AmigaDiskName is: $AmigaDiskName"
+
     $TotalPartitions = (Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $AmigaDiskName}).Count
     
     $PartitionstoCheck = (Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName })

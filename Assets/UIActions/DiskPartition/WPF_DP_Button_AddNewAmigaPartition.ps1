@@ -4,8 +4,7 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
     }
     # $AmigaDiskName = 'WPF_DP_Partition_MBR_2_AmigaDisk'
 
-    Set-AmigaDiskSizeOverhangPixels -AmigaDisk $AmigaDiskName
-
+    
     if ($WPF_DP_AddNewAmigaPartition_DropDown.SelectedItem -eq 'At end of disk'){
         $AddType = 'AtEnd'     
         $AmigaDiskName = "$($Script:GUICurrentStatus.SelectedGPTMBRPartition)_AmigaDisk"
@@ -23,7 +22,9 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
         $null = Show-WarningorError -Msg_Header 'No Partition Selected' -Msg_Body 'You must select a partition!' -BoxTypeError -ButtonType_OK
         return
     } 
-
+    
+    Set-AmigaDiskSizeOverhangPixels -AmigaDisk $AmigaDiskName
+    
     $CurrentNumberofPartitionsonAmigaDisk = (Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $AmigaDiskName}).Count
 
     if ($CurrentNumberofPartitionsonAmigaDisk -eq $Script:Settings.AmigaPartitionsperDiskMaximum){

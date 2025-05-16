@@ -9,6 +9,16 @@ function Write-AmigaFilestoInterimDrive {
        [switch]$wifiprefs
     )
     
+
+#    $DownloadFilesFromInternet = $true
+#    $DownloadLocalFiles = $true
+#    $ExtractADFFilesandIconFiles = $true
+#    $AdjustingScriptsandInfoFiles = $true
+#    $ProcessDownloadedFiles = $true
+#    $CopyRemainingFiles = $true
+#    $wifiprefs = $true
+
+
     $Script:Settings.CurrentTaskNumber ++
     $Script:Settings.CurrentTaskName = "Determining list of OS files, local install files, and files from internet to be installed"
 
@@ -322,11 +332,11 @@ function Write-AmigaFilestoInterimDrive {
              (Resolve-Path -Path $SourcePath).path | ForEach-Object {
                  $SourcePath = $_
                  Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
-                 $null = Copy-Item $SourcePath  $DestinationPath -Force
+                 $null = Copy-Item $SourcePath  $DestinationPath -Force -Recurse
              } 
 
         }
- 
+
          elseif ($_.Source -eq "Local"){
             $SourcePath = "$($Script:Settings.LocationofAmigaFiles)\$($_.SourceLocation)"       
             $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
@@ -338,7 +348,7 @@ function Write-AmigaFilestoInterimDrive {
                 $DestinationPath = "$DestinationPath\$($_.NewFileName)" 
             }
             Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
-            $null = Copy-Item -path $SourcePath  -Destination $DestinationPath -Force
+            $null = Copy-Item -path $SourcePath  -Destination $DestinationPath -Force -Recurse
         }
 
         elseif ($_.Source -eq "Local - ConfigTXT") {
@@ -391,10 +401,38 @@ function Write-AmigaFilestoInterimDrive {
             (Resolve-Path -Path $SourcePath).path | ForEach-Object {
                 $SourcePath = $_
                 Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
-                $null = Copy-Item $SourcePath  $DestinationPath -Force
+                $null = Copy-Item $SourcePath  $DestinationPath -Force -Recurse
             } 
         }
+
     }
+    
+    $Script:Settings.CurrentSubTaskNumber ++
+    $Script:Settings.CurrentSubTaskName = "Cleaning up files"
+    Write-StartSubTaskMessage
+    
+    (Get-ChildItem -Path "$($Script:Settings.InterimAmigaDrives)\System" -Recurse | Where-Object {$_.name -eq 'Disk.info'} ).FullName | ForEach-Object {
+        if ((Split-Path -path $_ -Parent) -ne  [System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\System")){
+            $null = remove-item $_ -Force
+        }
+    }
+
+    if (test-path "$($Script:Settings.InterimAmigaDrives)\System\libs\68040.libary"){
+        $null = remove-item "$($Script:Settings.InterimAmigaDrives)\System\libs\68040.libary" -Force 
+    }
+    
+    $PFSOutputScript = $null 
+    Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {
+        if (($_.Value.ImportedPartition -eq $false) -and ($_.Value.dostype -eq "PFS\3")){
+            $PFSOutputScript += "setfnsize $($_.Value.DeviceName): 107 >NIL:`n" 
+        }
+    }
+
+    if (-not (Test-Path "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun" -PathType Container)){
+        $null = New-Item "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun" -ItemType Directory
+    }
+
+    Export-TextFileforAmiga -DatatoExport $PFSOutputScript -AddLineFeeds 'TRUE' -ExportFile "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun\PFS"
 
     Write-TaskCompleteMessage 
 
@@ -508,7 +546,9 @@ function Write-AmigaFilestoInterimDrive {
 
     $ListofPackagestoInstall | Where-Object {$_.InstallType -eq 'AddFolder'} | Select-Object 'InstallType','DrivetoInstall', 'LocationtoInstall' -Unique | ForEach-Object {
         $DestinationFolder = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)".TrimEnd('\')
-        $null = New-Item $DestinationFolder -ItemType Directory -Force
+        if (-not (Test-Path $DestinationFolder -PathType Container)){
+            $null = New-Item $DestinationFolder -ItemType Directory -Force
+        }
     }
        
         

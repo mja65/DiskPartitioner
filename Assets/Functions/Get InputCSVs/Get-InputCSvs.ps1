@@ -8,7 +8,8 @@ function Get-InputCSVs {
       [switch]$ScreenModes,
       [switch]$PackagestoInstall,
       [switch]$PackagestoInstallEmu68Only,
-      [switch]$FileSystems
+      [switch]$FileSystems,
+      [switch]$IconPositions
 
     )
     
@@ -36,6 +37,9 @@ function Get-InputCSVs {
     }
     elseif (($PackagestoInstall) -or ($PackagestoInstallEmu68Only)){
         $Pathtouse = $Script:Settings.ListofPackagestoInstallCSV.Path
+    }
+    elseif ($IconPositions){
+        $Pathtouse = $Script:Settings.IconPositionsCSV.Path
     }
 
     $CSV = @()
@@ -263,9 +267,57 @@ function Get-InputCSVs {
         elseif ($PackagestoInstallEmu68Only){
             $CSVtoReturn = $CSVtoReturn | Where-Object {$_.DrivetoInstall -eq 'Emu68Boot'}
         }
-
     }
+    
+    elseif ($IconPositions){
+        
+        $CSVtoReturn = [System.Collections.Generic.List[PSCustomObject]]::New()
+        
+        $CSV | ForEach-Object {
+            $CountofVariables = ([regex]::Matches($_.KickstartVersion, "," )).count
+            if ($CountofVariables -gt 0){
+                $Counter = 0
+                do {
+                    $CSVtoReturn += [PSCustomObject]@{                              
+                        MinimumInstallerVersion = [system.version]$_.MinimumInstallerVersion
+                        InstallerVersionLessThan = [system.version]$_.InstallerVersionLessThan
+                        KickstartVersion = [system.version](($_.KickstartVersion -split ',')[$Counter]) 
+                        Drive = $_.Drive	
+                        File = $_.File		
+                        Type = $_.Type		
+                        IconX = $_.IconX
+                        IconY = $_.IconY	
+                        DrawerX	= $_.DrawerX
+                        DrawerY	= $_.DrawerY
+                        DrawerWidth	= $_.DrawerWidth
+                        DrawerHeight= $_.DrawerHeight	                        
+                    }
+                    $counter ++
+                 } until (
+                        $Counter -eq ($CountofVariables+1)
+                    )
+            }
+            else {        
+                $CSVtoReturn += [PSCustomObject]@{
+                    MinimumInstallerVersion = [system.version]$_.MinimumInstallerVersion
+                    InstallerVersionLessThan = [system.version]$_.InstallerVersionLessThan
+                    KickstartVersion = [system.version]$_.KickstartVersion  
+                    Drive = $_.Drive	
+                    File = $_.File		
+                    Type = $_.Type		
+                    IconX = $_.IconX
+                    IconY = $_.IconY	
+                    DrawerX	= $_.DrawerX
+                    DrawerY	= $_.DrawerY
+                    DrawerWidth	= $_.DrawerWidth
+                    DrawerHeight= $_.DrawerHeight	                     
+                }
+            }
+        }
 
+        $CSVtoReturn = $CSVtoReturn | Where-Object {$_.KickstartVersion -eq $Script:GUIActions.KickstartVersiontoUse}
+    }
+    
     return $CSVtoReturn
 }
 

@@ -1,6 +1,7 @@
 function Set-PartitionGridActions {
     param (
     )
+
     $WPF_Partition.add_MouseLeftButtonUp({
         if ($Script:GUICurrentStatus.CurrentWindow -eq 'DiskPartition'){
             $Script:GUICurrentStatus.ActionToPerform = $null
@@ -21,6 +22,9 @@ function Set-PartitionGridActions {
     })
     
  $WPF_Window_Main.add_MouseMove({
+        if ($Script:GUICurrentStatus.FileBoxOpen -eq $true) {
+        return
+    }
         if (($Script:GUICurrentStatus.CurrentWindow -eq 'DiskPartition') -and ($WPF_DP_GPTMBR_GroupBox.Visibility -eq 'Visible')){
             $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow
             $Script:GUICurrentStatus.CurrentMousePositionX = $MouseCoordinates.MousePositionRelativetoWindowX
@@ -105,6 +109,9 @@ function Set-PartitionGridActions {
     })
 
     $WPF_Window_Main.add_MouseLeftButtonDown({
+            if ($Script:GUICurrentStatus.FileBoxOpen -eq $true) {
+        return
+    }
         if (($Script:GUICurrentStatus.CurrentWindow -eq 'DiskPartition') -and ($WPF_DP_GPTMBR_GroupBox.Visibility -eq 'Visible')){
             $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow
             $Script:GUICurrentStatus.MousePositionXatTimeofPress = $MouseCoordinates.MousePositionRelativetoWindowX

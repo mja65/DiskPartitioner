@@ -124,6 +124,16 @@ $WPF_Window_Button_Run.Add_Click({
 
          Get-DiskStructurestoMBRGPTDiskorImageCommands #Commands not run yet
 
+         # if ($Script:GUIActions.InstallOSFiles -eq $true){
+         #    $Script:Settings.CurrentTaskNumber ++
+         #    $Script:Settings.CurrentTaskName = "Setting Icon Positions"
+         #    Write-StartTaskMessage
+
+         #    Write-IconPositions
+
+         #    Write-TaskCompleteMessage 
+         # }         
+
          Get-CopyFilestoAmigaDiskCommands -OutputLocationType $OutputTypetoUse #Commands not run yet
 
          if (($OutputTypetoUse -eq "Physical Disk") -or ($OutputTypetoUse -eq "VHDImage")){
@@ -178,6 +188,7 @@ $WPF_Window_Button_Run.Add_Click({
             Write-TaskCompleteMessage 
          
          }
+
 
          $FullListofCommands =   $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles +`
                                  $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles + `
