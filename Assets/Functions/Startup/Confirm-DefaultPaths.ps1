@@ -34,13 +34,14 @@ function Confirm-DefaultPaths {
         }
     }
     
-    Get-ChildItem -Path "$($Script:Settings.TempFolder)\WebPackagesDownload" | ForEach-Object {
-        if ($_.PSIsContainer){
-            $null = Remove-Item $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
-        } 
+    if (test-path "$($Script:Settings.TempFolder)\WebPackagesDownload") {
+        Get-ChildItem -Path "$($Script:Settings.TempFolder)\WebPackagesDownload" | ForEach-Object {
+            if ($_.PSIsContainer){
+                $null = Remove-Item $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
+            } 
+        }
     }
-    
-    
+        
     Write-InformationMessage "Checking for existence of default folders - Complete"
     Write-InformationMessage ""
 
