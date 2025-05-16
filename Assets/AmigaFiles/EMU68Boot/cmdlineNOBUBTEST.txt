@@ -1,0 +1,1 @@
+sd.low_speed emmc.low_speed sd.unit0=rw emmc.unit0=rw

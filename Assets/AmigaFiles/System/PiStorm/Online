@@ -1,0 +1,32 @@
+echo "Starting Wifi"
+failat 21
+;assign libs: libs:Roadshow ADD
+
+run <>nil: wirelessmanager Device=wifipi.device UNIT=0 CONFIG="ENVARC:Sys/Wireless.prefs" VERBOSE
+wait 1
+WaitUntilConnected device=wifipi.device UNIT=0 DELAY=100
+
+if NOT Warn
+    echo "Starting Roadshow"	
+	;roadshowcontrol tcp.recvspace = 150000 >NIL:
+	;roadshowcontrol tcp.sendspace = 150000 >NIL:
+	roadshowcontrol tcp.recvspace = 16384 >nil:
+	roadshowcontrol tcp.sendspace = 16384 >nil:
+;	addnetinterface wifipi >NIL:
+	addnetinterface wifipi
+	
+	sntp pool.ntp.org
+;	sntp pool.ntp.org >NIL:
+;    waitfortask sntp
+;    c:SetDST NOASK NOREQ QUIET >NIL:
+	If exists SYS:Prefs/ENV-ARCHIVE/TZONEOVERRIDE 
+		c:SetDST ZONE=${TZONEOVERRIDE}
+	else
+		c:SetDST NOASK NOREQ
+	endif
+echo ""
+date
+echo ""
+echo "You should now be online. You can close this window."
+endif
+failat 10

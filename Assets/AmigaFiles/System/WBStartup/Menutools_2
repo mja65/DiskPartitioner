@@ -1,0 +1,2 @@
+MENU ADD NAME MenuOnline TITLE '"Go Online"' CMD "'address command ''execute sys:Pistorm/Online'''"
+MENU ADD NAME MenuOffline TITLE '"Go Offline"' CMD "'address command ''execute sys:Pistorm/Offline'''"

@@ -1,0 +1,11 @@
+If ${KickstartVersion} EQ 3.1
+    sys:programs/JanoEditor/JanoEditor ENVARC:Sys/wireless.prefs
+else
+    if ${KickstartVersion} EQ 3.2
+    sys:tools/TextEdit ENVARC:Sys/wireless.prefs
+    else
+		if ${KickstartVersion} EQ 3.9
+		sys:tools/EditPad ENVARC:Sys/wireless.prefs
+		endif
+	endif
+endif 

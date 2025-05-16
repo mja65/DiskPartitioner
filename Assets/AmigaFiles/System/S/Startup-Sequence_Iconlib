@@ -1,0 +1,5 @@
+Version exec.library version 47 >NIL:
+If Warn
+  C:RemLib >NIL: icon.library
+EndIf
+

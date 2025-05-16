@@ -1,0 +1,3 @@
+IF EXISTS Sys:System/RexxMast
+   SYS:System/RexxMast >NIL:
+EndIF

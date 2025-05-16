@@ -1,0 +1,15 @@
+Echo "Checking for PAL vs NTSC Machine"
+IF EXISTS SYS:Devs/Monitors/PAL
+ELSE
+    IF EXISTS SYS:Devs/Monitors/NTSC
+    ELSE
+      C:AreWePal
+      IF WARN
+		echo "NTSC Machine Found"
+        copy >NIL: sys:Storage/Monitors/NTSC#? sys:Devs/Monitors
+      ELSE
+        echo "PAL Machine Found"
+		copy >NIL: sys:Storage/Monitors/PAL#? sys:Devs/Monitors
+      ENDIF
+    ENDIF
+ENDIF

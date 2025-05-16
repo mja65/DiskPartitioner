@@ -1,0 +1,9 @@
+echo "Stopping Roadshow..."
+failat 21
+Killdev DOSDEV=SMB0 >NIL:
+netshutdown >nil:
+echo ""
+echo "Roadshow Stopped!"
+echo ""
+echo "You should now be offline. You can close this window."
+failat 10

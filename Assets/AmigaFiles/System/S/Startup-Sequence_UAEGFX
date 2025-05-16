@@ -1,0 +1,31 @@
+IF ${System} EQ "WinUAE" 
+    IF exists Devs:Picasso96Settings   
+    RENAME Devs:Picasso96Settings Devs:Picasso96SettingsPiStorm QUIET
+    ENDIF
+	IF exists SYS:storage/Monitors/Uaegfx
+		COPY >NIL: SYS:Storage/Monitors/Uaegfx Devs:Monitors/
+		DELETE SYS:Storage/Monitors/Uaegfx FORCE QUIET
+	ENDIF
+	IF exists SYS:storage/Monitors/Uaegfx.info
+		COPY >NIL: SYS:Storage/Monitors/Uaegfx.info Devs:Monitors/
+		DELETE SYS:Storage/Monitors/Uaegfx.info FORCE QUIET
+	ENDIF
+ENDIF
+
+FAILAT 21
+VERSION brcm-emmc.device >nil:
+IF NOT FAIL
+	IF exists Devs:Monitors/Uaegfx 
+		COPY >NIL: Devs:Monitors/Uaegfx SYS:storage/Monitors/
+		DELETE Devs:Monitors/Uaegfx FORCE QUIET
+	ENDIF
+	IF exists Devs:Monitors/Uaegfx.info 
+		COPY >NIL: Devs:Monitors/Uaegfx.info SYS:storage/Monitors/
+		DELETE Devs:Monitors/Uaegfx.info FORCE QUIET
+	ENDIF
+	
+    IF exists Devs:Picasso96SettingsPiStorm
+		RENAME Devs:Picasso96SettingsPiStorm Devs:Picasso96Settings QUIET
+    ENDIF    
+ENDIF
+FAILAT 10
