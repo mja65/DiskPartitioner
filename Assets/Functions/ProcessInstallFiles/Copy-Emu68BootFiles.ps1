@@ -45,7 +45,7 @@ function Copy-EMU68BootFiles {
         
         elseif ($OutputLocationType -eq 'Physical Disk'){
             $PowershellDiskNumber = $Script:GUIActions.OutputPath.Substring(5,($Script:GUIActions.OutputPath.length-5))
-            $DriveLetterFound = (Get-Partition -DiskNumber 6 -PartitionNumber 1).DriveLetter
+            $DriveLetterFound = (Get-Partition -DiskNumber $PowershellDiskNumber -PartitionNumber 1).DriveLetter
             if ($DriveLetterFound){
                 $Emu68BootPath = "$($DriveLetterFound):\"
             } 

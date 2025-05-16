@@ -24,9 +24,11 @@ function Get-AvailableAmigaFileSystems {
     #Identify Unique FileSystems Available
 
     foreach ($FileSystem in $ListofFileSystemstoCheck){
-        $FileSystemHash = Get-FileHash -LiteralPath $FileSystem -Algorithm MD5
-        if (-not ($HashTableforFileSystemstoCheck[$FileSystemHash.Hash])){
-            $HashTableforFileSystemstoCheck.Add(($FileSystemHash.Hash),$FileSystem)
+        if ($FileSystem){
+            $FileSystemHash = Get-FileHash -Path $filesystem -Algorithm MD5
+            if (-not ($HashTableforFileSystemstoCheck[$FileSystemHash.Hash])){
+                $HashTableforFileSystemstoCheck.Add(($FileSystemHash.Hash),$FileSystem)
+            }           
         }
     }
 

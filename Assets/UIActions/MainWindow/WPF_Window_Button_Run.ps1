@@ -138,7 +138,7 @@ $WPF_Window_Button_Run.Add_Click({
 
          if (($OutputTypetoUse -eq "Physical Disk") -or ($OutputTypetoUse -eq "VHDImage")){
             $Script:Settings.CurrentSubTaskNumber ++
-            $Script:Settings.CurrentTaskName = 'Processing Commands on Disk'
+            $Script:Settings.CurrentTaskName = "Processing Commands on Disk (this may take a few minutes depending on the size of your disk)"
 
             Write-StartSubTaskMessage
 
@@ -151,7 +151,7 @@ $WPF_Window_Button_Run.Add_Click({
            }
 
             $HSTCommandstoRun = $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures + $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk
-            Start-HSTCommands -HSTScript $HSTCommandstoRun 'Processing commands'
+            Start-HSTCommands -HSTScript $HSTCommandstoRun "Processing commands (this may take a few minutes depending on the size of your disk)"
          }
 
          Copy-EMU68BootFiles -OutputLocationType $OutputTypetoUse #Commands not run yet for IMG
