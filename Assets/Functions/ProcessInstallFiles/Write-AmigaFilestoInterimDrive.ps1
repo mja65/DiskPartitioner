@@ -434,6 +434,10 @@ function Write-AmigaFilestoInterimDrive {
 
     Export-TextFileforAmiga -DatatoExport $PFSOutputScript -AddLineFeeds 'TRUE' -ExportFile "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun\PFS"
 
+    $IconPosScript = (Get-IconPositionScript)
+
+    Export-TextFileforAmiga -DatatoExport $IconPosScript -ExportFile "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun\SetIconPositions" -AddLineFeeds 'TRUE'   
+
     Write-TaskCompleteMessage 
 
    }

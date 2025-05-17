@@ -165,11 +165,18 @@ function Set-GUIPartitionNewSize {
 
     (Get-Variable -name $PartitionName).Value.PartitionSizeBytes = $SizeBytes
     
-    if ((Get-Variable -name $PartitionName).Value.PartitionSubType -eq 'ID76'){            
-        (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes = $SizeBytes
+   # $WPF_DP_Partition_MBR_2.PartitionSizeBytes
+   # $WPF_DP_Partition_MBR_2_AmigaDisk.DiskSizeBytes
+
+   #$PartitionName = 'WPF_DP_Partition_MBR_2'
+
+    if ((Get-Variable -name $PartitionName).Value.PartitionSubType -eq 'ID76'){      
+        write-debug "Old Size was: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"     
+        (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes = Get-AmigaDiskSize -AmigaDisk (Get-Variable -name ($PartitionName+'_AmigaDisk')).value
+        write-debug "New size is: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"    
         (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor = (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes / (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizePixels
-        $AmigaPartitionstoChange = Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $PartitionName} | Sort-Object $_.Margin.Left
-        
+        $AmigaPartitionstoChange = Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $PartitionName} | Sort-Object {[int]$_.value.StartingPositionBytes} 
+              
         $Counter = 1
         $LastPartitionEndPixels = 0
         foreach ($AmigaPartition in $AmigaPartitionstoChange) {

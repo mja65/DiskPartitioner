@@ -34,6 +34,7 @@ Get-ChildItem -Path '.\Assets\Functions\' -Recurse | Where-Object { $_.PSIsConta
 }
 
 $DebugPreference = 'SilentlyContinue'
+#$DebugPreference = 'Continue'
 
 if (($env:TERM_PROGRAM)  -or ($psISE)) {
     $Script:GUICurrentStatus.RunMode = "VisualCodeorISE"
@@ -111,5 +112,14 @@ update-ui -MainWindowButtons
 
 $WPF_MainWindow.ShowDialog() | out-null
 
+if ($Script:GUICurrentStatus.ProcessImageConfirmedbyUser -eq $true){
+    Write-ImageCreation
+}
+else {
+    Write-ErrorMessage -Message "Serious Error! Exiting!"
+    exit
+}
+
 # # $WPF_MainWindow.Close()
 # # [System.Windows.Controls.DataGrid].GetEvents() | Select-Object Name, *Method, EventHandlerType >test.txt
+ 

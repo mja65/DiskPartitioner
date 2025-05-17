@@ -38,7 +38,7 @@ function Show-WarningorError {
     elseif($ButtonType_YesNoCancel){
         $ButtonType = 3
     }
-    elseif(ButtonType_YesNo){
+    elseif($ButtonType_YesNo){
         $ButtonType = 4
     }
 

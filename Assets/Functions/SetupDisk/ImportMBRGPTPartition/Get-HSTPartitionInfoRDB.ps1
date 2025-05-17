@@ -26,57 +26,55 @@ function Get-HSTPartitionInfoRDB {
         $HSTCommandstoProcess | Out-File -FilePath $HSTCommandScriptPath -Force
         $Logoutput = "$($Script:Settings.TempFolder)\LogOutputTemp.txt"
         Write-InformationMessage -Message "Running HST Imager to determine RDB partitions"
-        & $Script:ExternalProgramSettings.HSTImagerPath script $HSTCommandScriptPath >$Logoutput
+        & $Script:ExternalProgramSettings.HSTImagerPath script $HSTCommandScriptPath | Tee-Object -variable Logoutput
     
     }
-    if ((Confirm-HSTNoErrors -PathtoLog $Logoutput -HSTImager -KeepLog) -eq $false){
+    if ((Confirm-HSTNoErrors -Logoutput $Logoutput -HSTImager -KeepLog) -eq $false){
         exit
     }
     
-    $OutputtoParse = Get-Content -Path $Logoutput 
-
     $RDBDiskInfo = @()
     #$RDBFileSystems =  @()
     $RDBPartitions = @()
     $RDBOverview = @()
     $RDBEntries = @()
     
-    for ($i = 0; $i -lt $OutputtoParse.count; $i++) {
-        if ($OutputtoParse[$i] -match 'No Rigid Disk Block present'){
+    for ($i = 0; $i -lt $Logoutput.count; $i++) {
+        if ($Logoutput[$i] -match 'No Rigid Disk Block present'){
             $null = Remove-Item ($Logoutput) -Force
             $null = Remove-Item $HSTCommandScriptPath -Force
             return
         }
-        if ($OutputtoParse[$i] -eq 'Rigid Disk Block:'){
+        if ($Logoutput[$i] -eq 'Rigid Disk Block:'){
             $RDBDiskInfoRowStart = $i+4
         }
-        # elseif ($OutputtoParse[$i] -eq 'File systems:'){
+        # elseif ($Logoutput[$i] -eq 'File systems:'){
         #     $RDBFileSystemsRowStart = $i+4
         # }
-       elseif ($OutputtoParse[$i] -eq 'Partitions:'){
+       elseif ($Logoutput[$i] -eq 'Partitions:'){
         #     $RDBFileSystemsRowEnd = $i-2   
             $RDBPartitionsStart = $i+4
         }
-        elseif ($OutputtoParse[$i] -eq 'Partition table overview:'){
+        elseif ($Logoutput[$i] -eq 'Partition table overview:'){
             $RDBPartitionsEnd = $i-2
             $RDBPartitionsOverviewStart = $i+7 
         }
-        elseif ($OutputtoParse[$i] -eq 'Entries:'){
+        elseif ($Logoutput[$i] -eq 'Entries:'){
             $RDBEntriesStart = $i+4
             $RDBPartitionsOverviewEnd = $i-6
     
         }
-        elseif ($OutputtoParse[$i] -match ' directories, '){
+        elseif ($Logoutput[$i] -match ' directories, '){
             $RDBEntriesEnd = $i-2
         }
     }
     
-    $RDBDiskInfo = $OutputtoParse[$RDBDiskInfoRowStart]
-   # $RDBFileSystems = $OutputtoParse[$RDBFileSystemsRowStart..$RDBFileSystemsRowEnd]
-    $RDBPartitions = $OutputtoParse[$RDBPartitionsStart..$RDBPartitionsEnd]
+    $RDBDiskInfo = $Logoutput[$RDBDiskInfoRowStart]
+   # $RDBFileSystems = $Logoutput[$RDBFileSystemsRowStart..$RDBFileSystemsRowEnd]
+    $RDBPartitions = $Logoutput[$RDBPartitionsStart..$RDBPartitionsEnd]
     
-    $RDBOverview = $OutputtoParse[$RDBPartitionsOverviewStart..$RDBPartitionsOverviewEnd]
-    $RDBEntries = $OutputtoParse[$RDBEntriesStart..$RDBEntriesEnd]
+    $RDBOverview = $Logoutput[$RDBPartitionsOverviewStart..$RDBPartitionsOverviewEnd]
+    $RDBEntries = $Logoutput[$RDBEntriesStart..$RDBEntriesEnd]
 
     $RDBPartitionTable = [System.Collections.Generic.List[PSCustomObject]]::New()
     

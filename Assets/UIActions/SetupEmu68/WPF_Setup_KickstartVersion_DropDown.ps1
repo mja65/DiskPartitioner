@@ -13,7 +13,10 @@ foreach ($Kickstart in $Script:GUIActions.AvailableKickstarts) {
                  $Script:GUIActions.OSInstallMediaType = $Kickstart.InstallMedia
                  $Script:GUIActions.FoundInstallMediatoUse = $null
                  $Script:GUIActions.FoundKickstarttoUse = $null
+              #   $Script:GUIActions.ROMLocation = $null
+              #   $Script:GUIActions.InstallMediaLocation = $null
                  $Script:GUICurrentStatus.AvailablePackagesNeedingGeneration = $true
+                 update-ui -Emu68Settings
              }
              break
          }
