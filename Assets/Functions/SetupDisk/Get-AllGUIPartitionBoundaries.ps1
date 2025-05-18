@@ -2,8 +2,7 @@ function Get-AllGUIPartitionBoundaries {
     param (
 
     )
-    
-   
+       
     $DiskPartitionGridMargins = $WPF_Partition.Margin
 
     $GroupBoxGPTMBRMargins = $WPF_DP_GPTMBR_GroupBox.Margin
@@ -31,7 +30,7 @@ function Get-AllGUIPartitionBoundaries {
         $BottomMarginWindow = $AmigaTopMargin  + $_.Value.ActualHeight
         $AmigaDiskName = ($_.Name.Substring(0,($_.Name.IndexOf('_AmigaDisk_')+10)))
 
-        $AllPartitionBoundaries_Amiga_Preliminary += [PSCustomObject]@{
+        $AllPartitionBoundaries_Amiga_Preliminary.add([PSCustomObject]@{
             PartitionName = $_.Name
             PartitionType = $PartitionType
             ImportedPartition = $_.Value.ImportedPartition
@@ -62,7 +61,7 @@ function Get-AllGUIPartitionBoundaries {
             Height = $_.Value.ActualHeight
             BottomMargin = $_.Value.Margin.Top + $_.Value.ActualHeight
             BottomMarginWindow = $BottomMarginWindow
-        }
+        })
     }
 
     Get-AllGUIPartitions -PartitionType 'MBR' | ForEach-Object {   
@@ -72,7 +71,7 @@ function Get-AllGUIPartitionBoundaries {
         $RightMarginWindow = $GPTMBRLeftMargin + $_.Value.Margin.Left + (Get-GUIPartitionWidth -Partition $_.Value)
         $BottomMarginWindow = $GPTMBRTopMargin  + $_.Value.ActualHeight
 
-        $AllPartitionBoundaries_MBR += [PSCustomObject]@{
+        $AllPartitionBoundaries_MBR.add([PSCustomObject]@{
             PartitionName = $_.Name
             PartitionType = $PartitionType
             PartitionSubType = $_.Value.PartitionSubType
@@ -105,11 +104,18 @@ function Get-AllGUIPartitionBoundaries {
             Height = $_.Value.ActualHeight
             BottomMargin = $_.Value.Margin.Top + $_.Value.ActualHeight
             BottomMarginWindow = $BottomMarginWindow
-        }
+        })
     }
 
-    $AllPartitionBoundaries_MBR = $AllPartitionBoundaries_MBR | Sort-Object -property 'LeftMargin'
-    
+    $AllPartitionBoundaries_MBR_Sorted = $AllPartitionBoundaries_MBR | Sort-Object {[int64]$_.StartingPositionBytes}
+
+    $AllPartitionBoundaries_MBR = [System.Collections.Generic.List[PSCustomObject]]::new()
+
+    $AllPartitionBoundaries_MBR_Sorted | ForEach-Object {
+        $AllPartitionBoundaries_MBR.add($_)
+    }
+
+
     $OverhangPixelsAccumulated = 0
 
     for ($i = 0; $i -lt $AllPartitionBoundaries_MBR.Count; $i++) {
@@ -133,8 +139,14 @@ function Get-AllGUIPartitionBoundaries {
         }                  
      }
 
+    $Sorted_Amiga_Preliminary = $AllPartitionBoundaries_Amiga_Preliminary | Sort-Object {[int64]$_.StartingPositionBytes}
 
-    $AllPartitionBoundaries_Amiga_Preliminary = $AllPartitionBoundaries_Amiga_Preliminary | Sort-Object -property 'PartitionName','LeftMargin'
+    # Create a new list and add the sorted items
+    $AllPartitionBoundaries_Amiga_Preliminary = [System.Collections.Generic.List[PSCustomObject]]::new()
+
+    $Sorted_Amiga_Preliminary | ForEach-Object { 
+        $AllPartitionBoundaries_Amiga_Preliminary.Add($_) 
+    }
     
     $AllPartitionBoundaries_Amiga = [System.Collections.Generic.List[PSCustomObject]]::New()
 
@@ -142,38 +154,42 @@ function Get-AllGUIPartitionBoundaries {
     
     foreach ($AmigaDisk in $AmigaDisks) {
         $OverhangPixelsAccumulated = 0
-        $PartitionstoCheck = $AllPartitionBoundaries_Amiga_Preliminary | Where-Object {$_.PartitionName -match $AmigaDisk}
-        $RDBPartitionCounter = 1
+        $PartitionstoCheck = @($AllPartitionBoundaries_Amiga_Preliminary | Where-Object {$_.PartitionName -match $AmigaDisk})
         for ($i = 0; $i -lt $PartitionstoCheck.Count; $i++){
             $OverhangPixelsAccumulated += $PartitionstoCheck[$i].OverhangPixels
             $PartitionstoCheck[$i].OverhangPixelsAccumulated = $OverhangPixelsAccumulated             
-            if ($RDBPartitionCounter -eq 1){
-                $PartitionstoCheck[$i].BytesAvailableLeft = $PartitionstoCheck[$i].StartingPositionBytes
+            if ($i -eq 0){
+                $PartitionstoCheck[$i].BytesAvailableLeft = $PartitionstoCheck[$i].StartingPositionBytes 
                 $PartitionstoCheck[$i].PixelsAvailableLeft = $PartitionstoCheck[$i].LeftMargin
             }
             else {
-                    $PartitionstoCheck[$i].BytesAvailableLeft = $PartitionstoCheck[$i].StartingPositionBytes - $PartitionstoCheck[$i-1].EndingPositionBytes
-                    $PartitionstoCheck[$i].PixelsAvailableLeft = $PartitionstoCheck[$i].LeftMargin - $PartitionstoCheck[$i-1].RightMargin
+                $PartitionstoCheck[$i].BytesAvailableLeft = $PartitionstoCheck[$i].StartingPositionBytes - $PartitionstoCheck[$i-1].EndingPositionBytes
+                $PartitionstoCheck[$i].PixelsAvailableLeft = $PartitionstoCheck[$i].LeftMargin - $PartitionstoCheck[$i-1].RightMargin
             }
-            
-            if ((($i+1) -lt $PartitionstoCheck.Count)){
+            if (($i+1) -lt $PartitionstoCheck.count){
                 $PartitionstoCheck[$i].PixelsAvailableRight = $PartitionstoCheck[$i+1].LeftMargin-$PartitionstoCheck[$i].RightMargin
                 $PartitionstoCheck[$i].BytesAvailableRight = $PartitionstoCheck[$i+1].StartingPositionBytes-$PartitionstoCheck[$i].EndingPositionBytes
             }
-            else{
+            else {
                 $PartitionstoCheck[$i].PixelsAvailableRight = (Get-Variable -name $AmigaDisk).Value.RightDiskBoundary - $PartitionstoCheck[$i].RightMargin
                 $PartitionstoCheck[$i].BytesAvailableRight =  (Get-Variable -name $AmigaDisk).Value.DiskSizeBytes - $PartitionstoCheck[$i].EndingPositionBytes
-            }  
+            }
 
-            $RDBPartitionCounter ++
         }
-        $AllPartitionBoundaries_Amiga += $PartitionstoCheck
+        $PartitionstoCheck | ForEach-Object {
+            $AllPartitionBoundaries_Amiga.Add($_)         
+        }
+
     }
 
-    $AllPartitionBoundaries += $AllPartitionBoundaries_MBR
-    $AllPartitionBoundaries += $AllPartitionBoundaries_Amiga
-  
-    return $AllPartitionBoundaries
+$AllPartitionBoundaries_MBR | ForEach-Object {
+    $AllPartitionBoundaries.Add($_)
+}
+$AllPartitionBoundaries_Amiga | ForEach-Object {
+    $AllPartitionBoundaries.Add($_)
+}    
+
+return $AllPartitionBoundaries
 
 }
 

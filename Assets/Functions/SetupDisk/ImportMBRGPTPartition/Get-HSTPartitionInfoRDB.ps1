@@ -17,16 +17,15 @@ function Get-HSTPartitionInfoRDB {
         $HSTCommandstoProcess += "fs dir $Path\mbr\$MBRPartitionNumber\rdb"
     }
     else{
-        $HSTCommandstoProcess += "rdb info $Path"
-        $HSTCommandstoProcess += "fs dir $Path\rdb"
+        $HSTCommandstoProcess += "rdb info $Path`n"
+        $HSTCommandstoProcess += "fs dir $Path\rdb`n"
     }
         
 
     if ($HSTCommandstoProcess){
         $HSTCommandstoProcess | Out-File -FilePath $HSTCommandScriptPath -Force
-        $Logoutput = "$($Script:Settings.TempFolder)\LogOutputTemp.txt"
         Write-InformationMessage -Message "Running HST Imager to determine RDB partitions"
-        & $Script:ExternalProgramSettings.HSTImagerPath script $HSTCommandScriptPath | Tee-Object -variable Logoutput
+        $Logoutput = & $Script:ExternalProgramSettings.HSTImagerPath script $HSTCommandScriptPath
     
     }
     if ((Confirm-HSTNoErrors -Logoutput $Logoutput -HSTImager -KeepLog) -eq $false){
@@ -150,7 +149,7 @@ function Get-HSTPartitionInfoRDB {
 
     $RDBPartitionTable | ForEach-Object {
         $_.DiskSizeCalculated = [int]$_.Cylinders*[int]$_.Heads*[int]$_.Sectors*[int]$_.BlockSizeDisk
-        $_.SizeCalculated = ([int]$_.HighCylinder+1-[int]$_.LowCylinder)*[int]$_.BlockSizePartition*[int]$_.Heads*[int]$_.Sectors
+        $_.SizeCalculated = [int64](([int]$_.HighCylinder+1-[int]$_.LowCylinder)*[int]$_.BlockSizePartition*[int]$_.Heads*[int]$_.Sectors)
     }
 
     return $RDBPartitionTable

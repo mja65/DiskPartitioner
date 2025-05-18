@@ -116,7 +116,7 @@ if ($Script:GUICurrentStatus.ProcessImageConfirmedbyUser -eq $true){
     Write-ImageCreation
 }
 else {
-    Write-ErrorMessage -Message "Serious Error! Exiting!"
+    Write-ErrorMessage -Message "User Quit Tool! Exiting!"
     exit
 }
 

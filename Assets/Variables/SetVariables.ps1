@@ -10,6 +10,9 @@ $Script:Settings = [PSCustomObject]@{
     MBROverheadBytes = 1048576+50688 # Allowing for partition to start at sectoe 2048 and leave space HST Imager appears to require
     MBRFirstPartitionStartSector = 2048
     PartitionPixelBuffer = 5 # To account for not exact mouse pointer precision
+    AmigaWorkDiskIconXPosition = 15
+    AmigaWorkDiskIconYPosition = 4
+    AmigaWorkDiskIconYPositionSpacing = 56 
     Version = $null
     PowershellVersion = ((($PSVersionTable.PSVersion).Major).ToString()+'.'+(($PSVersionTable.PSVersion).Minor))
     NetFrameworkrelease = Get-ItemPropertyValue -LiteralPath 'HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full' -Name Release
@@ -154,22 +157,22 @@ for ($i = 0; $i -lt $Script:GUICurrentStatus.MBRPartitionstoImportDataTable.Colu
     }
 }
 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”MBRPartitionNumber”,([string])))
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”DeviceName”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”VolumeName”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”LowCylinder”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”HighCylinder”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”Size”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”StartOffset”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”EndOffset”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”Buffers”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”DosType”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”Mask”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”MaxTransfer”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”Bootable”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”NoMount”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”Priority”,([string]))) 
-$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn ”SizeBytes”,([int64]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "MBRPartitionNumber",([string])))
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "DeviceName",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "VolumeName",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "LowCylinder",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "HighCylinder",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "Size",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "StartOffset",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "EndOffset",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "Buffers",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "DosType",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "Mask",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "MaxTransfer",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "Bootable",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "NoMount",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "Priority",([string]))) 
+$Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Add((New-Object System.Data.DataColumn "SizeBytes",([int64]))) 
 
 for ($i = 0; $i -lt $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns.Count; $i++) {
     if (($Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Columns[$i].ColumnName) -eq 'MBRPartitionNumber'){

@@ -62,22 +62,22 @@ function Update-UI {
 
         
         If (-not ($Script:GUIActions.KickstartVersiontoUse)){
-            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","No OS selected")
+            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Configure Emu68","No OS selected")
             $Script:GUICurrentStatus.ProcessImageStatus = $false
         }
         If (-not ($Script:GUIActions.FoundKickstarttoUse)){
-            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","Kickstart file has not been located")
+            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Configure Emu68","Kickstart file has not been located")
             $Script:GUICurrentStatus.ProcessImageStatus = $false
         }
         if ($Script:GUIActions.InstallOSFiles -eq $true){
             If (-not ($Script:GUIActions.FoundInstallMediatoUse)){
-                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Kickstart and Workbench Files","OS file(s) have not been located")
+                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Configure Emu68","OS file(s) have not been located")
                 $Script:GUICurrentStatus.ProcessImageStatus = $false
             }   
         }
         
         If (-not ($Script:GUIActions.OutputPath)){
-            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","No Output location has been defined")
+            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","No Output location has been defined")
             $Script:GUICurrentStatus.ProcessImageStatus = $false
         }
         else {
@@ -85,7 +85,7 @@ function Update-UI {
                 Get-AllGUIPartitions -partitiontype 'MBR' | ForEach-Object {
                     if ($_.value.ImportedPartition -eq $true -and $_.value.ImportedPartitionMethod -eq 'Direct'){
                        if ($_.value.ImportedPartitionPath -match $Script:GUIActions.OutputPath){
-                           $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","The output location is the same physical disk set for one or more imported partitions")
+                           $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The output location is the same physical disk set for one or more imported partitions")
                            $Script:GUICurrentStatus.ProcessImageStatus = $false
                        }
                     }         
@@ -93,7 +93,7 @@ function Update-UI {
             }
         }
         If (-not ($Script:GUIActions.DiskSizeSelected)){
-            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Output","Disk Partitioning has not been performed")
+            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","Disk Partitioning has not been performed")
             $Script:GUICurrentStatus.ProcessImageStatus = $false
         }        
 

@@ -6,11 +6,12 @@ function Get-AmigaDiskFreeSpace {
     )
     
     # $Disk = $WPF_DP_Disk_GPTMBR
-    # $Disk = $WPF_DP_Partition_ID76_2_AmigaDisk
-    # $PartitionNameNextto = 'WPF_DP_Partition_ID76_1'
-    # $Position = 'AtEnd'
+    # $Disk = $WPF_DP_Partition_MBR_2_AmigaDisk
+    # $PartitionNameNextto = 'WPF_DP_Partition_MBR_2_AmigaDisk_Partition_1'
+    # $Position = 'Right'
 
     #$PartitionstoCheck = [System.Collections.Generic.List[PSCustomObject]]::New()
+    
     if ($Disk.DiskType -eq 'MBR'){
         $PartitionstoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq $Disk.DiskType} 
     }

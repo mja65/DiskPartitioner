@@ -58,6 +58,9 @@ function Copy-EMU68BootFiles {
         if (($OutputLocationType -eq 'Physical Disk') -or ($OutputLocationType -eq 'VHDImage')){
             Set-Volume -DriveLetter $Emu68BootPath.replace(":\","") -NewFileSystemLabel "EMU68BOOT"
         }
+        elseif ($OutputLocationType -eq "ImgImage"){
+            Set-Fat32VolumeLabel -Path $Script:GUIActions.OutputPath
+        }
 
         $null = Copy-Item "$($Script:Settings.InterimAmigaDrives)\Emu68Boot\*" -Destination $Emu68BootPath -Recurse -force
 

@@ -46,7 +46,7 @@ function Get-MBRandRDBPartitionsforSelection  {
                 elseif ($PhysicalDisk){
                     $PathtoUse =  $Script:GUICurrentStatus.SelectedPhysicalDiskforImport
                 }
-                Get-HSTPartitionInfoRDB -Path $PathtoUse -MBRPartitionNumber $MBRPartition.PartitionNumber | ForEach-Object {
+                Get-HSTPartitionInfoRDB -Path $PathtoUse -MBRPartitionNumber $MBRPartition.PartitionNumber | ForEach-Object { 
                     $SizetoUse = Get-ConvertedSize -Size $_.SizeCalculated -AutoScale -ScaleFrom B -NumberofDecimalPlaces 2
                     $NewRow = $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.NewRow()
                     $NewRow.MBRPartitionNumber =  $MBRPartition.PartitionNumber
@@ -55,18 +55,17 @@ function Get-MBRandRDBPartitionsforSelection  {
                     $NewRow.LowCylinder = $_.LowCylinder
                     $NewRow.HighCylinder = $_.HighCylinder
                     $NewRow.Size = "$($SizetoUse.Size) $($SizetoUse.Scale)"
-                    $NewRow.SizeBytes = $_.SizeCalculated
-                    $NewRow.StartOffset = $_.StartOffset
-                    $NewRow.EndOffset = $_.EndOffset
-                    $NewRow.Buffers = $_.Buffers
-                    $NewRow.DosType = $_.DosType
-                    $NewRow.Mask = $_.Mask
-                    $NewRow.MaxTransfer = $_.MaxTransfer
-                    $NewRow.Bootable = $_.Bootable
-                    $NewRow.NoMount = $_.NoMount
-                    $NewRow.Priority = $_.Priority
-                    $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Rows.Add($NewRow)
-    
+                    $NewRow.SizeBytes = [int64]$_.SizeCalculated
+                   $NewRow.StartOffset = $_.StartOffset
+                   $NewRow.EndOffset = $_.EndOffset
+                   $NewRow.Buffers = $_.Buffers
+                   $NewRow.DosType = $_.DosType
+                   $NewRow.Mask = $_.Mask
+                   $NewRow.MaxTransfer = $_.MaxTransfer
+                   $NewRow.Bootable = $_.Bootable
+                   $NewRow.NoMount = $_.NoMount
+                   $NewRow.Priority = $_.Priority                    
+                   $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Rows.Add($NewRow)
                 }
             }
         }

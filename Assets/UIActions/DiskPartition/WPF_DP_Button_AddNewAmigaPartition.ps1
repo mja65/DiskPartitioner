@@ -53,7 +53,7 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
     }
 
     write-debug "Addtype is: $Addtype DiskName is: $AmigaDiskName Allows addition of partitions: $CanAddPartition" 
-    
+        
     if ($EmptyAmigaDisk -eq $true){
         $AvailableFreeSpace = (Get-Variable -name $AmigaDiskName).value.DiskSizeBytes
         write-debug "Available free space is: $AvailableFreeSpace "

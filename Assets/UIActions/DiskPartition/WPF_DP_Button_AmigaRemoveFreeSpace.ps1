@@ -1,6 +1,6 @@
 $WPF_DP_Button_AmigaRemoveFreeSpace.add_click({
   
-    $PartitionstoAdjust = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition -and $_.PartitionType -eq 'Amiga'} | Sort-Object {[int]$_.StartingPositionBytes}
+    $PartitionstoAdjust = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition -and $_.PartitionType -eq 'Amiga'} | Sort-Object {[int64]$_.StartingPositionBytes}
 
     $EndingPositionBytesLastPartition = $null
    
