@@ -3,19 +3,31 @@ function Get-MBRandRDBPartitionsforSelection  {
         [switch]$Image,
         [switch]$PhysicalDisk
     )
-    
+     
     # $Image = $true
     # $Script:GUICurrentStatus.ImportedImagePath = "C:\Users\Matt\OneDrive\Documents\DiskPartitioner\Emu68Workbench3.1.img"
     
     if ($Image){
         $Script:GUICurrentStatus.ImportedPartitionType = Confirm-IsMDBRorRDB -Path $Script:GUICurrentStatus.ImportedImagePath -Image
-
+        $WPF_DP_ID_SourceofPartition_Value.Text = "Image `($($Script:GUICurrentStatus.ImportedImagePath)`)"
     }
     elseif ($PhysicalDisk){
         $Script:GUICurrentStatus.ImportedPartitionType = Confirm-IsMDBRorRDB -Path $Script:GUICurrentStatus.ImportedImagePath -PhysicalDisk
+        $WPF_DP_ID_SourceofPartition_Value.Text = "Disk"        
     }
 
+    $WPF_DP_ID_ImportText_Label.Visibility = 'Visible'
+    $WPF_DP_ID_SourceofPartition_Label.Visibility = 'Visible'
+    $WPF_DP_ID_SourceofPartition_Value.Visibility = 'Visible'
+    $WPF_DP_ID_TypeofPartition_Value.Visibility = 'Visible'
+     $WPF_DP_ID_TypeofPartition_Label.Visibility = 'Visible'
+      
     if ($Script:GUICurrentStatus.ImportedPartitionType -eq 'MBR'){
+        
+        $WPF_DP_ID_TypeofPartition_Value.Text = "MBR Disk"
+        $WPF_DP_ID_ImportText_Label.Text = 'Select MBR 0x76 Partition (PiStorm) to Import. Press OK to import disk or cancel'
+        $WPF_DP_ID_ImportText_Label.Foreground = "#FF000000"
+
         $Script:GUICurrentStatus.MBRPartitionstoImportDataTable.Clear()
 
         if ($Image){
@@ -56,8 +68,8 @@ function Get-MBRandRDBPartitionsforSelection  {
                     $NewRow.HighCylinder = $_.HighCylinder
                     $NewRow.Size = "$($SizetoUse.Size) $($SizetoUse.Scale)"
                     $NewRow.SizeBytes = [int64]$_.SizeCalculated
-                   $NewRow.StartOffset = $_.StartOffset
-                   $NewRow.EndOffset = $_.EndOffset
+                   $NewRow.StartOffset = [int64]$_.StartOffset
+                   $NewRow.EndOffset = [int64]$_.EndOffset
                    $NewRow.Buffers = $_.Buffers
                    $NewRow.DosType = $_.DosType
                    $NewRow.Mask = $_.Mask
@@ -75,23 +87,23 @@ function Get-MBRandRDBPartitionsforSelection  {
         $WPF_DP_ID_RDB_DataGrid.IsHitTestVisible = ''
         
         #$WPF_DP_ID_Grid_RDB.Margin = [System.Windows.Thickness]"0,250,0,0"
-
-        $WPF_DP_ID_TypeofPartition_Label.Text = 'Select MBR Partition to Import. If 0x76 Partition is selected, all RDB partitions will be imported'
-        $WPF_DP_ID_TypeofPartition_Label.Visibility = 'Visible'
-        $WPF_DP_ID_SourceofPartition_Label.Visibility = 'Visible'
-        $WPF_DP_ID_SourceofPartition_Value.Visibility = 'Visible'
-        $WPF_DP_ID_SourceofPartition_Value.Text = "Image `($($Script:GUICurrentStatus.ImportedImagePath)`)"
-           
+          
         $WPF_DP_ID_MBR_DataGrid.ItemsSource = $Script:GUICurrentStatus.MBRPartitionstoImportDataTable.DefaultView 
 
     }
 
     elseif ($Script:GUICurrentStatus.ImportedPartitionType -eq 'RDB'){
-   
-        $WPF_DP_ID_Grid_MBR.Visibility = "Hidden"
-    #    $WPF_DP_ID_Grid_RDB.Visibility = "Visible"
+
+        $WPF_DP_ID_TypeofPartition_Value.Text = "Amiga Disk"
+        $WPF_DP_ID_ImportText_Label.Text = 'Amiga Disk partitions shown below. It is not possible to import individual partitions so importing will import ALL Amiga partitions on the disk. Press OK to import disk or cancel'
+        $WPF_DP_ID_ImportText_Label.Foreground = "#FF000000"
+
+        $Script:GUICurrentStatus.MBRPartitionstoImportDataTable.Clear()
+        
+        $WPF_DP_ID_MBR_DataGrid.Visibility = 'Hidden'
         $WPF_DP_ID_RDB_DataGrid.Visibility = 'Visible'
-        $WPF_DP_ID_RDB_DataGrid.IsHitTestVisible = 'TRUE'
+        
+        $WPF_DP_ID_RDB_DataGrid.IsHitTestVisible = ''
         
         #$WPF_DP_ID_Grid_RDB.Margin = [System.Windows.Thickness]"0,120,0,0"
 
@@ -101,7 +113,6 @@ function Get-MBRandRDBPartitionsforSelection  {
         }
         elseif ($PhysicalDisk){
             $PathtoUse =  $Script:GUICurrentStatus.SelectedPhysicalDiskforImport
-            $WPF_DP_ID_SourceofPartition_Value.Text = "Disk"
         }                
 
         $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Clear()
@@ -114,9 +125,9 @@ function Get-MBRandRDBPartitionsforSelection  {
             $NewRow.LowCylinder = $_.LowCylinder
             $NewRow.HighCylinder = $_.HighCylinder
             $NewRow.Size = "$($SizetoUse.Size) $($SizetoUse.Scale)"
-            $NewRow.SizeBytes = $_.SizeCalculated
-            $NewRow.StartOffset = $_.StartOffset
-            $NewRow.EndOffset = $_.EndOffset
+            $NewRow.SizeBytes = [int64]$_.SizeCalculated
+            $NewRow.StartOffset = [int64]$_.StartOffset
+            $NewRow.EndOffset = [int64]$_.EndOffset
             $NewRow.Buffers = $_.Buffers
             $NewRow.DosType = $_.DosType
             $NewRow.Mask = $_.Mask
@@ -127,9 +138,20 @@ function Get-MBRandRDBPartitionsforSelection  {
             $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.Rows.Add($NewRow)
         }
 
-        $WPF_DP_ID_RDB_DataGrid.ItemsSource = $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.DefaultView                                 
+        $WPF_DP_ID_RDB_DataGrid.ItemsSource = $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.DefaultView       
+        
+        $SpaceforImport = ((Get-AmigaNearestSizeBytes -SizeBytes (($Script:GUICurrentStatus.RDBPartitionstoImportDataTable | Measure-Object -Property SizeBytes -Sum).Sum) -RoundUp )+(Get-AmigaRDBOverheadBytes)) 
 
-    }
+        $FreeSpaceRemaining = (Get-ConvertedSize -Size ($Script:GUICurrentStatus.AvailableSpaceforImportedMBRGPTPartitionBytes - $SpaceforImport) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)       
+        
+        if ($FreeSpaceRemaining.Size -lt 0){
+            $WPF_DP_ID_FreeSpaceRemaining_Value.Background = 'Red'        
+        }
+        else {
+            $WPF_DP_ID_FreeSpaceRemaining_Value.Background = 'Transparent'
+        }
+        $WPF_DP_ID_FreeSpaceRemaining_Value.Text = "$($FreeSpaceRemaining.size)$($FreeSpaceRemaining.scale)"      
+    }  
 
     else {
         if ($Image){

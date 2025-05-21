@@ -121,5 +121,5 @@ else {
 }
 
 # # $WPF_MainWindow.Close()
-# # [System.Windows.Controls.DataGrid].GetEvents() | Select-Object Name, *Method, EventHandlerType >test.txt
- 
+# # [System.Windows.Controls.CheckBox].GetEvents() | Select-Object Name, *Method, EventHandlerType >test.txt
+

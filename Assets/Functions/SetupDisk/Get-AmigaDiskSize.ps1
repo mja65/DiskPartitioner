@@ -3,7 +3,7 @@ function Get-AmigaDiskSize {
         $AmigaDisk
     )
     
-    # $Disk = $WPF_DP_Partition_ID76_1_AmigaDisk
+    # $AmigaDisk = $WPF_DP_Partition_MBR_2_AmigaDisk
 
     $ID76PartitionSizeBytes = (Get-Variable -name $AmigaDisk.ID76PartitionParent).Value.PartitionSizeBytes
 

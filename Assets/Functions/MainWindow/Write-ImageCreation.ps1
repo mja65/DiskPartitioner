@@ -22,16 +22,27 @@ function Write-ImageCreation {
      }
      
      if (Get-AllGUIPartitions -partitiontype 'MBR' | Where-Object {$_.value.ImportedPartitionMethod -eq 'Direct'}){
-        $PartitionstoImport = $true
+        $PartitionstoImport_Direct = $true
      }
      else {
-        $PartitionstoImport = $false
+        $PartitionstoImport_Direct = $false
+     }
+     
+     if (Get-AllGUIPartitions -partitiontype 'MBR' | Where-Object {$_.value.ImportedPartitionMethod -eq 'Derived'}){
+        $PartitionstoImport_Derived = $true
+     }
+     else {
+        $PartitionstoImport_Derived = $false
      }
 
      $Script:Settings.TotalNumberofTasks = 22
 
-     if ($PartitionstoImport -eq $true){
+     if ($PartitionstoImport_Direct -eq $true){
         $Script:Settings.TotalNumberofTasks ++
+     }
+     
+     if ($PartitionstoImport_Derived -eq $true){
+        $Script:Settings.TotalNumberofTasks ++        
      }
 
      $Script:Settings.CurrentTaskNumber = 0 
@@ -158,7 +169,7 @@ function Write-ImageCreation {
      
      Write-TaskCompleteMessage 
 
-     if ($PartitionstoImport -eq $true){
+     if ($PartitionstoImport_Direct -eq $true){
         $Script:Settings.CurrentTaskNumber ++
         $Script:Settings.CurrentTaskName = "Importing partitions to disk"
         
@@ -172,7 +183,23 @@ function Write-ImageCreation {
      
      }
 
-
+     if ($PartitionstoImport_Derived -eq $true){
+        Import-RDBPartitiontoDisk     
+     }
+     
+     if ($OutputTypetoUse -eq 'VHDImage'){
+        $IsMounted = (Get-DiskImage -ImagePath $Script:GUIActions.OutputPath -ErrorAction Ignore).Attached
+        if ($IsMounted -eq $true){
+           Write-InformationMessage -Message "Dismounting existing image: $($Script:GUIActions.OutputPath)"
+           $null = Dismount-DiskImage -ImagePath $Script:GUIActions.OutputPath 
+         }
+      }
+           
+     $HSTCommandstoRun = $Script:GUICurrentStatus.HSTCommandstoProcess.AdjustParametersonImportedRDBPartition
+     if ($HSTCommandstoRun){
+        Start-HSTCommands -HSTScript $HSTCommandstoRun 'Processing commands'
+     }
+        
      $FullListofCommands =   $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles +`
                              $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles + `
                              $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage +`

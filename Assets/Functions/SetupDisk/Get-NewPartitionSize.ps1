@@ -36,11 +36,18 @@ function Get-NewPartitionSize {
     $Script:GUICurrentStatus.NewPartitionDefaultScale = $null
     $Script:GUICurrentStatus.NewPartitionMaximumSizeBytes = $null
     $Script:GUICurrentStatus.NewPartitionMinimumSizeBytes = $null
-    
-    if ($WPF_NewPartitionWindow_Input_PartitionSize_Value.Text){
-        $ValuetoReturn = (Get-ConvertedSize -Size $WPF_NewPartitionWindow_Input_PartitionSize_Value.Text -ScaleFrom $WPF_NewPartitionWindow_Input_PartitionSize_SizeScale_Dropdown.SelectedItem -Scaleto 'B').size  
-        Remove-Variable -Name 'WPF_NewPartitionWindow_*'
-        return $ValuetoReturn
+
+    if ($Script:GUICurrentStatus.NewPartitionAcceptedNewValue -eq $true){
+        if ($WPF_NewPartitionWindow_Input_PartitionSize_Value.Text){
+            $ValuetoReturn = (Get-ConvertedSize -Size $WPF_NewPartitionWindow_Input_PartitionSize_Value.Text -ScaleFrom $WPF_NewPartitionWindow_Input_PartitionSize_SizeScale_Dropdown.SelectedItem -Scaleto 'B').size  
+            Remove-Variable -Name 'WPF_NewPartitionWindow_*'
+            $Script:GUICurrentStatus.NewPartitionAcceptedNewValue = $false
+            return $ValuetoReturn
+        }
+        else {
+            Remove-Variable -Name 'WPF_NewPartitionWindow_*'
+            return 
+        }                          
     }
     else {
         Remove-Variable -Name 'WPF_NewPartitionWindow_*'

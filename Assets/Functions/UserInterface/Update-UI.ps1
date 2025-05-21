@@ -103,32 +103,51 @@ function Update-UI {
             
             $SystemDeviceName = (Get-InputCSVs -Diskdefaults | Where-Object {$_.Disk -eq 'System'}).DeviceName
             $DefaultID76Partition = Get-AllGUIPartitions -PartitionType 'MBR' | Where-Object {$_.value.defaultgptmbrpartition -eq $true -and $_.value.PartitionSubType -eq 'ID76'}
-    
+           
             Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {            
-                $AmigaDriveDetailsToTest += [PSCustomObject]@{
+                $AmigaDriveDetailsToTest.add([PSCustomObject]@{
                     Disk = ($_.Name -split '_AmigaDisk_')[0]
                     DeviceName = $_.value.DeviceName
                     VolumeName = $_.value.VolumeName
                     Priority = $_.value.Priority
-                }
-            }
-            
+                    Bootable = $_.value.Bootable
+                })
+            } 
+                
+  
             if ($AmigaDriveDetailsToTest) {
+                
+                $IsBootableFound = $false
+
+                foreach ($drive in $AmigaDriveDetailsToTest) {
+                    if ($drive.Bootable -eq $true) {
+                        $IsBootableFound = $true
+                        break
+                    }
+                }
+                
+                if ($IsBootableFound -eq $false){
+                     $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","There are no Amiga volumes set to be bootable.")
+                } 
 
                 $TopPriorityonDefaultDrive = $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | Sort-Object 'Priority'| Select-Object -first 1
                 
-                if ($TopPriorityonDefaultDrive.DeviceName -ne $SystemDeviceName) {
-                    $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is not the highest priority device on the RDB.")
-                    $Script:GUICurrentStatus.ProcessImageStatus = $false
-                }
-                else {
-                    $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | ForEach-Object {
-                        if (($_.Disk -eq $TopPriorityonDefaultDrive.Disk) -and ($_.DeviceName -ne $TopPriorityonDefaultDrive.DeviceName)  -and ($_.Priority -eq $TopPriorityonDefaultDrive.Priority)){
-                            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is set to the same priority as one or more volumes on the same Amiga disk.")
-                            $Script:GUICurrentStatus.ProcessImageStatus = $false
+                if ($Script:GUIActions.InstallOSFiles -eq $true){
+
+                    if ($TopPriorityonDefaultDrive.DeviceName -ne $SystemDeviceName) {
+                        $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is not the highest priority device on the RDB.")
+                        $Script:GUICurrentStatus.ProcessImageStatus = $false
+                    }
+                    else {
+                        $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | ForEach-Object {
+                            if (($_.Disk -eq $TopPriorityonDefaultDrive.Disk) -and ($_.DeviceName -ne $TopPriorityonDefaultDrive.DeviceName)  -and ($_.Priority -eq $TopPriorityonDefaultDrive.Priority)){
+                                $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is set to the same priority as one or more volumes on the same Amiga disk.")
+                                $Script:GUICurrentStatus.ProcessImageStatus = $false
+                            }
                         }
                     }
                 }
+
         
                 $UniqueVolumeNamesPerDisk = $AmigaDriveDetailsToTest | Group-Object 'Disk','VolumeName' 
                 

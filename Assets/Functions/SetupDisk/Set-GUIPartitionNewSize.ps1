@@ -171,6 +171,7 @@ function Set-GUIPartitionNewSize {
    #$PartitionName = 'WPF_DP_Partition_MBR_2'
 
     if ((Get-Variable -name $PartitionName).Value.PartitionSubType -eq 'ID76'){      
+        Remove-AmigaDiskFreeSpaceBetweenPartitions 
         write-debug "Old Size was: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"     
         (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes = Get-AmigaDiskSize -AmigaDisk (Get-Variable -name ($PartitionName+'_AmigaDisk')).value
         write-debug "New size is: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"    

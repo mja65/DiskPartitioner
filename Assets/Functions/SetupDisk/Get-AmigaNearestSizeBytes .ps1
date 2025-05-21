@@ -18,5 +18,3 @@ function Get-AmigaNearestSizeBytes {
 
     return $BytestoReturn
 }
-
-

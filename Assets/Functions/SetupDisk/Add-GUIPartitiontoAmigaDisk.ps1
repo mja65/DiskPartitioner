@@ -10,6 +10,8 @@ function Add-GUIPartitiontoAmigaDisk {
         [Switch]$ImportedPartition,
         $ImportedPartitionMethod,
         $ImportedFilesPath,
+        $ImportedPartitionOffsetBytes,
+        $ImportedPartitionEndBytes,
         $ImportedFilesSpaceBytes,
         $PathtoImportedPartition,
         $DeviceName,
@@ -111,6 +113,8 @@ function Add-GUIPartitiontoAmigaDisk {
         (Get-Variable -Name $NewPartitionName).Value.BootableOriginalImportedValue = $Bootable
         (Get-Variable -Name $NewPartitionName).Value.NoMountOriginalImportedValue = $NoMount
         (Get-Variable -Name $NewPartitionName).Value.PriorityOriginalImportedValue = $Priority
+        (Get-Variable -Name $NewPartitionName).Value.ImportedPartitionOffsetBytes = $ImportedPartitionOffsetBytes
+        (Get-Variable -Name $NewPartitionName).Value.ImportedPartitionEndBytes = $ImportedPartitionEndBytes
     }
 
 

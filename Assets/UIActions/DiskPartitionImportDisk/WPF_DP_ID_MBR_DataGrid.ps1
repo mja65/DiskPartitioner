@@ -15,7 +15,11 @@ $WPF_DP_ID_RDB_DataGrid.add_selectionChanged({
 
 $WPF_DP_ID_MBR_DataGrid.add_selectionChanged({
 
-    if ($WPF_DP_ID_MBR_DataGrid.SelectedItem.PartitionType -eq 'Amiga MBR Partition'){
+    if ($WPF_DP_ID_MBR_DataGrid.SelectedItem.PartitionType -eq 'FAT32 Partition'){
+        $WPF_DP_ID_ImportText_Label.text = "Error! You cannot import a FAT32 Partition! If needed, copy the files accross in Windows Explorer"
+        $WPF_DP_ID_ImportText_Label.Foreground = "Red"
+    }
+    elseif ($WPF_DP_ID_MBR_DataGrid.SelectedItem.PartitionType -eq 'Amiga MBR Partition'){
         $WPF_DP_ID_RDB_DataGrid.ItemsSource = $Script:GUICurrentStatus.RDBPartitionstoImportDataTable.DefaultView  | Where-Object {$_.'MBRPartitionNumber' -eq $WPF_DP_ID_MBR_DataGrid.SelectedItem.PartitionNumber}
         $WPF_DP_ID_RDB_DataGrid.Visibility = 'Visible'
     }

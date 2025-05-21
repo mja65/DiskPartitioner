@@ -36,11 +36,13 @@ $WPF_DP_Button_AddNewGPTMBRPartition.add_click({
                 $MinimumRequiredSpace = $Script:SDCardMinimumsandMaximums.ID76Minimum
             }
             $AvailableSpace = (Get-MBRDiskFreeSpace -Disk $WPF_DP_Disk_GPTMBR -Position $AddType -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition)
+            $AvailableSpace = (Get-MBRNearestSizeBytes -Rounddown $AvailableSpace)
+            $MinimumRequiredSpace = (Get-MBRNearestSizeBytes -Roundup $MinimumRequiredSpace)
             if ($AvailableSpace -lt $MinimumRequiredSpace){
                 $null = Show-WarningorError -Msg_Header 'No Free Space' -Msg_Body 'Insufficient freespace to create partition!' -BoxTypeError -ButtonType_OK
             }
             else {
-                $SpacetoUse = Get-NewPartitionSize -DefaultScale 'GiB' -MaximumSizeBytes (Get-MBRNearestSizeBytes -Rounddown $AvailableSpace) -MinimumSizeBytes (Get-MBRNearestSizeBytes -Roundup $MinimumRequiredSpace)
+                $SpacetoUse = Get-NewPartitionSize -DefaultScale 'GiB' -MaximumSizeBytes $AvailableSpace -MinimumSizeBytes $MinimumRequiredSpace
                 if ($SpacetoUse){
                     write-debug "Adding Partition with subtype:$PartitionSubtypetouse Addtype:$AddType Size:$(Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse)"
                     Add-GUIPartitiontoGPTMBRDisk -PartitionSubType $PartitionSubtypetouse -PartitionType 'MBR' -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition -AddType $AddType -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) 

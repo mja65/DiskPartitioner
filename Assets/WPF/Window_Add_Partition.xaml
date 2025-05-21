@@ -5,7 +5,7 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:local="clr-namespace:WpfApp14"
             mc:Ignorable="d"
-         Title="Add Partition" Height="255" Width="255" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterScreen"  ResizeMode="NoResize">
+         Title="Add Partition" Height="255" Width="255" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid x:Name ="Main" Background="#FFE5E5E5">
         <TextBox x:Name="Input_PartitionSize_Label" HorizontalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Text="Select Size of Partition" VerticalAlignment="Top" Width="135" BorderBrush="Transparent" Background="Transparent" IsReadOnly="True" IsUndoEnabled="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False"/>
         <TextBox x:Name="Input_PartitionSize_Value" HorizontalAlignment="Left" Margin="5,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="120" Visibility="Visible" Height="20"/>

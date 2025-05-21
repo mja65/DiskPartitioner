@@ -1,3 +1,12 @@
+if (-not ($Script:GUIActions.ListofRemovableMedia)){
+    $Script:GUIActions.ListofRemovableMedia = Get-RemovableMedia
+}
+
+foreach ($Disk in $Script:GUIActions.ListofRemovableMedia){
+    if ($Disk.HSTDiskName -ne $Script:GUIActions.OutputPath){
+        $WPF_DP_ID_BrowseforDisk_DropDown.AddChild($Disk.FriendlyName)       
+    }
+}
 
 $WPF_DP_ID_BrowseforDisk_DropDown.add_selectionChanged({
     $Script:GUICurrentStatus.ImportedImagePath = $null
@@ -11,15 +20,3 @@ $WPF_DP_ID_BrowseforDisk_DropDown.add_selectionChanged({
         }
     }
 })
-
-#if $WPF_DP_ID_PiStormvsAmiga_Dropdown.SelectedItem  -eq 'PiStorm Disk/Image'
-
-
-# if ($WPF_DP_ID_BrowseforDisk_DropDown.SelectedItem){
-#     $WPF_DP_ID_MBR_DataGrid.Visibility = 'Visible'
-#     #$WPF_DP_ID_RDB_DataGrid.Visibility = 'Visible'        
-# } 
-# else {
-#     $WPF_DP_ID_MBR_DataGrid.Visibility = 'Hidden'
-#     #$WPF_DP_ID_RDB_DataGrid.Visibility = 'Hidden'
-# }

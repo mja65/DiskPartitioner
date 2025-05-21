@@ -18,7 +18,6 @@ function Write-AmigaFilestoInterimDrive {
 #    $CopyRemainingFiles = $true
 #    $wifiprefs = $true
 
-
     $Script:Settings.CurrentTaskNumber ++
     $Script:Settings.CurrentTaskName = "Determining list of OS files, local install files, and files from internet to be installed"
 
@@ -28,7 +27,7 @@ function Write-AmigaFilestoInterimDrive {
         $ListofPackagestoInstall = Get-InputCSVs -PackagestoInstallEmu68Only
     }
     else {
-
+    
         $ListofPackagestoInstall = Get-InputCSVs -PackagestoInstall | Where-Object {(($_.KickstartVersion -eq $Script:GUIActions.KickstartVersiontoUse) -and ($_.IconsetName -eq "" -or $_.IconsetName -eq $Script:GUIActions.SelectedIconSet))} 
         $ListofPackagestoInstall | Add-Member -NotePropertyName 'InstallMediaPath' -NotePropertyValue $null
         $ListofPackagestoInstall | Add-Member -NotePropertyName 'PackageNameUserSelected' -NotePropertyValue $null
@@ -57,13 +56,13 @@ function Write-AmigaFilestoInterimDrive {
         }
     
         $ListofPackagestoInstall = $ListofPackagestoInstall | Where-Object {$_.PackageNameUserSelected -eq $true}
-
+    
     }
-
+    
     Write-TaskCompleteMessage 
 
     if ($DownloadFilesFromInternet){
-
+    
         $Script:Settings.CurrentTaskNumber ++
         $Script:Settings.CurrentTaskName = "Getting Packages from Internet"
         
@@ -74,7 +73,7 @@ function Write-AmigaFilestoInterimDrive {
         Get-PackagesfromInternet -ListofPackagestoDownload $ListofPackagestoDownloadfromInternet
         
         Write-TaskCompleteMessage 
-
+    
         $Script:Settings.CurrentTaskNumber ++
         $Script:Settings.CurrentTaskName = "Extracting Packages from Internet"
         
@@ -83,11 +82,11 @@ function Write-AmigaFilestoInterimDrive {
         Expand-Packages -Web -ListofPackages $ListofPackagestoDownloadfromInternet
         
         Write-TaskCompleteMessage 
-
+    
     }
-
-   if ($DownloadLocalFiles){
-
+    
+    if ($DownloadLocalFiles){
+    
        $Script:Settings.CurrentTaskNumber ++
        $Script:Settings.CurrentTaskName = "Extracting Local Packages"
        
@@ -98,350 +97,361 @@ function Write-AmigaFilestoInterimDrive {
        Expand-Packages -Local -ListofPackages $ListofLocalPackages
        
        Write-TaskCompleteMessage 
-
-   }
-    
-   if ($ExtractADFFilesandIconFiles){
-   
-       $Script:Settings.CurrentTaskNumber ++
-       $Script:Settings.CurrentTaskName = "Extracting files from ADFs and Icon Files and copying to interim Amiga Drive"
-       
-       Write-StartTaskMessage
-       
-       $Script:Settings.TotalNumberofSubTasks = 3
-       
-       $Script:Settings.CurrentSubTaskNumber = 1
-       $Script:Settings.CurrentSubTaskName = "Removing Existing Files"
-       
-       Write-StartSubTaskMessage
-       
-       if (test-path $Script:Settings.InterimAmigaDrives){
-           Get-ChildItem -Path $Script:Settings.InterimAmigaDrives | Remove-Item -Recurse -Force
-       }
-   
-   
-       $Script:Settings.CurrentSubTaskNumber ++
-       $Script:Settings.CurrentSubTaskName = 'Preparing extraction commands for files from ADFs to interim drives'
-   
-       Write-StartSubTaskMessage
-   
-       $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
-           
-       $ListofPackagestoInstall | Where-Object {$_.Source -eq "ADF"} | ForEach-Object{
-           $SourcePath  = "$($_.InstallMediaPath)\$($_.FilestoInstall)"
-           If ($_.NewFileName -ne ""){
-               $FileName = Split-Path $SourcePath -Leaf
-               $LocationtoInstalltoUse = ($($_.LocationtoInstall)).replace('\','_')      
-               if ($FileName.Substring($FileName.Length-2) -eq ".Z"){
-                   $NewFileNametoUse = "$($_.NewFileName).Z"
-               }
-               else{
-                   $NewFileNametoUse = $_.NewFileName 
-               }
-               $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\ADFRenameFiles\$($_.DrivetoInstall)_$($LocationtoInstalltoUse)_$($NewFileNametoUse)"
-               $DestinationPath = [System.IO.Path]::GetFullPath($DestinationPath)    
-       
-           }
-           else {
-               $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
-               $DestinationPath = [System.IO.Path]::GetFullPath($DestinationPath)            
-           }
-           $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles += [PSCustomObject]@{ 
-               Command = "fs extract `"$SourcePath`" `"$DestinationPath`" --uaemetadata None"
-               Sequence = $_.InstallSequence
-           }
-       
-       }
-
-       $Script:Settings.CurrentSubTaskNumber ++
-       $Script:Settings.CurrentSubTaskName = 'Preparing extraction commands for files from Install Media for Icons to interim drives and processing copy commands'
-   
-       Write-StartSubTaskMessage
-
-       $DestinationPath = [System.IO.Path]::GetFullPath("$($Script:Settings.TempFolder)\IconFiles")
-       $IconsPaths = Get-IconPaths
-
-       $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
-   
-       if (Test-Path -Path $DestinationPath -PathType Container){
-           $null = Remove-Item -Path  $DestinationPath -Force -Recurse
-       }
-   
-       $null = New-Item $DestinationPath -ItemType Directory
-   
-       If ($IconsPaths.NewFolderIconInstallMedia -eq 'ADF'){
-           $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles += [PSCustomObject]@{
-               Command = "fs extract `"$($IconsPaths.InstallMediaPathNewFolderIcon)\$($IconsPaths.NewFolderIconFilestoInstall)`" `"$DestinationPath\NewFolderIcon`" --uaemetadata None" 
-               Sequence = 3           
-            }
-   
-       }
-       elseIf ($IconsPaths.NewFolderIconInstallMedia -eq 'CD'){
-           if (-not (Copy-CDFiles -InputFile $IconsPaths.InstallMediaPathNewFolderIcon -FiletoExtract $IconsPaths.NewFolderIconFilestoInstall -OutputDirectory "$DestinationPath\NewFolderIcon")){
-               Write-ErrorMessage -Message 'Error extracting file(s) from CD! Quitting'
-               exit      
-           } 
-       }
-   
-       if ($IconsPaths.Emu68BootDiskIconInstallMedia -eq 'ADF'){
-           $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles += [PSCustomObject]@{
-               Command = "fs extract `"$($IconsPaths.InstallMediaPathEmu68BootDiskIcon)\$($IconsPaths.Emu68BootDiskIconFilestoInstall)`" `"$DestinationPath\Emu68BootDiskIcon`" --uaemetadata None" 
-               Sequence = 3
-           }
-       }
-       elseif ($IconsPaths.Emu68BootDiskIconInstallMedia -eq 'CD'){
-           if (-not (Copy-CDFiles -InputFile $IconsPaths.InstallMediaPathEmu68BootDiskIcon -FiletoExtract $IconsPaths.Emu68BootDiskIconFilestoInstall -OutputDirectory "$DestinationPath\Emu68BootDiskIcon")){
-               Write-ErrorMessage -Message 'Error extracting file(s) from CD! Quitting'
-               exit      
-           }  
-       }
-   
-       if ($IconsPaths.SystemDiskIconInstallMedia -eq 'ADF'){
-           $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles += [PSCustomObject]@{
-               Command = "fs extract `"$($IconsPaths.InstallMediaPathSystemDiskIcon)\$($IconsPaths.SystemDiskIconFilestoInstall)`" `"$DestinationPath\SystemDiskIcon`" --uaemetadata None"
-               Sequence = 3
-           }
-      }
-       elseif ($IconsPaths.SystemDiskIconInstallMedia -eq 'CD'){
-           if (-not (Copy-CDFiles -InputFile $IconsPaths.InstallMediaPathSystemDiskIcon -FiletoExtract $IconsPaths.SystemDiskIconFilestoInstall -OutputDirectory "$DestinationPath\SystemDiskIcon")){
-               Write-ErrorMessage -Message 'Error extracting file(s) from CD! Quitting'
-               exit      
-           }  
-       }
-   
-       if ($IconsPaths.WorkDiskIconInstallMedia -eq 'ADF'){
-           $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles += [PSCustomObject]@{
-               Command = "fs extract `"$($IconsPaths.InstallMediaPathWorkDiskIcon)\$($IconsPaths.WorkDiskIconFilestoInstall)`" `"$DestinationPath\WorkDiskIcon`" --uaemetadata None"
-               Sequence = 3
-           }
-       }
-       elseif ($IconsPaths.WorkDiskIconInstallMedia -eq 'CD'){
-           if (-not (Copy-CDFiles -InputFile $IconsPaths.InstallMediaPathWorkDiskIcon -FiletoExtract $IconsPaths.WorkDiskIconFilestoInstall -OutputDirectory "$DestinationPath\WorkDiskIcon")){
-               Write-ErrorMessage -Message 'Error extracting file(s) from CD! Quitting'
-               exit      
-           } 
-       }
-
-       $HSTCommandstoProcess = $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles + $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles 
-
-       if ($HSTCommandstoProcess){
-           Start-HSTCommands -HSTScript $HSTCommandstoProcess -Message "Running HST Imager to extract files from ADFs"
-       }
-       else {
-           Write-InformationMessage -Message 'No ADF files to process!'
-       }
-   
-       Write-TaskCompleteMessage 
-
-   }
-    
-   if ($ProcessDownloadedFiles){
-       
-       $Script:Settings.CurrentTaskNumber ++
-       $Script:Settings.CurrentTaskName = "Processing Downloaded Files"
-       
-       Write-StartTaskMessage
-       
-       $Script:Settings.TotalNumberofSubTasks = 3
-       $Script:Settings.CurrentSubTaskNumber = 1
-       $Script:Settings.CurrentSubTaskName = 'Preparing default icon files for future use'
-    
-       if (-not (test-path "$DestinationPath\Emu68BootDrive" -PathType Container)){
-           $null = New-Item "$DestinationPath\Emu68BootDrive" -ItemType Directory
-       }
-       if (-not (test-path "$DestinationPath\SystemDrive" -PathType Container)){
-           $null = New-Item "$DestinationPath\SystemDrive" -ItemType Directory
-       }
-       if (-not (test-path "$DestinationPath\WorkDrive" -PathType Container)){
-           $null = New-Item "$DestinationPath\WorkDrive" -ItemType Directory           
-       }
-
-       $null = copy-item -path "$DestinationPath\NewFolderIcon\$(Split-Path -Path $IconsPaths.NewFolderIconFilestoInstall -Leaf)" -Destination "$DestinationPath\NewFolder.info" -Force
-       $null = copy-item -path "$DestinationPath\Emu68BootDiskIcon\$(Split-Path -Path $IconsPaths.Emu68BootDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\Emu68BootDrive\disk.info" -Force
-       $null = copy-item -path "$DestinationPath\SystemDiskIcon\$(Split-Path -Path $IconsPaths.SystemDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\SystemDrive\disk.info" -Force
-       $null = copy-item -path "$DestinationPath\WorkDiskIcon\$(Split-Path -Path $IconsPaths.WorkDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\WorkDrive\disk.info" -Force
-    
-       $Script:Settings.CurrentSubTaskNumber ++
-       $Script:Settings.CurrentSubTaskName = 'Renaming extracted files where needed'
-    
-       $PathtoExtractedFilesFilestoRename = [System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\ADFRenameFiles")
-    
-       if (test-path $PathtoExtractedFilesFilestoRename){
-           (Get-ChildItem $PathtoExtractedFilesFilestoRename  -Recurse -File).FullName |ForEach-Object {
-               $SourcePath = $_
-               $ParentPathtoRemove = "$PathtoExtractedFilesFilestoRename\"
-               $DestinationPath = $_.replace('_','\').Replace($ParentPathtoRemove,'') 
-               $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$DestinationPath" 
-               $DestinationPath = Split-Path $DestinationPath -Parent
-               $ParentFolder = Split-Path $DestinationPath -Parent
-               if (-not (Test-Path -Path $ParentFolder -PathType Container)){
-                   $null = New-Item -Path $ParentFolder -ItemType Directory
-               }
-               Write-InformationMessage -Message "Copying file `"$SourcePath`" to `"$DestinationPath`""
-               $null = copy-item $SourcePath $DestinationPath
-               if ($DestinationPath.Substring($DestinationPath.Length-2) -eq ".Z"){
-                   $DestinationPathtoRemove = $DestinationPath.Substring(0,$DestinationPath.Length-2)
-                   if (Test-Path $DestinationPathtoRemove){
-                       $null = Remove-Item $DestinationPathtoRemove -Force
-                   } 
-               }          
-           }
-       }
-    
-       if (($Script:GUIActions.OSInstallMediaType -eq 'Disk') -and ([system.version]$Script:GUIActions.KickstartVersiontoUse -ge [system.version]3.2) -and ([system.version]$Script:GUIActions.KickstartVersiontoUse -lt [system.version]3.3)){
-           $Script:Settings.CurrentSubTaskNumber ++
-           $Script:Settings.CurrentSubTaskName = "Uncompressing .Z Files"
-           Write-StartSubTaskMessage
-           
-           Expand-AmigaZFiles -LocationofZFiles "$($Script:Settings.InterimAmigaDrives)\System" -MultipleDirectoryFlag
-       }
-   
-       Write-TaskCompleteMessage 
     
     }
- 
-   if ($CopyRemainingFiles) {
-    $Script:Settings.CurrentTaskNumber ++
-    $Script:Settings.CurrentTaskName = "Copy Remaining files to Interim Drive"
+
+    if ($ExtractADFFilesandIconFiles){
     
-    Write-StartTaskMessage
-
-    $ListofPackagestoInstall | Where-Object {$_.Source -eq 'Local - ConfigTXT' -or $_.Source -eq 'Local - LHA File' -or $_.Source -eq 'Github' -or  $_.Source -eq 'Local' -or $_.Source -eq 'ArchiveinArchive' -or $_.Source -eq 'CD' `
-                                              -or $_.Source -eq 'Web' -or $_.Source -eq 'Web - SearchforPackageAminet' -or $_.Source -eq 'Web - SearchforPackageWHDLoadWrapper'}  | ForEach-Object {
-  
-  
-        if ($_.Source -eq 'Local - LHA File'){
-            Write-InformationMessage -Message "Processing Local Packages"
-             $ArchiveNameExtractedFilePath = Split-Path -Path $_.SourceLocation -Leaf
-             if ($ArchiveNameExtractedFilePath.Substring($ArchiveNameExtractedFilePath.Length-4) -eq ".lha"){
-                 $ArchiveNameExtractedFilePath = $ArchiveNameExtractedFilePath.Substring(0,$ArchiveNameExtractedFilePath.Length-4)
-             }
-             $SourcePath = "$($Script:Settings.LocalPackagesDownloadLocation)\$ArchiveNameExtractedFilePath\$($_.FilestoInstall)"    
-             $DestinationFolder = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
-             $DestinationFolder = $DestinationFolder.TrimEnd('\')   
-             if (-not (test-path $DestinationFolder -PathType Container)){
-                 Write-InformationMessage -Message "Creating destination folder $DestinationFolder"    
-                 $null = New-Item -Path $DestinationFolder -ItemType Directory   
-             }
-             if ($_.NewFileName -ne ""){
-                 $DestinationPath = "$DestinationFolder\$($_.NewFileName)"
-             }
-             else {
-                 $DestinationPath = $DestinationFolder
-             }    
-             (Resolve-Path -Path $SourcePath).path | ForEach-Object {
-                 $SourcePath = $_
-                 Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
-                 $null = Copy-Item $SourcePath  $DestinationPath -Force -Recurse
-             } 
-
+        $Script:Settings.CurrentTaskNumber ++
+        $Script:Settings.CurrentTaskName = "Extracting files from ADFs and Icon Files and copying to interim Amiga Drive"
+        
+        Write-StartTaskMessage
+        
+        $Script:Settings.TotalNumberofSubTasks = 3
+        
+        $Script:Settings.CurrentSubTaskNumber = 1
+        $Script:Settings.CurrentSubTaskName = "Removing Existing Files"
+        
+        Write-StartSubTaskMessage
+        
+        if (test-path $Script:Settings.InterimAmigaDrives){
+            Get-ChildItem -Path $Script:Settings.InterimAmigaDrives | Remove-Item -Recurse -Force
         }
-
-         elseif ($_.Source -eq "Local"){
-            $SourcePath = "$($Script:Settings.LocationofAmigaFiles)\$($_.SourceLocation)"       
-            $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
-            $DestinationPath = $DestinationPath.TrimEnd("\")
-            if (-not (Test-Path $DestinationPath -PathType Container)){
-                $null = New-Item -Path $DestinationPath -ItemType Directory
-            }
-            if  ($_.NewFileName){
-                $DestinationPath = "$DestinationPath\$($_.NewFileName)" 
-            }
-            Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
-            $null = Copy-Item -path $SourcePath  -Destination $DestinationPath -Force -Recurse
-        }
-
-        elseif ($_.Source -eq "Local - ConfigTXT") {
-            $SourcePath = "$($Script:Settings.LocationofAmigaFiles)\$($_.SourceLocation)"
-            $FileName = Split-Path -Path $SourcePath -Leaf
-            $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$FileName "
-            $DestinationPath = $DestinationPath.TrimEnd("\")
-            Update-ConfigTXT -PathtoConfigTXT $SourcePath -PathtoExportedConfigTXT $DestinationPath
-        }
-
-        elseif ($_.Source -eq "CD") {
-            $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
-            $DestinationPath = $DestinationPath.TrimEnd("\")
-            if (-not (Copy-CDFiles -InputFile $($_.InstallMediaPath) -OutputDirectory $DestinationPath -FiletoExtract $($_.FilestoInstall) -NewFileName $($_.NewFileName))){
-                Write-ErrorMessage -Message 'Error extracting file(s) from CD! Quitting'
-                exit        
-            }
-        }
-        elseif ($_Source -eq "Archive"){
-            Write-ErrorMessage -Message "Not built!"
-            exit
-        }
-        elseif ($_.Source -eq "ArchiveinArchive"){
-            $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
-            $DestinationPath = $DestinationPath.TrimEnd("\")
-            if (-not (Copy-ArchiveinArchiveFiles -InputFile $($_.InstallMediaPath) -ArchiveinArchiveName $($_.ArchiveinArchiveName) -ArchiveinArchivePassword $($_.ArchiveinArchivePassword) -OutputDirectory $DestinationPath -FiletoExtract $($_.FilestoInstall) -NewFileName $($_.NewFileName))){
-                Write-ErrorMessage -Message 'Error extracting file(s) from Archive! Quitting'
-                exit
-            } 
-        }  
-
-        elseif ($_.Source -eq 'Github' -or $_.Source -eq 'Web' -or $_.Source -eq 'Web - SearchforPackageAminet' -or $_.Source -eq 'Web - SearchforPackageWHDLoadWrapper'){
-            $ArchiveNameExtractedFilePath = Split-Path -Path $_.FileDownloadName -Leaf
-            if (($ArchiveNameExtractedFilePath.Substring($ArchiveNameExtractedFilePath.Length-4) -eq ".lha") -or ($ArchiveNameExtractedFilePath.Substring($ArchiveNameExtractedFilePath.Length-4) -eq ".lzx") -or ($ArchiveNameExtractedFilePath.Substring($ArchiveNameExtractedFilePath.Length-4) -eq ".zip")){
-                $ArchiveNameExtractedFilePath = $ArchiveNameExtractedFilePath.Substring(0,$ArchiveNameExtractedFilePath.Length-4)
-            }
-            $SourcePath = "$($Script:Settings.WebPackagesDownloadLocation)\$ArchiveNameExtractedFilePath\$($_.FilestoInstall)"   
-            $DestinationFolder = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
-            $DestinationFolder = $DestinationFolder.TrimEnd('\')   
-            if (-not (test-path $DestinationFolder -PathType Container)){
-                Write-InformationMessage -Message "Creating destination folder $DestinationFolder"    
-                $null = New-Item -Path $DestinationFolder -ItemType Directory   
-            }
-            if ($_.NewFileName -ne ""){
-                $DestinationPath = "$DestinationFolder\$($_.NewFileName)"
+    
+    
+        $Script:Settings.CurrentSubTaskNumber ++
+        $Script:Settings.CurrentSubTaskName = 'Preparing extraction commands for files from ADFs to interim drives'
+    
+        Write-StartSubTaskMessage
+    
+        $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
+            
+        $ListofPackagestoInstall | Where-Object {$_.Source -eq "ADF"} | ForEach-Object{
+            $SourcePath  = "$($_.InstallMediaPath)\$($_.FilestoInstall)"
+            If ($_.NewFileName -ne ""){
+                $FileName = Split-Path $SourcePath -Leaf
+                $LocationtoInstalltoUse = ($($_.LocationtoInstall)).replace('\','_')      
+                if ($FileName.Substring($FileName.Length-2) -eq ".Z"){
+                    $NewFileNametoUse = "$($_.NewFileName).Z"
+                }
+                else{
+                    $NewFileNametoUse = $_.NewFileName 
+                }
+                $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\ADFRenameFiles\$($_.DrivetoInstall)_$($LocationtoInstalltoUse)_$($NewFileNametoUse)"
+                $DestinationPath = [System.IO.Path]::GetFullPath($DestinationPath)    
+        
             }
             else {
-                $DestinationPath = $DestinationFolder
-            }    
-            (Resolve-Path -Path $SourcePath).path | ForEach-Object {
-                $SourcePath = $_
-                Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
-                $null = Copy-Item $SourcePath  $DestinationPath -Force -Recurse
+                $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
+                $DestinationPath = [System.IO.Path]::GetFullPath($DestinationPath)            
+            }
+            $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles += [PSCustomObject]@{ 
+                Command = "fs extract `"$SourcePath`" `"$DestinationPath`" --uaemetadata None"
+                Sequence = $_.InstallSequence
+            }
+        
+        }
+    
+        $Script:Settings.CurrentSubTaskNumber ++
+        $Script:Settings.CurrentSubTaskName = 'Preparing extraction commands for files from Install Media for Icons to interim drives and processing copy commands'
+    
+        Write-StartSubTaskMessage
+    
+        $DestinationPath = [System.IO.Path]::GetFullPath("$($Script:Settings.TempFolder)\IconFiles")
+        $IconsPaths = Get-IconPaths
+    
+        $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
+    
+        if (Test-Path -Path $DestinationPath -PathType Container){
+            $null = Remove-Item -Path  $DestinationPath -Force -Recurse
+        }
+    
+        $null = New-Item $DestinationPath -ItemType Directory
+    
+        If ($IconsPaths.NewFolderIconInstallMedia -eq 'ADF'){
+            $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles += [PSCustomObject]@{
+                Command = "fs extract `"$($IconsPaths.InstallMediaPathNewFolderIcon)\$($IconsPaths.NewFolderIconFilestoInstall)`" `"$DestinationPath\NewFolderIcon`" --uaemetadata None" 
+                Sequence = 3           
+             }
+    
+        }
+        elseIf ($IconsPaths.NewFolderIconInstallMedia -eq 'CD'){
+            if (-not (Copy-CDFiles -InputFile $IconsPaths.InstallMediaPathNewFolderIcon -FiletoExtract $IconsPaths.NewFolderIconFilestoInstall -OutputDirectory "$DestinationPath\NewFolderIcon")){
+                Write-ErrorMessage -Message 'Error extracting file(s) from CD! Quitting'
+                exit      
             } 
         }
-
-    }
     
-    $Script:Settings.CurrentSubTaskNumber ++
-    $Script:Settings.CurrentSubTaskName = "Cleaning up files"
-    Write-StartSubTaskMessage
-    
-    (Get-ChildItem -Path "$($Script:Settings.InterimAmigaDrives)\System" -Recurse | Where-Object {$_.name -eq 'Disk.info'} ).FullName | ForEach-Object {
-        if ((Split-Path -path $_ -Parent) -ne  [System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\System")){
-            $null = remove-item $_ -Force
+        if ($IconsPaths.Emu68BootDiskIconInstallMedia -eq 'ADF'){
+            $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles += [PSCustomObject]@{
+                Command = "fs extract `"$($IconsPaths.InstallMediaPathEmu68BootDiskIcon)\$($IconsPaths.Emu68BootDiskIconFilestoInstall)`" `"$DestinationPath\Emu68BootDiskIcon`" --uaemetadata None" 
+                Sequence = 3
+            }
         }
-    }
-
-    if (test-path "$($Script:Settings.InterimAmigaDrives)\System\libs\68040.libary"){
-        $null = remove-item "$($Script:Settings.InterimAmigaDrives)\System\libs\68040.libary" -Force 
-    }
-    
-    $PFSOutputScript = $null 
-    Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {
-        if (($_.Value.ImportedPartition -eq $false) -and ($_.Value.dostype -eq "PFS\3")){
-            $PFSOutputScript += "setfnsize $($_.Value.DeviceName): 107 >NIL:`n" 
+        elseif ($IconsPaths.Emu68BootDiskIconInstallMedia -eq 'CD'){
+            if (-not (Copy-CDFiles -InputFile $IconsPaths.InstallMediaPathEmu68BootDiskIcon -FiletoExtract $IconsPaths.Emu68BootDiskIconFilestoInstall -OutputDirectory "$DestinationPath\Emu68BootDiskIcon")){
+                Write-ErrorMessage -Message 'Error extracting file(s) from CD! Quitting'
+                exit      
+            }  
         }
+    
+        if ($IconsPaths.SystemDiskIconInstallMedia -eq 'ADF'){
+            $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles += [PSCustomObject]@{
+                Command = "fs extract `"$($IconsPaths.InstallMediaPathSystemDiskIcon)\$($IconsPaths.SystemDiskIconFilestoInstall)`" `"$DestinationPath\SystemDiskIcon`" --uaemetadata None"
+                Sequence = 3
+            }
+       }
+        elseif ($IconsPaths.SystemDiskIconInstallMedia -eq 'CD'){
+            if (-not (Copy-CDFiles -InputFile $IconsPaths.InstallMediaPathSystemDiskIcon -FiletoExtract $IconsPaths.SystemDiskIconFilestoInstall -OutputDirectory "$DestinationPath\SystemDiskIcon")){
+                Write-ErrorMessage -Message 'Error extracting file(s) from CD! Quitting'
+                exit      
+            }  
+        }
+    
+        if ($IconsPaths.WorkDiskIconInstallMedia -eq 'ADF'){
+            $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles += [PSCustomObject]@{
+                Command = "fs extract `"$($IconsPaths.InstallMediaPathWorkDiskIcon)\$($IconsPaths.WorkDiskIconFilestoInstall)`" `"$DestinationPath\WorkDiskIcon`" --uaemetadata None"
+                Sequence = 3
+            }
+        }
+        elseif ($IconsPaths.WorkDiskIconInstallMedia -eq 'CD'){
+            if (-not (Copy-CDFiles -InputFile $IconsPaths.InstallMediaPathWorkDiskIcon -FiletoExtract $IconsPaths.WorkDiskIconFilestoInstall -OutputDirectory "$DestinationPath\WorkDiskIcon")){
+                Write-ErrorMessage -Message 'Error extracting file(s) from CD! Quitting'
+                exit      
+            } 
+        }
+    
+        $HSTCommandstoProcess = $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles + $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles 
+    
+        if ($HSTCommandstoProcess){
+            Start-HSTCommands -HSTScript $HSTCommandstoProcess -Message "Running HST Imager to extract files from ADFs"
+        }
+        else {
+            Write-InformationMessage -Message 'No ADF files to process!'
+        }
+    
+        Write-TaskCompleteMessage 
+    
     }
 
-    if (-not (Test-Path "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun" -PathType Container)){
-        $null = New-Item "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun" -ItemType Directory
-    }
+    if ($ProcessDownloadedFiles){
+        
+        $Script:Settings.CurrentTaskNumber ++
+        $Script:Settings.CurrentTaskName = "Processing Downloaded Files"
+        
+        Write-StartTaskMessage
+        
+        $Script:Settings.TotalNumberofSubTasks = 3
+        $Script:Settings.CurrentSubTaskNumber = 1
+        $Script:Settings.CurrentSubTaskName = 'Preparing default icon files for future use'
+     
+        if (-not (test-path "$DestinationPath\Emu68BootDrive" -PathType Container)){
+            $null = New-Item "$DestinationPath\Emu68BootDrive" -ItemType Directory
+        }
+        if (-not (test-path "$DestinationPath\SystemDrive" -PathType Container)){
+            $null = New-Item "$DestinationPath\SystemDrive" -ItemType Directory
+        }
+        if (-not (test-path "$DestinationPath\WorkDrive" -PathType Container)){
+            $null = New-Item "$DestinationPath\WorkDrive" -ItemType Directory           
+        }
+    
+        $null = copy-item -path "$DestinationPath\NewFolderIcon\$(Split-Path -Path $IconsPaths.NewFolderIconFilestoInstall -Leaf)" -Destination "$DestinationPath\NewFolder.info" -Force
+        $null = copy-item -path "$DestinationPath\Emu68BootDiskIcon\$(Split-Path -Path $IconsPaths.Emu68BootDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\Emu68BootDrive\disk.info" -Force
+        $null = copy-item -path "$DestinationPath\SystemDiskIcon\$(Split-Path -Path $IconsPaths.SystemDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\SystemDrive\disk.info" -Force
+        $null = copy-item -path "$DestinationPath\WorkDiskIcon\$(Split-Path -Path $IconsPaths.WorkDiskIconFilestoInstall -Leaf)" -Destination "$DestinationPath\WorkDrive\disk.info" -Force
+        
+        if ($Script:GUIActions.KickstartVersiontoUse -eq '3.9'){
+            Write-AmigaInfoType -IconPath "$DestinationPath\NewFolder.info" -TypetoSet 'Drawer'
+         #   Write-AmigaInfoType -IconPath "$DestinationPath\SystemDrive\disk.info"-TypetoSet 'Disk'
+         #   Write-AmigaInfoType -IconPath "$DestinationPath\WorkDrive\disk.info" -TypetoSet 'Disk'
+         #   Write-AmigaInfoType -IconPath "$DestinationPath\Emu68BootDrive\disk.info" -TypetoSet 'Disk'       
+        }
+        
+        $Script:Settings.CurrentSubTaskNumber ++
+        $Script:Settings.CurrentSubTaskName = 'Renaming extracted files where needed'
+     
+        $PathtoExtractedFilesFilestoRename = [System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\ADFRenameFiles")
+     
+        if (test-path $PathtoExtractedFilesFilestoRename){
+            (Get-ChildItem $PathtoExtractedFilesFilestoRename  -Recurse -File).FullName |ForEach-Object {
+                $SourcePath = $_
+                $ParentPathtoRemove = "$PathtoExtractedFilesFilestoRename\"
+                $DestinationPath = $_.replace('_','\').Replace($ParentPathtoRemove,'') 
+                $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$DestinationPath" 
+                $DestinationPath = Split-Path $DestinationPath -Parent
+                $ParentFolder = Split-Path $DestinationPath -Parent
+                if (-not (Test-Path -Path $ParentFolder -PathType Container)){
+                    $null = New-Item -Path $ParentFolder -ItemType Directory
+                }
+                Write-InformationMessage -Message "Copying file `"$SourcePath`" to `"$DestinationPath`""
+                $null = copy-item $SourcePath $DestinationPath
+                if ($DestinationPath.Substring($DestinationPath.Length-2) -eq ".Z"){
+                    $DestinationPathtoRemove = $DestinationPath.Substring(0,$DestinationPath.Length-2)
+                    if (Test-Path $DestinationPathtoRemove){
+                        $null = Remove-Item $DestinationPathtoRemove -Force
+                    } 
+                }          
+            }
+        }
+     
+        if (($Script:GUIActions.OSInstallMediaType -eq 'Disk') -and ([system.version]$Script:GUIActions.KickstartVersiontoUse -ge [system.version]3.2) -and ([system.version]$Script:GUIActions.KickstartVersiontoUse -lt [system.version]3.3)){
+            $Script:Settings.CurrentSubTaskNumber ++
+            $Script:Settings.CurrentSubTaskName = "Uncompressing .Z Files"
+            Write-StartSubTaskMessage
+            
+            Expand-AmigaZFiles -LocationofZFiles "$($Script:Settings.InterimAmigaDrives)\System" -MultipleDirectoryFlag
+        }
+    
+        Write-TaskCompleteMessage 
+     
+     }
 
-    Export-TextFileforAmiga -DatatoExport $PFSOutputScript -AddLineFeeds 'TRUE' -ExportFile "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun\PFS"
-
-    $IconPosScript = (Get-IconPositionScript)
-
-    Export-TextFileforAmiga -DatatoExport $IconPosScript -ExportFile "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun\SetIconPositions" -AddLineFeeds 'TRUE'   
-
-    Write-TaskCompleteMessage 
-
-   }
-
+     if ($CopyRemainingFiles) {
+      $Script:Settings.CurrentTaskNumber ++
+      $Script:Settings.CurrentTaskName = "Copy Remaining files to Interim Drive"
+      
+      Write-StartTaskMessage
+     
+      $ListofPackagestoInstall | Where-Object {$_.Source -eq 'Local - ConfigTXT' -or $_.Source -eq 'Local - LHA File' -or $_.Source -eq 'Github' -or  $_.Source -eq 'Local' -or $_.Source -eq 'ArchiveinArchive' -or $_.Source -eq 'CD' `
+                                                -or $_.Source -eq 'Web' -or $_.Source -eq 'Web - SearchforPackageAminet' -or $_.Source -eq 'Web - SearchforPackageWHDLoadWrapper'}  | ForEach-Object {
+     
+     
+          if ($_.Source -eq 'Local - LHA File'){
+              Write-InformationMessage -Message "Processing Local Packages"
+               $ArchiveNameExtractedFilePath = Split-Path -Path $_.SourceLocation -Leaf
+               if ($ArchiveNameExtractedFilePath.Substring($ArchiveNameExtractedFilePath.Length-4) -eq ".lha"){
+                   $ArchiveNameExtractedFilePath = $ArchiveNameExtractedFilePath.Substring(0,$ArchiveNameExtractedFilePath.Length-4)
+               }
+               $SourcePath = "$($Script:Settings.LocalPackagesDownloadLocation)\$ArchiveNameExtractedFilePath\$($_.FilestoInstall)"    
+               $DestinationFolder = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
+               $DestinationFolder = $DestinationFolder.TrimEnd('\')   
+               if (-not (test-path $DestinationFolder -PathType Container)){
+                   Write-InformationMessage -Message "Creating destination folder $DestinationFolder"    
+                   $null = New-Item -Path $DestinationFolder -ItemType Directory   
+               }
+               if ($_.NewFileName -ne ""){
+                   $DestinationPath = "$DestinationFolder\$($_.NewFileName)"
+               }
+               else {
+                   $DestinationPath = $DestinationFolder
+               }    
+               (Resolve-Path -Path $SourcePath).path | ForEach-Object {
+                   $SourcePath = $_
+                   Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
+                   $null = Copy-Item $SourcePath  $DestinationPath -Force -Recurse
+               } 
+     
+          }
+     
+           elseif ($_.Source -eq "Local"){
+              $SourcePath = "$($Script:Settings.LocationofAmigaFiles)\$($_.SourceLocation)"       
+              $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
+              $DestinationPath = $DestinationPath.TrimEnd("\")
+              if (-not (Test-Path $DestinationPath -PathType Container)){
+                  $null = New-Item -Path $DestinationPath -ItemType Directory
+              }
+              if  ($_.NewFileName){
+                  $DestinationPath = "$DestinationPath\$($_.NewFileName)" 
+              }
+              Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
+              $null = Copy-Item -path $SourcePath  -Destination $DestinationPath -Force -Recurse
+          }
+     
+          elseif ($_.Source -eq "Local - ConfigTXT") {
+              $SourcePath = "$($Script:Settings.LocationofAmigaFiles)\$($_.SourceLocation)"
+              $FileName = Split-Path -Path $SourcePath -Leaf
+              $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$FileName "
+              $DestinationPath = $DestinationPath.TrimEnd("\")
+              Update-ConfigTXT -PathtoConfigTXT $SourcePath -PathtoExportedConfigTXT $DestinationPath
+          }
+     
+          elseif ($_.Source -eq "CD") {
+              $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
+              $DestinationPath = $DestinationPath.TrimEnd("\")
+              if (-not (Copy-CDFiles -InputFile $($_.InstallMediaPath) -OutputDirectory $DestinationPath -FiletoExtract $($_.FilestoInstall) -NewFileName $($_.NewFileName))){
+                  Write-ErrorMessage -Message 'Error extracting file(s) from CD! Quitting'
+                  exit        
+              }
+          }
+          elseif ($_Source -eq "Archive"){
+              Write-ErrorMessage -Message "Not built!"
+              exit
+          }
+          elseif ($_.Source -eq "ArchiveinArchive"){
+              $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
+              $DestinationPath = $DestinationPath.TrimEnd("\")
+              if (-not (Copy-ArchiveinArchiveFiles -InputFile $($_.InstallMediaPath) -ArchiveinArchiveName $($_.ArchiveinArchiveName) -ArchiveinArchivePassword $($_.ArchiveinArchivePassword) -OutputDirectory $DestinationPath -FiletoExtract $($_.FilestoInstall) -NewFileName $($_.NewFileName))){
+                  Write-ErrorMessage -Message 'Error extracting file(s) from Archive! Quitting'
+                  exit
+              } 
+          }  
+     
+          elseif ($_.Source -eq 'Github' -or $_.Source -eq 'Web' -or $_.Source -eq 'Web - SearchforPackageAminet' -or $_.Source -eq 'Web - SearchforPackageWHDLoadWrapper'){
+              $ArchiveNameExtractedFilePath = Split-Path -Path $_.FileDownloadName -Leaf
+              if (($ArchiveNameExtractedFilePath.Substring($ArchiveNameExtractedFilePath.Length-4) -eq ".lha") -or ($ArchiveNameExtractedFilePath.Substring($ArchiveNameExtractedFilePath.Length-4) -eq ".lzx") -or ($ArchiveNameExtractedFilePath.Substring($ArchiveNameExtractedFilePath.Length-4) -eq ".zip")){
+                  $ArchiveNameExtractedFilePath = $ArchiveNameExtractedFilePath.Substring(0,$ArchiveNameExtractedFilePath.Length-4)
+              }
+              $SourcePath = "$($Script:Settings.WebPackagesDownloadLocation)\$ArchiveNameExtractedFilePath\$($_.FilestoInstall)"   
+              $DestinationFolder = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
+              $DestinationFolder = $DestinationFolder.TrimEnd('\')   
+              if (-not (test-path $DestinationFolder -PathType Container)){
+                  Write-InformationMessage -Message "Creating destination folder $DestinationFolder"    
+                  $null = New-Item -Path $DestinationFolder -ItemType Directory   
+              }
+              if ($_.NewFileName -ne ""){
+                  $DestinationPath = "$DestinationFolder\$($_.NewFileName)"
+              }
+              else {
+                  $DestinationPath = $DestinationFolder
+              }    
+              (Resolve-Path -Path $SourcePath).path | ForEach-Object {
+                  $SourcePath = $_
+                  Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
+                  $null = Copy-Item $SourcePath  $DestinationPath -Force -Recurse
+              } 
+          }
+     
+      }
+      
+      $Script:Settings.CurrentSubTaskNumber ++
+      $Script:Settings.CurrentSubTaskName = "Cleaning up files"
+      Write-StartSubTaskMessage
+      
+      (Get-ChildItem -Path "$($Script:Settings.InterimAmigaDrives)\System" -Recurse | Where-Object {$_.name -eq 'Disk.info'} ).FullName | ForEach-Object {
+          if ((Split-Path -path $_ -Parent) -ne  [System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\System")){
+              $null = remove-item $_ -Force
+          }
+      }
+     
+      if (test-path "$($Script:Settings.InterimAmigaDrives)\System\libs\68040.libary"){
+          $null = remove-item "$($Script:Settings.InterimAmigaDrives)\System\libs\68040.libary" -Force 
+      }
+      
+      $PFSOutputScript = $null 
+      Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {
+          if (($_.Value.ImportedPartition -eq $false) -and ($_.Value.dostype -eq "PFS\3")){
+              $PFSOutputScript += "setfnsize $($_.Value.DeviceName): 107 >NIL:`n" 
+          }
+      }
+     
+      if (-not (Test-Path "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun" -PathType Container)){
+          $null = New-Item "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun" -ItemType Directory
+      }
+     
+      Export-TextFileforAmiga -DatatoExport $PFSOutputScript -AddLineFeeds 'TRUE' -ExportFile "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun\PFS"
+     
+      $IconPosScript_AmigaDrives = (Get-IconPositionScript -AmigaDrives)
+      $IconPosScript_Emu68Boot = (Get-IconPositionScript -Emu68Boot)
+      
+      Export-TextFileforAmiga -DatatoExport $IconPosScript_AmigaDrives -ExportFile "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun\SetIconPositions" -AddLineFeeds 'TRUE'   
+     
+      Export-TextFileforAmiga -DatatoExport $IconPosScript_Emu68Boot -ExportFile "$($Script:Settings.InterimAmigaDrives)\System\S\OneTimeRun\SetIconPositionsEmu68Boot_Pistorm" -AddLineFeeds 'TRUE'   
+     
+     
+      Write-TaskCompleteMessage 
+     
+     }
+     
    if ($AdjustingScriptsandInfoFiles){
     $Script:Settings.CurrentTaskNumber ++
     $Script:Settings.CurrentTaskName = "Adjusting scripts and .info files"

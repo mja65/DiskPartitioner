@@ -37,7 +37,7 @@ function New-GUIDisk {
     elseif ($DiskType -eq 'Amiga'){
         $NewDisk_Grid | Add-Member -NotePropertyMembers @{
             CanAddPartition = $null
-            RDBOverheadBytes = 16*63*512*2
+            RDBOverheadBytes = Get-AmigaRDBOverheadBytes
             DiskType = 'Amiga'
             ID76PartitionParent = $null
             NextPartitionNumber = 1

@@ -1,9 +1,7 @@
 function Get-AmigaPartitionSizeBlockBytes {
     param (
     )
-    $Heads = 16
-    $Sectors = 63
-    $BlockSize = 512
 
-    return $Heads*$Sectors*$BlockSize
+    return ($Script:Settings.AmigaRDBHeads * $Script:Settings.AmigaRDBSectors * $Script:Settings.AmigaRDBBlockSize)
+    
 }

@@ -71,7 +71,7 @@ function Import-MBRPartitiontoDisk {
                 if ($RDBUpdateStringUsed -eq $true) {
                     Write-InformationMessage -Message "Adding comamand for parameter changes for RDB partition #$RDBCounter"  
                     $Script:GUICurrentStatus.HSTCommandstoProcess.AdjustParametersonImportedRDBPartition += [PSCustomObject]@{
-                        Command = "rdb part update $($Script:GUIActions.OutputPath)\MBR\$MBRPartitionCounter $RDBCounter $RDBUpdateString"
+                        Command = "rdb part update $($Script:GUIActions.OutputPath)\MBR\$MBRPartitionCounter\RDB $RDBCounter $RDBUpdateString"
                         Sequence = 1      
                     }       
                 }
@@ -82,11 +82,7 @@ function Import-MBRPartitiontoDisk {
         }
         $MBRPartitionCounter ++
     }
-    
-    $HSTCommandstoRun = $Script:GUICurrentStatus.HSTCommandstoProcess.AdjustParametersonImportedRDBPartition
-    if ($HSTCommandstoRun){
-        Start-HSTCommands -HSTScript $HSTCommandstoRun 'Processing commands'
-    }
+   
 
 }
     

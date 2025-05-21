@@ -14,7 +14,7 @@ function Get-CopyFilestoAmigaDiskCommands {
         $HashTableforPathstoRDBPartitions[$_.VolumeName] = @($_.RDBPartitionNumber,$_.DeviceName,$_.MBRPartitionNumber) 
     }
     
-    $AmigaDiskstoWrite =  Get-InputCSVs -Diskdefaults | Where-Object {$_.DeviceName -ne ""} | Select-Object 'Disk','DeviceName','VolumeName' 
+    $AmigaDiskstoWrite =  Get-InputCSVs -Diskdefaults | Where-Object {$_.Disk -ne "EMU68BOOT"} | Select-Object 'Disk','DeviceName','VolumeName' 
 
     $AmigaDiskstoWrite | ForEach-Object {
         if ($HashTableforPathstoRDBPartitions.ContainsKey($_.VolumeName)){

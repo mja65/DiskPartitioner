@@ -149,6 +149,8 @@ function New-GUIPartition {
             Bootable = $null
             NoMount = $null
             Priority = $null
+            ImportedPartitionOffsetBytes = $null
+            ImportedPartitionEndBytes = $null
             VolumeNameOriginalImportedValue = $null
             DeviceNameOriginalImportedValue = $null
             BuffersOriginalImportedValue = $null
