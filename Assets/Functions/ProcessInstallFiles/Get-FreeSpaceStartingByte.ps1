@@ -20,6 +20,11 @@ function Get-FreeSpaceStartingByte {
         $lastUsedByte = [EmptySpaceScanFile]::FindLastNonZeroByteReverse($Path, $chunkSize, $EndingOffset)
     }
     
-    Write-InformationMessage -Message "Scanned $Path for RDB Partition #$RDBPartitionNumber and last written byte is: $lastUsedByte"
+    if ($RDBPartitionNumber){
+        Write-InformationMessage -Message "Scanned $Path for RDB Partition #$RDBPartitionNumber and last written byte is: $lastUsedByte"
+    }
+    else {
+        Write-InformationMessage -Message "Scanned $Path and last written byte is: $lastUsedByte"
+    }
     return $lastUsedByte
 }
