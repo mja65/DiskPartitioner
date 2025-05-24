@@ -114,10 +114,9 @@ function Write-AmigaFilestoInterimDrive {
         
         Write-StartSubTaskMessage
         
-        if (test-path $Script:Settings.InterimAmigaDrives){
-            Get-ChildItem -Path $Script:Settings.InterimAmigaDrives | Remove-Item -Recurse -Force
+        if (Test-Path $Script:Settings.InterimAmigaDrives) {
+            Remove-Item "$($Script:Settings.InterimAmigaDrives)\*" -Recurse -Force -ErrorAction SilentlyContinue
         }
-    
     
         $Script:Settings.CurrentSubTaskNumber ++
         $Script:Settings.CurrentSubTaskName = 'Preparing extraction commands for files from ADFs to interim drives'
@@ -224,7 +223,7 @@ function Write-AmigaFilestoInterimDrive {
         $HSTCommandstoProcess = $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles + $Script:GUICurrentStatus.HSTCommandstoProcess.CopyIconFiles 
     
         if ($HSTCommandstoProcess){
-            Start-HSTCommands -HSTScript $HSTCommandstoProcess -Message "Running HST Imager to extract files from ADFs"
+            Start-HSTCommands -HSTScript $HSTCommandstoProcess -Section "ExtractOSFiles" -ActivityDescription "Running HST Imager to extract OS files" -ReportTime
         }
         else {
             Write-InformationMessage -Message 'No ADF files to process!'
@@ -299,7 +298,7 @@ function Write-AmigaFilestoInterimDrive {
             $Script:Settings.CurrentSubTaskName = "Uncompressing .Z Files"
             Write-StartSubTaskMessage
             
-            Expand-AmigaZFiles -LocationofZFiles "$($Script:Settings.InterimAmigaDrives)\System" -MultipleDirectoryFlag
+           Expand-AmigaZFiles -LocationofZFiles "$($Script:Settings.InterimAmigaDrives)\System" -MultipleDirectoryFlag
         }
     
         Write-TaskCompleteMessage 
