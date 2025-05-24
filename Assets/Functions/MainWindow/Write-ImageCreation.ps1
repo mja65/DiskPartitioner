@@ -7,6 +7,18 @@ function Write-ImageCreation {
        get-process -id $Pid | set-windowstate -State SHOWDEFAULT
      }
 
+     $Script:GUICurrentStatus.ProgressBarMarkers = $Script:Settings.ProgressBarMarkers | Where-Object {(([System.Version]$Script:GUIActions.KickstartVersiontoUse).Major -eq ([System.Version]$_.KickstartVersion).major -and ([System.Version]$Script:GUIActions.KickstartVersiontoUse).Minor -eq ([System.Version]$_.KickstartVersion).Minor)}
+  
+     $fileCount = 0
+     
+     Get-AllGUIPartitions -PartitionType "Amiga" | ForEach-Object {
+        if ($_.value.ImportedFilesPath){
+           $fileCount += (Get-ChildItem -Path $_.value.ImportedFilesPath -File -Recurse).Count
+         }
+      }
+
+      $Script:GUICurrentStatus.ProgressBarMarkers.WriteFilestoDisk += $fileCount
+      
      $Script:GUICurrentStatus.StartTimeForRunningInstall = (Get-Date -Format HH:mm:ss)
 
      Write-InformationMessage "Started processing at: $($Script:GUICurrentStatus.StartTimeForRunningInstall)"
@@ -81,7 +93,7 @@ function Write-ImageCreation {
 
      if ($OutputTypetoUse -eq "VHDImage"){
         $Message = "Running HST Imager to create image"
-        Start-HSTCommands -HSTScript $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage -Message $Message          
+        Start-HSTCommands -HSTScript $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage -Section "NewDiskorImage" -ActivityDescription $Message -ReportTime -TotalSteps 7 -ReportActualSteps       
      }
              
      $Script:Settings.CurrentSubTaskNumber ++
@@ -94,11 +106,13 @@ function Write-ImageCreation {
      if (($OutputTypetoUse -eq "ImgImage") -or ($OutputTypetoUse -eq "Physical Disk")){
         if ($OutputTypetoUse -eq "ImgImage"){
            $Message = "Running HST Imager to create and initialise Image"
+           $totalsteps = 10
         } 
         elseif ($OutputTypetoUse -eq "Physical Disk"){
            $Message = "Running HST Imager to create and initialise Disk"
+           $totalsteps = 20
         }
-        Start-HSTCommands -HSTScript $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage -Message "Running HST Imager to create and initialise Image"
+        Start-HSTCommands -HSTScript $Script:GUICurrentStatus.HSTCommandstoProcess.NewDiskorImage -Section "NewDiskorImage" -ActivityDescription $Message -ReportTime -TotalSteps $totalsteps -ReportActualSteps
      }
 
      Write-TaskCompleteMessage 
@@ -145,7 +159,8 @@ function Write-ImageCreation {
        }
 
         $HSTCommandstoRun = $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures + $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk
-        Start-HSTCommands -HSTScript $HSTCommandstoRun "Processing commands (this may take a few minutes depending on the size of your disk)"
+        Start-HSTCommands -HSTScript $HSTCommandstoRun -Section "DiskStructures;WriteFilestoDisk" -ActivityDescription "Processing commands (this may take a few minutes depending on the size of your disk)" -ReportActualSteps -ReportTime
+        #"Processing commands (this may take a few minutes depending on the size of your disk)"
      }
 
      Copy-EMU68BootFiles -OutputLocationType $OutputTypetoUse #Commands not run yet for IMG
