@@ -24,11 +24,41 @@ Architecture is: $($Script:Settings.Architecture)
 
 "@  
 
-    if (-not (Test-Path $Script:Settings.LogFolder)){
-        $null = New-Item -Path $Script:Settings.LogFolder -ItemType Directory
-    }
-    
-    $LogEntry| Out-File -FilePath $Script:Settings.LogLocation
+        if (-not (Test-Path $Script:Settings.LogFolder)){
+            $null = New-Item -Path $Script:Settings.LogFolder -ItemType Directory
+        }
+
+        $utf8NoBOM = New-Object System.Text.UTF8Encoding($false)
+        $streamWriter = New-Object System.IO.StreamWriter($Script:Settings.LogLocation, $false, $utf8NoBOM)
+
+        foreach ($entry in $logEntry) {
+            $streamWriter.WriteLine($entry)
+        }
+        
+        $streamWriter.Close()
+        #$LogEntry| Out-File -FilePath $Script:Settings.LogLocation
+
+        if ($Script:Settings.HSTDetailedLogEnabled -eq $true){
+            $Script:Settings.HSTDetailedLogLocation = "$($Script:Settings.LogFolder)\$LogNameDateTime`_Emu68HSTLog.txt"
+            $LogEntry =     @"
+Emu68 Imager Log - HST Detailed Log
+        
+Log created at: $DateandTime
+
+"@ 
+       
+            $utf8NoBOM = New-Object System.Text.UTF8Encoding($false)
+            $streamWriter = New-Object System.IO.StreamWriter($Script:Settings.HSTDetailedLogLocation, $false, $utf8NoBOM)
+
+            foreach ($entry in $logEntry) {
+                $streamWriter.WriteLine($entry)
+            }
+        
+            $streamWriter.Close()
+
+            #$LogEntry| Out-File -FilePath $Script:Settings.HSTDetailedLogLocation
+
+        }
 
     }
     elseif($Continue){ 
@@ -60,6 +90,16 @@ Script:DeleteAllWorkingPathFiles = [$Script:DeleteAllWorkingPathFiles]
 Activity Commences:
 
 "@
-        $LogEntry| Out-File -FilePath $Script:Settings.LogLocation -Append
+
+        $utf8NoBOM = New-Object System.Text.UTF8Encoding($false)
+        $streamWriter = New-Object System.IO.StreamWriter($Script:Settings.LogLocation, $true, $utf8NoBOM)
+
+        foreach ($entry in $logEntry) {
+            $streamWriter.WriteLine($entry)
+        }
+        
+        $streamWriter.Close()
+
+        #$LogEntry| Out-File -FilePath $Script:Settings.LogLocation -Append
     }
 }

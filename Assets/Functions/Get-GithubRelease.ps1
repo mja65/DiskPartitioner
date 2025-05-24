@@ -26,7 +26,10 @@ function Get-GithubRelease {
 
     Write-InformationMessage -Message "Retrieving Github information for: $GithubRelease"
 
-    $GithubDetails = (Get-DownloadFile -DownloadURL $GithubRelease -NumberofAttempts 3) | ConvertFrom-Json
+    $client = [System.Net.Http.HttpClient]::new()
+    $client.DefaultRequestHeaders.UserAgent.ParseAdd("PowerShellHttpClient")
+    $GithubDetails = $client.GetStringAsync($GithubRelease).Result | ConvertFrom-Json
+
     if ( -not $GithubDetails){
         Write-ErrorMessage 'Error accessing Github! Qutting Progream'
         exit

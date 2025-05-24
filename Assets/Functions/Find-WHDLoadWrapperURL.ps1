@@ -8,7 +8,7 @@ function Find-WHDLoadWrapperURL{
         
         $Counter = 0
         $IsSuccess = $null
-
+        
         do {
             try {
                 $SearchResults=Invoke-WebRequest "https://ftp2.grandis.nu/turransearch/search.php?_search_=1&search=$SearchCriteria&category_id=Misc&exclude=&limit=$ResultLimit&httplinks=on"

@@ -22,7 +22,11 @@ function Update-InputCSV {
     }
 
     $PathtoGoogleDrivetouse = "$($PathtoGoogleDrive_param)export?format=tsv&gid=$GidValue"
-    $ImportedFile = (((Get-DownloadFile -DownloadURL $PathtoGoogleDrivetouse -NumberofAttempts 3).Content) -split "`r`n")
+   # $ImportedFile = (((Get-DownloadFile -DownloadURL $PathtoGoogleDrivetouse -NumberofAttempts 3).Content) -split "`r`n")
+
+    $client = [System.Net.Http.HttpClient]::new()
+    $client.DefaultRequestHeaders.UserAgent.ParseAdd("PowerShellHttpClient")
+    $ImportedFile = $client.GetStringAsync($PathtoGoogleDrivetouse).Result -split "`r`n"
 
     If ($ImportedFile){
         $TotalLines = $ImportedFile.Count

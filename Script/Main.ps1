@@ -21,6 +21,9 @@ Script for Emu68Imager
 #> 
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Net.Http
+
+#Set-Location -Path "C:\Users\Matt\OneDrive\Documents\DiskPartitioner"
 
 Set-Location -Path (Split-Path -Path $PSScriptRoot -Parent)
 [System.IO.Directory]::SetCurrentDirectory((Split-Path -Path $PSScriptRoot -Parent)) # Needed for Powershell 5 Compatibility
@@ -34,6 +37,7 @@ Get-ChildItem -Path '.\Assets\Functions\' -Recurse | Where-Object { $_.PSIsConta
 }
 
 $DebugPreference = 'SilentlyContinue'
+
 #$DebugPreference = 'Continue'
 
 if (($env:TERM_PROGRAM)  -or ($psISE)) {
@@ -122,4 +126,3 @@ else {
 
 # # $WPF_MainWindow.Close()
 # # [System.Windows.Controls.CheckBox].GetEvents() | Select-Object Name, *Method, EventHandlerType >test.txt
-

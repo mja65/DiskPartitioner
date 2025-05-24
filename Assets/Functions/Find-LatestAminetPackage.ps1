@@ -5,7 +5,7 @@ function Find-LatestAminetPackage {
         $DateNewerthan,
         $Architecture
     )
-    
+     
     $AminetMirrors =  Import-Csv $Script:Settings.AminetMirrorsCSV.Path -Delimiter ';'
     $AminetURL='http://aminet.net'
     Write-InformationMessage -Message "Searching for: $PackagetoFind"
@@ -14,7 +14,7 @@ function Find-LatestAminetPackage {
         $URLBase=$Mirror.Type+'://'+$Mirror.MirrorURL
         $URL = ($URLBase+'/search?name='+$PackagetoFind+'&o_date=newer&date='+$DateNewerthan+'&arch[]='+$Architecture)
         try {
-            $ListofAminetFiles=Invoke-WebRequest $URL -UseBasicParsing # -AllowInsecureRedirect Powershell 5 compatibility
+            $ListofAminetFiles = Invoke-WebRequest $URL -UseBasicParsing # -AllowInsecureRedirect Powershell 5 compatibility
             $IsSuccess = $true    
             break
         }

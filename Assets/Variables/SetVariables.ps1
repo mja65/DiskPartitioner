@@ -1,6 +1,7 @@
 $Script:DP_Settings = [PSCustomObject]@{
     PartitionPrefix = 'WPF_DP_Partition_'
 }
+$osInfo = Get-WmiObject -Class Win32_OperatingSystem
 
 $Script:Settings = [PSCustomObject]@{
     MBRSectorSizeBytes = 512
@@ -18,11 +19,11 @@ $Script:Settings = [PSCustomObject]@{
     AmigaWorkDiskIconYPosition = 4
     AmigaWorkDiskIconYPositionSpacing = 56 
     Version = $null
-    PowershellVersion = ((($PSVersionTable.PSVersion).Major).ToString()+'.'+(($PSVersionTable.PSVersion).Minor))
-    NetFrameworkrelease = Get-ItemPropertyValue -LiteralPath 'HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full' -Name Release
+    PowershellVersion = "$($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor)"           
+    NetFrameworkrelease = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full' -Name Release).Release
     WindowsLocale = ((((Get-WinSystemLocale).Name).Tostring())+' ('+(((Get-WinSystemLocale).DisplayName).Tostring())+')')
-    WindowsVersion = (Get-WmiObject -class Win32_OperatingSystem).Caption
-    Architecture = (Get-WmiObject win32_operatingsystem | Select-Object osarchitecture).osarchitecture
+    WindowsVersion = $osInfo.Caption
+    Architecture = $osInfo.OSArchitecture
     TempFolder = '.\Temp'
     InterimAmigaDrives = '.\Temp\InterimAmigaDrives' 
     WebPackagesDownloadLocation = '.\Temp\WebPackagesDownload'
@@ -90,8 +91,11 @@ $Script:Settings = [PSCustomObject]@{
     TotalNumberofSubTasks = $null
     CurrentSubTaskNumber = $null
     CurrentSubTaskName = $null
+    ProgressBarMarkers = New-Object System.Collections.ArrayList
     LogFolder = '.\Logs'
     LogLocation = $null
+    HSTDetailedLogEnabled = $true
+    HSTDetailedLogLocation = $null
     QuickStart_URL = "https://mja65.github.io/Emu68-Imager/quickstart.html"
     Documentation_URL = "https://mja65.github.io/Emu68-Imager/"
     #DefaultImageLocation = 
@@ -99,9 +103,45 @@ $Script:Settings = [PSCustomObject]@{
     # TempFolder = '.\Temp\'
 }
 
+$null = $Script:Settings.ProgressBarMarkers.Add([PSCustomObject]@{
+    KickstartVersion = [System.Version]"3.1"
+    ExtractOSFiles = [int]2000
+    CopyIconFiles = [int]$null
+    NewDiskorImage = [int]1
+    DiskStructures = [int]10
+    CopyImportedFiles = [int]$null
+    WriteFilestoDisk = [int]4535
+    AdjustParametersonImportedRDBPartitions = [int]$null
+})
+
+$null = $Script:Settings.ProgressBarMarkers.Add([PSCustomObject]@{
+    KickstartVersion = [System.Version]"3.2"
+    ExtractOSFiles = [int]3930
+    CopyIconFiles = [int]$null
+    NewDiskorImage = [int]1
+    DiskStructures = [int]10
+    CopyImportedFiles = [int]$null
+    WriteFilestoDisk = [int]4535
+    AdjustParametersonImportedRDBPartitions = [int]$null
+})
+
+$null = $Script:Settings.ProgressBarMarkers.Add([PSCustomObject]@{
+    KickstartVersion = [System.Version]"3.9"
+    ExtractOSFiles = [int]5930
+    CopyIconFiles = [int]$null
+    NewDiskorImage = [int]1
+    DiskStructures = [int]10
+    CopyImportedFiles = [int]$null
+    WriteFilestoDisk = [int]4535
+    AdjustParametersonImportedRDBPartitions = [int]$null
+})
+
+
+
 $Script:GUICurrentStatus = [PSCustomObject]@{
     FileBoxOpen = $false
     RunMode = $null
+    ProgressBarMarkers = New-Object System.Collections.ArrayList
     HSTCommandstoProcess = [PSCustomObject]@{
         ExtractOSFiles =  [System.Collections.Generic.List[PSCustomObject]]::New()
         CopyIconFiles = [System.Collections.Generic.List[PSCustomObject]]::New()
