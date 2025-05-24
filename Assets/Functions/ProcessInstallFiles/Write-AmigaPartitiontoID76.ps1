@@ -9,7 +9,13 @@ function Write-AmigaPartiontoID76 {
      
      Add-TypesDiskAccess
 
-    # $DestinationPath = "\disk8"
+    #  $DestinationPath = "\disk8"
+    #  $SourcePartitionPath = "C:\Users\Matt\Downloads\CaffeineOS_Storm_9311.img"
+    #  $StartingOffsetWrite = 0
+    #  $StartingOffsetRead = 1048576
+    #  $EndingOffsetRead = 1178599424
+
+
     # $DestinationPath = "C:\Users\Matt\OneDrive\Documents\DiskPartitioner\UserFiles\SavedOutputImages\Newtest.vhd"
     # $StartingOffsetWrite = 3528759808
     # $SourcePartitionPath = "C:\Users\Matt\OneDrive\Documents\DiskPartitioner\Pistorm3.2.3.HDF"   
@@ -18,7 +24,7 @@ function Write-AmigaPartiontoID76 {
 
     $StartingOffsetWritetoUse = $StartingOffsetWrite + $StartingOffsetRead
     $chunkSize = 1048576 
-    $BlankSpaceSizeBytes = 10485760-512
+    $BlankSpaceSizeBytes = 10485760-512 #Less than 10MiB just in case the partition is only 10MiB
     
     if ($WriteStream){
         $WriteStream.Close()
@@ -49,6 +55,8 @@ function Write-AmigaPartiontoID76 {
     
     if ($null -ne $DiskNumberDestination) {
         $targetDiskPath = "\\.\PhysicalDrive$DiskNumberDestination"
+        # Set-Disk -Number $DiskNumberDestination -IsOffline $true
+        # Set-Disk -Number $DiskNumberDestination -IsOffline $false
         #$WriteStream = New-Object System.IO.FileStream($targetDiskPath, [System.IO.FileMode]::Open, [System.IO.FileAccess]::ReadWrite)
         $Writestream = [DiskAccess]::OpenForWrite($targetDiskPath)
     } 
@@ -71,7 +79,7 @@ function Write-AmigaPartiontoID76 {
     #Write Blank space at start of partition
     
     $BlankSpace = New-Object byte[] $BlankSpaceSizeBytes
-    
+
     Write-InformationMessage -Message "Writing blank space to start of partition"
     
     $WriteStream.Write($BlankSpace, 0, $BlankSpaceSizeBytes)
@@ -110,9 +118,12 @@ function Write-AmigaPartiontoID76 {
         
         $remaining -= $BytesRead.Length
     
-         $percentComplete = [math]::Round((($TotalBytes - $remaining) / $TotalBytes) * 100, 2)
+         $newpercentComplete = [math]::Round((($TotalBytes - $remaining) / $TotalBytes) * 100, 2)
 
-         Write-Progress -Activity "Writing data..." -Status "($percentComplete% complete)" -PercentComplete $percentComplete
+         if ($newpercentComplete -ne $percentComplete){
+             $percentComplete = $newpercentComplete
+             Write-Progress -Activity "Writing data..." -Status "($percentComplete% complete)" -PercentComplete $percentComplete             
+         }
 
     }
         
@@ -133,4 +144,3 @@ function Write-AmigaPartiontoID76 {
     #     $diskNumber = [int]($SourcePartitionPath -replace '^.*\\disk', '')
     #     $targetDiskPath = "\\.\PhysicalDrive$diskNumber"
     # } 
-    
