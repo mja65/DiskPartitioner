@@ -179,7 +179,7 @@ function Write-ImageCreation {
 
         Write-StartSubTaskMessage
         $HSTCommandstoRun = $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures + $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk
-        Start-HSTCommands -HSTScript $HSTCommandstoRun 'Processing commands'
+        Start-HSTCommands -HSTScript $HSTCommandstoRun -Section "DiskStructures;WriteFilestoDisk" -ActivityDescription 'Processing commands' -ReportActualSteps -ReportTime
      }
      
      Write-TaskCompleteMessage 
@@ -198,9 +198,9 @@ function Write-ImageCreation {
      
      }
 
-     if ($PartitionstoImport_Derived -eq $true){
-        Import-RDBPartitiontoDisk     
-     }
+   #   if ($PartitionstoImport_Derived -eq $true){
+   #      Import-RDBPartitiontoDisk     
+   #   }
      
      if ($OutputTypetoUse -eq 'VHDImage'){
         $IsMounted = (Get-DiskImage -ImagePath $Script:GUIActions.OutputPath -ErrorAction Ignore).Attached
@@ -212,7 +212,7 @@ function Write-ImageCreation {
            
      $HSTCommandstoRun = $Script:GUICurrentStatus.HSTCommandstoProcess.AdjustParametersonImportedRDBPartition
      if ($HSTCommandstoRun){
-        Start-HSTCommands -HSTScript $HSTCommandstoRun 'Processing commands'
+        Start-HSTCommands -HSTScript $HSTCommandstoRun -section "AdjustParametersonImportedRDBPartition" -ActivityDescription 'Processing commands' -ReportActualSteps -ReportTime
      }
         
      $FullListofCommands =   $Script:GUICurrentStatus.HSTCommandstoProcess.ExtractOSFiles +`
