@@ -1,5 +1,5 @@
 $WPF_DP_Button_RemoveFreeSpace.add_click({
-    $PartitionstoAdjust = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'MBR'} 
+    $PartitionstoAdjust = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'MBR'} 
         
     $ExpectedPartitionStartingPosition = 0
     

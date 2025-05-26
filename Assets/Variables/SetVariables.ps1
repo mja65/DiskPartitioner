@@ -139,6 +139,8 @@ $null = $Script:Settings.ProgressBarMarkers.Add([PSCustomObject]@{
 
 
 $Script:GUICurrentStatus = [PSCustomObject]@{
+    AmigaPartitionsandBoundaries = $null
+    GPTMBRPartitionsandBoundaries = $null
     LastMouseMoveUpdateTime = [DateTime]::MinValue
     FileBoxOpen = $false
     RunMode = $null

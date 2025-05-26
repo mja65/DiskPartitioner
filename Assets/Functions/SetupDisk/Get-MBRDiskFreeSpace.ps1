@@ -12,7 +12,7 @@ function Get-MBRDiskFreeSpace {
 
     #$PartitionstoCheck = [System.Collections.Generic.List[PSCustomObject]]::New()
     
-    $PartitionstoCheck = Get-AllGUIPartitionBoundaries  | Where-Object {$_.PartitionType -eq $Disk.DiskType} 
+    $PartitionstoCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga  | Where-Object {$_.PartitionType -eq $Disk.DiskType} 
           
     if ($Position -eq 'AtEnd'){
         if ($PartitionstoCheck){

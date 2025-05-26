@@ -42,7 +42,7 @@ function Set-GUIPartitionNewSize {
         $BytestoPixelFactor = (Get-Variable -name $AmigaDiskName).Value.BytestoPixelFactor 
     }
 
-    $PartitionToCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -eq $PartitionName}
+    $PartitionToCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
 
     if (($ResizeBytes) -and ($SizeBytes -eq $PartitionToCheck.PartitionSizeBytes)){
         # Write-debug 'No change based on bytes' 
@@ -55,7 +55,7 @@ function Set-GUIPartitionNewSize {
             $MinimumSizeBytes = $SDCardMinimumsandMaximums.MBRMinimum
         }
         elseif ((Get-Variable -name $PartitionName).Value.PartitionSubType -eq 'ID76'){
-            $AmigaPartitionstoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -match $PartitionName -and $_.PartitionType -eq 'Amiga'}
+            $AmigaPartitionstoCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -match $PartitionName -and $_.PartitionType -eq 'Amiga'}
             $AmigatoGPTMBROverhead = (Get-Variable -name ($PartitionName+'_AmigaDisk')).value.DiskSizeAmigatoGPTMBROverhead
             $TotalSpaceofAmigaPartitions = $AmigatoGPTMBROverhead
             for ($i = 0; $i -lt $AmigaPartitionstoCheck.Count; $i++) {

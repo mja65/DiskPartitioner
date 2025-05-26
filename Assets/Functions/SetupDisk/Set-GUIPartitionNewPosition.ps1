@@ -21,7 +21,7 @@ function Set-GUIPartitionNewPosition {
         return $false
     }
     else{
-        $PartitionBoundary = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -eq $PartitionName}
+        $PartitionBoundary = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
     
         if ($PartitionType -eq 'MBR'){
             $BytestoPixelFactor = $WPF_DP_Disk_GPTMBR.BytestoPixelFactor

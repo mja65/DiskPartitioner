@@ -106,10 +106,10 @@ function Update-GUIInputBox {
         }
         if (($MBRMove_SpaceatBeginning) -or ($MBRMove_SpaceatEnd) -or ($AmigaMove_SpaceatBeginning) -or ($AmigaMove_SpaceatEnd)){
             if (($MBRMove_SpaceatBeginning) -or ($MBRMove_SpaceatEnd)){
-                $PartitiontoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'MBR' -and $_.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition}
+                $PartitiontoCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'MBR' -and $_.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition}
             }
             elseif (($AmigaMove_SpaceatBeginning) -or ($AmigaMove_SpaceatEnd)){
-                $PartitiontoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition}
+                $PartitiontoCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition}
             }
             if (($MBRMove_SpaceatBeginning) -or ($AmigaMove_SpaceatBeginning)){
                 $AmounttoMove = (Get-ConvertedSize -Size $InputBox.Text -ScaleFrom $DropDownBox.SelectedItem -Scaleto 'B').size-$PartitiontoCheck.BytesAvailableLeft

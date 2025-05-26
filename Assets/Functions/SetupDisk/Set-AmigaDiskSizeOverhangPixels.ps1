@@ -9,7 +9,7 @@ function Set-AmigaDiskSizeOverhangPixels {
 
     # $TotalPartitions = (Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $AmigaDiskName}).Count
     
-    # $PartitionstoCheck = (Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName })
+    # $PartitionstoCheck = (Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -match $AmigaDiskName })
 
     # $AmounttoMovePartitionPixelsAccumulated = 0
 
@@ -33,7 +33,7 @@ function Set-AmigaDiskSizeOverhangPixels {
     #     }
     # }
 
-    # $PartitionstoCheck = (Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName})
+    # $PartitionstoCheck = (Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -match $AmigaDiskName})
 
     # $OverhangPixels = $PartitionstoCheck[$TotalPartitions-1].OverhangPixelsAccumulated
     

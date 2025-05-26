@@ -129,7 +129,7 @@ else {
 # # [System.Windows.Controls.CheckBox].GetEvents() | Select-Object Name, *Method, EventHandlerType >test.txt
 
 <#
-#Measure-Command { Get-AllGUIPartitionBoundaries }
+#Measure-Command { Get-AllGUIPartitionBoundaries -GPTMBR -Amiga }
 Measure-Command { Update-ui }
 
 -Emu68Settings -HighlightSelectedPartitions -UpdateInputBoxes -Buttons -CheckforRunningImage 

@@ -14,10 +14,10 @@ function Get-NextGUIPartition {
         else{
             $AmigaDiskName = ($Script:GUICurrentStatus.SelectedGPTMBRPartition+'_AmigaDisk')
         }
-        $PartitionstoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq $PartitionType -and $_.PartitionName -match $AmigaDiskName }
+        $PartitionstoCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq $PartitionType -and $_.PartitionName -match $AmigaDiskName }
     }
     elseif ($PartitionType -eq 'MBR'){
-        $PartitionstoCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionType -eq $PartitionType}
+        $PartitionstoCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq $PartitionType}
     }
     
     if ($PartitionNametoCheck){

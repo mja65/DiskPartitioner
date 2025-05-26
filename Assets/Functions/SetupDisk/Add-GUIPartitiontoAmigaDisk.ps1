@@ -49,7 +49,7 @@ function Add-GUIPartitiontoAmigaDisk {
         # Write-debug "Left Margin is: $LeftMargin. Starting Position Bytes is: $StartingPositionBytes"
     }
     else{
-        $PartitionNameNexttoDetails = (Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -eq $PartitionNameNextto}) 
+        $PartitionNameNexttoDetails = (Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -eq $PartitionNameNextto}) 
         if ($AddType -eq 'Right'){
             $LeftMargin = $PartitionNameNexttoDetails.RightMargin
             $StartingPositionBytes = $PartitionNameNexttoDetails.EndingPositionBytes

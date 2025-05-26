@@ -15,7 +15,7 @@ function Get-HighlightedGUIPartition {
         ResizeZone = $null
     }
     
-    $PartitionDetails = Get-AllGUIPartitionBoundaries 
+    $PartitionDetails = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga 
     $FoundPartition = $null
 
     $PixelBuffer = 0
