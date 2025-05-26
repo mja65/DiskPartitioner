@@ -303,7 +303,6 @@ function Update-UI {
                     }
                     $WPF_DP_DiskGrid_Amiga.AddChild(((Get-Variable -Name ($Script:GUICurrentStatus.SelectedGPTMBRPartition+'_AmigaDisk')).value))
                     if (-not ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries)){
-                        Write-host "Wibble2"
                         $WPF_DP_DiskGrid_Amiga.UpdateLayout()
                         $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga                                
                     }                    
@@ -362,7 +361,6 @@ function Update-UI {
                 $WPF_DP_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
             }
            
-      #      $PartitionsToCheck = Get-AllGUIPartitionBoundaries -GPTMBR | Where-Object {$_.PartitionType -eq 'MBR'}
             $PartitionsToCheck = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries 
                        
             $PartitionToCheck = $PartitionsToCheck | Where-Object {$_.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition}
@@ -386,7 +384,6 @@ function Update-UI {
         else {
             if ($WPF_DP_GPTMBR_GroupBox.Visibility -eq 'Visible'){
                 $DiskSize = (Get-ConvertedSize -Size $WPF_DP_Disk_GPTMBR.DiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
-                #$PartitionsToCheck = Get-AllGUIPartitionBoundaries -GPTMBR | Where-Object {$_.PartitionType -eq 'MBR'}
                 $PartitionsToCheck = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries 
                 $DiskFreeSpaceSize = (Get-ConvertedSize -Size (($PartitionsToCheck[$PartitionsToCheck.Count-1]).BytesAvailableRight) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_SpaceatBeginning_Input.Background = 'White'
