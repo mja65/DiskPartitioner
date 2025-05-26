@@ -114,8 +114,12 @@ function Write-AmigaFilestoInterimDrive {
         
         Write-StartSubTaskMessage
         
-        if (Test-Path $Script:Settings.InterimAmigaDrives) {
-            Remove-Item "$($Script:Settings.InterimAmigaDrives)\*" -Recurse -Force -ErrorAction SilentlyContinue
+        $PathtoDelete = [System.IO.Path]::GetFullPath($Script:Settings.InterimAmigaDrives)
+
+        if (Test-Path $PathtoDelete) {
+            Show-SpinnerWhileDeleting -ScriptBlock {
+                Remove-Item $PathtoDelete -Recurse -Force -ErrorAction SilentlyContinue
+            }      
         }
     
         $Script:Settings.CurrentSubTaskNumber ++
@@ -243,6 +247,7 @@ function Write-AmigaFilestoInterimDrive {
         $Script:Settings.TotalNumberofSubTasks = 3
         $Script:Settings.CurrentSubTaskNumber = 1
         $Script:Settings.CurrentSubTaskName = 'Preparing default icon files for future use'
+        Write-StartSubTaskMessage
      
         if (-not (test-path "$DestinationPath\Emu68BootDrive" -PathType Container)){
             $null = New-Item "$DestinationPath\Emu68BootDrive" -ItemType Directory
@@ -268,7 +273,8 @@ function Write-AmigaFilestoInterimDrive {
         
         $Script:Settings.CurrentSubTaskNumber ++
         $Script:Settings.CurrentSubTaskName = 'Renaming extracted files where needed'
-     
+        Write-StartSubTaskMessage
+        
         $PathtoExtractedFilesFilestoRename = [System.IO.Path]::GetFullPath("$($Script:Settings.InterimAmigaDrives)\ADFRenameFiles")
      
         if (test-path $PathtoExtractedFilesFilestoRename){
@@ -282,7 +288,7 @@ function Write-AmigaFilestoInterimDrive {
                 if (-not (Test-Path -Path $ParentFolder -PathType Container)){
                     $null = New-Item -Path $ParentFolder -ItemType Directory
                 }
-                Write-InformationMessage -Message "Copying file `"$SourcePath`" to `"$DestinationPath`""
+#                Write-InformationMessage -Message "Copying file `"$SourcePath`" to `"$DestinationPath`""
                 $null = copy-item $SourcePath $DestinationPath
                 if ($DestinationPath.Substring($DestinationPath.Length-2) -eq ".Z"){
                     $DestinationPathtoRemove = $DestinationPath.Substring(0,$DestinationPath.Length-2)
@@ -325,7 +331,6 @@ function Write-AmigaFilestoInterimDrive {
                $DestinationFolder = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
                $DestinationFolder = $DestinationFolder.TrimEnd('\')   
                if (-not (test-path $DestinationFolder -PathType Container)){
-                   Write-InformationMessage -Message "Creating destination folder $DestinationFolder"    
                    $null = New-Item -Path $DestinationFolder -ItemType Directory   
                }
                if ($_.NewFileName -ne ""){
@@ -333,10 +338,14 @@ function Write-AmigaFilestoInterimDrive {
                }
                else {
                    $DestinationPath = $DestinationFolder
-               }    
+               }  
+              if ($_.PackageName -ne $PackageNametoUseforReporting){
+                $PackageNametoUseforReporting = $_.PackageName 
+                Write-InformationMessage -message "Copying file(s) for $PackageNametoUseforReporting"
+              }                     
                (Resolve-Path -Path $SourcePath).path | ForEach-Object {
                    $SourcePath = $_
-                   Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
+               #    Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
                    $null = Copy-Item $SourcePath  $DestinationPath -Force -Recurse
                } 
      
@@ -352,7 +361,11 @@ function Write-AmigaFilestoInterimDrive {
               if  ($_.NewFileName){
                   $DestinationPath = "$DestinationPath\$($_.NewFileName)" 
               }
-              Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
+              if ($_.PackageName -ne $PackageNametoUseforReporting){
+                $PackageNametoUseforReporting = $_.PackageName 
+                Write-InformationMessage -message "Copying file(s) for $PackageNametoUseforReporting"
+              }                  
+              #Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
               $null = Copy-Item -path $SourcePath  -Destination $DestinationPath -Force -Recurse
           }
      
@@ -402,10 +415,14 @@ function Write-AmigaFilestoInterimDrive {
               }
               else {
                   $DestinationPath = $DestinationFolder
+              }
+              if ($_.PackageName -ne $PackageNametoUseforReporting){
+                $PackageNametoUseforReporting = $_.PackageName 
+                Write-InformationMessage -message "Copying file(s) for $PackageNametoUseforReporting"
               }    
               (Resolve-Path -Path $SourcePath).path | ForEach-Object {
                   $SourcePath = $_
-                  Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
+                 # Write-InformationMessage -message "Copying file(s) from $SourcePath to $DestinationPath" 
                   $null = Copy-Item $SourcePath  $DestinationPath -Force -Recurse
               } 
           }

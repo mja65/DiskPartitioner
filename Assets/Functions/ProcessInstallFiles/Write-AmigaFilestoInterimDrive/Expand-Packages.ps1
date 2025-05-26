@@ -17,8 +17,8 @@ function Expand-Packages {
         $ListofPackages | ForEach-Object {
             $FileExtension = $_.FileDownloadName.Substring($_.FileDownloadName.Length -4,4)
             $ArchivestoExtract += [PSCustomObject]@{
-                SourceLocation = "$($Script:Settings.WebPackagesDownloadLocation)\$($_.FileDownloadName)"
-                FoldertoExtract = "$($Script:Settings.WebPackagesDownloadLocation)\$($_.FileDownloadName.Substring(0,$_.FileDownloadName.Length -4))"
+                SourceLocation = [System.IO.Path]::GetFullPath("$($Script:Settings.WebPackagesDownloadLocation)\$($_.FileDownloadName)")
+                FoldertoExtract = [System.IO.Path]::GetFullPath("$($Script:Settings.WebPackagesDownloadLocation)\$($_.FileDownloadName.Substring(0,$_.FileDownloadName.Length -4))")
                 FileExtension = $FileExtension
             }
         }
@@ -30,8 +30,8 @@ function Expand-Packages {
             $FileExtension = $_.SourceLocation.Substring($_.SourceLocation.Length -4,4)
             $DestinationFolder = "$($Script:Settings.LocalPackagesDownloadLocation)\$($FiletoExtract.substring(0,$FiletoExtract.length-4))" 
             $ArchivestoExtract += [PSCustomObject]@{
-                SourceLocation = "$($Script:Settings.LocationofAmigaFiles)\$($_.SourceLocation)" 
-                FoldertoExtract = $DestinationFolder 
+                SourceLocation = [System.IO.Path]::GetFullPath("$($Script:Settings.LocationofAmigaFiles)\$($_.SourceLocation)") 
+                FoldertoExtract = [System.IO.Path]::GetFullPath($DestinationFolder) 
                 FileExtension = $FileExtension
             }
         }
@@ -42,11 +42,22 @@ function Expand-Packages {
     Write-StartSubTaskMessage
     $Script:Settings.CurrentSubTaskNumber ++
     
-    $ArchivestoExtract | ForEach-Object {
-        if (Test-Path -Path $_.FoldertoExtract -PathType Container){
-            $null = Remove-Item $_.FoldertoExtract -Recurse -Force
+    $FilestoDelete = $ArchivestoExtract | ForEach-Object { $_.FoldertoExtract }
+
+    Show-SpinnerWhileDeleting -ScriptBlock {
+        $using:FilestoDelete | ForEach-Object {
+            if (Test-Path -Path $_ -PathType Container){
+                 $null = Remove-Item $_ -Recurse -Force
+            }
         }
     }
+
+    # $ArchivestoExtract | ForEach-Object {
+    #     Write-host "Test I should have done earlier $($_.FoldertoExtract)" 
+    #     if (Test-Path -Path $_.FoldertoExtract -PathType Container){
+    #         $null = Remove-Item $_.FoldertoExtract -Recurse -Force
+    #     }
+    # }
   
     $Script:Settings.CurrentSubTaskName = "Extracting Files from Package(s)"
     

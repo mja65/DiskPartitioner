@@ -12,10 +12,10 @@ function Expand-AmigaZFiles {
     $SevenzipPathtouse  = [System.IO.Path]::GetFullPath($Script:ExternalProgramSettings.SevenZipFilePath)
     $LogLocation = [System.IO.Path]::GetFullPath($Script:Settings.LogLocation)
 
-    $LocationofZFiles = [System.IO.Path]::GetFullPath($LocationofZFiles)
+    $LocationofZFilestouse = [System.IO.Path]::GetFullPath($LocationofZFiles)
 
     if ($MultipleDirectoryFlag){
-        $DirectoriestoDecompress = ((Get-ChildItem  -path $LocationofZFiles -Recurse -Filter '*.Z').Directory).FullName 
+        $DirectoriestoDecompress = ((Get-ChildItem  -path $LocationofZFilestouse -Recurse -Filter '*.Z').Directory).FullName 
         $UniqueDirectoriestoDecompress = $DirectoriestoDecompress | Select-Object -Unique 
         $TotalFolders = $UniqueDirectoriestoDecompress.Count
         $FoldersDone = 0
@@ -34,8 +34,8 @@ function Expand-AmigaZFiles {
         Write-Progress -Activity "Extracting .Z files" -Completed -Status "Done"
     }
     else {
-        $ListofFilestoDecompress = Get-ChildItem -Path $LocationofZFiles -Recurse -Filter '*.Z'
-        Write-InformationMessage -Message "Decompressing .Z files in location: $LocationofZFiles" 
+        $ListofFilestoDecompress = Get-ChildItem -Path $LocationofZFilestouse -Recurse -Filter '*.Z'
+        Write-InformationMessage -Message "Decompressing .Z files in location: $LocationofZFilestouse" 
         foreach ($FiletoDecompress in $ListofFilestoDecompress){
             $InputFile = $FiletoDecompress.FullName
             set-location $FiletoDecompress.DirectoryName
@@ -46,9 +46,15 @@ function Expand-AmigaZFiles {
 
     Set-Location $CurrentLocation
     
-    Write-InformationMessage -Message "Deleting .Z files in location: $LocationofZFiles"
+    Write-InformationMessage -Message "Deleting .Z files in location: $LocationofZFilestouse"
+
+    $LocationofZFilestousefordelete = "$LocationofZFilestouse\*.Z"
+
+    Show-SpinnerWhileDeleting -ScriptBlock {
+        Remove-Item $using:LocationofZFilestousefordelete -Recurse -Force -ErrorAction SilentlyContinue
+    }
     
-    Remove-Item "$LocationofZFiles\*.Z" -Recurse -Force -ErrorAction SilentlyContinue
+    #Remove-Item "$LocationofZFiles\*.Z" -Recurse -Force -ErrorAction SilentlyContinue
 
 
 }

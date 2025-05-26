@@ -7,7 +7,7 @@
             mc:Ignorable="d"
                Title="" Height="100" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center" Topmost="True" WindowStartupLocation="CenterOwner">
     <Grid Background="#FFE5E5E5">
-        <DataGrid Name="Datagrid" IsReadOnly="True"  HorizontalAlignment="Center" Margin="5,40,0,0" Height="200" VerticalAlignment="Top" HorizontalScrollBarVisibility="Auto" GridLinesVisibility="None" HorizontalGridLinesBrush="#FF505050" VerticalGridLinesBrush="#FF505050" >
+        <DataGrid Name="Datagrid" IsReadOnly="True"  HorizontalAlignment="Center" Margin="5,40,0,0" Height="200" VerticalAlignment="Top" HorizontalScrollBarVisibility="Auto" GridLinesVisibility="None" HorizontalGridLinesBrush="#FF505050" VerticalGridLinesBrush="#FF505050" AlternatingRowBackground="LightGray">
 
         </DataGrid>
         <Button x:Name="OK_Button" Content="OK" HorizontalAlignment="Center" Margin="5,5,5,5" VerticalAlignment="Bottom" Width="40"/>
