@@ -77,14 +77,14 @@ function Add-GUIPartitiontoGPTMBRDisk {
         }
     }
     if ($DefaultPartition) {
-        $NewPartition = New-GUIPartition -PartitionType $PartitionType -PartitionSubType $PartitionSubType -DefaultPartition 
+        $NewPartition = New-GUIPartition -PartitionName $NewPartitionName -PartitionType $PartitionType -PartitionSubType $PartitionSubType -DefaultPartition 
 
     }
     elseif ($ImportedPartition){
-        $NewPartition = New-GUIPartition -PartitionType $PartitionType -PartitionSubType $PartitionSubType -ImportedPartition -ImportedPartitionMethod $ImportedPartitionMethod
+        $NewPartition = New-GUIPartition -PartitionName $NewPartitionName -PartitionType $PartitionType -PartitionSubType $PartitionSubType -ImportedPartition -ImportedPartitionMethod $ImportedPartitionMethod
     }
     else{
-        $NewPartition = New-GUIPartition -PartitionType $PartitionType -PartitionSubType $PartitionSubType
+        $NewPartition = New-GUIPartition -PartitionName $NewPartitionName -PartitionType $PartitionType -PartitionSubType $PartitionSubType
     }
     
     $NewPartition.PartitionSizeBytes = $SizeBytes
@@ -174,5 +174,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
         }
 
     }
+
+    $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries =  Get-AllGUIPartitionBoundaries -GPTMBR
 
 }

@@ -20,61 +20,66 @@ function Set-GUIPartitionNewPosition {
     if ((Get-Variable -name $PartitionName).Value.CanMove -eq $false) {
         return $false
     }
-    else{
-        $PartitionBoundary = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
-    
-        if ($PartitionType -eq 'MBR'){
-            $BytestoPixelFactor = $WPF_DP_Disk_GPTMBR.BytestoPixelFactor
-        }
-        elseif ($PartitionType -eq 'Amiga'){
-            $AmigaDiskName = $PartitionName.Substring(0,($PartitionName.IndexOf('_AmigaDisk_Partition_')+10))
-            $BytestoPixelFactor = (Get-Variable -name $AmigaDiskName).Value.BytestoPixelFactor 
-        }
-    
-        if ($AmountMovedPixels){
-            if ($AmountMovedPixels -gt 0){
-                # Write-debug "Available bytes Right is :$($PartitionBoundary.BytesAvailableRight) $($PartitionBoundary.PixelsAvailableRight)"
-                if (($BytestoPixelFactor*$AmountMovedPixels) -gt $PartitionBoundary.BytesAvailableRight) {
-                    $AmountMovedPixels = $PartitionBoundary.BytesAvailableRight/$BytestoPixelFactor
-                    
-                }
-            }
-            elseif ($AmountMovedPixels -lt 0){
-                # Write-debug "Available bytes left is: $($PartitionBoundary.BytesAvailableLeft). Available pixels left is: $($PartitionBoundary.PixelsAvailableLeft)"
-                if (($BytestoPixelFactor*$AmountMovedPixels*-1) -gt $PartitionBoundary.BytesAvailableLeft) {
-                    $AmountMovedPixels = ($PartitionBoundary.BytesAvailableLeft/$BytestoPixelFactor*-1)
-                }
-            }
-            $AmountMovedBytes = $BytestoPixelFactor*$AmountMovedPixels
 
-            # if ($PartitionType -eq 'MBR'){
-            #     $AmountMovedBytes = Get-MBRNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
-            # }
-            # elseif ($PartitionType -eq 'Amiga'){
-            #     $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
-            # }
+    $PartitionBoundary = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
 
-        }
-        elseif ($AmountMovedBytes){
-            # if ($PartitionType -eq 'MBR'){
-            #     $AmountMovedBytes = Get-MBRNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
-            # }
-            # elseif ($PartitionType -eq 'Amiga'){
-            #     $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
-            # }
-            $AmountMovedPixels = $AmountMovedBytes/$BytestoPixelFactor
-            # Write-debug "Moving by: $AmountMovedPixels pixels"
-        }
-       
-        $AmounttoSetLeft = (Get-Variable -Name $PartitionName).value.Margin.Left + $AmountMovedPixels
-            
-        (Get-Variable -Name $PartitionName).value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
-        (Get-Variable -Name $PartitionName).value.StartingPositionBytes = (Get-Variable -Name $PartitionName).value.StartingPositionBytes + $AmountMovedBytes
-        if ($PartitionType -eq 'MBR'){
-            (Get-Variable -Name $PartitionName).value.StartingPositionSector = (Get-Variable -Name $PartitionName).value.StartingPositionBytes/$Script:Settings.MBRSectorSizeBytes
-        }
-        return $true
+    if ($PartitionType -eq 'MBR'){
+        $BytestoPixelFactor = $WPF_DP_Disk_GPTMBR.BytestoPixelFactor
+    }
+    elseif ($PartitionType -eq 'Amiga'){
+        $AmigaDiskName = $PartitionName.Substring(0,($PartitionName.IndexOf('_AmigaDisk_Partition_')+10))
+        $BytestoPixelFactor = (Get-Variable -name $AmigaDiskName).Value.BytestoPixelFactor 
     }
 
+    if ($AmountMovedPixels){
+        if ($AmountMovedPixels -gt 0){
+            # Write-debug "Available bytes Right is :$($PartitionBoundary.BytesAvailableRight) $($PartitionBoundary.PixelsAvailableRight)"
+            if (($BytestoPixelFactor*$AmountMovedPixels) -gt $PartitionBoundary.BytesAvailableRight) {
+                $AmountMovedPixels = $PartitionBoundary.BytesAvailableRight/$BytestoPixelFactor
+                
+            }
+        }
+        elseif ($AmountMovedPixels -lt 0){
+            # Write-debug "Available bytes left is: $($PartitionBoundary.BytesAvailableLeft). Available pixels left is: $($PartitionBoundary.PixelsAvailableLeft)"
+            if (($BytestoPixelFactor*$AmountMovedPixels*-1) -gt $PartitionBoundary.BytesAvailableLeft) {
+                $AmountMovedPixels = ($PartitionBoundary.BytesAvailableLeft/$BytestoPixelFactor*-1)
+            }
+        }
+        $AmountMovedBytes = $BytestoPixelFactor*$AmountMovedPixels
 
+        # if ($PartitionType -eq 'MBR'){
+        #     $AmountMovedBytes = Get-MBRNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+        # }
+        # elseif ($PartitionType -eq 'Amiga'){
+        #     $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+        # }
+
+    }
+    elseif ($AmountMovedBytes){
+        # if ($PartitionType -eq 'MBR'){
+        #     $AmountMovedBytes = Get-MBRNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+        # }
+        # elseif ($PartitionType -eq 'Amiga'){
+        #     $AmountMovedBytes = Get-AmigaNearestSizeBytes -SizeBytes $AmountMovedBytes -RoundDown
+        # }
+        $AmountMovedPixels = $AmountMovedBytes/$BytestoPixelFactor
+        # Write-debug "Moving by: $AmountMovedPixels pixels"
+    }
+   
+    $AmounttoSetLeft = (Get-Variable -Name $PartitionName).value.Margin.Left + $AmountMovedPixels
+        
+    (Get-Variable -Name $PartitionName).value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
+    (Get-Variable -Name $PartitionName).value.StartingPositionBytes = (Get-Variable -Name $PartitionName).value.StartingPositionBytes + $AmountMovedBytes
+    if ($PartitionType -eq 'MBR'){
+        (Get-Variable -Name $PartitionName).value.StartingPositionSector = (Get-Variable -Name $PartitionName).value.StartingPositionBytes/$Script:Settings.MBRSectorSizeBytes
+    }
+    if ($PartitionType -eq 'Amiga'){
+        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga            
+    }
+    elseif ($PartitionType -eq 'MBR'){
+        $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -GPTMBR
+    }
+         
+    return $true
+    
 }

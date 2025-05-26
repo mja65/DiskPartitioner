@@ -1,5 +1,6 @@
 function New-GUIPartition {
     param (
+        $PartitionName,
         $PartitionType,
         $PartitionSubType,
         [switch]$DefaultPartition,
@@ -58,6 +59,7 @@ function New-GUIPartition {
     $NewPartition = [Windows.Markup.XamlReader]::Load( $reader)
 
     $NewPartition | Add-Member -NotePropertyMembers @{
+        PartitionName = $PartitionName
         VolumeName = $null
         CanRenameVolume = $null
         ImportedPartition = $false

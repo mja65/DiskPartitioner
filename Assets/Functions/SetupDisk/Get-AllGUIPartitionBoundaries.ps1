@@ -24,6 +24,7 @@ function Get-AllGUIPartitionBoundaries {
      
             $AllPartitionBoundaries_MBR.add([PSCustomObject]@{
                 PartitionName = $_.Name
+                Partition = $_.Value
                 PartitionType = $PartitionType
                 PartitionSubType = $_.Value.PartitionSubType
                 ImportedPartition = $_.Value.ImportedPartition
@@ -111,6 +112,7 @@ function Get-AllGUIPartitionBoundaries {
             $AmigaDiskName = ($_.Name.Substring(0,($_.Name.IndexOf('_AmigaDisk_')+10)))
             $AllPartitionBoundaries_Amiga_Preliminary.add([PSCustomObject]@{
                 PartitionName = $_.Name
+                Partition = $_.Value
                 PartitionType = $PartitionType
                 ImportedPartition = $_.Value.ImportedPartition
                 ImportedPartitionMethod = $_.Value.ImportedPartitionMethod

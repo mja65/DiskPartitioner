@@ -1,17 +1,13 @@
 $WPF_DP_Button_RemoveFreeSpace.add_click({
-    $PartitionstoAdjust = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'MBR'} 
-        
-    $ExpectedPartitionStartingPosition = 0
-    
-    $PartitionstoAdjust | ForEach-Object {
-        $DifferencetoStartingPostition = $ExpectedPartitionStartingPosition - $_.StartingPositionBytes 
-        if ($DifferencetoStartingPostition -lt 0){
-            Set-GUIPartitionNewPosition -PartitionName $_.PartitionName -PartitionType 'MBR' -AmountMovedBytes $DifferencetoStartingPostition
-        }
-        $ExpectedPartitionStartingPosition += (Get-Variable -Name $_.PartitionName).value.PartitionSizeBytes
-    }
+
+    Remove-GPTMBRFreeSpaceBetweenPartitions
     
     update-ui -FreeSpaceAlert
+
+})
+
+
+ 
     
     # $EndingPositionBytesLastPartition = $null
     # foreach ($Partition in $PartitionstoAdjust){        
@@ -27,5 +23,4 @@ $WPF_DP_Button_RemoveFreeSpace.add_click({
     #     }
     #     $EndingPositionBytesLastPartition = (Get-Variable -Name $Partition.PartitionName).value.StartingPositionBytes + (Get-Variable -Name $Partition.PartitionName).value.PartitionSizeBytes
     # }
-})
 

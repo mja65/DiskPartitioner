@@ -71,13 +71,13 @@ function Add-GUIPartitiontoAmigaDisk {
     # Write-debug "New Partition Name is: $NewPartitionName "
 
     if ($DefaultPartition -eq $true){
-        Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -DefaultPartition -PartitionType 'Amiga' -PartitionTypeAmiga $PartitionTypeAmiga)
+        Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -PartitionName $NewPartitionName -DefaultPartition -PartitionType 'Amiga' -PartitionTypeAmiga $PartitionTypeAmiga)
     }
     elseif ($ImportedPartition){
-        Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -PartitionType 'Amiga' -ImportedPartition -ImportedPartitionMethod $ImportedPartitionMethod)
+        Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -PartitionName $NewPartitionName -PartitionType 'Amiga' -ImportedPartition -ImportedPartitionMethod $ImportedPartitionMethod)
     }
     else {
-        Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -PartitionType 'Amiga')
+        Set-Variable -name $NewPartitionName -Scope script -value (New-GUIPartition -PartitionName $NewPartitionName -PartitionType 'Amiga')
     }
 
     if ($ImportedFilesPath){
@@ -130,5 +130,7 @@ function Add-GUIPartitiontoAmigaDisk {
     if (-not ($LoadSettings)){
         (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber ++
     }
-       
+    
+    $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
+
 }

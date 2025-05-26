@@ -215,14 +215,20 @@ function Set-GUIPartitionNewSize {
         (Get-Variable -Name $PartitionName).value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
     }
     
-        $TotalColumns = (Get-Variable -name $PartitionName).Value.ColumnDefinitions.Count-1
-        for ($i = 0; $i -le $TotalColumns; $i++) {
-            if  ((Get-Variable -name $PartitionName).Value.ColumnDefinitions[$i].Name -eq 'FullSpace'){
-                (Get-Variable -name $PartitionName).Value.ColumnDefinitions[$i].Width = $NewSizePixels 
-            } 
-        }
+    $TotalColumns = (Get-Variable -name $PartitionName).Value.ColumnDefinitions.Count-1
+    for ($i = 0; $i -le $TotalColumns; $i++) {
+        if  ((Get-Variable -name $PartitionName).Value.ColumnDefinitions[$i].Name -eq 'FullSpace'){
+            (Get-Variable -name $PartitionName).Value.ColumnDefinitions[$i].Width = $NewSizePixels 
+        } 
+    }
     
-
+    if ($PartitionType -eq 'Amiga'){
+        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga            
+    }
+    elseif ($PartitionType -eq 'MBR'){
+        $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries =  Get-AllGUIPartitionBoundaries -GPTMBR
+    }        
+        
     return $true
     
 }

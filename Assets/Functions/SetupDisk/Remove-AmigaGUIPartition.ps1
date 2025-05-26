@@ -19,6 +19,7 @@ function Remove-AmigaGUIPartition {
     
         Remove-Variable -Scope Script -Name $PartitionName
         $Script:GUICurrentStatus.SelectedAmigaPartition = $null
+        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
         return $true
     }
 
