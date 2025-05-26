@@ -281,7 +281,7 @@ function Update-UI {
     
             if ($Script:GUICurrentStatus.SelectedGPTMBRPartition){
                 $MBRPartitionCounter = 1
-                Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'MBR'} | ForEach-Object {
+                $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries | ForEach-Object {
                     If ($Script:GUICurrentStatus.SelectedGPTMBRPartition -eq $_.PartitionName){
                         $WPF_DP_SelectedMBRPartition_Value.text = "Partition #$MBRPartitionCounter"
                     }
@@ -357,7 +357,8 @@ function Update-UI {
                 $WPF_DP_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
             }
            
-            $PartitionsToCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'MBR'}
+      #      $PartitionsToCheck = Get-AllGUIPartitionBoundaries -GPTMBR | Where-Object {$_.PartitionType -eq 'MBR'}
+            $PartitionsToCheck = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries 
                        
             $PartitionToCheck = $PartitionsToCheck | Where-Object {$_.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition}
             $SpaceatBeginning = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableLeft -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
@@ -380,7 +381,8 @@ function Update-UI {
         else {
             if ($WPF_DP_GPTMBR_GroupBox.Visibility -eq 'Visible'){
                 $DiskSize = (Get-ConvertedSize -Size $WPF_DP_Disk_GPTMBR.DiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
-                $PartitionsToCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'MBR'}
+                #$PartitionsToCheck = Get-AllGUIPartitionBoundaries -GPTMBR | Where-Object {$_.PartitionType -eq 'MBR'}
+                $PartitionsToCheck = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries 
                 $DiskFreeSpaceSize = (Get-ConvertedSize -Size (($PartitionsToCheck[$PartitionsToCheck.Count-1]).BytesAvailableRight) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_SpaceatBeginning_Input.Background = 'White'
                 $WPF_DP_SpaceatBeginning_Input.Text =''
@@ -397,7 +399,7 @@ function Update-UI {
         }
         if ($Script:GUICurrentStatus.SelectedAmigaPartition){
                 $RDBPartitionCounter = 1
-                Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition} | ForEach-Object {
+                $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition} | ForEach-Object {
                     If ($Script:GUICurrentStatus.SelectedAmigaPartition -eq $_.PartitionName){
                         $WPF_DP_SelectedAmigaPartition_Value.text = "Partition #$RDBPartitionCounter"
                     }
@@ -428,7 +430,7 @@ function Update-UI {
                 $WPF_DP_Amiga_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
             }
 
-            $PartitionsToCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'Amiga' -and $_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition}
+            $PartitionsToCheck = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition}
 
             $PartitionToCheck = $PartitionsToCheck | Where-Object {$_.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition}
             $SpaceatBeginning = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableLeft -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
@@ -519,13 +521,11 @@ function Update-UI {
     If ($FreeSpaceAlert){
         $FreeSpaceBytes_MBR = 0
         $FreeSpaceBytes_Amiga = 0
-        Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | ForEach-Object {
-            if ($_.PartitionType -eq 'MBR'){
-                $FreeSpaceBytes_MBR += $_.BytesAvailableLeft
-           }
-           elseif ($_.PartitionType -eq 'Amiga'){
-               $FreeSpaceBytes_Amiga += $_.BytesAvailableLeft               
-           }
+        $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries | ForEach-Object {
+            $FreeSpaceBytes_MBR += $_.BytesAvailableLeft
+        }
+        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | ForEach-Object {
+            $FreeSpaceBytes_Amiga += $_.BytesAvailableLeft               
         }
 
         If ($FreeSpaceBytes_MBR -eq 0){
