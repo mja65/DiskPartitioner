@@ -302,6 +302,11 @@ function Update-UI {
                         $WPF_DP_DiskGrid_Amiga.Children.Remove($WPF_DP_DiskGrid_Amiga.Children[$i])
                     }
                     $WPF_DP_DiskGrid_Amiga.AddChild(((Get-Variable -Name ($Script:GUICurrentStatus.SelectedGPTMBRPartition+'_AmigaDisk')).value))
+                    if (-not ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries)){
+                        Write-host "Wibble2"
+                        $WPF_DP_DiskGrid_Amiga.UpdateLayout()
+                        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga                                
+                    }                    
                 }
                 else{
                     #$WPF_DP_DiskGrid_Amiga.Visibility ='Hidden'

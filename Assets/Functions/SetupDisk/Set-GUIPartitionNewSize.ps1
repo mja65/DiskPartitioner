@@ -221,12 +221,17 @@ function Set-GUIPartitionNewSize {
             (Get-Variable -name $PartitionName).Value.ColumnDefinitions[$i].Width = $NewSizePixels 
         } 
     }
-    
     if ($PartitionType -eq 'Amiga'){
-        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga            
+        if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){      
+            $WPF_DP_DiskGrid_Amiga.UpdateLayout()
+            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
+        }
+
     }
     elseif ($PartitionType -eq 'MBR'){
+        $WPF_DP_DiskGrid_GPTMBR.UpdateLayout()
         $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries =  Get-AllGUIPartitionBoundaries -GPTMBR
+
     }        
         
     return $true

@@ -25,7 +25,7 @@ function Add-GUIPartitiontoAmigaDisk {
         $Mask
     )
     
-    # $AmigaDiskName = 'WPF_DP_Partition_ID76_2_AmigaDisk'
+    # $AmigaDiskName = 'WPF_DP_Partition_MBR_2_AmigaDisk'
     # $WPF_DP_Partition_ID76_1_AmigaDisk_Partition_1
     # $PartitionNameNextto = 'WPF_DP_Partition_ID76_1_AmigaDisk_Partition_1'
     # $AddType = 'AtEnd'
@@ -131,6 +131,12 @@ function Add-GUIPartitiontoAmigaDisk {
         (Get-Variable -Name $AmigaDiskName).Value.NextPartitionNumber ++
     }
     
-    $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
-
+    if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){     
+        Write-host "Wibble"
+        $WPF_DP_DiskGrid_Amiga.UpdateLayout()
+        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
+    }
+    
 }
+
+

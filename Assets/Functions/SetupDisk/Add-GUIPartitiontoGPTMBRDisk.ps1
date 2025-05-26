@@ -174,7 +174,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
         }
 
     }
-
+    $WPF_DP_DiskGrid_GPTMBR.UpdateLayout()
     $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries =  Get-AllGUIPartitionBoundaries -GPTMBR
 
 }

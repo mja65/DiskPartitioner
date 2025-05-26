@@ -4,8 +4,8 @@ function Get-HighlightedGUIPartition {
         $MouseY
     )
     
-    # $MouseX = 500
-    # $MouseY = 520
+    # $MouseX = 660
+    # $MouseY = 613
 
     $PartitionInformationtoReturn = [PSCustomObject]@{
         DiskName = $null
@@ -14,8 +14,10 @@ function Get-HighlightedGUIPartition {
         PartitionSubType = $null
         ResizeZone = $null
     }
-    
-    $PartitionDetails = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga 
+
+   # $PartitionDetails = Get-AllGUIPartitionBoundaries -Amiga -GPTMBR 
+    $PartitionDetails = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries + $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries)
+
     $FoundPartition = $null
 
     $PixelBuffer = 0
@@ -62,6 +64,7 @@ function Get-HighlightedGUIPartition {
                         elseif ($Partition.PartitionType -eq 'Amiga'){
                             $PartitionInformationtoReturn.DiskName =  ($Partition.PartitionName.Substring(0,($Partition.PartitionName.IndexOf('_AmigaDisk_Partition_')+10)))
                         }
+                       # Write-host "Highlighted partition is $PartitionInformationtoReturn"
                         return $PartitionInformationtoReturn
                 }
             }

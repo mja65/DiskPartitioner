@@ -19,8 +19,12 @@ function Remove-AmigaGUIPartition {
     
         Remove-Variable -Scope Script -Name $PartitionName
         $Script:GUICurrentStatus.SelectedAmigaPartition = $null
-        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
-        return $true
+        
+        if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){      
+            $WPF_DP_DiskGrid_Amiga.UpdateLayout()
+            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
+        }               
+
     }
 
 }
