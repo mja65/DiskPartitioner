@@ -40,7 +40,7 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
         $CanAddPartition = (Get-Variable -Name $AmigaDiskName).value.CanAddPartition
         $EmptyAmigaDisk = $false
         If (($AddType -eq "AtEnd") -and (-not ($Script:GUICurrentStatus.SelectedAmigaPartition))){
-            $PartitionNexttotouse = (Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -match $AmigaDiskName}).PartitionName | Select-Object -Last 1
+            $PartitionNexttotouse = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName}).PartitionName | Select-Object -Last 1
         }
         else {
             $PartitionNexttotouse = $Script:GUICurrentStatus.SelectedAmigaPartition

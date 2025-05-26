@@ -407,7 +407,7 @@ function Write-AmigaFilestoInterimDrive {
               $DestinationFolder = "$($Script:Settings.InterimAmigaDrives)\$($_.DrivetoInstall)\$($_.LocationtoInstall)"
               $DestinationFolder = $DestinationFolder.TrimEnd('\')   
               if (-not (test-path $DestinationFolder -PathType Container)){
-                  Write-InformationMessage -Message "Creating destination folder $DestinationFolder"    
+             #     Write-InformationMessage -Message "Creating destination folder $DestinationFolder"    
                   $null = New-Item -Path $DestinationFolder -ItemType Directory   
               }
               if ($_.NewFileName -ne ""){

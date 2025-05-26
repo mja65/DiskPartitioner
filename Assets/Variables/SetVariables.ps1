@@ -121,7 +121,7 @@ $null = $Script:Settings.ProgressBarMarkers.Add([PSCustomObject]@{
     NewDiskorImage = [int]1
     DiskStructures = [int]10
     CopyImportedFiles = [int]$null
-    WriteFilestoDisk = [int]4535
+    WriteFilestoDisk = [int]6795
     AdjustParametersonImportedRDBPartitions = [int]$null
 })
 

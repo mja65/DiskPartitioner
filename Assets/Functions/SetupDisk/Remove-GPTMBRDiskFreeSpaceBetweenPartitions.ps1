@@ -3,7 +3,7 @@ function Remove-GPTMBRFreeSpaceBetweenPartitions {
        
     )
     
-    $PartitionstoAdjust = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'MBR'} 
+    $PartitionstoAdjust = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
 
     $ExpectedPartitionStartingPosition = 0
         

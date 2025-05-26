@@ -146,7 +146,7 @@ function Write-ImageCreation {
 
      if (($OutputTypetoUse -eq "Physical Disk") -or ($OutputTypetoUse -eq "VHDImage")){
         $Script:Settings.CurrentSubTaskNumber ++
-        $Script:Settings.CurrentTaskName = "Processing Commands on Disk (this may take a few minutes depending on the size of your disk)"
+        $Script:Settings.CurrentSubTaskName = "Processing Commands on Disk (this may take a few minutes depending on the size of your disk)"
 
         Write-StartSubTaskMessage
 

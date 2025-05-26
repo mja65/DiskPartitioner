@@ -13,11 +13,11 @@ function Get-AmigaDiskFreeSpace {
     #$PartitionstoCheck = [System.Collections.Generic.List[PSCustomObject]]::New()
     
     if ($Disk.DiskType -eq 'MBR'){
-        $PartitionstoCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq $Disk.DiskType} 
+        $PartitionstoCheck = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries | Where-Object {$_.PartitionType -eq $Disk.DiskType} 
     }
     elseif ($Disk.DiskType -eq 'Amiga'){
         $ID76Partition = $AmigaDiskName.Substring(0,$AmigaDiskName.IndexOf('_AmigaDisk'))  
-        $PartitionstoCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq $Disk.DiskType -and $_.PartitionName -match $ID76Partition} 
+        $PartitionstoCheck = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionType -eq $Disk.DiskType -and $_.PartitionName -match $ID76Partition} 
     }
            
     if ($Position -eq 'AtEnd'){

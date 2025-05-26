@@ -3,7 +3,7 @@ function Remove-AmigaDiskFreeSpaceBetweenPartitions {
 
     )
     
-    $PartitionstoAdjust = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName -and $_.PartitionType -eq 'Amiga'} | Sort-Object {[int64]$_.StartingPositionBytes}
+    $PartitionstoAdjust = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName} | Sort-Object {[int64]$_.StartingPositionBytes}
 
     $EndingPositionBytesLastPartition = $null
    

@@ -3,7 +3,7 @@ function Set-RevisedDiskValues {
         $SizeBytes
     )
     
-    $PartitionsToCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionType -eq 'MBR'}
+    $PartitionsToCheck = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
     $DiskFreeSpaceSize = (Get-ConvertedSize -Size (($PartitionsToCheck[$PartitionsToCheck.Count-1]).BytesAvailableRight) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2).size
     $NewSizeBytes = $SizeBytes
     if ( $NewSizeBytes -ge ($WPF_DP_Disk_GPTMBR.DiskSizeBytes -$DiskFreeSpaceSize)){
@@ -25,4 +25,8 @@ function Set-RevisedDiskValues {
             }               
         }
     }   
+
+    $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
+    $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries =  Get-AllGUIPartitionBoundaries -GPTMBR
+
 }
