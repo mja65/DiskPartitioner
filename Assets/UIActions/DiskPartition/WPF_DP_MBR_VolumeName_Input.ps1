@@ -15,8 +15,8 @@ $WPF_DP_MBR_VolumeName_Input.add_LostFocus({
     
     if ($WPF_DP_MBR_VolumeName_Input.ValueWhenEnterorButtonPushed -ne $WPF_DP_MBR_VolumeName_Input.Text -and $WPF_DP_MBR_VolumeName_Input.InputEntryChanged){
         # Write-debug 'Lost Focus - Performing action for WPF_DP_MBR_VolumeName_Input'    
-        (get-variable -name $script:GUICurrentStatus.SelectedGPTMBRPartition).value.volumeName = $WPF_DP_MBR_VolumeName_Input.Text
-        Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedGPTMBRPartition -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
+        $Script:GUICurrentStatus.SelectedGPTMBRPartition.volumeName = $WPF_DP_MBR_VolumeName_Input.Text
+        Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
 
 
     }
@@ -40,8 +40,8 @@ $WPF_DP_MBR_VolumeName_Input.Add_KeyDown({
             # Write-debug "WPF_DP_MBR_VolumeName_Input: Recording value of: $($WPF_DP_MBR_VolumeName_Input.ValueWhenEnterorButtonPushed) and actioning. EntryType is: $($WPF_DP_MBR_VolumeName_Input.EntryType) InputEntry is: $($WPF_DP_MBR_VolumeName_Input.InputEntry) InputEntryChanged is: $($WPF_DP_MBR_VolumeName_Input.InputEntryChanged) InputEntryInvalid is: $($WPF_DP_MBR_VolumeName_Input.InputEntryInvalid) InputEntryScaleChanged is: $($WPF_DP_MBR_VolumeName_Input.InputEntryScaleChanged) ValueWhenEnterorButtonPushed is: $($WPF_DP_MBR_VolumeName_Input.ValueWhenEnterorButtonPushed)" 
 
             $WPF_DP_MBR_VolumeName_Input.InputEntry = $true
-            (get-variable -name $script:GUICurrentStatus.SelectedGPTMBRPartition).value.volumeName = $WPF_DP_MBR_VolumeName_Input.Text
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedGPTMBRPartition -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
+            $Script:GUICurrentStatus.SelectedGPTMBRPartition.volumeName = $WPF_DP_MBR_VolumeName_Input.Text
+            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
 
         }
         else {

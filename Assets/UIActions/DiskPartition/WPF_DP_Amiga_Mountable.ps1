@@ -1,7 +1,7 @@
 $WPF_DP_Amiga_Mountable.add_checked({
     if ($Script:GUICurrentStatus.SelectedAmigaPartition){
-        if ((Get-Variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).Value.NoMount -eq $false){
-            (Get-Variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).Value.NoMount = $false
+        if ($Script:GUICurrentStatus.SelectedAmigaPartition.NoMount -eq $false){
+            $Script:GUICurrentStatus.SelectedAmigaPartition.NoMount = $false
         }
     }
 
@@ -9,8 +9,8 @@ $WPF_DP_Amiga_Mountable.add_checked({
 
 $WPF_DP_Amiga_Mountable.add_unchecked({
     if ($Script:GUICurrentStatus.SelectedAmigaPartition){
-        if ((Get-Variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).Value.NoMount -eq $true){
-            (Get-Variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).Value.NoMount = $true
+        if ($Script:GUICurrentStatus.SelectedAmigaPartition.NoMount -eq $true){
+            $Script:GUICurrentStatus.SelectedAmigaPartition.NoMount = $true
         }
     }
 

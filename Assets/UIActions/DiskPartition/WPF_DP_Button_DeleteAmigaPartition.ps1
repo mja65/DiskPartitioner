@@ -1,6 +1,6 @@
 $WPF_DP_Button_DeleteAmigaPartition.add_click({
     if ($Script:GUICurrentStatus.SelectedAmigaPartition){
-        if ((Get-Variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.DefaultAmigaWorkbenchPartition -eq $true){
+        if ($Script:GUICurrentStatus.SelectedAmigaPartition.DefaultAmigaWorkbenchPartition -eq $true){
 $MessageBody = 
             @"
             You have selected the default Amiga Partition for deletion! If you really want to do this you will not be installing ANY OS files! 

@@ -1,13 +1,13 @@
 function Set-GUIPartitionNewPosition {
     param (
-        $PartitionName,
+        $Partition,
         $PartitionType,
         $AmountMovedPixels,
         $AmountMovedBytes
     )
     
   
-    If (-not ($PartitionName)){
+    If (-not ($Partition)){
         return
     }
 
@@ -17,17 +17,17 @@ function Set-GUIPartitionNewPosition {
     
     # Write-debug "Function Set-GUIPartitionNewPosition PartitionName:$PartitionName AmountMovedBytes:$AmountMovedBytes AmountMovedPixels:$AmountMovedPixels"
     
-    if ((Get-Variable -name $PartitionName).Value.CanMove -eq $false) {
+    if ($Partition.CanMove -eq $false) {
         return $false
     }
 
-    $PartitionBoundary = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
+    $PartitionBoundary = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -eq $Partition.PartitionName}
 
     if ($PartitionType -eq 'MBR'){
         $BytestoPixelFactor = $WPF_DP_Disk_GPTMBR.BytestoPixelFactor
     }
     elseif ($PartitionType -eq 'Amiga'){
-        $AmigaDiskName = $PartitionName.Substring(0,($PartitionName.IndexOf('_AmigaDisk_Partition_')+10))
+        $AmigaDiskName = $Partition.PartitionName.Substring(0,($Partition.PartitionName.IndexOf('_AmigaDisk_Partition_')+10))
         $BytestoPixelFactor = (Get-Variable -name $AmigaDiskName).Value.BytestoPixelFactor 
     }
 
@@ -66,12 +66,12 @@ function Set-GUIPartitionNewPosition {
         # Write-debug "Moving by: $AmountMovedPixels pixels"
     }
    
-    $AmounttoSetLeft = (Get-Variable -Name $PartitionName).value.Margin.Left + $AmountMovedPixels
+    $AmounttoSetLeft = $Partition.Margin.Left + $AmountMovedPixels
         
-    (Get-Variable -Name $PartitionName).value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
-    (Get-Variable -Name $PartitionName).value.StartingPositionBytes = (Get-Variable -Name $PartitionName).value.StartingPositionBytes + $AmountMovedBytes
+    $Partition.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
+    $Partition.StartingPositionBytes = $Partition.StartingPositionBytes + $AmountMovedBytes
     if ($PartitionType -eq 'MBR'){
-        (Get-Variable -Name $PartitionName).value.StartingPositionSector = (Get-Variable -Name $PartitionName).value.StartingPositionBytes/$Script:Settings.MBRSectorSizeBytes
+        $Partition.StartingPositionSector = $Partition.StartingPositionBytes/$Script:Settings.MBRSectorSizeBytes
     }
     $WPF_MainWindow.UpdateLayout()
 

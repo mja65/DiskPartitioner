@@ -5,12 +5,12 @@ $WPF_DP_Button_ImportFiles.add_click({
     else {
         $Script:GUICurrentStatus.FileBoxOpen = $true
         if ($Script:GUICurrentStatus.SelectedAmigaPartition){
-            $PartitionSizeByes = (get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.PartitionSizeBytes 
-            if ((Get-Variable -Name $Script:GUICurrentStatus.SelectedAmigaPartition).Value.DefaultAmigaWorkbenchPartition -eq $true){
+            $PartitionSizeByes = $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionSizeBytes 
+            if ($Script:GUICurrentStatus.SelectedAmigaPartition.DefaultAmigaWorkbenchPartition -eq $true){
                $Script:GUICurrentStatus.FileBoxOpen = $false
                 Show-WarningorError -Msg_Header 'Default Workbench Partition Selected' -Msg_Body 'Cannot transfer files to the default Workbench partition!' -BoxTypeError -ButtonType_OK
             }
-            elseif ((Get-Variable -Name $Script:GUICurrentStatus.SelectedAmigaPartition).Value.CanImportFiles -eq $false){
+            elseif ($Script:GUICurrentStatus.SelectedAmigaPartition.CanImportFiles -eq $false){
                 $Script:GUICurrentStatus.FileBoxOpen = $false
                 Show-WarningorError -Msg_Header 'Imported Partition Selected' -Msg_Body 'Cannot transfer files to the this partition!' -BoxTypeError -ButtonType_OK
             }
@@ -23,8 +23,8 @@ $WPF_DP_Button_ImportFiles.add_click({
                         Show-WarningorError -Msg_Header 'Insufficient Space' -Msg_Body 'Insufficient space on partition for files!' -BoxTypeError -ButtonType_OK
                     }
                     else {
-                        (get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesPath = $PathtoPopulate 
-                        (get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesSpaceBytes = $SpaceofFolderBytes
+                        $Script:GUICurrentStatus.SelectedAmigaPartition.ImportedFilesPath = $PathtoPopulate 
+                        $Script:GUICurrentStatus.SelectedAmigaPartition.ImportedFilesSpaceBytes = $SpaceofFolderBytes
                         $Script:GUICurrentStatus.FileBoxOpen = $false
                         Update-UI -UpdateInputBoxes
                     }

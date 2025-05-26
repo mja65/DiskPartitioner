@@ -15,8 +15,8 @@ $WPF_DP_Amiga_Buffers_Input.add_LostFocus({
     
     if ($WPF_DP_Amiga_Buffers_Input.ValueWhenEnterorButtonPushed -ne $WPF_DP_Amiga_Buffers_Input.Text -and $WPF_DP_Amiga_Buffers_Input.InputEntryChanged){
         # Write-debug 'Lost Focus - Performing action for WPF_DP_Amiga_Buffers_Input'   
-        (get-variable -name $script:GUICurrentStatus.SelectedAmigaPartition).value.Buffers = $WPF_DP_Amiga_Buffers_Input.Text
-        Update-UITextbox -NameofPartition $script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'Buffers' -CanChangeParameter 'CanChangeBuffers'
+        $Script:GUICurrentStatus.SelectedAmigaPartition.Buffers = $WPF_DP_Amiga_Buffers_Input.Text
+        Update-UITextbox -NameofPartition $script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'Buffers' -CanChangeParameter 'CanChangeBuffers'
 
 
     }
@@ -39,8 +39,8 @@ $WPF_DP_Amiga_Buffers_Input.Add_KeyDown({
             $WPF_DP_Amiga_Buffers_Input.ValueWhenEnterorButtonPushed = $WPF_DP_Amiga_Buffers_Input.Text
             # Write-debug "WPF_DP_Amiga_Buffers_Input: Recording value of: $($WPF_DP_Amiga_Buffers_Input.ValueWhenEnterorButtonPushed) and actioning. EntryType is: $($WPF_DP_Amiga_Buffers_Input.EntryType) InputEntry is: $($WPF_DP_Amiga_Buffers_Input.InputEntry) InputEntryChanged is: $($WPF_DP_Amiga_Buffers_Input.InputEntryChanged) InputEntryInvalid is: $($WPF_DP_Amiga_Buffers_Input.InputEntryInvalid) InputEntryScaleChanged is: $($WPF_DP_Amiga_Buffers_Input.InputEntryScaleChanged) ValueWhenEnterorButtonPushed is: $($WPF_DP_Amiga_Buffers_Input.ValueWhenEnterorButtonPushed)" 
             $WPF_DP_Amiga_Buffers_Input.InputEntry = $true
-            (get-variable -name $script:GUICurrentStatus.SelectedAmigaPartition).value.Buffers = $WPF_DP_Amiga_Buffers_Input.Text
-            Update-UITextbox -NameofPartition $script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'Buffers' -CanChangeParameter 'CanChangeBuffers'
+            $Script:GUICurrentStatus.SelectedAmigaPartition.Buffers = $WPF_DP_Amiga_Buffers_Input.Text
+            Update-UITextbox -NameofPartition $script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'Buffers' -CanChangeParameter 'CanChangeBuffers'
 
         }
         else {

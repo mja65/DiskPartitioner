@@ -35,7 +35,7 @@ $WPF_DP_Button_AddNewGPTMBRPartition.add_click({
             elseif ($PartitionSubtypetouse -eq 'ID76'){
                 $MinimumRequiredSpace = $Script:SDCardMinimumsandMaximums.ID76Minimum
             }
-            $AvailableSpace = (Get-MBRDiskFreeSpace -Disk $WPF_DP_Disk_GPTMBR -Position $AddType -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition)
+            $AvailableSpace = (Get-MBRDiskFreeSpace -Disk $WPF_DP_Disk_GPTMBR -Position $AddType -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName)
             $AvailableSpace = (Get-MBRNearestSizeBytes -Rounddown $AvailableSpace)
             $MinimumRequiredSpace = (Get-MBRNearestSizeBytes -Roundup $MinimumRequiredSpace)
             if ($AvailableSpace -lt $MinimumRequiredSpace){
@@ -45,7 +45,7 @@ $WPF_DP_Button_AddNewGPTMBRPartition.add_click({
                 $SpacetoUse = Get-NewPartitionSize -DefaultScale 'GiB' -MaximumSizeBytes $AvailableSpace -MinimumSizeBytes $MinimumRequiredSpace
                 if ($SpacetoUse){
                     # Write-debug "Adding Partition with subtype:$PartitionSubtypetouse Addtype:$AddType Size:$(Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse)"
-                    Add-GUIPartitiontoGPTMBRDisk -PartitionSubType $PartitionSubtypetouse -PartitionType 'MBR' -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition -AddType $AddType -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) 
+                    Add-GUIPartitiontoGPTMBRDisk -PartitionSubType $PartitionSubtypetouse -PartitionType 'MBR' -PartitionNameNextto $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName -AddType $AddType -SizeBytes (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) 
                 }
                 else {
                     return

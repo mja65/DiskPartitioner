@@ -11,7 +11,7 @@ function Remove-GPTMBRFreeSpaceBetweenPartitions {
     $PartitionstoAdjust | ForEach-Object {
         $DifferencetoStartingPostition = $ExpectedPartitionStartingPosition - $_.StartingPositionBytes 
         if ($DifferencetoStartingPostition -lt 0){
-            Set-GUIPartitionNewPosition -PartitionName $_.PartitionName -PartitionType 'MBR' -AmountMovedBytes $DifferencetoStartingPostition
+            Set-GUIPartitionNewPosition -Partition $_.Partition -PartitionType 'MBR' -AmountMovedBytes $DifferencetoStartingPostition
         }
         $ExpectedPartitionStartingPosition += (Get-Variable -Name $_.PartitionName).value.PartitionSizeBytes
     }

@@ -267,7 +267,7 @@ function Update-UI {
                         (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'LeftBorder_Rectangle') -or `
                         (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'RightBorder_Rectangle'))
                     {
-                        if ($Script:GUICurrentStatus.SelectedGPTMBRPartition -eq $_.Name -or $Script:GUICurrentStatus.SelectedAmigaPartition -eq $_.Name ){
+                        if ($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName -eq $_.Name -or $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -eq $_.Name ){
                            ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Red'
                            # Write-debug "Highlighting Partition"                                      
                         } 
@@ -282,15 +282,15 @@ function Update-UI {
             if ($Script:GUICurrentStatus.SelectedGPTMBRPartition){
                 $MBRPartitionCounter = 1
                 $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries | ForEach-Object {
-                    If ($Script:GUICurrentStatus.SelectedGPTMBRPartition -eq $_.PartitionName){
+                    If ($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName -eq $_.PartitionName){
                         $WPF_DP_SelectedMBRPartition_Value.text = "Partition #$MBRPartitionCounter"
                     }
                     $MBRPartitionCounter ++
                 }
 
                 $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Visible'
-                If ((get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSubType -eq 'ID76'){
-                    $AmigaDiskName = "$($Script:GUICurrentStatus.SelectedGPTMBRPartition)_AmigaDisk"
+                If ($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionSubType -eq 'ID76'){
+                    $AmigaDiskName = "$($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName)_AmigaDisk"
                     if (Get-Variable -name $AmigaDiskName){
                         Set-AmigaDiskSizeOverhangPixels -AmigaDiskName $AmigaDiskName
                     }
@@ -301,7 +301,7 @@ function Update-UI {
                     for ($i = 0; $i -le $TotalChildren; $i++) {
                         $WPF_DP_DiskGrid_Amiga.Children.Remove($WPF_DP_DiskGrid_Amiga.Children[$i])
                     }
-                    $WPF_DP_DiskGrid_Amiga.AddChild(((Get-Variable -Name ($Script:GUICurrentStatus.SelectedGPTMBRPartition+'_AmigaDisk')).value))
+                    $WPF_DP_DiskGrid_Amiga.AddChild(((Get-Variable -Name ($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName+'_AmigaDisk')).value))
                     if (-not ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries)){
                         $WPF_DP_DiskGrid_Amiga.UpdateLayout()
                         $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga                                
@@ -355,7 +355,7 @@ function Update-UI {
     if (($DiskPartitionWindow) -or ($UpdateInputBoxes)){
         if ($Script:GUICurrentStatus.SelectedGPTMBRPartition){
             if (-not $WPF_DP_SelectedSize_Input.InputEntry -eq $true){
-                $SizetoReturn =  (Get-ConvertedSize -Size ((get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSizeBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+                $SizetoReturn =  (Get-ConvertedSize -Size $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_SelectedSize_Input.Background = 'White'
                 $WPF_DP_SelectedSize_Input.Text = $SizetoReturn.Size
                 $WPF_DP_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
@@ -363,7 +363,7 @@ function Update-UI {
            
             $PartitionsToCheck = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries 
                        
-            $PartitionToCheck = $PartitionsToCheck | Where-Object {$_.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition}
+            $PartitionToCheck = $PartitionsToCheck | Where-Object {$_.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName}
             $SpaceatBeginning = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableLeft -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
             $SpaceatEnd = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableRight -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
             $DiskSize = (Get-ConvertedSize -Size $WPF_DP_Disk_GPTMBR.DiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
@@ -378,7 +378,7 @@ function Update-UI {
             $WPF_DP_MBR_TotalDiskSize.Text = "$($DiskSize.Size) $($DiskSize.Scale)"
             $WPF_DP_MBR_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)" 
 
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedGPTMBRPartition -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
+            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
 
         }
         else {
@@ -401,17 +401,17 @@ function Update-UI {
         }
         if ($Script:GUICurrentStatus.SelectedAmigaPartition){
                 $RDBPartitionCounter = 1
-                $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition} | ForEach-Object {
-                    If ($Script:GUICurrentStatus.SelectedAmigaPartition -eq $_.PartitionName){
+                $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName} | ForEach-Object {
+                    If ($Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -eq $_.PartitionName){
                         $WPF_DP_SelectedAmigaPartition_Value.text = "Partition #$RDBPartitionCounter"
                     }
                     $RDBPartitionCounter ++
                 }
-            if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesPath){
-                $SpaceImportedFilesConverted = (Get-ConvertedSize -Size ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesSpaceBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+            if ($Script:GUICurrentStatus.SelectedAmigaPartition.ImportedFilesPath){
+                $SpaceImportedFilesConverted = (Get-ConvertedSize -Size $Script:GUICurrentStatus.SelectedAmigaPartition.ImportedFilesSpaceBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_Button_ImportFiles.Background = 'Green'
                 $WPF_DP_Button_ImportFiles.Foreground = 'White'
-                $WPF_DP_Button_ImportFiles_Label.Text = Get-FormattedPathforGUI -PathtoTruncate ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.ImportedFilesPath) -Length 15
+                $WPF_DP_Button_ImportFiles_Label.Text = Get-FormattedPathforGUI -PathtoTruncate $Script:GUICurrentStatus.SelectedAmigaPartition.ImportedFilesPath -Length 15
                 $WPF_DP_ImportFilesSize_Label.Visibility = 'Visible'
                 $WPF_DP_ImportFilesSize_Value.Visibility = 'Visible'
                 $WPF_DP_ImportFilesSize_Value.Text = "$($SpaceImportedFilesConverted.Size) $($SpaceImportedFilesConverted.Scale)"
@@ -426,18 +426,18 @@ function Update-UI {
             }
 
             if (-not $WPF_DP_Amiga_SelectedSize_Input.InputEntry -eq $true){
-                $SizetoReturn =  (Get-ConvertedSize -Size ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.PartitionSizeBytes) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+                $SizetoReturn =  (Get-ConvertedSize -Size $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $WPF_DP_Amiga_SelectedSize_Input.Background = 'White'
                 $WPF_DP_Amiga_SelectedSize_Input.Text = $SizetoReturn.Size
                 $WPF_DP_Amiga_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = $SizetoReturn.Scale
             }
 
-            $PartitionsToCheck = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition}
+            $PartitionsToCheck = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName}
 
-            $PartitionToCheck = $PartitionsToCheck | Where-Object {$_.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition}
+            $PartitionToCheck = $PartitionsToCheck | Where-Object {$_.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName}
             $SpaceatBeginning = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableLeft -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
             $SpaceatEnd = (Get-ConvertedSize -Size $PartitionToCheck.BytesAvailableRight -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
-            $DiskSize = (Get-ConvertedSize -Size ((Get-Variable -name ($Script:GUICurrentStatus.SelectedAmigaPartition.Substring(0,($Script:GUICurrentStatus.SelectedAmigaPartition.IndexOf('AmigaDisk_Partition_')+9)))).value).DiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+            $DiskSize = (Get-ConvertedSize -Size ((Get-Variable -name ($Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName.Substring(0,($Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName.IndexOf('AmigaDisk_Partition_')+9)))).value).DiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
             $DiskFreeSpaceSize = (Get-ConvertedSize -Size (($PartitionsToCheck[$PartitionsToCheck.Count-1]).BytesAvailableRight) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
             
             $WPF_DP_Amiga_SpaceatBeginning_Input.Background = 'White'
@@ -449,43 +449,43 @@ function Update-UI {
             $WPF_DP_Amiga_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)"
             
             $WPF_DP_Amiga_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem = $SpaceatEnd.Scale
-            if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.Bootable -eq $true){
-                # Write-debug "Bootable is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
+            if ($Script:GUICurrentStatus.SelectedAmigaPartition.Bootable -eq $true){
+                # Write-debug "Bootable is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName)"
                 $WPF_DP_Amiga_Bootable.IsChecked = 'True'
             }
-            elseif ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.Bootable -eq $false){
-                # Write-debug "Bootable is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
+            elseif ($Script:GUICurrentStatus.SelectedAmigaPartition.Bootable -eq $false){
+                # Write-debug "Bootable is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName)"
                 $WPF_DP_Amiga_Bootable.IsChecked = ''
             }
-            if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.NoMount -eq $true){
+            if ($Script:GUICurrentStatus.SelectedAmigaPartition.NoMount -eq $true){
                 # Write-debug "NoMount is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
                 $WPF_DP_Amiga_Mountable.IsChecked = ''
             }
-            elseif ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.NoMount -eq $false){
+            elseif ($Script:GUICurrentStatus.SelectedAmigaPartition.NoMount -eq $false){
                 # Write-debug "NoMount is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
                 $WPF_DP_Amiga_Mountable.IsChecked = 'True'
             }
-            if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.CanChangeMountable -eq $true){
+            if ($Script:GUICurrentStatus.SelectedAmigaPartition.CanChangeMountable -eq $true){
                 $WPF_DP_Amiga_Mountable.IsEnabled = 'True'
             }
             else {
                 $WPF_DP_Amiga_Mountable.IsEnabled = ''
             }            
-            if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.CanChangeBootable -eq $true){
+            if ($Script:GUICurrentStatus.SelectedAmigaPartition.CanChangeBootable -eq $true){
                 $WPF_DP_Amiga_Bootable.IsEnabled = 'True'
             }
             else {
                 $WPF_DP_Amiga_Bootable.IsEnabled = ''
             }
 
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'buffers' -CanChangeParameter 'CanChangeBuffers'      
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_DeviceName_Input -Value 'DeviceName' -CanChangeParameter 'CanRenameDevice'
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_MaxTransfer_Input -Value 'MaxTransfer' -CanChangeParameter 'CanChangeMaxTransfer'
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Priority_Input -Value 'Priority' -CanChangeParameter 'CanChangePriority'
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'buffers' -CanChangeParameter 'CanChangeBuffers'
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_DosType_Input -Value 'DosType' -CanChangeParameter 'CanChangeDosType'  
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Mask_Input -Value 'Mask' -CanChangeParameter 'CanChangeMask'  
+            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'buffers' -CanChangeParameter 'CanChangeBuffers'      
+            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_DeviceName_Input -Value 'DeviceName' -CanChangeParameter 'CanRenameDevice'
+            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
+            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_MaxTransfer_Input -Value 'MaxTransfer' -CanChangeParameter 'CanChangeMaxTransfer'
+            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_Priority_Input -Value 'Priority' -CanChangeParameter 'CanChangePriority'
+            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_Buffers_Input -Value 'buffers' -CanChangeParameter 'CanChangeBuffers'
+            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_DosType_Input -Value 'DosType' -CanChangeParameter 'CanChangeDosType'  
+            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_Mask_Input -Value 'Mask' -CanChangeParameter 'CanChangeMask'  
 
         }    
         else {

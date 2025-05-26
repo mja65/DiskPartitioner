@@ -8,6 +8,7 @@ function Get-HighlightedGUIPartition {
     # $MouseY = 613
 
     $PartitionInformationtoReturn = [PSCustomObject]@{
+        Partition = $null
         DiskName = $null
         PartitionName = $null
         PartitionType = $null
@@ -26,9 +27,10 @@ function Get-HighlightedGUIPartition {
     }
 
     foreach ($Partition in $PartitionDetails) {
-        if (($Partition.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition) -or ($Partition.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition)){
+        if (($Partition.PartitionName -eq $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName) -or ($Partition.PartitionName -eq $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName)){
             if ($MouseY -ge $Partition.TopMarginWindow -and $MouseY -le $Partition.BottomMarginWindow -and $MouseX -ge ($Partition.LeftMarginWindow - $PixelBuffer) -and $MouseX -le ($Partition.RightMarginWindow + $PixelBuffer)){   
                 $FoundPartition = $true
+                $PartitionInformationtoReturn.Partition = $Partition.Partition
                 $PartitionInformationtoReturn.PartitionName = $Partition.PartitionName
                 $PartitionInformationtoReturn.PartitionType = $Partition.PartitionType
                 $PartitionInformationtoReturn.PartitionSubType = $Partition.PartitionSubType
@@ -54,8 +56,9 @@ function Get-HighlightedGUIPartition {
     }
     else{
         foreach ($Partition in $PartitionDetails) {
-            if (($Partition.PartitionType -eq 'MBR') -or (($Script:GUICurrentStatus.SelectedGPTMBRPartition) -and $Partition.PartitionType -eq 'Amiga' -and  $Partition.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition)){
+            if (($Partition.PartitionType -eq 'MBR') -or (($Script:GUICurrentStatus.SelectedGPTMBRPartition) -and $Partition.PartitionType -eq 'Amiga' -and  $Partition.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName)){
                 if ($MouseY -ge $Partition.TopMarginWindow -and $MouseY -le $Partition.BottomMarginWindow -and $MouseX -ge $Partition.LeftMarginWindow -and $MouseX -le $Partition.RightMarginWindow){
+                        $PartitionInformationtoReturn.Partition = $Partition.Partition
                         $PartitionInformationtoReturn.PartitionName = $Partition.PartitionName
                         $PartitionInformationtoReturn.PartitionType = $Partition.PartitionType
                         if ($Partition.PartitionType -eq 'MBR'){

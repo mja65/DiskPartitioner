@@ -2,33 +2,33 @@ function Set-GUIPartitionNewSize {
     param (
         [Switch]$ResizeBytes,
         [Switch]$ResizePixels,
-        $PartitionName,
+        $Partition,
         $ActiontoPerform,
         $PartitionType,
         $SizeBytes,
         $SizePixelstoChange
     )
     
-    # $PartitionName = 'WPF_DP_Partition_MBR_2'
-    # $PartitionName = 'WPF_DP_Partition_MBR_2_AmigaDisk_Partition_2'
+    # $Partition = $WPF_DP_Partition_MBR_2
+    # $Partition = $WPF_DP_Partition_MBR_2_AmigaDisk_Partition_2
     # $SizeBytes = 536870912
     # $ActiontoPerform = 'MBR_ResizeFromRight'
     # $PartitionType = 'MBR'
    
-    # Write-debug "Function Set-GUIPartitionNewSize Partition:$PartitionName PartitionType:$PartitionType SizeBytes:$SizeBytes SizePixelstoChange:$SizePixelstoChange ActiontoPerform:$ActiontoPerform"
+     #Write-debug "Function Set-GUIPartitionNewSize Partition:$PartitionName PartitionType:$PartitionType SizeBytes:$SizeBytes SizePixelstoChange:$SizePixelstoChange ActiontoPerform:$ActiontoPerform"
     if (($ResizePixels) -and ($SizePixelstoChange -eq 0)){
         # Write-debug 'No change based on Pixels' 
         return $false
     }
 
     if ($ActiontoPerform -eq 'MBR_ResizeFromLeft' -or $ActiontoPerform -eq 'Amiga_ResizeFromLeft'){
-        if ((Get-Variable -name $PartitionName).Value.CanResizeLeft -eq $false){
+        if ($Partition.CanResizeLeft -eq $false){
             # Write-debug "Cannot Resize left"
             return $false
         }
     }
     elseif ($ActiontoPerform -eq 'MBR_ResizeFromRight' -or $ActiontoPerform -eq 'Amiga_ResizeFromRight'){
-        if ((Get-Variable -name $PartitionName).Value.CanResizeRight -eq $false){
+        if ($Partition.CanResizeRight -eq $false){
             # Write-debug "Cannot Resize Right"
             return $false
         }
@@ -38,11 +38,11 @@ function Set-GUIPartitionNewSize {
         $BytestoPixelFactor = $WPF_DP_Disk_GPTMBR.BytestoPixelFactor
     }
     elseif ($PartitionType -eq 'Amiga'){
-        $AmigaDiskName = $PartitionName.Substring(0,($PartitionName.IndexOf('_AmigaDisk_Partition_')+10))
+        $AmigaDiskName = $Partition.PartitionName.Substring(0,($Partition.PartitionName.IndexOf('_AmigaDisk_Partition_')+10))
         $BytestoPixelFactor = (Get-Variable -name $AmigaDiskName).Value.BytestoPixelFactor 
     }
 
-    $PartitionToCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -eq $PartitionName}
+    $PartitionToCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -eq $Partition.PartitionName}
 
     if (($ResizeBytes) -and ($SizeBytes -eq $PartitionToCheck.PartitionSizeBytes)){
         # Write-debug 'No change based on bytes' 
@@ -51,12 +51,12 @@ function Set-GUIPartitionNewSize {
 
     $MinimumSizeBytes = $null       
     if ($PartitionType -eq 'MBR'){
-        if ((Get-Variable -name $PartitionName).Value.PartitionSubType -eq 'FAT32'){
+        if ($Partition.PartitionSubType -eq 'FAT32'){
             $MinimumSizeBytes = $SDCardMinimumsandMaximums.MBRMinimum
         }
-        elseif ((Get-Variable -name $PartitionName).Value.PartitionSubType -eq 'ID76'){
-            $AmigaPartitionstoCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -match $PartitionName -and $_.PartitionType -eq 'Amiga'}
-            $AmigatoGPTMBROverhead = (Get-Variable -name ($PartitionName+'_AmigaDisk')).value.DiskSizeAmigatoGPTMBROverhead
+        elseif ($Partition.PartitionSubType -eq 'ID76'){
+            $AmigaPartitionstoCheck = Get-AllGUIPartitionBoundaries -GPTMBR -Amiga | Where-Object {$_.PartitionName -match $Partition.PartitionName -and $_.PartitionType -eq 'Amiga'}
+            $AmigatoGPTMBROverhead = (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).value.DiskSizeAmigatoGPTMBROverhead
             $TotalSpaceofAmigaPartitions = $AmigatoGPTMBROverhead
             for ($i = 0; $i -lt $AmigaPartitionstoCheck.Count; $i++) {
                 $TotalSpaceofAmigaPartitions += $AmigaPartitionstoCheck[$i].PartitionSizeBytes
@@ -70,11 +70,11 @@ function Set-GUIPartitionNewSize {
         }
     }
     elseif ($PartitionType -eq 'Amiga'){
-        if ($SDCardMinimumsandMaximums.PFS3Minimum -gt (Get-Variable -name $PartitionName).Value.ImportedFilesSpaceBytes){
+        if ($SDCardMinimumsandMaximums.PFS3Minimum -gt $Partition.ImportedFilesSpaceBytes){
             $MinimumSizeBytes = $SDCardMinimumsandMaximums.PFS3Minimum
         }
         else {
-            $MinimumSizeBytes = (Get-Variable -name $PartitionName).Value.ImportedFilesSpaceBytes
+            $MinimumSizeBytes = $Partition.ImportedFilesSpaceBytes
         }
     }
 
@@ -163,32 +163,32 @@ function Set-GUIPartitionNewSize {
     
     # Write-debug "New Size of Partition is $SizeBytes"
 
-    (Get-Variable -name $PartitionName).Value.PartitionSizeBytes = $SizeBytes
+    $Partition.PartitionSizeBytes = $SizeBytes
     
    # $WPF_DP_Partition_MBR_2.PartitionSizeBytes
    # $WPF_DP_Partition_MBR_2_AmigaDisk.DiskSizeBytes
 
    #$PartitionName = 'WPF_DP_Partition_MBR_2'
 
-    if ((Get-Variable -name $PartitionName).Value.PartitionSubType -eq 'ID76'){      
+    if ($Partition.PartitionSubType -eq 'ID76'){      
         Remove-AmigaDiskFreeSpaceBetweenPartitions 
         # Write-debug "Old Size was: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"     
-        (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes = Get-AmigaDiskSize -AmigaDisk (Get-Variable -name ($PartitionName+'_AmigaDisk')).value
+        (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.DiskSizeBytes = Get-AmigaDiskSize -AmigaDisk (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).value
         # Write-debug "New size is: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"    
-        (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor = (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes / (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizePixels
-        $AmigaPartitionstoChange = Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $PartitionName} | Sort-Object {[int64]$_.value.StartingPositionBytes} 
+        (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor = (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.DiskSizeBytes / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.DiskSizePixels
+        $AmigaPartitionstoChange = Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $Partition.PartitionName} | Sort-Object {[int64]$_.value.StartingPositionBytes} 
               
         $Counter = 1
         $LastPartitionEndPixels = 0
         foreach ($AmigaPartition in $AmigaPartitionstoChange) {
             if ($Counter -eq 1){
-                $AmounttoSetLeft = $AmigaPartition.Value.StartingPositionBytes / (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
+                $AmounttoSetLeft = $AmigaPartition.Value.StartingPositionBytes / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
             }
             else {
                 $AmounttoSetLeft = $LastPartitionEndPixels
             }
             $AmigaPartition.Value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"                
-            $AmigaSizePixels = $AmigaPartition.Value.PartitionSizeBytes  / (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
+            $AmigaSizePixels = $AmigaPartition.Value.PartitionSizeBytes  / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
             if ($AmigaSizePixels -gt 4){
                 $AmigaSizePixels -= 4
             }
@@ -209,16 +209,16 @@ function Set-GUIPartitionNewSize {
 
     if (($ActiontoPerform -eq 'MBR_ResizeFromLeft') -or ($ActiontoPerform -eq 'Amiga_ResizeFromLeft')){
         # Write-debug "Resizing from Left. Old Starting Position Bytes is $($PartitionToCheck.StartingPositionBytes). Bytes to change is $BytestoChange. Old Left Margin is: $($PartitionToCheck.LeftMargin). Pixels to change is $($SizePixelstoChange)"
-        (Get-Variable -Name $PartitionName).value.StartingPositionBytes -= $BytestoChange  
-       # Write-debug "New Starting Position bytes is: $((Get-Variable -Name $PartitionName).value.StartingPositionBytes)"
+        $Partition.StartingPositionBytes -= $BytestoChange  
+       # Write-debug "New Starting Position bytes is: $($Partition.StartingPositionBytes)"
         $AmounttoSetLeft = $PartitionToCheck.LeftMargin  - $SizePixelstoChange
-        (Get-Variable -Name $PartitionName).value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
+        $Partition.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
     }
     
-    $TotalColumns = (Get-Variable -name $PartitionName).Value.ColumnDefinitions.Count-1
+    $TotalColumns = $Partition.ColumnDefinitions.Count-1
     for ($i = 0; $i -le $TotalColumns; $i++) {
-        if  ((Get-Variable -name $PartitionName).Value.ColumnDefinitions[$i].Name -eq 'FullSpace'){
-            (Get-Variable -name $PartitionName).Value.ColumnDefinitions[$i].Width = $NewSizePixels 
+        if  ($Partition.ColumnDefinitions[$i].Name -eq 'FullSpace'){
+            $Partition.ColumnDefinitions[$i].Width = $NewSizePixels 
         } 
     }
     if ($PartitionType -eq 'Amiga'){

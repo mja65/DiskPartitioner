@@ -4,7 +4,7 @@ $WPF_DP_Button_DeleteMBRPartition.add_click({
     }
     # $Script:GUICurrentStatus.SelectedGPTMBRPartition = 'WPF_DP_Partition_MBR_2'
     if ($Script:GUICurrentStatus.SelectedGPTMBRPartition){
-        If (((Get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.DefaultGPTMBRPartition -eq $true) -and ((Get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSubType -eq 'ID76')){
+        If (($Script:GUICurrentStatus.SelectedGPTMBRPartition.DefaultGPTMBRPartition -eq $true) -and ($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionSubType -eq 'ID76')){
 
 $MessageBody = 
 @"
@@ -24,7 +24,7 @@ Press OK to continue otherwise cancel
        
         }
 
-        if ((Get-variable -name $Script:GUICurrentStatus.SelectedGPTMBRPartition).value.PartitionSubType -eq 'ID76'){
+        if ($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionSubType -eq 'ID76'){
             $DeleteUnderlyingAmigaPartitions = $true
         }
         else {

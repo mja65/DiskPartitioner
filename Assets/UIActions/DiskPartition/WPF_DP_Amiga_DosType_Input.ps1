@@ -15,8 +15,8 @@ $WPF_DP_Amiga_DosType_Input.add_LostFocus({
     
     if ($WPF_DP_Amiga_DosType_Input.ValueWhenEnterorButtonPushed -ne $WPF_DP_Amiga_DosType_Input.Text -and $WPF_DP_Amiga_DosType_Input.InputEntryChanged){
         # Write-debug 'Lost Focus - Performing action for WPF_DP_Amiga_DosType_Input'
-        (get-variable -name $script:GUICurrentStatus.SelectedAmigaPartition).value.DosType = $WPF_DP_Amiga_DosType_Input.Text
-        Update-UITextbox -NameofPartition $script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_DosType_Input -Value 'DosType' -CanChangeParameter 'CanChangeDosType'
+        $Script:GUICurrentStatus.SelectedAmigaPartition.DosType = $WPF_DP_Amiga_DosType_Input.Text
+        Update-UITextbox -NameofPartition $script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_DosType_Input -Value 'DosType' -CanChangeParameter 'CanChangeDosType'
 
 
     }
@@ -39,8 +39,8 @@ $WPF_DP_Amiga_DosType_Input.Add_KeyDown({
             $WPF_DP_Amiga_DosType_Input.ValueWhenEnterorButtonPushed = $WPF_DP_Amiga_DosType_Input.Text
             # Write-debug "WPF_DP_Amiga_DosType_Input: Recording value of: $($WPF_DP_Amiga_DosType_Input.ValueWhenEnterorButtonPushed) and actioning. EntryType is: $($WPF_DP_Amiga_DosType_Input.EntryType) InputEntry is: $($WPF_DP_Amiga_DosType_Input.InputEntry) InputEntryChanged is: $($WPF_DP_Amiga_DosType_Input.InputEntryChanged) InputEntryInvalid is: $($WPF_DP_Amiga_DosType_Input.InputEntryInvalid) InputEntryScaleChanged is: $($WPF_DP_Amiga_DosType_Input.InputEntryScaleChanged) ValueWhenEnterorButtonPushed is: $($WPF_DP_Amiga_DosType_Input.ValueWhenEnterorButtonPushed)" 
             $WPF_DP_Amiga_DosType_Input.InputEntry = $true
-            (get-variable -name $script:GUICurrentStatus.SelectedAmigaPartition).value.DosType = $WPF_DP_Amiga_DosType_Input.Text
-            Update-UITextbox -NameofPartition $script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_DosType_Input -Value 'DosType' -CanChangeParameter 'CanChangeDosType'
+            $Script:GUICurrentStatus.SelectedAmigaPartition.DosType = $WPF_DP_Amiga_DosType_Input.Text
+            Update-UITextbox -NameofPartition $script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_DosType_Input -Value 'DosType' -CanChangeParameter 'CanChangeDosType'
 
         }
         else {
