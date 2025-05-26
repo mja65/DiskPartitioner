@@ -9,7 +9,7 @@ $WPF_DP_SpaceatEnd_Input | Add-Member -NotePropertyMembers @{
 }
 
 $WPF_DP_SpaceatEnd_Input.add_GotFocus({
-    write-debug 'Got Focus - WPF_DP_SpaceatEnd_Input:'
+    # Write-debug 'Got Focus - WPF_DP_SpaceatEnd_Input:'
     $WPF_DP_SpaceatEnd_Input.InputEntry = $true
     $Script:GUICurrentStatus.TextBoxEntryFocus = 'WPF_DP_SpaceatEnd_Input'
 
@@ -18,11 +18,11 @@ $WPF_DP_SpaceatEnd_Input.add_GotFocus({
 $WPF_DP_SpaceatEnd_Input.add_LostFocus({
     
     if ($WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed -ne $WPF_DP_SpaceatEnd_Input.Text -and $WPF_DP_SpaceatEnd_Input.InputEntryChanged){
-        write-debug 'Lost Focus - Performing action for WPF_DP_SpaceatEnd_Input'
+        # Write-debug 'Lost Focus - Performing action for WPF_DP_SpaceatEnd_Input'
         Update-GUIInputBox -InputBox $WPF_DP_SpaceatEnd_Input -DropDownBox $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown -MBRMove_SpaceatEnd
     }
     else {
-        write-debug 'Lost Focus - Not performing action for WPF_DP_SpaceatEnd_Input'
+        # Write-debug 'Lost Focus - Not performing action for WPF_DP_SpaceatEnd_Input'
     }
     $WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed = $null
     $Script:GUICurrentStatus.TextBoxEntryFocus = $null 
@@ -31,22 +31,22 @@ $WPF_DP_SpaceatEnd_Input.add_LostFocus({
    
 $WPF_DP_SpaceatEnd_Input.add_TextChanged({
     $WPF_DP_SpaceatEnd_Input.InputEntryChanged = $true
-    write-debug 'Text Changed'
+    # Write-debug 'Text Changed'
 })
 
 $WPF_DP_SpaceatEnd_Input.Add_KeyDown({
     if ($_.Key -eq 'Return'){       
-        write-debug "Key pressed was: $($_.Key)"
+        # Write-debug "Key pressed was: $($_.Key)"
         if ($WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed -ne $WPF_DP_SpaceatEnd_Input.Text){
             $WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed = $WPF_DP_SpaceatEnd_Input.Text
-            write-debug "WPF_DP_SpaceatEnd_Input: Recording value of: $($WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed) and actioning. EntryType is: $($WPF_DP_SpaceatEnd_Input.EntryType) InputEntry is: $($WPF_DP_SpaceatEnd_Input.InputEntry) InputEntryChanged is: $($WPF_DP_SpaceatEnd_Input.InputEntryChanged) InputEntryInvalid is: $($WPF_DP_SpaceatEnd_Input.InputEntryInvalid) InputEntryScaleChanged is: $($WPF_DP_SpaceatEnd_Input.InputEntryScaleChanged) ValueWhenEnterorButtonPushed is: $($WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed)" 
+            # Write-debug "WPF_DP_SpaceatEnd_Input: Recording value of: $($WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed) and actioning. EntryType is: $($WPF_DP_SpaceatEnd_Input.EntryType) InputEntry is: $($WPF_DP_SpaceatEnd_Input.InputEntry) InputEntryChanged is: $($WPF_DP_SpaceatEnd_Input.InputEntryChanged) InputEntryInvalid is: $($WPF_DP_SpaceatEnd_Input.InputEntryInvalid) InputEntryScaleChanged is: $($WPF_DP_SpaceatEnd_Input.InputEntryScaleChanged) ValueWhenEnterorButtonPushed is: $($WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed)" 
 
             $WPF_DP_SpaceatEnd_Input.InputEntry = $true
             Update-GUIInputBox -InputBox $WPF_DP_SpaceatEnd_Input -DropDownBox $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown -MBRMove_SpaceatEnd
         }
         else {
             $WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed = $WPF_DP_SpaceatEnd_Input.Text
-            write-debug "WPF_DP_SpaceatEnd_Input: Recording value of: $($WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed)"
+            # Write-debug "WPF_DP_SpaceatEnd_Input: Recording value of: $($WPF_DP_SpaceatEnd_Input.ValueWhenEnterorButtonPushed)"
 
         }
     }

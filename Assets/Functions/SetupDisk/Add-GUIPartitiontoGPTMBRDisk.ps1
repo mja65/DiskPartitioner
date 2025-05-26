@@ -24,7 +24,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
     # $PartitionNameNextto = 'WPF_DP_Partition_ID76_1'
 
     if ($ImportedPartition -eq $true){
-        write-debug "Importing MBR Partition $PathtoImportedPartition"
+        # Write-debug "Importing MBR Partition $PathtoImportedPartition"
     }
     
     $SizePixels = $SizeBytes / $Script:WPF_DP_Disk_GPTMBR.BytestoPixelFactor
@@ -49,7 +49,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
         
     }
 
-    write-debug "New Partition Name is: $NewPartitionName" 
+    # Write-debug "New Partition Name is: $NewPartitionName" 
 
     if ($AddType -eq 'AtEnd' -or $AddType -eq 'Initial'){
         $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'MBR').EndingPositionPixels

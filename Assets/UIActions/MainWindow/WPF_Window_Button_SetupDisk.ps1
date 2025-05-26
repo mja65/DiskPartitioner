@@ -4,7 +4,7 @@ $WPF_Window_Button_SetupDisk.Add_Click({
         return
     }
 
-    write-debug "Set up Disk button pressed"
+    # Write-debug "Set up Disk button pressed"
 
 
     # if (-not ($Script:WPF_Partition)){
@@ -25,7 +25,7 @@ $WPF_Window_Button_SetupDisk.Add_Click({
                 
                 $Script:GUICurrentStatus.InstallMediaRequiredFromUserSelectablePackages | ForEach-Object {
                     if  (-not ($HashTableforInstallMedia.ContainsKey($_.SourceLocation) -and $_.Source -eq 'ADF')){
-                        write-debug "Install Media requirements changed"
+                        # Write-debug "Install Media requirements changed"
                         $Script:GUIActions.FoundInstallMediatoUse = $null
                         break               
                     } 

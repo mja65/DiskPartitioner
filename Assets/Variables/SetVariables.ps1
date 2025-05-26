@@ -139,6 +139,7 @@ $null = $Script:Settings.ProgressBarMarkers.Add([PSCustomObject]@{
 
 
 $Script:GUICurrentStatus = [PSCustomObject]@{
+    LastMouseMoveUpdateTime = [DateTime]::MinValue
     FileBoxOpen = $false
     RunMode = $null
     ProgressBarMarkers = New-Object System.Collections.ArrayList

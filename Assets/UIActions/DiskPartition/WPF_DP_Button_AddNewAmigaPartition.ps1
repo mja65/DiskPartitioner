@@ -52,15 +52,15 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
         return        
     }
 
-    write-debug "Addtype is: $Addtype DiskName is: $AmigaDiskName Allows addition of partitions: $CanAddPartition" 
+    # Write-debug "Addtype is: $Addtype DiskName is: $AmigaDiskName Allows addition of partitions: $CanAddPartition" 
         
     if ($EmptyAmigaDisk -eq $true){
         $AvailableFreeSpace = (Get-Variable -name $AmigaDiskName).value.DiskSizeBytes
-        write-debug "Available free space is: $AvailableFreeSpace "
+        # Write-debug "Available free space is: $AvailableFreeSpace "
     }
     else {
         $AvailableFreeSpace = (Get-AmigaDiskFreeSpace -Disk (Get-Variable -Name $AmigaDiskName).Value -Position $AddType -PartitionNameNextto $PartitionNexttotouse)
-        write-debug "Available free space is: $AvailableFreeSpace "
+        # Write-debug "Available free space is: $AvailableFreeSpace "
     }
     $AvailableFreeSpace = (Get-AmigaNearestSizeBytes -RoundDown $AvailableFreeSpace)
     $MinimumFreeSpace = (Get-AmigaNearestSizeBytes -RoundDown $Script:SDCardMinimumsandMaximums.PFS3Minimum)

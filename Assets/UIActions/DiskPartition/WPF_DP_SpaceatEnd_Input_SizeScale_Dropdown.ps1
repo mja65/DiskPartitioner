@@ -7,7 +7,7 @@ $DropDownScaleOptions += New-Object -TypeName pscustomobject -Property @{Scale='
 $DropDownScaleOptions += New-Object -TypeName pscustomobject -Property @{Scale='B'}
 
 foreach ($Option in $DropDownScaleOptions){
-    write-debug "SpaceatEndDropdown"
+    # Write-debug "SpaceatEndDropdown"
 
     $WPF_DP_SpaceatEnd_Input_SizeScale_Dropdown.AddChild($Option.Scale)
     

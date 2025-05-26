@@ -18,13 +18,22 @@ function Set-PartitionGridActions {
         $Script:GUICurrentStatus.LastCommandTime = $null
         $Script:GUICurrentStatus.MousePositionXatTimeofPress = $null
         $Script:GUICurrentStatus.MousePositionyatTimeofPress = $null
-        Write-debug "Out of bounds"
+        # Write-debug "Out of bounds"
     })
     
  $WPF_Window_Main.add_MouseMove({
         if ($Script:GUICurrentStatus.FileBoxOpen -eq $true) {
-        return
-    }
+            return
+        }
+        $CurrentTime = (Get-Date)
+        $ThrottleIntervalMs = 30 # Adjust this value (e.g., 16ms for ~60 FPS, 30ms for ~30 FPS)
+        # Only proceed if enough time has passed since the last update
+        if (($CurrentTime - $Script:GUICurrentStatus.LastMouseMoveUpdateTime).TotalMilliseconds -lt $ThrottleIntervalMs) {
+            return
+        }
+        
+        $Script:GUICurrentStatus.LastMouseMoveUpdateTime = $CurrentTime
+               
         if (($Script:GUICurrentStatus.CurrentWindow -eq 'DiskPartition') -and ($WPF_DP_GPTMBR_GroupBox.Visibility -eq 'Visible')){
             $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow
             $Script:GUICurrentStatus.CurrentMousePositionX = $MouseCoordinates.MousePositionRelativetoWindowX
@@ -48,7 +57,7 @@ function Set-PartitionGridActions {
                 }
 
             }
-            Write-debug "X Not Window:$($MouseCoordinates.MousePositionX) X:$($MouseCoordinates.MousePositionRelativetoWindowX) Y Not Window:$($MouseCoordinates.MousePositionY) Y:$($MouseCoordinates.MousePositionRelativetoWindowY) Buttons:$($MouseCoordinates.MouseButtons) MouseOverWindow:$($WPF_Window_Main.IsMouseOver) Hovered Over:$($Script:GUICurrentStatus.PartitionHoveredOver)"
+            # Write-debug "X Not Window:$($MouseCoordinates.MousePositionX) X:$($MouseCoordinates.MousePositionRelativetoWindowX) Y Not Window:$($MouseCoordinates.MousePositionY) Y:$($MouseCoordinates.MousePositionRelativetoWindowY) Buttons:$($MouseCoordinates.MouseButtons) MouseOverWindow:$($WPF_Window_Main.IsMouseOver) Hovered Over:$($Script:GUICurrentStatus.PartitionHoveredOver)"
             if ($Script:GUICurrentStatus.ActionToPerform){
                 $PerformAction = $false
                 $CurrentTime = (Get-Date)
@@ -63,13 +72,13 @@ function Set-PartitionGridActions {
                 }
                 if ($PerformAction -eq $true){
                     $Script:GUICurrentStatus.LastCommandTime = $CurrentTime
-                    write-debug "Action: $($Script:GUICurrentStatus.ActionToPerform)"   
+                    # Write-debug "Action: $($Script:GUICurrentStatus.ActionToPerform)"   
                     $AmounttoMove = $Script:GUICurrentStatus.CurrentMousePositionX - $Script:GUICurrentStatus.MousePositionXatTimeofPress
                     $Script:GUICurrentStatus.MousePositionXatTimeofPress = $Script:GUICurrentStatus.CurrentMousePositionX 
 
                     if (($Script:GUICurrentStatus.ActionToPerform -eq 'Amiga_ResizeFromRight') -or ($Script:GUICurrentStatus.ActionToPerform -eq 'Amiga_ResizeFromLeft')) {
                         $WPF_Partition.Cursor = "SizeWE"
-                        Write-debug "Amount to Resize:$AmounttoMove"
+                        # Write-debug "Amount to Resize:$AmounttoMove"
                         if ((Set-GUIPartitionNewSize -ResizePixels -PartitionName $Script:GUICurrentStatus.SelectedAmigaPartition -ActiontoPerform $Script:GUICurrentStatus.ActionToPerform -PartitionType 'Amiga' -SizePixelstoChange $AmounttoMove) -eq $false){
                             
                         }        
@@ -77,7 +86,7 @@ function Set-PartitionGridActions {
 
                     elseif (($Script:GUICurrentStatus.ActionToPerform -eq 'MBR_ResizeFromRight') -or ($Script:GUICurrentStatus.ActionToPerform -eq 'MBR_ResizeFromLeft')) {
                         $WPF_Partition.Cursor = "SizeWE"
-                        Write-debug "Amount to Resize:$AmounttoMove"
+                        # Write-debug "Amount to Resize:$AmounttoMove"
                         if ((Set-GUIPartitionNewSize -ResizePixels -PartitionName $Script:GUICurrentStatus.SelectedGPTMBRPartition -ActiontoPerform $Script:GUICurrentStatus.ActionToPerform -PartitionType 'MBR' -SizePixelstoChange $AmounttoMove) -eq $false){
             
                         }
@@ -85,24 +94,24 @@ function Set-PartitionGridActions {
 
                     elseif ($Script:GUICurrentStatus.ActionToPerform -eq 'MBR_Move'){
                         $WPF_Partition.Cursor = "Hand"
-                        write-debug "Amount to Move:$AmounttoMove"                  
+                        # Write-debug "Amount to Move:$AmounttoMove"                  
                         if ((Set-GUIPartitionNewPosition -PartitionName $Script:GUICurrentStatus.SelectedGPTMBRPartition -AmountMovedPixels $AmounttoMove -PartitionType 'MBR') -eq $false){
-                            write-debug "Cannot Move!"
+                            # Write-debug "Cannot Move!"
                         }       
                     }
 
                     elseif ($Script:GUICurrentStatus.ActionToPerform -eq 'Amiga_Move'){
                         $WPF_Partition.Cursor = "Hand"
-                        write-debug "Amount to Move:$AmounttoMove"
+                        # Write-debug "Amount to Move:$AmounttoMove"
                         if ((Set-GUIPartitionNewPosition -PartitionName $Script:GUICurrentStatus.SelectedAmigaPartition -AmountMovedPixels $AmounttoMove -PartitionType 'Amiga') -eq $false){
-                            write-debug "Cannot Move!"
+                            # Write-debug "Cannot Move!"
                         }                        
                     }
                     
                     Update-UI -UpdateInputBoxes
                  }
                 elseif ($PerformAction -eq $false){
-                    write-debug "Action: $($Script:GUICurrentStatus.ActionToPerform) - Too Soon!"
+                    # Write-debug "Action: $($Script:GUICurrentStatus.ActionToPerform) - Too Soon!"
                 }  
             } 
         }
@@ -116,7 +125,7 @@ function Set-PartitionGridActions {
             $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow
             $Script:GUICurrentStatus.MousePositionXatTimeofPress = $MouseCoordinates.MousePositionRelativetoWindowX
             $Script:GUICurrentStatus.MousePositionYatTimeofPress = $MouseCoordinates.MousePositionRelativetoWindowY
-            Write-debug "X (At time of Button press):$($Script:GUICurrentStatus.MousePositionXatTimeofPress) Y (At time of Button press):$($Script:GUICurrentStatus.MousePositionYatTimeofPress)"                                
+            # Write-debug "X (At time of Button press):$($Script:GUICurrentStatus.MousePositionXatTimeofPress) Y (At time of Button press):$($Script:GUICurrentStatus.MousePositionYatTimeofPress)"                                
             if ($Script:GUICurrentStatus.PartitionHoveredOver){
                 if ($Script:GUICurrentStatus.PartitionHoveredOver.PartitionType -eq 'MBR'){
                     if ($Script:GUICurrentStatus.SelectedGPTMBRPartition -eq $Script:GUICurrentStatus.PartitionHoveredOver.PartitionName){
@@ -126,13 +135,13 @@ function Set-PartitionGridActions {
                         else {
                             $Script:GUICurrentStatus.ActionToPerform = 'MBR_Move' 
                         }
-                        Write-debug $Script:GUICurrentStatus.ActionToPerform                      
+                        # Write-debug $Script:GUICurrentStatus.ActionToPerform                      
                     } 
                     if ($Script:GUICurrentStatus.PartitionHoveredOver.PartitionName -ne $Script:GUICurrentStatus.SelectedGPTMBRPartition){
                         $Script:GUICurrentStatus.SelectedGPTMBRPartition = $Script:GUICurrentStatus.PartitionHoveredOver.PartitionName
                         $Script:GUICurrentStatus.ActionToPerform = $null
                         $Script:GUICurrentStatus.SelectedAmigaPartition = $null
-                        Write-debug "Selected MBR Partition:$($Script:GUICurrentStatus.SelectedGPTMBRPartition)"                       
+                        # Write-debug "Selected MBR Partition:$($Script:GUICurrentStatus.SelectedGPTMBRPartition)"                       
                     }
                 }
                 elseif ($Script:GUICurrentStatus.PartitionHoveredOver.PartitionType -eq 'Amiga'){
@@ -143,10 +152,10 @@ function Set-PartitionGridActions {
                         else {
                             $Script:GUICurrentStatus.ActionToPerform = 'Amiga_Move' 
                         }
-                        write-debug $Script:GUICurrentStatus.ActionToPerform                      
+                        # Write-debug $Script:GUICurrentStatus.ActionToPerform                      
                     } 
                     $Script:GUICurrentStatus.SelectedAmigaPartition = $Script:GUICurrentStatus.PartitionHoveredOver.PartitionName
-                    write-debug "Selected Amiga Partition:$($Script:GUICurrentStatus.SelectedAmigaPartition)"                       
+                    # Write-debug "Selected Amiga Partition:$($Script:GUICurrentStatus.SelectedAmigaPartition)"                       
                 }
             }
             else {
@@ -154,12 +163,12 @@ function Set-PartitionGridActions {
                     if  ($Script:GUICurrentStatus.SelectedAmigaPartition){
                         $Script:GUICurrentStatus.SelectedAmigaPartition = $null
                         
-                        write-debug "Unselected Amiga Partition"                       
+                        # Write-debug "Unselected Amiga Partition"                       
 
                     }
                     else {
                         $Script:GUICurrentStatus.SelectedGPTMBRPartition = $null
-                        write-debug "Unselected MBR Partition"                       
+                        # Write-debug "Unselected MBR Partition"                       
 
                     }
                 }

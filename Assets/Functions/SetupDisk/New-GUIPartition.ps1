@@ -8,7 +8,7 @@ function New-GUIPartition {
         $ImportedPartitionMethod
     )
     
-    write-debug "PartitionType is: $PartitionType PartitionSubType is:  $PartitionSubType DefaultPartition is: $DefaultPartition"
+    # Write-debug "PartitionType is: $PartitionType PartitionSubType is:  $PartitionSubType DefaultPartition is: $DefaultPartition"
     # $WPF_MainWindow.Close()
     # exit
 

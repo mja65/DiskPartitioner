@@ -19,7 +19,7 @@ function Add-InitialGPTMBRDisk {
     if (-not $WPF_DP_Disk_GPTMBR){
 
         $MBRSectorAdjustmentBytes = $DiskSizeBytes - (Get-MBRNearestSizeBytes -RoundDown -SizeBytes $DiskSizeBytes) 
-        write-debug "Rounded down disksize by: $MBRSectorAdjustmentBytes"
+        # Write-debug "Rounded down disksize by: $MBRSectorAdjustmentBytes"
 
         $Script:WPF_DP_Disk_GPTMBR = New-GUIDisk -DiskType $DiskTypetouse
         $Script:WPF_DP_DiskGrid_GPTMBR.AddChild($WPF_DP_Disk_GPTMBR)      

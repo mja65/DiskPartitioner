@@ -11,7 +11,7 @@ $WPF_Window_Button_PackageSelection.Add_Click({
         $Script:GUICurrentStatus.CurrentWindow = 'PackageSelection' 
     
         if ($Script:GUICurrentStatus.AvailablePackagesNeedingGeneration -eq $true){
-            write-debug "Populating Available Packages"
+            # Write-debug "Populating Available Packages"
             Get-SelectablePackages 
             $Script:GUICurrentStatus.AvailablePackagesNeedingGeneration = $false
         }

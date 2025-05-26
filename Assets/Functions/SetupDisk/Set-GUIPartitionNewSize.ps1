@@ -15,21 +15,21 @@ function Set-GUIPartitionNewSize {
     # $ActiontoPerform = 'MBR_ResizeFromRight'
     # $PartitionType = 'MBR'
    
-    write-debug "Function Set-GUIPartitionNewSize Partition:$PartitionName PartitionType:$PartitionType SizeBytes:$SizeBytes SizePixelstoChange:$SizePixelstoChange ActiontoPerform:$ActiontoPerform"
+    # Write-debug "Function Set-GUIPartitionNewSize Partition:$PartitionName PartitionType:$PartitionType SizeBytes:$SizeBytes SizePixelstoChange:$SizePixelstoChange ActiontoPerform:$ActiontoPerform"
     if (($ResizePixels) -and ($SizePixelstoChange -eq 0)){
-        write-debug 'No change based on Pixels' 
+        # Write-debug 'No change based on Pixels' 
         return $false
     }
 
     if ($ActiontoPerform -eq 'MBR_ResizeFromLeft' -or $ActiontoPerform -eq 'Amiga_ResizeFromLeft'){
         if ((Get-Variable -name $PartitionName).Value.CanResizeLeft -eq $false){
-            write-debug "Cannot Resize left"
+            # Write-debug "Cannot Resize left"
             return $false
         }
     }
     elseif ($ActiontoPerform -eq 'MBR_ResizeFromRight' -or $ActiontoPerform -eq 'Amiga_ResizeFromRight'){
         if ((Get-Variable -name $PartitionName).Value.CanResizeRight -eq $false){
-            write-debug "Cannot Resize Right"
+            # Write-debug "Cannot Resize Right"
             return $false
         }
     }
@@ -45,7 +45,7 @@ function Set-GUIPartitionNewSize {
     $PartitionToCheck = Get-AllGUIPartitionBoundaries | Where-Object {$_.PartitionName -eq $PartitionName}
 
     if (($ResizeBytes) -and ($SizeBytes -eq $PartitionToCheck.PartitionSizeBytes)){
-        write-debug 'No change based on bytes' 
+        # Write-debug 'No change based on bytes' 
         return $false
     }
 
@@ -78,10 +78,10 @@ function Set-GUIPartitionNewSize {
         }
     }
 
-    write-debug "Minimum Size bytes is $MinimumSizeBytes"
+    # Write-debug "Minimum Size bytes is $MinimumSizeBytes"
 
     if ($SizeBytes){                
-       write-debug 'Resizing based on bytes'
+       # Write-debug 'Resizing based on bytes'
        
        if ($PartitionType -eq 'MBR'){
            $SizeBytes = Get-MBRNearestSizeBytes -RoundDown -SizeBytes $SizeBytes 
@@ -110,7 +110,7 @@ function Set-GUIPartitionNewSize {
     }
 
     elseif ($SizePixelstoChange){
-        write-debug "Resizing based on Pixels"
+        # Write-debug "Resizing based on Pixels"
 
         if (($ActiontoPerform -eq 'MBR_ResizeFromRight') -or ($ActiontoPerform -eq 'Amiga_ResizeFromRight')) {
 
@@ -142,7 +142,7 @@ function Set-GUIPartitionNewSize {
         }
         
         $SizePixelstoChange = $BytestoChange / $BytestoPixelFactor
-        write-debug "Action is $ActiontoPerform. Resizing based on Pixels: $SizePixelstoChange. Bytes to change is: $BytestoChange"
+        # Write-debug "Action is $ActiontoPerform. Resizing based on Pixels: $SizePixelstoChange. Bytes to change is: $BytestoChange"
         
         $SizeBytes = $PartitionToCheck.PartitionSizeBytes + $BytestoChange
 
@@ -161,7 +161,7 @@ function Set-GUIPartitionNewSize {
 
     }
     
-    write-debug "New Size of Partition is $SizeBytes"
+    # Write-debug "New Size of Partition is $SizeBytes"
 
     (Get-Variable -name $PartitionName).Value.PartitionSizeBytes = $SizeBytes
     
@@ -172,9 +172,9 @@ function Set-GUIPartitionNewSize {
 
     if ((Get-Variable -name $PartitionName).Value.PartitionSubType -eq 'ID76'){      
         Remove-AmigaDiskFreeSpaceBetweenPartitions 
-        write-debug "Old Size was: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"     
+        # Write-debug "Old Size was: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"     
         (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes = Get-AmigaDiskSize -AmigaDisk (Get-Variable -name ($PartitionName+'_AmigaDisk')).value
-        write-debug "New size is: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"    
+        # Write-debug "New size is: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"    
         (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor = (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes / (Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizePixels
         $AmigaPartitionstoChange = Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $PartitionName} | Sort-Object {[int64]$_.value.StartingPositionBytes} 
               
@@ -201,16 +201,16 @@ function Set-GUIPartitionNewSize {
             }
 
             $LastPartitionEndPixels += ($AmigaSizePixels + 4)
-           write-debug "Last Partition EndPixels for partition $($AmigaPartition.Name) is: $LastPartitionEndPixels "
+           # Write-debug "Last Partition EndPixels for partition $($AmigaPartition.Name) is: $LastPartitionEndPixels "
             $Counter ++
         }
        
     }
 
     if (($ActiontoPerform -eq 'MBR_ResizeFromLeft') -or ($ActiontoPerform -eq 'Amiga_ResizeFromLeft')){
-        write-debug "Resizing from Left. Old Starting Position Bytes is $($PartitionToCheck.StartingPositionBytes). Bytes to change is $BytestoChange. Old Left Margin is: $($PartitionToCheck.LeftMargin). Pixels to change is $($SizePixelstoChange)"
+        # Write-debug "Resizing from Left. Old Starting Position Bytes is $($PartitionToCheck.StartingPositionBytes). Bytes to change is $BytestoChange. Old Left Margin is: $($PartitionToCheck.LeftMargin). Pixels to change is $($SizePixelstoChange)"
         (Get-Variable -Name $PartitionName).value.StartingPositionBytes -= $BytestoChange  
-       write-debug "New Starting Position bytes is: $((Get-Variable -Name $PartitionName).value.StartingPositionBytes)"
+       # Write-debug "New Starting Position bytes is: $((Get-Variable -Name $PartitionName).value.StartingPositionBytes)"
         $AmounttoSetLeft = $PartitionToCheck.LeftMargin  - $SizePixelstoChange
         (Get-Variable -Name $PartitionName).value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
     }

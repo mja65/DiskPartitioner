@@ -16,7 +16,7 @@ $WPF_Window_Button_SetupEmu68.Add_Click({
                 
                 $Script:GUICurrentStatus.InstallMediaRequiredFromUserSelectablePackages | ForEach-Object {
                     if  (-not ($HashTableforInstallMedia.ContainsKey($_.SourceLocation) -and $_.Source -eq 'ADF')){
-                        write-debug "Install Media requirements changed"
+                        # Write-debug "Install Media requirements changed"
                         $Script:GUIActions.FoundInstallMediatoUse = $null
                         break               
                     } 

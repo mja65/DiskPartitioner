@@ -269,7 +269,7 @@ function Update-UI {
                     {
                         if ($Script:GUICurrentStatus.SelectedGPTMBRPartition -eq $_.Name -or $Script:GUICurrentStatus.SelectedAmigaPartition -eq $_.Name ){
                            ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Red'
-                           write-debug "Highlighting Partition"                                      
+                           # Write-debug "Highlighting Partition"                                      
                         } 
                         else{
                            ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Black'
@@ -446,19 +446,19 @@ function Update-UI {
             
             $WPF_DP_Amiga_SpaceatEnd_Input_SizeScale_Dropdown.SelectedItem = $SpaceatEnd.Scale
             if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.Bootable -eq $true){
-                write-debug "Bootable is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
+                # Write-debug "Bootable is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
                 $WPF_DP_Amiga_Bootable.IsChecked = 'True'
             }
             elseif ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.Bootable -eq $false){
-                write-debug "Bootable is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
+                # Write-debug "Bootable is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
                 $WPF_DP_Amiga_Bootable.IsChecked = ''
             }
             if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.NoMount -eq $true){
-                write-debug "NoMount is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
+                # Write-debug "NoMount is true for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
                 $WPF_DP_Amiga_Mountable.IsChecked = ''
             }
             elseif ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.NoMount -eq $false){
-                write-debug "NoMount is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
+                # Write-debug "NoMount is false for partition $($Script:GUICurrentStatus.SelectedAmigaPartition)"
                 $WPF_DP_Amiga_Mountable.IsChecked = 'True'
             }
             if ((get-variable -name $Script:GUICurrentStatus.SelectedAmigaPartition).value.CanChangeMountable -eq $true){
@@ -529,20 +529,20 @@ function Update-UI {
         }
 
         If ($FreeSpaceBytes_MBR -eq 0){
-            write-debug "No free space - MBR"
+            # Write-debug "No free space - MBR"
             $WPF_DP_MBR_FreeSpaceBetweenPartitions_Label.Visibility = 'hidden'
         }
         else {
-            write-debug "Free space MBR is:$FreeSpaceBytes_MBR"
+            # Write-debug "Free space MBR is:$FreeSpaceBytes_MBR"
             $WPF_DP_MBR_FreeSpaceBetweenPartitions_Label.Visibility = 'visible'
         }
         
         If ($FreeSpaceBytes_Amiga -eq 0){
-            write-debug "No free space - Amiga"
+            # Write-debug "No free space - Amiga"
             $WPF_DP_Amiga_FreeSpaceBetweenPartitions_Label.Visibility = 'hidden'
         }
         else {
-            write-debug "Free space Amiga is:$FreeSpaceBytes_Amiga"
+            # Write-debug "Free space Amiga is:$FreeSpaceBytes_Amiga"
             $WPF_DP_Amiga_FreeSpaceBetweenPartitions_Label.Visibility = 'visible'
         }
 

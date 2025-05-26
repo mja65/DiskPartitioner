@@ -19,6 +19,7 @@
 .DESCRIPTION 
 Script for Emu68Imager 
 #> 
+
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Net.Http

@@ -61,7 +61,7 @@ function Set-DiskForImport {
             $PartitionName = "WPF_DP_Partition_MBR_$($WPF_DP_Disk_GPTMBR.NextPartitionMBRNumber)"
             $TotalPartitionSizeBytes = $WPF_DP_ID_MBR_DataGrid.SelectedItem.SizeBytes
 
-            write-debug $PathforImport            
+            # Write-debug $PathforImport            
         } 
     }
     elseif ($Script:GUICurrentStatus.ImportedPartitionType -eq 'RDB'){
@@ -72,7 +72,7 @@ function Set-DiskForImport {
         
         $TotalPartitionSizeBytes = (Get-AmigaNearestSizeBytes -SizeBytes (($Script:GUICurrentStatus.RDBPartitionstoImportDataTable | Measure-Object -Property SizeBytes -Sum).Sum) -RoundUp )+(Get-AmigaRDBOverheadBytes) 
                 
-        write-debug $PathforImport            
+        # Write-debug $PathforImport            
     }
     
     if ($Script:GUICurrentStatus.ImportedPartitionType -eq 'MBR'){
