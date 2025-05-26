@@ -35,11 +35,22 @@ function Set-PartitionGridActions {
         $Script:GUICurrentStatus.LastMouseMoveUpdateTime = $CurrentTime
                
         if (($Script:GUICurrentStatus.CurrentWindow -eq 'DiskPartition') -and ($WPF_DP_GPTMBR_GroupBox.Visibility -eq 'Visible')){
-            $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow
+
+            # Measure Get-MouseCoordinatesRelativetoWindow
+            $measureResult_GetCoords = Measure-Command {
+                $MouseCoordinates = Get-MouseCoordinatesRelativetoWindow
+            }
+            Write-Host "  Get-MouseCoordinatesRelativetoWindow: $($measureResult_GetCoords.TotalMilliseconds)ms"
+
+
             $Script:GUICurrentStatus.CurrentMousePositionX = $MouseCoordinates.MousePositionRelativetoWindowX
             $Script:GUICurrentStatus.CurrentMousePositionY = $MouseCoordinates.MousePositionRelativetoWindowY
             $Script:GUICurrentStatus.MouseStatus = $MouseCoordinates.MouseButtons 
-            $Script:GUICurrentStatus.PartitionHoveredOver = (Get-HighlightedGUIPartition -MouseX $Script:GUICurrentStatus.CurrentMousePositionX -MouseY $Script:GUICurrentStatus.CurrentMousePositionY)
+            $measureResult_GetHighlight = Measure-Command {
+                $Script:GUICurrentStatus.PartitionHoveredOver = (Get-HighlightedGUIPartition -MouseX $Script:GUICurrentStatus.CurrentMousePositionX -MouseY $Script:GUICurrentStatus.CurrentMousePositionY)
+            }
+            Write-Host "  Get-HighlightedGUIPartition: $($measureResult_GetHighlight.TotalMilliseconds)ms"
+            
             if (-not ($Script:GUICurrentStatus.PartitionHoveredOver)){
                 $WPF_Partition.Cursor = ''   
             }
@@ -76,39 +87,49 @@ function Set-PartitionGridActions {
                     $AmounttoMove = $Script:GUICurrentStatus.CurrentMousePositionX - $Script:GUICurrentStatus.MousePositionXatTimeofPress
                     $Script:GUICurrentStatus.MousePositionXatTimeofPress = $Script:GUICurrentStatus.CurrentMousePositionX 
 
-                    if (($Script:GUICurrentStatus.ActionToPerform -eq 'Amiga_ResizeFromRight') -or ($Script:GUICurrentStatus.ActionToPerform -eq 'Amiga_ResizeFromLeft')) {
-                        $WPF_Partition.Cursor = "SizeWE"
-                        # Write-debug "Amount to Resize:$AmounttoMove"
-                        if ((Set-GUIPartitionNewSize -ResizePixels -PartitionName $Script:GUICurrentStatus.SelectedAmigaPartition -ActiontoPerform $Script:GUICurrentStatus.ActionToPerform -PartitionType 'Amiga' -SizePixelstoChange $AmounttoMove) -eq $false){
-                            
-                        }        
-                    }
-
-                    elseif (($Script:GUICurrentStatus.ActionToPerform -eq 'MBR_ResizeFromRight') -or ($Script:GUICurrentStatus.ActionToPerform -eq 'MBR_ResizeFromLeft')) {
-                        $WPF_Partition.Cursor = "SizeWE"
-                        # Write-debug "Amount to Resize:$AmounttoMove"
-                        if ((Set-GUIPartitionNewSize -ResizePixels -PartitionName $Script:GUICurrentStatus.SelectedGPTMBRPartition -ActiontoPerform $Script:GUICurrentStatus.ActionToPerform -PartitionType 'MBR' -SizePixelstoChange $AmounttoMove) -eq $false){
-            
+                   # Measure the partition modification functions
+                    $measureResult_SetPartition = Measure-Command {                    
+                        if (($Script:GUICurrentStatus.ActionToPerform -eq 'Amiga_ResizeFromRight') -or ($Script:GUICurrentStatus.ActionToPerform -eq 'Amiga_ResizeFromLeft')) {
+                            $WPF_Partition.Cursor = "SizeWE"
+                            # Write-debug "Amount to Resize:$AmounttoMove"
+                            if ((Set-GUIPartitionNewSize -ResizePixels -PartitionName $Script:GUICurrentStatus.SelectedAmigaPartition -ActiontoPerform $Script:GUICurrentStatus.ActionToPerform -PartitionType 'Amiga' -SizePixelstoChange $AmounttoMove) -eq $false){
+                                
+                            }        
+                        }
+    
+                        elseif (($Script:GUICurrentStatus.ActionToPerform -eq 'MBR_ResizeFromRight') -or ($Script:GUICurrentStatus.ActionToPerform -eq 'MBR_ResizeFromLeft')) {
+                            $WPF_Partition.Cursor = "SizeWE"
+                            # Write-debug "Amount to Resize:$AmounttoMove"
+                            if ((Set-GUIPartitionNewSize -ResizePixels -PartitionName $Script:GUICurrentStatus.SelectedGPTMBRPartition -ActiontoPerform $Script:GUICurrentStatus.ActionToPerform -PartitionType 'MBR' -SizePixelstoChange $AmounttoMove) -eq $false){
+                
+                            }
+                        }
+    
+                        elseif ($Script:GUICurrentStatus.ActionToPerform -eq 'MBR_Move'){
+                            $WPF_Partition.Cursor = "Hand"
+                            # Write-debug "Amount to Move:$AmounttoMove"                  
+                            if ((Set-GUIPartitionNewPosition -PartitionName $Script:GUICurrentStatus.SelectedGPTMBRPartition -AmountMovedPixels $AmounttoMove -PartitionType 'MBR') -eq $false){
+                                # Write-debug "Cannot Move!"
+                            }       
+                        }
+    
+                        elseif ($Script:GUICurrentStatus.ActionToPerform -eq 'Amiga_Move'){
+                            $WPF_Partition.Cursor = "Hand"
+                            # Write-debug "Amount to Move:$AmounttoMove"
+                            if ((Set-GUIPartitionNewPosition -PartitionName $Script:GUICurrentStatus.SelectedAmigaPartition -AmountMovedPixels $AmounttoMove -PartitionType 'Amiga') -eq $false){
+                                # Write-debug "Cannot Move!"
+                            }                        
                         }
                     }
 
-                    elseif ($Script:GUICurrentStatus.ActionToPerform -eq 'MBR_Move'){
-                        $WPF_Partition.Cursor = "Hand"
-                        # Write-debug "Amount to Move:$AmounttoMove"                  
-                        if ((Set-GUIPartitionNewPosition -PartitionName $Script:GUICurrentStatus.SelectedGPTMBRPartition -AmountMovedPixels $AmounttoMove -PartitionType 'MBR') -eq $false){
-                            # Write-debug "Cannot Move!"
-                        }       
+                    Write-Host "  Set-GUIPartitionNewSize/Position: $($measureResult_SetPartition.TotalMilliseconds)ms"
+                    # Measure Update-UI
+                    $measureResult_UpdateUI = Measure-Command {
+                        Update-UI -UpdateInputBoxes
                     }
+                    Write-Host "  Update-UI: $($measureResult_UpdateUI.TotalMilliseconds)ms"
 
-                    elseif ($Script:GUICurrentStatus.ActionToPerform -eq 'Amiga_Move'){
-                        $WPF_Partition.Cursor = "Hand"
-                        # Write-debug "Amount to Move:$AmounttoMove"
-                        if ((Set-GUIPartitionNewPosition -PartitionName $Script:GUICurrentStatus.SelectedAmigaPartition -AmountMovedPixels $AmounttoMove -PartitionType 'Amiga') -eq $false){
-                            # Write-debug "Cannot Move!"
-                        }                        
-                    }
-                    
-                    Update-UI -UpdateInputBoxes
+
                  }
                 elseif ($PerformAction -eq $false){
                     # Write-debug "Action: $($Script:GUICurrentStatus.ActionToPerform) - Too Soon!"

@@ -127,3 +127,20 @@ else {
 
 # # $WPF_MainWindow.Close()
 # # [System.Windows.Controls.CheckBox].GetEvents() | Select-Object Name, *Method, EventHandlerType >test.txt
+
+<#
+#Measure-Command { Get-AllGUIPartitionBoundaries }
+Measure-Command { Update-ui }
+
+-Emu68Settings -HighlightSelectedPartitions -UpdateInputBoxes -Buttons -CheckforRunningImage 
+
+-MainWindowButtons 20ms
+-Emu68Settings 18ms
+-Buttons 16
+-PhysicalvsImage 
+-FreeSpaceAlert 32
+-DiskPartitionWindow 134
+-HighlightSelectedPartitions 88
+-UpdateInputBoxes 103
+
+#>

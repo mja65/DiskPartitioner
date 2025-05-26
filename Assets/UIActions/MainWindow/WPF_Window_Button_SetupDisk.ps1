@@ -57,7 +57,7 @@ $WPF_Window_Button_SetupDisk.Add_Click({
             $WPF_Window_Main.AddChild($WPF_Partition)
         }
         
-        update-ui -MainWindowButtons -DiskPartitionWindow -FreeSpaceAlert
+        update-ui -MainWindowButtons -DiskPartitionWindow -FreeSpaceAlert -HighlightSelectedPartitions
 
 })
  

@@ -18,11 +18,9 @@ function Get-HighlightedGUIPartition {
     $PartitionDetails = Get-AllGUIPartitionBoundaries 
     $FoundPartition = $null
 
+    $PixelBuffer = 0
     if ($Script:GUICurrentStatus.SelectedGPTMBRPartition -or $Script:GUICurrentStatus.SelectedAmigaPartition){
         $PixelBuffer = $Script:Settings.PartitionPixelBuffer
-    }
-    else {
-        $PixelBuffer = 0
     }
 
     foreach ($Partition in $PartitionDetails) {

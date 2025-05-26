@@ -257,7 +257,7 @@ function Update-UI {
         }
     }
 
-    if (($DiskPartitionWindow) -or ($HighlightSelectedPartitions)){
+    if ($HighlightSelectedPartitions){
         if ($Script:GUIActions.DiskSizeSelected){
             Get-AllGUIPartitions -PartitionType 'All' | ForEach-Object {
                 $TotalChildren = ((Get-Variable -Name $_.Name).Value).Children.Count-1
