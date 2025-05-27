@@ -5,56 +5,56 @@ function Import-MBRPartitiontoDisk {
 
     $Script:GUICurrentStatus.HSTCommandstoProcess.AdjustParametersonImportedRDBPartitions.Clear()
 
-    $MBRPartitionstoAddtoDisk = Get-AllGUIPartitions -partitiontype 'MBR'
+    $MBRPartitionstoAddtoDisk = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
     
     $MBRPartitionCounter = 1
     
     foreach ($MBRPartition in $MBRPartitionstoAddtoDisk) {
-        if ($MBRPartition.value.ImportedPartition -eq $true -and $MBRPartition.value.ImportedPartitionMethod -eq 'Direct'){
+        if ($MBRPartition.Partition.ImportedPartition -eq $true -and $MBRPartition.Partition.ImportedPartitionMethod -eq 'Direct'){
             Write-InformationMessage -Message "Identified MBR Partition #$MBRPartitionCounter for importation"          
-            $Startpoint = $MBRPartition.value.ImportedPartitionPath.IndexOf("\MBR\")
-            $SubstringLength = $MBRPartition.value.ImportedPartitionPath.length-($Startpoint+5)
-            $MBRPartitionNumbertoImport = $MBRPartition.value.ImportedPartitionPath.Substring(($Startpoint+5),$SubstringLength)
-            $PathofImage = $MBRPartition.value.ImportedPartitionPath.Substring(0,$Startpoint)
+            $Startpoint = $MBRPartition.Partition.ImportedPartitionPath.IndexOf("\MBR\")
+            $SubstringLength = $MBRPartition.Partition.ImportedPartitionPath.length-($Startpoint+5)
+            $MBRPartitionNumbertoImport = $MBRPartition.Partition.ImportedPartitionPath.Substring(($Startpoint+5),$SubstringLength)
+            $PathofImage = $MBRPartition.Partition.ImportedPartitionPath.Substring(0,$Startpoint)
             Write-InformationMessage -Message "Running command to import partition from: `"$PathofImage`" MBR Partition #$MBRPartitionNumbertoImport to: MBR Partition #$MBRPartitionCounter"
             Copy-MBRPartition -SourcePath $PathofImage -SourcePartitionNumber $MBRPartitionNumbertoImport -DestinationPath $($Script:GUIActions.OutputPath) -DestinationPartitionNumber $MBRPartitionCounter
             
             $RDBCounter = 0        
             Write-InformationMessage -Message 'Adjusting Amiga disk parameters for imported partitions where required'
-            Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $MBRPartition.name } | ForEach-Object {
+            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $MBRPartition.name } | ForEach-Object {
                 $RDBCounter ++
                 $RDBUpdateString = $null
                 $RDBUpdateStringUsed = $false
-                if ($_.value.DeviceName -ne $_.value.DeviceNameoriginalimportedvalue){
-                    $RDBUpdateString += "--name $($_.value.DeviceName) "
+                if ($_.partition.DeviceName -ne $_.Partition.DeviceNameoriginalimportedvalue){
+                    $RDBUpdateString += "--name $($_.Partition.DeviceName) "
                     $RDBUpdateStringUsed = $true                    
                 }
-                if ($_.value.buffers -ne $_.value.buffersoriginalimportedvalue){
-                    $RDBUpdateString += "--buffers $($_.value.buffers) "
+                if ($_.Partition.buffers -ne $_.Partition.buffersoriginalimportedvalue){
+                    $RDBUpdateString += "--buffers $($_.Partition.buffers) "
                     $RDBUpdateStringUsed = $true
                 }
-                if ($_.value.dostype -ne $_.value.dostypeoriginalimportedvalue){
-                    $RDBUpdateString += "--dos-type $($_.value.dostype) "
+                if ($_.Partition.dostype -ne $_.Partition.dostypeoriginalimportedvalue){
+                    $RDBUpdateString += "--dos-type $($_.Partition.dostype) "
                     $RDBUpdateStringUsed = $true
                 }
-                if ($_.value.MaxTransfer -ne $_.value.MaxTransferoriginalimportedvalue){
-                    $RDBUpdateString += "--max-transfer $($_.value.MaxTransfer) "
+                if ($_.Partition.MaxTransfer -ne $_.Partition.MaxTransferoriginalimportedvalue){
+                    $RDBUpdateString += "--max-transfer $($_.Partition.MaxTransfer) "
                     $RDBUpdateStringUsed = $true        
                 }
-                if ($_.value.mask -ne $_.value.maskoriginalimportedvalue){
-                    $RDBUpdateString += "--mask $($_.value.mask) " 
+                if ($_.Partition.mask -ne $_.Partition.maskoriginalimportedvalue){
+                    $RDBUpdateString += "--mask $($_.Partition.mask) " 
                     $RDBUpdateStringUsed = $true       
                 }
-                if ($_.value.nomount -ne $_.value.nomountoriginalimportedvalue){
+                if ($_.Partition.nomount -ne $_.Partition.nomountoriginalimportedvalue){
                     $RDBUpdateStringUsed = $true
-                    if ($_.value.NoMount -eq 'True'){
+                    if ($_.Partition.NoMount -eq 'True'){
                         $RDBUpdateString += "--no-mount True" #Need space in case some partitions don't have flag
                     }
-                    elseif ($_.value.NoMount -eq 'False'){
+                    elseif ($_.Partition.NoMount -eq 'False'){
                         $RDBUpdateString += "--no-mount False" #Need space in case some partitions don't have flag            
                     }
                 }
-                if ($_.value.bootable -ne $_.value.bootableoriginalimportedvalue){
+                if ($_.Partition.bootable -ne $_.Partition.bootableoriginalimportedvalue){
                     $RDBUpdateStringUsed = $true
                     if ($_.Bootable -eq 'True'){
                         $RDBUpdateString += "--bootable True" #Need space in case some partitions don't have flag
@@ -63,9 +63,9 @@ function Import-MBRPartitiontoDisk {
                         $RDBUpdateString += "--bootable False" #Need space in case some partitions don't have flag
                     }
                 }
-                if ($_.value.priority -ne $_.value.priorityoriginalimportedvalue){
+                if ($_.Partition.priority -ne $_.Partition.priorityoriginalimportedvalue){
                     $RDBUpdateStringUsed = $true
-                    $RDBUpdateString += "--bootpriority $($_.value.priority) "        
+                    $RDBUpdateString += "--bootpriority $($_.Partition.priority) "        
                 }    
 
                 if ($RDBUpdateStringUsed -eq $true) {

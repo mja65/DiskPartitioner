@@ -11,8 +11,8 @@ function Write-ImageCreation {
   
      $fileCount = 0
      
-     Get-AllGUIPartitions -PartitionType "Amiga" | ForEach-Object {
-        if ($_.value.ImportedFilesPath){
+     $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | ForEach-Object {
+        if ($_.Partition.ImportedFilesPath){
            $fileCount += (Get-ChildItem -Path $_.value.ImportedFilesPath -File -Recurse).Count
          }
       }
@@ -33,14 +33,14 @@ function Write-ImageCreation {
         $OutputTypetoUse = "Physical Disk"
      }
      
-     if (Get-AllGUIPartitions -partitiontype 'MBR' | Where-Object {$_.value.ImportedPartitionMethod -eq 'Direct'}){
+     if ($Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries | Where-Object {$_.Partition.ImportedPartitionMethod -eq 'Direct'}){
         $PartitionstoImport_Direct = $true
      }
      else {
         $PartitionstoImport_Direct = $false
      }
      
-     if (Get-AllGUIPartitions -partitiontype 'MBR' | Where-Object {$_.value.ImportedPartitionMethod -eq 'Derived'}){
+     if ($Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries | Where-Object {$_.Partition.ImportedPartitionMethod -eq 'Derived'}){
         $PartitionstoImport_Derived = $true
      }
      else {

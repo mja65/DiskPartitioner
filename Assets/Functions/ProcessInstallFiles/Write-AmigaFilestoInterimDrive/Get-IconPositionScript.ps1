@@ -29,7 +29,7 @@ function Get-IconPositionScript {
            $IconPosScript += "iconpos >NIL: `"SYS:$($_.File)`" type=$($_.Type) $($_.IconX) $($_.IconY) $Remainder"
         }
 
-        $ListofDisks = Get-AllGUIPartitions -PartitionType 'Amiga'
+        $ListofDisks = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries
         
         $HashTableforDefaultDisks = @{} # Clear Hash
         Get-InputCSVs -Diskdefaults | ForEach-Object {
@@ -40,9 +40,9 @@ function Get-IconPositionScript {
         $IconY = 0
          
         foreach ($Disk in $ListofDisks) {
-            if ($HashTableforDefaultDisks.ContainsKey($Disk.value.DeviceName)){
-                $IconX = [int]($HashTableforDefaultDisks.($Disk.value.DeviceName)[0])
-                $IconY = [int]($HashTableforDefaultDisks.($Disk.value.DeviceName)[1])
+            if ($HashTableforDefaultDisks.ContainsKey($Disk.Partition.DeviceName)){
+                $IconX = [int]($HashTableforDefaultDisks.($Disk.Partition.DeviceName)[0])
+                $IconY = [int]($HashTableforDefaultDisks.($Disk.Partition.DeviceName)[1])
             }
             else {
                 $IconX = [int]$Script:Settings.AmigaWorkDiskIconXPosition
@@ -54,7 +54,7 @@ function Get-IconPositionScript {
                 }
         
             }
-            $IconPosScript += "iconpos >NIL: `"$($Disk.value.DeviceName):disk.info`" type=DISK $IconX $IconY"
+            $IconPosScript += "iconpos >NIL: `"$($Disk.Partition.DeviceName):disk.info`" type=DISK $IconX $IconY"
             
         }
     }

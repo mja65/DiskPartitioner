@@ -176,27 +176,27 @@ function Set-GUIPartitionNewSize {
         (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.DiskSizeBytes = Get-AmigaDiskSize -AmigaDisk (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).value
         # Write-debug "New size is: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"    
         (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor = (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.DiskSizeBytes / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.DiskSizePixels
-        $AmigaPartitionstoChange = Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $Partition.PartitionName} | Sort-Object {[int64]$_.value.StartingPositionBytes} 
+        $AmigaPartitionstoChange = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $Partition.PartitionName} | Sort-Object {[int64]$_.Partition.StartingPositionBytes} 
               
         $Counter = 1
         $LastPartitionEndPixels = 0
         foreach ($AmigaPartition in $AmigaPartitionstoChange) {
             if ($Counter -eq 1){
-                $AmounttoSetLeft = $AmigaPartition.Value.StartingPositionBytes / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
+                $AmounttoSetLeft = $AmigaPartition.Partition.StartingPositionBytes / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
             }
             else {
                 $AmounttoSetLeft = $LastPartitionEndPixels
             }
-            $AmigaPartition.Value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"                
-            $AmigaSizePixels = $AmigaPartition.Value.PartitionSizeBytes  / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
+            $AmigaPartition.Partition.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"                
+            $AmigaSizePixels = $AmigaPartition.Partition.PartitionSizeBytes  / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
             if ($AmigaSizePixels -gt 4){
                 $AmigaSizePixels -= 4
             }
 
-            $TotalColumns = $AmigaPartition.Value.ColumnDefinitions.Count-1
+            $TotalColumns = $AmigaPartition.Partition.ColumnDefinitions.Count-1
             for ($i = 0; $i -le $TotalColumns; $i++) {
-                if  ($AmigaPartition.Value.ColumnDefinitions[$i].Name -eq 'FullSpace'){
-                    $AmigaPartition.Value.ColumnDefinitions[$i].Width = $AmigaSizePixels
+                if  ($AmigaPartition.Partition.ColumnDefinitions[$i].Name -eq 'FullSpace'){
+                    $AmigaPartition.Partition.ColumnDefinitions[$i].Width = $AmigaSizePixels
                 } 
             }
 
