@@ -78,13 +78,13 @@ function Set-GUIPartitionNewPosition {
     if ($PartitionType -eq 'Amiga'){
         if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){      
             $WPF_DP_DiskGrid_Amiga.UpdateLayout()
-            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
+            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = @(Get-AllGUIPartitionBoundaries -Amiga)
         }
 
     }
     elseif ($PartitionType -eq 'MBR'){
         $WPF_DP_DiskGrid_GPTMBR.UpdateLayout()
-        $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -GPTMBR
+        $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries = @(Get-AllGUIPartitionBoundaries -GPTMBR)
             
     }
          

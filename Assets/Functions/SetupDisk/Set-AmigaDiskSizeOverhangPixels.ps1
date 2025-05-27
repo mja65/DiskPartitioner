@@ -44,7 +44,7 @@ function Set-AmigaDiskSizeOverhangPixels {
     }
 
     if ($Changes -eq  $true){
-        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
+        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = @(Get-AllGUIPartitionBoundaries -Amiga)
     }
 
     $PartitionstoCheck = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName })
@@ -65,7 +65,7 @@ function Set-AmigaDiskSizeOverhangPixels {
     }
 
     if ($Changes -eq  $true){
-        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
+        $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = @(Get-AllGUIPartitionBoundaries -Amiga)
     }
 
     

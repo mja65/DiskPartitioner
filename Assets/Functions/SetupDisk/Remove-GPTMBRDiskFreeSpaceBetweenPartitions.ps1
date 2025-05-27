@@ -16,7 +16,7 @@ function Remove-GPTMBRFreeSpaceBetweenPartitions {
         $ExpectedPartitionStartingPosition += $_.Partition.PartitionSizeBytes
     }
     $WPF_DP_DiskGrid_GPTMBR.UpdateLayout()
-    $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries =  Get-AllGUIPartitionBoundaries -GPTMBR
+    $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries = @(Get-AllGUIPartitionBoundaries -GPTMBR)
 
 
 }

@@ -13,9 +13,9 @@ function Get-DeviceandVolumeNametoUse {
     $DeviceNumbertoUse = 0
     $VolumeNameCountertoUse = 0
     
-    Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {
-        $DevicetoCheck = $_.value.devicename 
-        $VolumeNametoCheck = $_.value.VolumeName 
+    $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | ForEach-Object {
+        $DevicetoCheck = $_.Partition.devicename 
+        $VolumeNametoCheck = $_.Partition.VolumeName 
         if ($VolumeNametoCheck -match "Work_"){
             if (([int]($VolumeNametoCheck -replace "Work_","")) -gt $VolumeNameCountertoUse){
                 $VolumeNameCountertoUse = [int]($VolumeNametoCheck -replace "Work_","")

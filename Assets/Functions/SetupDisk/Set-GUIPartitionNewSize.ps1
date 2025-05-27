@@ -176,24 +176,24 @@ function Set-GUIPartitionNewSize {
         (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.DiskSizeBytes = Get-AmigaDiskSize -AmigaDisk (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).value
         # Write-debug "New size is: $((Get-Variable -name ($PartitionName+'_AmigaDisk')).Value.DiskSizeBytes)"    
         (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor = (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.DiskSizeBytes / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.DiskSizePixels
-        $AmigaPartitionstoChange = Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $Partition.PartitionName} | Sort-Object {[int64]$_.value.StartingPositionBytes} 
+        $AmigaPartitionstoChange = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $Partition.PartitionName } | Sort-Object {[int64]$_.Partition.StartingPositionBytes} 
               
         $Counter = 1
         $LastPartitionEndPixels = 0
         foreach ($AmigaPartition in $AmigaPartitionstoChange) {
             if ($Counter -eq 1){
-                $AmounttoSetLeft = $AmigaPartition.Value.StartingPositionBytes / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
+                $AmounttoSetLeft = $AmigaPartition.Partition.StartingPositionBytes / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
             }
             else {
                 $AmounttoSetLeft = $LastPartitionEndPixels
             }
-            $AmigaPartition.Value.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"                
-            $AmigaSizePixels = $AmigaPartition.Value.PartitionSizeBytes  / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
+            $AmigaPartition.Partition.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"                
+            $AmigaSizePixels = $AmigaPartition.Partition.PartitionSizeBytes  / (Get-Variable -name ($Partition.PartitionName+'_AmigaDisk')).Value.BytestoPixelFactor
             if ($AmigaSizePixels -gt 4){
                 $AmigaSizePixels -= 4
             }
 
-            $AmigaPartition.Value.ColumnDefinitions[1].Width = $AmigaSizePixels
+            $AmigaPartition.Partition.ColumnDefinitions[1].Width = $AmigaSizePixels
 
             $LastPartitionEndPixels += ($AmigaSizePixels + 4)
            # Write-debug "Last Partition EndPixels for partition $($AmigaPartition.Name) is: $LastPartitionEndPixels "
@@ -210,19 +210,18 @@ function Set-GUIPartitionNewSize {
         $Partition.Margin = [System.Windows.Thickness]"$AmounttoSetLeft,0,0,0"
     }
     
-    $TotalColumns = $Partition.ColumnDefinitions.Count-1
     $Partition.ColumnDefinitions[1].Width = $NewSizePixels 
     
     if ($PartitionType -eq 'Amiga'){
         if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){      
             $WPF_DP_DiskGrid_Amiga.UpdateLayout()
-            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
+            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = @(Get-AllGUIPartitionBoundaries -Amiga)
         }
 
     }
     elseif ($PartitionType -eq 'MBR'){
         $WPF_DP_DiskGrid_GPTMBR.UpdateLayout()
-        $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries =  Get-AllGUIPartitionBoundaries -GPTMBR
+        $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries = @(Get-AllGUIPartitionBoundaries -GPTMBR)
 
     }        
         

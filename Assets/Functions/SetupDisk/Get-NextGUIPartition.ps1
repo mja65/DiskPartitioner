@@ -1,57 +1,59 @@
 function Get-NextGUIPartition {
     param (
-        $PartitionNametoCheck,
+        $PartitiontoCheck,
         $PartitionType,
         $Side
     )
     
     # $PartitionType = 'MBR'
+    # $Side = "Right"
+    # $PartitiontoCheck = $Script:GUICurrentStatus.SelectedGPTMBRPartition
 
     if ($PartitionType -eq 'Amiga'){
-        if ($PartitionNametoCheck){
-            $AmigaDiskName = ($PartitionNametoCheck.Substring(0,($PartitionNametoCheck.IndexOf('_AmigaDisk_Partition_')+10)))    
+        if ($PartitiontoCheck){
+            $AmigaDiskName = ($PartitiontoCheck.PartitionName.Substring(0,($PartitiontoCheck.PartitionName.IndexOf('_AmigaDisk_Partition_')+10)))    
         }
         else{
-            $AmigaDiskName = ($Script:GUICurrentStatus.SelectedGPTMBRPartition+'_AmigaDisk')
+            $AmigaDiskName = "$($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName)_AmigaDisk"
         }
-        $PartitionstoCheck = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName }
+        $ExistingPartitionstoCheck = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName }
     }
     elseif ($PartitionType -eq 'MBR'){
-        $PartitionstoCheck = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
+        $ExistingPartitionstoCheck = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
     }
     
-    if ($PartitionNametoCheck){
-        for ($i = 0; $i -lt $PartitionstoCheck.Count; $i++) {
-            if ($PartitionNametoCheck -eq $PartitionstoCheck[$i].PartitionName){
+    if ($PartitiontoCheck){
+        for ($i = 0; $i -lt $ExistingPartitionstoCheck.Count; $i++) {
+            if ($PartitiontoCheck.PartitionName -eq $ExistingPartitionstoCheck[$i].PartitionName){
                 if ($Side -eq "Left"){
                     if ($i -eq 0){
-                        $NextPartitionName = $PartitionstoCheck[$PartitionstoCheck.Count-1].PartitionName
+                        $NextPartition = $ExistingPartitionstoCheck[$ExistingPartitionstoCheck.Count-1].Partition
                     }
                     else{
-                        $NextPartitionName = $PartitionstoCheck[$i-1].PartitionName
+                        $NextPartition = $ExistingPartitionstoCheck[$i-1].Partition
                     }
                 }
                 elseif ($Side -eq "Right"){
-                    if ($i -eq $PartitionstoCheck.Count-1){
-                        $NextPartitionName = $PartitionstoCheck[0].PartitionName
+                    if ($i -eq $ExistingPartitionstoCheck.Count-1){
+                        $NextPartition = $ExistingPartitionstoCheck[0].Partition
                     }
                     else{
-                        $NextPartitionName = $PartitionstoCheck[$i+1].PartitionName
+                        $NextPartition = $ExistingPartitionstoCheck[$i+1].Partition
                     }
                 }
-                return $NextPartitionName
+                return $NextPartition
             }
         }
     }
     else{
         if ($Side -eq 'Right'){
-            $NextPartitionName = $PartitionstoCheck[0].PartitionName
+            $NextPartition = $ExistingPartitionstoCheck[0].Partition
         }
         elseif ($Side -eq 'Left'){
-            $NextPartitionName = $PartitionstoCheck[$PartitionstoCheck.Count-1].PartitionName
+            $NextPartition = $ExistingPartitionstoCheck[$ExistingPartitionstoCheck.Count-1].Partition
         }
     }
 
-    return $NextPartitionName
+    return $NextPartition
 
 }

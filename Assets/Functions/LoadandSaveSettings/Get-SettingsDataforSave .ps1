@@ -43,7 +43,7 @@ function Get-SettingsDataforSave {
     $AmigaDisks = Get-Variable -name '*_AmigaDisk'
     if ($AmigaDisks){
         $AmigaDisks | ForEach-Object{
-            $Output += "RDBDetails;$($_.Name);$($_.Value.DiskType);$($_.Value.DiskSizeBytes);$($_.Value.CanAddPartition);$($_.Value.RDBOverheadBytes);$($_.Value.NextPartitionNumber);$($_.Value.ID76PartitionParent)"
+            $Output += "RDBDetails;$($_.PartitionName);$($_.Partition.DiskType);$($_.Partition.DiskSizeBytes);$($_.Partition.CanAddPartition);$($_.Partition.RDBOverheadBytes);$($_.Partition.NextPartitionNumber);$($_.Partition.ID76PartitionParent)"
         }
     }
     else {
@@ -52,10 +52,10 @@ function Get-SettingsDataforSave {
   
     $Output += "MBR Partition Details:"
     $Output += "MBRPartitionHeader;Type;ImportedPartitionMethod;ImportedPartition;ImportedFilesSpaceBytes;VolumeName;StartingPositionBytes;PartitionSizeBytes;PartitionType;DefaultGPTMBRPartition;PartitionSubType;PartitionTypeGPTMBRorAmiga;ImportedPartitionPath;ImportedGPTMBRPartitionNumber;Name;ImportedFilesPath "
-    $MBRPartitions = Get-AllGUIPartitions -PartitionType 'MBR' 
+    $MBRPartitions = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
     if ($MBRPartitions){
         $MBRPartitions | ForEach-Object {
-           $Output += "MBRPartitionDetails;$($_.value.ImportedPartitionMethod);$($_.value.ImportedPartition);$($_.value.ImportedFilesSpaceBytes);$($_.value.VolumeName);$($_.value.StartingPositionBytes);$($_.value.PartitionSizeBytes);$($_.value.PartitionType);$($_.value.DefaultGPTMBRPartition);$($_.value.PartitionSubType);$($_.value.PartitionTypeGPTMBRorAmiga);$($_.value.ImportedPartitionPath);$($_.value.ImportedGPTMBRPartitionNumber);$($_.value.Name);$($_.value.ImportedFilesPath)"           
+           $Output += "MBRPartitionDetails;$($_.Partition.ImportedPartitionMethod);$($_.Partition.ImportedPartition);$($_.Partition.ImportedFilesSpaceBytes);$($_.Partition.VolumeName);$($_.Partition.StartingPositionBytes);$($_.Partition.PartitionSizeBytes);$($_.Partition.PartitionType);$($_.Partition.DefaultGPTMBRPartition);$($_.Partition.PartitionSubType);$($_.Partition.PartitionTypeGPTMBRorAmiga);$($_.Partition.ImportedPartitionPath);$($_.Partition.ImportedGPTMBRPartitionNumber);$($_.Partition.Name);$($_.Partition.ImportedFilesPath)"           
         }
     }
     else {
@@ -64,10 +64,10 @@ function Get-SettingsDataforSave {
 
     $Output += "RDB Partition Details:"
     $Output += "RDBPartitionHeader;Type;Name;ImportedPartitionMethod;ImportedPartition;ImportedFilesSpaceBytes;StartingPositionBytes;PartitionSizeBytes;PartitionType;ImportedFilesPath;DefaultAmigaWorkbenchPartition;PartitionTypeGPTMBRorAmiga;DefaultAmigaWorkPartition;ImportedPartitionPath;VolumeName;VolumeNameOriginalImportedValue;Bootable;BootableOriginalImportedValue;DosType;DosTypeOriginalImportedValue;NoMount;NoMountOriginalImportedValue;Priority;PriorityOriginalImportedValue;MaxTransfer;MaxTransferOriginalImportedValue;DeviceName;DeviceNameOriginalImportedValue;Buffers;BuffersOriginalImportedValue;Mask;MaskOriginalValue"    
-    $RDBPartitions = Get-AllGUIPartitions -PartitionType 'Amiga' 
+    $RDBPartitions = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries
     if ($RDBPartitions){
         $RDBPartitions | ForEach-Object {
-           $Output += "RDBPartitionDetails;$($_.Name);$($_.value.ImportedPartitionMethod);$($_.value.ImportedPartition);$($_.value.ImportedFilesSpaceBytes);$($_.value.StartingPositionBytes);$($_.value.PartitionSizeBytes);$($_.value.PartitionType);$($_.value.ImportedFilesPath);$($_.value.DefaultAmigaWorkbenchPartition);$($_.value.PartitionTypeGPTMBRorAmiga);$($_.value.DefaultAmigaWorkPartition);$($_.value.ImportedPartitionPath);$($_.value.VolumeName);$($_.value.VolumeNameOriginalImportedValue);$($_.value.Bootable);$($_.value.BootableOriginalImportedValue);$($_.value.DosType);$($_.value.DosTypeOriginalImportedValue);$($_.value.NoMount);$($_.value.NoMountOriginalImportedValue);$($_.value.Priority);$($_.value.PriorityOriginalImportedValue);$($_.value.MaxTransfer);$($_.value.MaxTransferOriginalImportedValue);$($_.value.DeviceName);$($_.value.DeviceNameOriginalImportedValue);$($_.value.Buffers);$($_.value.BuffersOriginalImportedValue);$($_.value.Mask);$($_.value.MaskOriginalImportedValue)"
+           $Output += "RDBPartitionDetails;$($_.PartitionName);$($_.Partition.ImportedPartitionMethod);$($_.Partition.ImportedPartition);$($_.Partition.ImportedFilesSpaceBytes);$($_.Partition.StartingPositionBytes);$($_.Partition.PartitionSizeBytes);$($_.Partition.PartitionType);$($_.Partition.ImportedFilesPath);$($_.Partition.DefaultAmigaWorkbenchPartition);$($_.Partition.PartitionTypeGPTMBRorAmiga);$($_.Partition.DefaultAmigaWorkPartition);$($_.Partition.ImportedPartitionPath);$($_.Partition.VolumeName);$($_.Partition.VolumeNameOriginalImportedValue);$($_.Partition.Bootable);$($_.Partition.BootableOriginalImportedValue);$($_.Partition.DosType);$($_.Partition.DosTypeOriginalImportedValue);$($_.Partition.NoMount);$($_.Partition.NoMountOriginalImportedValue);$($_.Partition.Priority);$($_.Partition.PriorityOriginalImportedValue);$($_.Partition.MaxTransfer);$($_.Partition.MaxTransferOriginalImportedValue);$($_.Partition.DeviceName);$($_.Partition.DeviceNameOriginalImportedValue);$($_.Partition.Buffers);$($_.Partition.BuffersOriginalImportedValue);$($_.Partition.Mask);$($_.Partition.MaskOriginalImportedValue)"
                
         }
     }

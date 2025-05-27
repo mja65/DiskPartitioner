@@ -22,7 +22,7 @@ function Remove-AmigaGUIPartition {
         
         if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){      
             $WPF_DP_DiskGrid_Amiga.UpdateLayout()
-            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
+            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = @(Get-AllGUIPartitionBoundaries -Amiga)
         }               
 
     }

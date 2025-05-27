@@ -8,7 +8,7 @@ function Get-OptionsBeforeRunningImage {
     $WPF_RunWindow = Get-XAML -WPFPrefix 'WPF_RunWindow_' -XMLFile '.\Assets\WPF\Window_RunOptions.xaml' -ActionsPath '.\Assets\UIActions\RunWindow\' -AddWPFVariables
 
     $DiskSizetoReport = (Get-ConvertedSize -Size $WPF_DP_Disk_GPTMBR.DiskSizeBytes -ScaleFrom 'B' -AutoScale)
-    $NumberofMBRPartitions = (Get-AllGUIPartitions -PartitionType 'MBR').Count
+    $NumberofMBRPartitions = ($Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries).Count
     if ($Script:GUIActions.WifiPassword){
         $WifiPassword = "Password has been set"
     }

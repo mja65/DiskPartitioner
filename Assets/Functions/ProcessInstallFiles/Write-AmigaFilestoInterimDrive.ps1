@@ -444,9 +444,9 @@ function Write-AmigaFilestoInterimDrive {
       }
       
       $PFSOutputScript = $null 
-      Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {
-          if (($_.Value.ImportedPartition -eq $false) -and ($_.Value.dostype -eq "PFS\3")){
-              $PFSOutputScript += "setfnsize $($_.Value.DeviceName): 107 >NIL:`n" 
+      $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | ForEach-Object {
+          if (($_.Partition.ImportedPartition -eq $false) -and ($_.Partition.dostype -eq "PFS\3")){
+              $PFSOutputScript += "setfnsize $($_.Partition.DeviceName): 107 >NIL:`n" 
           }
       }
      
