@@ -8,8 +8,8 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
     $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk = [System.Collections.Generic.List[PSCustomObject]]::New()
 
     if ($Script:GUIActions.DiskTypeSelected -eq 'PiStorm - MBR'){
-        $MBRPartitionstoAddtoDisk = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
-        $RDBPartitionstoAddtoDisk = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries
+        $MBRPartitionstoAddtoDisk = Get-AllGUIPartitions -partitiontype 'MBR'
+        $RDBPartitionstoAddtoDisk = Get-AllGUIPartitions -PartitionType 'Amiga' 
     }
     elseif ($Script:GUIActions.DiskTypeSelected -eq 'PiStorm - GPT'){
         Write-ErrorMessage -Message "Error in Coding - WPF_Window_Button_Run !"

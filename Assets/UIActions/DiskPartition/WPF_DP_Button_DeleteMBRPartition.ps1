@@ -39,7 +39,7 @@ Press OK to continue otherwise cancel
     
         if ($DeleteUnderlyingAmigaPartitions -eq $true){
             $Script:GUICurrentStatus.SelectedAmigaPartition = $null
-            $ListofPartitionstoDelete = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries| Where-Object {$_.PartitionName -match $Script:GUICurrentStatus.SelectedGPTMBRPartition} ).PartitionName
+            $ListofPartitionstoDelete = (Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $Script:GUICurrentStatus.SelectedGPTMBRPartition} ).Name
             if ($ListofPartitionstoDelete){
                 $ListofPartitionstoDelete  | ForEach-Object {
                     Remove-Variable -Scope Script -Name $_

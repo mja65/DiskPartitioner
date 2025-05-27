@@ -17,11 +17,11 @@ function Get-GUIPartitionStartEnd {
     }
 
     if ($PartitionType -eq 'MBR'){
-        $ListofPartitions  = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
+        $ListofPartitions  = Get-AllGUIPartitions -PartitionType $PartitionType
     }
     elseif ($PartitionType -eq 'Amiga'){
         $ID76Partition = $AmigaDiskName.Substring(0,$AmigaDiskName.IndexOf('_AmigaDisk'))        
-        $ListofPartitions  = $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.Name -Match $ID76Partition } 
+        $ListofPartitions  = Get-AllGUIPartitions -PartitionType $PartitionType | Where-Object {$_.Name -Match $ID76Partition } 
     }
        
     $Counter = 0
@@ -31,10 +31,10 @@ function Get-GUIPartitionStartEnd {
     else{
         Foreach ($Partition in $ListofPartitions){
             If ($Counter -eq 0){
-                $ValuetoReturn.StartingPositionPixels = $Partition.Partition.Margin.Left
+                $ValuetoReturn.StartingPositionPixels = $Partition.Value.Margin.Left
             }          
             $ValuetoReturn.EndingPositionPixels += (Get-GUIPartitionWidth -Partition $Partition.Value)
-            $ValuetoReturn.EndingPositionBytes +=  $Partition.Partition.PartitionSizeBytes
+            $ValuetoReturn.EndingPositionBytes +=  $Partition.Value.PartitionSizeBytes
             $Counter ++
         }
     }

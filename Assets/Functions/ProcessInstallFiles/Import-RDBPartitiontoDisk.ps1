@@ -7,25 +7,25 @@ function Import-RDBPartitiontoDisk {
 
     $FreeSpacePartitionMap = [System.Collections.Generic.List[PSCustomObject]]::New()
 
-    $MBRPartitionstoAddtoDisk = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
+    $MBRPartitionstoAddtoDisk = Get-AllGUIPartitions -partitiontype 'MBR'
     
     $MBRPartitionCounter = 1
     
     foreach ($MBRPartition in $MBRPartitionstoAddtoDisk) {
-        if ($MBRPartition.Partition.ImportedPartition -eq $true -and $MBRPartition.Partition.ImportedPartitionMethod -eq 'Derived'){
+        if ($MBRPartition.value.ImportedPartition -eq $true -and $MBRPartition.value.ImportedPartitionMethod -eq 'Derived'){
             Write-InformationMessage -Message "Identified MBR Partition #$MBRPartitionCounter for importation of Amiga Partitions"
             $RDBPartitionCounter = 1
-            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $MBRPartition.name } | ForEach-Object {
+            Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $MBRPartition.name } | ForEach-Object {
                 $FreeSpacePartitionMap.add([PSCustomObject]@{
                     PartitionName = [String]$_.Name
                     ID76Parent = [string]$MBRPartition.Name
-                    ID76ParentOffset = [int64]$MBRPartition.Partition.StartingPositionBytes  
-                    SourcePartitionPath = [string]$MBRPartition.Partition.ImportedPartitionPath
+                    ID76ParentOffset = [int64]$MBRPartition.value.StartingPositionBytes  
+                    SourcePartitionPath = [string]$MBRPartition.value.ImportedPartitionPath
                     MBRPartitionNumber = [int]$MBRPartitionCounter
                     RDBPartitionNumber = [int]$RDBPartitionCounter
-                    StartingOffset = [int64]$_.Partition.ImportedPartitionOffsetBytes
-                    EndingOffset = [int64]$_.Partition.ImportedPartitionEndBytes
-                    FreeSpaceStart = [int64](Get-FreeSpaceStartingByte -Path $MBRPartition.Partition.ImportedPartitionPath -RDBPartitionNumber $RDBPartitionCounter -EndingOffset ($_.Partition.ImportedPartitionEndBytes))
+                    StartingOffset = [int64]$_.value.ImportedPartitionOffsetBytes
+                    EndingOffset = [int64]$_.value.ImportedPartitionEndBytes
+                    FreeSpaceStart = [int64](Get-FreeSpaceStartingByte -Path $MBRPartition.value.ImportedPartitionPath -RDBPartitionNumber $RDBPartitionCounter -EndingOffset ($_.value.ImportedPartitionEndBytes))
                 })
                 $RDBPartitionCounter ++                
             }

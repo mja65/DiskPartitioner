@@ -82,9 +82,9 @@ function Update-UI {
         }
         else {
             if ($Script:GUIActions.OutputType -eq 'Disk'){
-                $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries | ForEach-Object {
-                    if ($_.Partition.ImportedPartition -eq $true -and $_.Partition.ImportedPartitionMethod -eq 'Direct'){
-                       if ($_.Partition.ImportedPartitionPath -match $Script:GUIActions.OutputPath){
+                Get-AllGUIPartitions -partitiontype 'MBR' | ForEach-Object {
+                    if ($_.value.ImportedPartition -eq $true -and $_.value.ImportedPartitionMethod -eq 'Direct'){
+                       if ($_.value.ImportedPartitionPath -match $Script:GUIActions.OutputPath){
                            $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The output location is the same physical disk set for one or more imported partitions")
                            $Script:GUICurrentStatus.ProcessImageStatus = $false
                        }
@@ -102,15 +102,15 @@ function Update-UI {
             $AmigaDriveDetailsToTest  = [System.Collections.Generic.List[PSCustomObject]]::New()
             
             $SystemDeviceName = (Get-InputCSVs -Diskdefaults | Where-Object {$_.Disk -eq 'System'}).DeviceName
-            $DefaultID76Partition = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries | Where-Object {$_.Partition.defaultgptmbrpartition -eq $true -and $_.Partition.PartitionSubType -eq 'ID76'}
+            $DefaultID76Partition = Get-AllGUIPartitions -PartitionType 'MBR' | Where-Object {$_.value.defaultgptmbrpartition -eq $true -and $_.value.PartitionSubType -eq 'ID76'}
            
-            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | ForEach-Object {            
+            Get-AllGUIPartitions -PartitionType 'Amiga' | ForEach-Object {            
                 $AmigaDriveDetailsToTest.add([PSCustomObject]@{
                     Disk = ($_.Name -split '_AmigaDisk_')[0]
-                    DeviceName = $_.Partition.DeviceName
-                    VolumeName = $_.Partition.VolumeName
-                    Priority = $_.Partition.Priority
-                    Bootable = $_.Partition.Bootable
+                    DeviceName = $_.value.DeviceName
+                    VolumeName = $_.value.VolumeName
+                    Priority = $_.value.Priority
+                    Bootable = $_.value.Bootable
                 })
             } 
                 
@@ -257,24 +257,22 @@ function Update-UI {
         }
     }
 
-
-
     if ($HighlightSelectedPartitions){
         if ($Script:GUIActions.DiskSizeSelected){
-            ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries + $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries) | ForEach-Object {
-                $TotalChildren = ($_.Partition.Children.Count)-1
+            Get-AllGUIPartitions -PartitionType 'All' | ForEach-Object {
+                $TotalChildren = ((Get-Variable -Name $_.Name).Value).Children.Count-1
                 for ($i = 0; $i -le $TotalChildren; $i++) {
-                    if  (($_.Partition.Children[$i].Name -eq 'TopBorder_Rectangle') -or `
-                        ($_.Partition.Children[$i].Name -eq 'BottomBorder_Rectangle') -or `
-                        ($_.Partition.Children[$i].Name -eq  'LeftBorder_Rectangle') -or `
-                        ($_.Partition.Children[$i].Name -eq 'RightBorder_Rectangle'))
+                    if  ((((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'TopBorder_Rectangle') -or `
+                        (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'BottomBorder_Rectangle') -or `
+                        (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'LeftBorder_Rectangle') -or `
+                        (((Get-Variable -Name $_.Name).Value).Children[$i].Name -eq 'RightBorder_Rectangle'))
                     {
                         if ($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName -eq $_.Name -or $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -eq $_.Name ){
                            ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Red'
                            # Write-debug "Highlighting Partition"                                      
                         } 
                         else{
-                           $_.Partition.Children[$i].Stroke='Black'
+                           ((Get-Variable -Name $_.Name).Value).Children[$i].Stroke='Black'
                         }
                     }
                 

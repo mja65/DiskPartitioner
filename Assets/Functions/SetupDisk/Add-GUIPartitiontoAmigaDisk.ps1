@@ -117,14 +117,8 @@ function Add-GUIPartitiontoAmigaDisk {
         (Get-Variable -Name $NewPartitionName).Value.ImportedPartitionEndBytes = $ImportedPartitionEndBytes
     }
 
-
-    $TotalColumns = (Get-Variable -Name $NewPartitionName).Value.ColumnDefinitions.Count-1
-    for ($i = 0; $i -le $TotalColumns; $i++) {
-        if  ((Get-Variable -Name $NewPartitionName).Value.ColumnDefinitions[$i].Name -eq 'FullSpace'){
-            (Get-Variable -Name $NewPartitionName).Value.ColumnDefinitions[$i].Width = $SizePixels
-        } 
-    }
-
+    (Get-Variable -Name $NewPartitionName).Value.ColumnDefinitions[1].Width = $SizePixels
+    
     (Get-Variable -Name $AmigaDiskName).Value.AddChild(((Get-Variable -name $NewPartitionName).value))
 
     if (-not ($LoadSettings)){

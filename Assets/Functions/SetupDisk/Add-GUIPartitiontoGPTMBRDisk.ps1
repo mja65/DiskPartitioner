@@ -102,12 +102,7 @@ function Add-GUIPartitiontoGPTMBRDisk {
 
     $NewPartition.Margin = [System.Windows.Thickness]"$LeftMargin,0,0,0"
     
-    $TotalColumns = $NewPartition.ColumnDefinitions.Count-1
-    for ($i = 0; $i -le $TotalColumns; $i++) {
-        if  ($NewPartition.ColumnDefinitions[$i].Name -eq 'FullSpace'){
-            $NewPartition.ColumnDefinitions[$i].Width = $SizePixels
-        } 
-    }
+    $NewPartition.ColumnDefinitions[1].Width = $SizePixels
 
     Set-Variable -name $NewPartitionName -Scope Script -Value ((Get-Variable -Name NewPartition).Value)
     (Get-Variable -Name $NewPartitionName).Value.Name = $NewPartitionName
