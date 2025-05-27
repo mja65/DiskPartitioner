@@ -16,7 +16,7 @@ $WPF_DP_MBR_VolumeName_Input.add_LostFocus({
     if ($WPF_DP_MBR_VolumeName_Input.ValueWhenEnterorButtonPushed -ne $WPF_DP_MBR_VolumeName_Input.Text -and $WPF_DP_MBR_VolumeName_Input.InputEntryChanged){
         # Write-debug 'Lost Focus - Performing action for WPF_DP_MBR_VolumeName_Input'    
         $Script:GUICurrentStatus.SelectedGPTMBRPartition.volumeName = $WPF_DP_MBR_VolumeName_Input.Text
-        Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
+        Update-UITextbox -Partition $Script:GUICurrentStatus.SelectedGPTMBRPartition -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
 
 
     }
@@ -41,7 +41,7 @@ $WPF_DP_MBR_VolumeName_Input.Add_KeyDown({
 
             $WPF_DP_MBR_VolumeName_Input.InputEntry = $true
             $Script:GUICurrentStatus.SelectedGPTMBRPartition.volumeName = $WPF_DP_MBR_VolumeName_Input.Text
-            Update-UITextbox -NameofPartition $Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
+            Update-UITextbox -Partition $Script:GUICurrentStatus.SelectedGPTMBRPartition -TextBoxControl $WPF_DP_MBR_VolumeName_Input -Value 'VolumeName' -CanChangeParameter 'CanRenameVolume'
 
         }
         else {

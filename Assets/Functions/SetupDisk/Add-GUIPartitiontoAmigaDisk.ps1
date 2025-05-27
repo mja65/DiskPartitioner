@@ -132,7 +132,6 @@ function Add-GUIPartitiontoAmigaDisk {
     }
     
     if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){     
-        Write-host "Wibble"
         $WPF_DP_DiskGrid_Amiga.UpdateLayout()
         $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = Get-AllGUIPartitionBoundaries -Amiga
     }

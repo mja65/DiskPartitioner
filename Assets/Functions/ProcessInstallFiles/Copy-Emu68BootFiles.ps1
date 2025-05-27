@@ -64,7 +64,7 @@ function Copy-EMU68BootFiles {
 
         $null = Copy-Item "$($Script:Settings.InterimAmigaDrives)\Emu68Boot\*" -Destination $Emu68BootPath -Recurse -force
 
-        $null = Copy-Item $Script:GUIActions.FoundKickstarttoUse.KickstartPath -Destination "$Emu68BootPath\$($Script:GUIActions.FoundKickstarttoUse.Fat32Name)"
+        $null = Copy-Item $Script:GUIActions.FoundKickstarttoUse.KickstartPath -LiteralPath -Destination "$Emu68BootPath\$($Script:GUIActions.FoundKickstarttoUse.Fat32Name)"
 
         if ($Script:GUIActions.InstallOSFiles -eq $true){
             $null = Copy-Item "$DiskIconsPath\Emu68BootDrive\disk.info" -Destination "$Emu68BootPath"

@@ -16,7 +16,7 @@ $WPF_DP_Amiga_Priority_Input.add_LostFocus({
     if ($WPF_DP_Amiga_Priority_Input.ValueWhenEnterorButtonPushed -ne $WPF_DP_Amiga_Priority_Input.Text -and $WPF_DP_Amiga_Priority_Input.InputEntryChanged){
         # Write-debug 'Lost Focus - Performing action for WPF_DP_Amiga_Priority_Input'
         $Script:GUICurrentStatus.SelectedAmigaPartition.Priority = $WPF_DP_Amiga_Priority_Input.Text
-        Update-UITextbox -NameofPartition $script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_Priority_Input -Value 'Priority' -CanChangeParameter 'CanChangePriority'
+        Update-UITextbox -Partition $script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Priority_Input -Value 'Priority' -CanChangeParameter 'CanChangePriority'
 
     }
     else {
@@ -40,7 +40,7 @@ $WPF_DP_Amiga_Priority_Input.Add_KeyDown({
 
             $WPF_DP_Amiga_Priority_Input.InputEntry = $true
             $Script:GUICurrentStatus.SelectedAmigaPartition.Priority = $WPF_DP_Amiga_Priority_Input.Text
-            Update-UITextbox -NameofPartition $script:GUICurrentStatus.SelectedAmigaPartition.PartitionName -TextBoxControl $WPF_DP_Amiga_Priority_Input -Value 'Priority' -CanChangeParameter 'CanChangePriority'
+            Update-UITextbox -Partition $script:GUICurrentStatus.SelectedAmigaPartition -TextBoxControl $WPF_DP_Amiga_Priority_Input -Value 'Priority' -CanChangeParameter 'CanChangePriority'
 
         }
         else {

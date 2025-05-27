@@ -1,6 +1,6 @@
 function Update-UITextbox {
     param (
-        $NameofPartition,
+        $Partition,
         $TextBoxControl,
         $DropdownControl,
         $Value,
@@ -19,13 +19,13 @@ function Update-UITextbox {
     # $CanChangeParameter = 'CanChangeDosType'
     
     if ($TextBoxControl){
-        $TextBoxControl.Text = (get-variable -name $NameofPartition).value.$Value
+        $TextBoxControl.Text = $Partition.$Value
     }
     elseif ($DropdownControl){
-        $DropdownControl.SelectedItem = (get-variable -name $NameofPartition).value.$Value
+        $DropdownControl.SelectedItem = $Partition.$Value
     }
 
-    if ((get-variable -name $NameofPartition).value.$CanChangeParameter -eq 'True'){
+    if ($Partition.$CanChangeParameter -eq 'True'){
         if ($TextBoxControl){
             $TextBoxControl.IsReadOnly = ''
             $TextBoxControl.Background = 'White'

@@ -140,7 +140,7 @@ function Write-AmigaFilestoInterimDrive {
                 else{
                     $NewFileNametoUse = $_.NewFileName 
                 }
-                $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\ADFRenameFiles\$($_.DrivetoInstall)_$($LocationtoInstalltoUse)_$($NewFileNametoUse)"
+                $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\ADFRenameFiles\$($_.DrivetoInstall)_XXX_$($LocationtoInstalltoUse)_XXX_$($NewFileNametoUse)"
                 $DestinationPath = [System.IO.Path]::GetFullPath($DestinationPath)    
         
             }
@@ -281,7 +281,7 @@ function Write-AmigaFilestoInterimDrive {
             (Get-ChildItem $PathtoExtractedFilesFilestoRename  -Recurse -File).FullName |ForEach-Object {
                 $SourcePath = $_
                 $ParentPathtoRemove = "$PathtoExtractedFilesFilestoRename\"
-                $DestinationPath = $_.replace('_','\').Replace($ParentPathtoRemove,'') 
+                $DestinationPath = $_.replace('_XXX_','\').Replace($ParentPathtoRemove,'') 
                 $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$DestinationPath" 
                 $DestinationPath = Split-Path $DestinationPath -Parent
                 $ParentFolder = Split-Path $DestinationPath -Parent

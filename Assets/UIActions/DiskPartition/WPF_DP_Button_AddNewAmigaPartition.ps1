@@ -3,19 +3,18 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
         return
     }
     # $AmigaDiskName = 'WPF_DP_Partition_MBR_2_AmigaDisk'
-
-    
+   
     if ($WPF_DP_AddNewAmigaPartition_DropDown.SelectedItem -eq 'At end of disk'){
         $AddType = 'AtEnd'     
-        $AmigaDiskName = "$($Script:GUICurrentStatus.SelectedGPTMBRPartition)_AmigaDisk"
+        $AmigaDiskName = "$($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName)_AmigaDisk"
     }
     elseif ($WPF_DP_AddNewAmigaPartition_DropDown.SelectedItem -eq 'Left of selected partition'){
         $AddType = 'Left'   
-        $AmigaDiskName = ($Script:GUICurrentStatus.SelectedAmigaPartition.Substring(0,($Script:GUICurrentStatus.SelectedAmigaPartition.IndexOf('_AmigaDisk_Partition_')+10))) 
+        $AmigaDiskName = ($Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName.Substring(0,($Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName.IndexOf('_AmigaDisk_Partition_')+10))) 
     }
     elseif ($WPF_DP_AddNewAmigaPartition_DropDown.SelectedItem -eq 'Right of selected partition'){
         $AddType = 'Right'  
-        $AmigaDiskName = ($Script:GUICurrentStatus.SelectedAmigaPartition.Substring(0,($Script:GUICurrentStatus.SelectedAmigaPartition.IndexOf('_AmigaDisk_Partition_')+10))) 
+        $AmigaDiskName = ($Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName.Substring(0,($Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName.IndexOf('_AmigaDisk_Partition_')+10))) 
     }
     
     if (($AddType -ne 'AtEnd') -and (-not $Script:GUICurrentStatus.SelectedAmigaPartition)){

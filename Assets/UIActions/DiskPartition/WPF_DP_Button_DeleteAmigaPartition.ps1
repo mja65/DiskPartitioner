@@ -17,7 +17,7 @@ $MessageBody =
             }
         }
 
-        if ((Remove-AmigaGUIPartition -PartitionName $Script:GUICurrentStatus.SelectedAmigaPartition) -eq $false){
+        if ((Remove-AmigaGUIPartition -Partition $Script:GUICurrentStatus.SelectedAmigaPartition) -eq $false){
             Show-WarningorError -Msg_Header 'Cannot Delete Partition' -Msg_Body 'Amiga Partition cannot be deleted.' -BoxTypeError -ButtonType_OK
         }
 

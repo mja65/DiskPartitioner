@@ -7,6 +7,8 @@ $WPF_DP_ResettoDefault.Add_Click({
             
             $Script:GUICurrentStatus.SelectedAmigaPartition = $null
             $Script:GUICurrentStatus.SelectedGPTMBRPartition = $null
+            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries = $null
+            $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries = $null
             $Script:GUIActions.OutputPath = $null
             $Script:GUIActions.OutputType = $null
             $Script:GUIActions.InstallOSFiles = $true
@@ -21,7 +23,7 @@ $WPF_DP_ResettoDefault.Add_Click({
                 Remove-Variable -Scope Script -Name 'WPF_DP_Disk_GPTMBR'
             }
         
-            Update-UI -DiskPartitionWindow -freespacealert
+            Update-UI -DiskPartitionWindow -freespacealert -HighlightSelectedPartitions
         
         }
         else {

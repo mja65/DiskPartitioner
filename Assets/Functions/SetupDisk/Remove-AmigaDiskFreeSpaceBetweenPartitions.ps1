@@ -16,9 +16,9 @@ function Remove-AmigaDiskFreeSpaceBetweenPartitions {
         }
         $AmounttoMoveBytes = $StartingPositiontoCheckAgainst - $Partition.StartingPositionBytes 
         if ($AmounttoMoveBytes -ne 0){
-            Set-GUIPartitionNewPosition -Partition $Partition -PartitionType 'Amiga' -AmountMovedBytes $AmounttoMoveBytes
+            Set-GUIPartitionNewPosition -Partition $Partition.Partition -PartitionType 'Amiga' -AmountMovedBytes $AmounttoMoveBytes
         }
-        $EndingPositionBytesLastPartition = (Get-Variable -Name $Partition.PartitionName).value.StartingPositionBytes + (Get-Variable -Name $Partition.PartitionName).value.PartitionSizeBytes
+        $EndingPositionBytesLastPartition = $Partition.Partition.StartingPositionBytes + $Partition.Partition.PartitionSizeBytes
     }
 
     if ($WPF_DP_Amiga_GroupBox.Visibility -eq 'Visible'){      
