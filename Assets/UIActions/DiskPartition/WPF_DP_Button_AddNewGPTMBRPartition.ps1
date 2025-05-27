@@ -25,7 +25,7 @@ $WPF_DP_Button_AddNewGPTMBRPartition.add_click({
         $null = Show-WarningorError -Msg_Header 'No Partition Selected' -Msg_Body 'You must select a partition!' -BoxTypeError -ButtonType_OK
     }
     else {
-        if ((Get-AllGUIPartitions -PartitionType 'MBR').count -eq $Script:Settings.MBRPartitionsMaximum){
+        if (($Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries).count -eq $Script:Settings.MBRPartitionsMaximum){
             $null = Show-WarningorError -Msg_Header 'Maximum Number of Partitions' -Msg_Body 'You have reached the maximum number of primary partitions allowed. Cannot create partition!' -BoxTypeError -ButtonType_OK
         }
         else {
