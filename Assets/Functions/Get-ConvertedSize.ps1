@@ -5,7 +5,7 @@ function Get-ConvertedSize {
         $Scaleto,
         [Switch]$AutoScale,
         $NumberofDecimalPlaces,
-        $Truncate
+        [Switch]$Truncate
     )
 
     $OutputtoReturn  = [PSCustomObject]@{

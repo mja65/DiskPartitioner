@@ -5,13 +5,13 @@ function Get-NewPartitionSize {
     $MinimumSizeBytes
     )
 
-    #$DefaultScale = "GiB"
-    #$MaximumSizeBytes = 10*1024*1024*1024
+    #$DefaultScale = "GiB" 
+    #$MaximumSizeBytes = 332365824
     #$MinimumSizeBytes = 10*1024*1024    
-    #$WPF_NewPartitionWindow_Input_PartitionSize_Value.Text = '5000'
+    #$WPF_NewPartitionWindow_Input_PartitionSize_Value.Text = '5000' 
 
     $MinimumSizeBytestoUse = (Get-ConvertedSize -Size $MinimumSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
-    $MaximumSizeBytestoUse = (Get-ConvertedSize -Size $MaximumSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
+    $MaximumSizeBytestoUse = (Get-ConvertedSize -Size $MaximumSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2 -Truncate)
 
     $Script:GUICurrentStatus.NewPartitionDefaultScale = $DefaultScale
     $Script:GUICurrentStatus.NewPartitionMinimumSizeBytes = $MinimumSizeBytes

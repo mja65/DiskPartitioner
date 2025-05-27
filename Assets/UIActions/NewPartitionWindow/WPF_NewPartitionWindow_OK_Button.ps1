@@ -10,6 +10,7 @@ $WPF_NewPartitionWindow_OK_Button.Add_Click({
     if  ((Get-IsValueNumber -TexttoCheck $WPF_NewPartitionWindow_Input_PartitionSize_Value.Text) -eq $true){
         $WPF_NewPartitionWindow_ErrorMessage_Label.Text = ""
         $ValuetoCheck = (Get-ConvertedSize -Size $WPF_NewPartitionWindow_Input_PartitionSize_Value.Text -ScaleFrom $WPF_NewPartitionWindow_Input_PartitionSize_SizeScale_Dropdown.Text -Scaleto 'B').size
+        Write-host "Value input is: $ValuetoCheck"  
         if (-not (($ValuetoCheck -le $Script:GUICurrentStatus.NewPartitionMaximumSizeBytes) -and $ValuetoCheck -ge ($Script:GUICurrentStatus.NewPartitionMinimumSizeBytes))){
             $WPF_NewPartitionWindow_ErrorMessage_Label.Text = "Size of partition must be less than maximum size and greater than the minimum size!"
             return

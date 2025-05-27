@@ -24,7 +24,7 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
     
     Set-AmigaDiskSizeOverhangPixels -AmigaDisk $AmigaDiskName
     
-    $CurrentNumberofPartitionsonAmigaDisk = (Get-AllGUIPartitions -PartitionType 'Amiga' | Where-Object {$_.Name -match $AmigaDiskName}).Count
+    $CurrentNumberofPartitionsonAmigaDisk = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object { $AmigaDiskName-match $_.PartitionNameName}).Count
 
     if ($CurrentNumberofPartitionsonAmigaDisk -eq $Script:Settings.AmigaPartitionsperDiskMaximum){
         $null = Show-WarningorError -Msg_Header "Exceeded maximum number of partitions" -Msg_Body "You have $($Script:Settings.AmigaPartitionsperDiskMaximum) partitions on this disk! No more partitions can be added." -BoxTypeError -ButtonType_OK
@@ -42,7 +42,7 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
             $PartitionNexttotouse = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName}).PartitionName | Select-Object -Last 1
         }
         else {
-            $PartitionNexttotouse = $Script:GUICurrentStatus.SelectedAmigaPartition
+            $PartitionNexttotouse = $Script:GUICurrentStatus.SelectedAmigaPartition.PartitionName
         }
     }
     
