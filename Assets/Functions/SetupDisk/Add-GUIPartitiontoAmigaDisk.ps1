@@ -30,6 +30,9 @@ function Add-GUIPartitiontoAmigaDisk {
     # $PartitionNameNextto = 'WPF_DP_Partition_ID76_1_AmigaDisk_Partition_1'
     # $AddType = 'AtEnd'
    
+    Write-Debug "Function: $($MyInvocation.MyCommand.Name)"
+    Write-Debug "Parameters received: $($PSBoundParameters | Out-String)"
+
     if ($PartitionTypeAmiga){
         $DefaultPartition = $true
     }
@@ -43,6 +46,7 @@ function Add-GUIPartitiontoAmigaDisk {
         $SizePixels -= 4
     }
 
+    #$Script:GUICurrentStatus.AmigaPartitionsandBoundaries
     if ($AddType -eq 'AtEnd'){
         $LeftMargin = (Get-GUIPartitionStartEnd -PartitionType 'Amiga' -AmigaDiskName $AmigaDiskName).EndingPositionPixels
         $StartingPositionBytes = (Get-GUIPartitionStartEnd -PartitionType 'Amiga' -AmigaDiskName $AmigaDiskName).EndingPositionBytes
