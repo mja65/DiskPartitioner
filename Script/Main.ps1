@@ -145,5 +145,4 @@ Measure-Command { Update-ui }
 
 #>
 
-# $Script:GUICurrentStatus.SelectedGPTBMRPartition
-# $Script:GUICurrentStatus.SelectedAmigaPartition
+# 

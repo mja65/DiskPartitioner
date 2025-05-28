@@ -5,11 +5,11 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
 
     
     $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures = [System.Collections.Generic.List[PSCustomObject]]::New()
-    $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk = [System.Collections.Generic.List[PSCustomObject]]::New()
+    $Script:GUICurrentStatus.HSTCommandstoProcess.WriteFilestoDisk = [System.Collections.Generic.List[PSCustomObject]]::New() 
 
     if ($Script:GUIActions.DiskTypeSelected -eq 'PiStorm - MBR'){
-        $MBRPartitionstoAddtoDisk = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
-        $RDBPartitionstoAddtoDisk = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries
+        $MBRPartitionstoAddtoDisk = @($Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries)
+        $RDBPartitionstoAddtoDisk = @($Script:GUICurrentStatus.AmigaPartitionsandBoundaries)
     }
     elseif ($Script:GUIActions.DiskTypeSelected -eq 'PiStorm - GPT'){
         Write-ErrorMessage -Message "Error in Coding - WPF_Window_Button_Run !"
@@ -42,7 +42,7 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
         Write-InformationMessage -Message "Adding command to create partition #$MBRPartitionCounter of type $PartitionTypetoUse"
 
         $MBRPartitionStartSector = $MBRPartition.Partition.StartingPositionSector + $StartingSector
-    
+     
         $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
             Command = "mbr part add $($Script:GUIActions.OutputPath) $PartitionTypetoUse $($MBRPartition.Partition.partitionsizebytes) --start-sector $MBRPartitionStartSector"
             Sequence = 1      
@@ -65,14 +65,13 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
     $FileSystemstoAdd = [System.Collections.Generic.List[PSCustomObject]]::New()
 
     Write-InformationMessage -Message "Determining Filesystems to add to disk"
-
     foreach ($RDBPartition in $RDBPartitionstoAddtoDisk){        
-        $FileSystemstoAdd  += [PSCustomObject]@{
-            GPTMBRPartition = $RDBPartition.name.Substring(0,($RDBPartition.name.IndexOf('_AmigaDisk_Partition_')))
+        $FileSystemstoAdd.add([PSCustomObject]@{
+            GPTMBRPartition = $RDBPartition.Partitionname.Substring(0,($RDBPartition.Partitionname.IndexOf('_AmigaDisk_Partition_')))
             DosType = $RDBPartition.Partition.DosType
             FileSystemPath = $null
             FileSystemName = $null
-        }
+        })
     }
    
    $FileSystemstoAdd = $FileSystemstoAdd | Select-Object 'GPTMBRPartition','DosType','FileSystemPath','FileSystemName'  -Unique
@@ -97,18 +96,18 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
   
    foreach ($MBRPartition in $MBRPartitionstoAddtoDisk) {
        if ($MBRPartition.Partition.PartitionSubType -eq 'FAT32'){
-           Write-InformationMessage -Message "Skipping Partition $($MBRPartition.Name) - MBR Partition Number: $MBRPartitionCounter"
+           Write-InformationMessage -Message "Skipping Partition $($MBRPartition.PartitionName) - MBR Partition Number: $MBRPartitionCounter"
        }       
        elseif ($MBRPartition.Partition.PartitionSubType -eq 'ID76'){
            $RDBPartitionCounter = 1       
-           Write-InformationMessage -Message "Preparing commands to set up Amiga Disk for $($MBRPartition.Name) - MBR Partition Number: $MBRPartitionCounter"
+           Write-InformationMessage -Message "Preparing commands to set up Amiga Disk for $($MBRPartition.PartitionName) - MBR Partition Number: $MBRPartitionCounter"
            if ($MBRPartition.Partition.ImportedPartition -ne $true){
                $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
                    Command = "rdb init $($Script:GUIActions.OutputPath)\mbr\$MBRPartitionCounter"
                    Sequence = 3    
                }  
                foreach ($FileSystem in $FileSystemstoAdd){
-                   if ($FileSystem.GPTMBRPartition -eq $MBRPartition.Name){
+                   if ($FileSystem.GPTMBRPartition -eq $MBRPartition.PartitionName){
                     $DosTypetoUse = $FileSystem.DosType.Replace("\","")
                     Write-InformationMessage -Message "Adding filesystem `"$($FileSystem.FileSystemName)`" to Disk"
                        $Script:GUICurrentStatus.HSTCommandstoProcess.DiskStructures += [PSCustomObject]@{
@@ -118,7 +117,7 @@ function Get-DiskStructurestoMBRGPTDiskorImageCommands {
                    }               
                }
                foreach ($RDBPartition in $RDBPartitionstoAddtoDisk) {
-                    if (($RDBPartition.Name -split '_AmigaDisk_')[0] -eq $MBRPartition.Name){
+                    if (($RDBPartition.PartitionName -split '_AmigaDisk_')[0] -eq $MBRPartition.PartitionName){
                         $Script:GUICurrentStatus.PathstoRDBPartitions  += [PSCustomObject]@{
                             MBRPartitionNumber = $MBRPartitionCounter
                             RDBPartitionNumber = $RDBPartitionCounter

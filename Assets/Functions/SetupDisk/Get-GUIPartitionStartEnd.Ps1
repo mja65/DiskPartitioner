@@ -5,7 +5,7 @@ function Get-GUIPartitionStartEnd {
 
     )
 
-    # $AmigaDiskName = 'WPF_DP_Partition_ID76_2_AmigaDisk'
+    # $AmigaDiskName = 'WPF_DP_Partition_MBR_2_AmigaDisk'
     # $PartitionType = 'MBR'
     # $PartitionType = 'Amiga'
 
@@ -17,27 +17,39 @@ function Get-GUIPartitionStartEnd {
     }
 
     if ($PartitionType -eq 'MBR'){
-        $ListofPartitions  = Get-AllGUIPartitions -PartitionType $PartitionType
+        $ListofPartitions  = @(Get-AllGUIPartitions -PartitionType $PartitionType | Sort-Object {[int]$_.value.StartingPositionBytes})
     }
     elseif ($PartitionType -eq 'Amiga'){
         $ID76Partition = $AmigaDiskName.Substring(0,$AmigaDiskName.IndexOf('_AmigaDisk'))        
-        $ListofPartitions  = Get-AllGUIPartitions -PartitionType $PartitionType | Where-Object {$_.Name -Match $ID76Partition } 
+        $ListofPartitions  = @(Get-AllGUIPartitions -PartitionType $PartitionType | Where-Object {$_.Name -Match $ID76Partition } | Sort-Object {[int]$_.value.StartingPositionBytes})
     }
-       
-    $Counter = 0
+     
     if (-not $ListofPartitions){ # No Partitions at all
         return $ValuetoReturn 
     }
-    else{
-        Foreach ($Partition in $ListofPartitions){
-            If ($Counter -eq 0){
-                $ValuetoReturn.StartingPositionPixels = $Partition.Value.Margin.Left
-            }          
-            $ValuetoReturn.EndingPositionPixels += (Get-GUIPartitionWidth -Partition $Partition.Value)
-            $ValuetoReturn.EndingPositionBytes +=  $Partition.Value.PartitionSizeBytes
-            $Counter ++
-        }
-    }
+
+    $TotalPartitions = $ListofPartitions.Count
+    
+    $ValuetoReturn.StartingPositionPixels = $ListofPartitions[0].Value.Margin.Left
+    $ValuetoReturn.StartingPositionBytes = $ListofPartitions[0].Value.StartingPositionBytes
+    $ValuetoReturn.EndingPositionPixels = $ListofPartitions[$TotalPartitions-1].Value.Margin.Left + (Get-GUIPartitionWidth -Partition $ListofPartitions[$TotalPartitions-1].Value)
+    $ValuetoReturn.EndingPositionBytes = $ListofPartitions[$TotalPartitions-1].Value.StartingPositionBytes + $ListofPartitions[$TotalPartitions-1].Value.PartitionSizeBytes
+ 
     return $ValuetoReturn                  
 }
 
+    # if (-not $ListofPartitions){ # No Partitions at all
+    #     return $ValuetoReturn 
+    # }
+    # $Counter = 0
+    # else{
+    #     Foreach ($Partition in $ListofPartitions){
+    #         If ($Counter -eq 0){
+    #             $ValuetoReturn.StartingPositionPixels = $Partition.Value.Margin.Left
+    #         }          
+    #         $ValuetoReturn.EndingPositionPixels += (Get-GUIPartitionWidth -Partition $Partition.Value)
+    #         $ValuetoReturn.EndingPositionBytes +=  $Partition.Value.PartitionSizeBytes
+    #         $Counter ++
+    #     }
+    # }
+    # return $ValuetoReturn        

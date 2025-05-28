@@ -185,12 +185,12 @@ function Set-PartitionGridActions {
                     if  ($Script:GUICurrentStatus.SelectedAmigaPartition){
                         $Script:GUICurrentStatus.SelectedAmigaPartition = $null
                         
-                        # Write-debug "Unselected Amiga Partition"                       
+                        #Write-debug "Unselected Amiga Partition"                       
 
                     }
                     else {
                         $Script:GUICurrentStatus.SelectedGPTMBRPartition = $null
-                        # Write-debug "Unselected MBR Partition"                       
+                        #Write-debug "Unselected MBR Partition"                       
 
                     }
                 }

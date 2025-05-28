@@ -92,6 +92,7 @@ function Update-UI {
                }
             }
         }
+
         If (-not ($Script:GUIActions.DiskSizeSelected)){
             $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","Disk Partitioning has not been performed")
             $Script:GUICurrentStatus.ProcessImageStatus = $false
@@ -104,13 +105,13 @@ function Update-UI {
             $SystemDeviceName = (Get-InputCSVs -Diskdefaults | Where-Object {$_.Disk -eq 'System'}).DeviceName
             $DefaultID76Partition = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries | Where-Object {$_.Partition.defaultgptmbrpartition -eq $true -and $_.Partition.PartitionSubType -eq 'ID76'}
            
-            $Script:GUICurrentStatus.AmigaPartitionsandBoundaries | ForEach-Object {            
+            Get-Variable -Include '*_amigadisk_Partition*' | ForEach-Object {            
                 $AmigaDriveDetailsToTest.add([PSCustomObject]@{
-                    Disk = ($_.PartitionName -split '_AmigaDisk_')[0]
-                    DeviceName = $_.Partition.DeviceName
-                    VolumeName = $_.Partition.VolumeName
-                    Priority = $_.Partition.Priority
-                    Bootable = $_.Partition.Bootable
+                    Disk = ($_.Name -split '_AmigaDisk_')[0]
+                    DeviceName = $_.value.DeviceName
+                    VolumeName = $_.value.VolumeName
+                    Priority = $_.value.Priority
+                    Bootable = $_.value.Bootable
                 })
             } 
                 
@@ -130,7 +131,7 @@ function Update-UI {
                      $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","There are no Amiga volumes set to be bootable.")
                 } 
 
-                $TopPriorityonDefaultDrive = $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | Sort-Object 'Priority'| Select-Object -first 1
+                $TopPriorityonDefaultDrive = $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.PartitionName} | Sort-Object 'Priority'| Select-Object -first 1
                 
                 if ($Script:GUIActions.InstallOSFiles -eq $true){
 
@@ -139,7 +140,7 @@ function Update-UI {
                         $Script:GUICurrentStatus.ProcessImageStatus = $false
                     }
                     else {
-                        $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.Name} | ForEach-Object {
+                        $AmigaDriveDetailsToTest | Where-Object {$_.Disk -eq $DefaultID76Partition.PartitionName} | ForEach-Object {
                             if (($_.Disk -eq $TopPriorityonDefaultDrive.Disk) -and ($_.DeviceName -ne $TopPriorityonDefaultDrive.DeviceName)  -and ($_.Priority -eq $TopPriorityonDefaultDrive.Priority)){
                                 $null = $Script:GUICurrentStatus.IssuesFoundBeforeProcessing.Rows.Add("Disk Setup","The default system device $SystemDeviceName is set to the same priority as one or more volumes on the same Amiga disk.")
                                 $Script:GUICurrentStatus.ProcessImageStatus = $false

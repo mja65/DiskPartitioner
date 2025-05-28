@@ -118,7 +118,7 @@ function Write-AmigaFilestoInterimDrive {
 
         if (Test-Path $PathtoDelete) {
             Show-SpinnerWhileDeleting -ScriptBlock {
-                Remove-Item $PathtoDelete -Recurse -Force -ErrorAction SilentlyContinue
+                Remove-Item $using:PathtoDelete -Recurse -Force -ErrorAction SilentlyContinue
             }      
         }
     
@@ -133,7 +133,7 @@ function Write-AmigaFilestoInterimDrive {
             $SourcePath  = "$($_.InstallMediaPath)\$($_.FilestoInstall)"
             If ($_.NewFileName -ne ""){
                 $FileName = Split-Path $SourcePath -Leaf
-                $LocationtoInstalltoUse = ($($_.LocationtoInstall)).replace('\','_')      
+                $LocationtoInstalltoUse = ($($_.LocationtoInstall)).replace('\','_XXX_')      
                 if ($FileName.Substring($FileName.Length-2) -eq ".Z"){
                     $NewFileNametoUse = "$($_.NewFileName).Z"
                 }
@@ -281,7 +281,7 @@ function Write-AmigaFilestoInterimDrive {
             (Get-ChildItem $PathtoExtractedFilesFilestoRename  -Recurse -File).FullName |ForEach-Object {
                 $SourcePath = $_
                 $ParentPathtoRemove = "$PathtoExtractedFilesFilestoRename\"
-                $DestinationPath = $_.replace('_XXX_','\').Replace($ParentPathtoRemove,'') 
+                $DestinationPath = ($_).replace('_XXX_','\').Replace($ParentPathtoRemove,'') 
                 $DestinationPath = "$($Script:Settings.InterimAmigaDrives)\$DestinationPath" 
                 $DestinationPath = Split-Path $DestinationPath -Parent
                 $ParentFolder = Split-Path $DestinationPath -Parent
