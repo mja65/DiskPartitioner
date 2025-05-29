@@ -11,11 +11,14 @@ function Set-AmigaDiskSizeOverhangPixels {
     return
    } 
 
+   $PartitionstoCheck = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName })
 
+   if (-not ($PartitionstoCheck)){
+       return
+    }
+   
     $TotalPartitions = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName}).Count
     
-    $PartitionstoCheck = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object {$_.PartitionName -match $AmigaDiskName })
-
     $AmounttoMovePartitionPixelsAccumulated = 0
 
     $Changes = $false

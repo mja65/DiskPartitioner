@@ -7,7 +7,7 @@ function Show-Disclaimer {
     $WPF_Disclaimer_TextBox_Header.Text = "Emu68 Imager v$($Script:Settings.Version)"
     $null = $WPF_Disclaimer.ShowDialog()
 
-    if (-not ($Script:GUIActions.IsDisclaimerAccepted -eq $true)){
+    if (-not ($Script:GUICurrentStatus.OperationMode)){
         Write-ErrorMessage 'Exiting - Disclaimer Not Accepted'
         exit    
     }

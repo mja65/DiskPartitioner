@@ -1,0 +1,49 @@
+    <Grid x:Name="Window_StartPage" Background="#FFE5E5E5" Margin="200,0,0,0" HorizontalAlignment="Left" Height="800" VerticalAlignment = "Top" Visibility="Visible"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:local="clr-namespace:WpfApp14"
+  mc:Ignorable="d">
+        <TextBlock x:Name="StartPage_TextBlock" HorizontalAlignment="Left" Margin="0,100,0,0" TextWrapping="Wrap"  FontSize="16" VerticalAlignment="Top" Width="1000" Height="800">
+            <Run FontWeight="Bold" FontSize="14" Text="Mode of Operation - Simple Mode"/>
+            <LineBreak/>
+            <Run/><LineBreak/>  
+            <Run Text="In order to use this tool, click the buttons on the left side of the screen."/>
+            <LineBreak/>
+            <Run/><LineBreak/>            
+            <Run FontWeight="Bold" Text="Start "/>
+            <Run Text="- this page"/><LineBreak/>
+            <Run/><LineBreak/>
+            <Run FontWeight="Bold" Text="Set up Disk"/>
+            <Run Text=" - Select the disk or image to write to, define the size"/><LineBreak/>
+            <Run/><LineBreak/>
+            <Run FontWeight="Bold" Text="Configure Emu68"/>
+            <Run Text=" - Configure Emu68 options"/><LineBreak/>
+            <Run/><LineBreak/>
+            <Run Text="If you wish to run by leaving everything at the default, the following steps will prepare an image with minimal customisation:"/><LineBreak/>
+            <Run Text="1. Go to the Configure Emu68 Page, set the ROM and OS Files location"/><LineBreak/>
+            <Run Text="2. Press the check files option"/><LineBreak/>
+            <Run Text="3. Go to the Set up Disk and set the output location"/><LineBreak/>
+            <Run Text="4. Press the run button  "/><LineBreak/>
+            <Run/><LineBreak/>
+            <Run Text="Detailed help is available at the following locations:"/><LineBreak/>
+            <Run/><LineBreak/>
+            <Hyperlink x:Name="ImagerURL" NavigateUri="https://mja65.github.io/Emu68-Imager/">
+                Emu68 Imager Documentation
+            </Hyperlink>
+            <LineBreak />
+            <Run/><LineBreak/>
+            <Hyperlink x:Name="DiscordURL" NavigateUri="https://discord.com/channels/784428461330530305/1291663799983673468">
+                PiStorm Discord Channel (#emu68-imager-support)
+            </Hyperlink>
+            <LineBreak />
+            <Run/><LineBreak/>
+            <Run Text="Other Useful Links:"/><LineBreak/>
+            <Hyperlink x:Name="Emu68GithubURL" NavigateUri="https://github.com/michalsc/Emu68">
+                Emu68 GitHub
+            </Hyperlink>
+        </TextBlock>
+
+       
+    </Grid>

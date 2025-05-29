@@ -1,6 +1,6 @@
 function Get-ConvertedSize {
     param (
-        $Size,
+        [decimal]$Size,
         $ScaleFrom,
         $Scaleto,
         [Switch]$AutoScale,
@@ -8,9 +8,24 @@ function Get-ConvertedSize {
         [Switch]$Truncate
     )
 
+
+    # $AutoScale = $true
+    # $Size = 3
+    # $NumberofDecimalPlaces = 2
+    # $ScaleFrom = 'B'
+
+    #Write-debug "Function: $($MyInvocation.MyCommand.Name)"
+    #Write-debug "Parameters received: $($PSBoundParameters | Out-String)"
+
     $OutputtoReturn  = [PSCustomObject]@{
         Size = $null
         Scale = $null
+    }
+
+    if ($Size -eq 0){
+        $OutputtoReturn.Size = 0
+        $OutputtoReturn.Scale = 'B'
+        return $OutputtoReturn 
     }
 
     if ($ScaleFrom -eq $Scaleto){

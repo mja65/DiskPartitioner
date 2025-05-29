@@ -10,6 +10,7 @@ function Update-UI {
         [Switch]$CheckforRunningImage,
         [Switch]$FreeSpaceAlert
     )
+
    
     # if (($Emu68Settings) -and (-not ($Script:GUICurrentStatus.CurrentWindow -eq 'Emu68Settings'))){
     #     return
@@ -299,14 +300,26 @@ function Update-UI {
                 }
 
                 $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Visible'
-                If ($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionSubType -eq 'ID76'){
+                If ($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionSubType -eq 'ID76'){ 
                     $AmigaDiskName = "$($Script:GUICurrentStatus.SelectedGPTMBRPartition.PartitionName)_AmigaDisk"
                     if (Get-Variable -name $AmigaDiskName){
                         Set-AmigaDiskSizeOverhangPixels -AmigaDiskName $AmigaDiskName
                     }
                     #$WPF_DP_DiskGrid_Amiga.Visibility ='Visible'
-                    $WPF_DP_Amiga_GroupBox.Visibility ='Visible'
-                    $WPF_DP_AmigaSettings_GroupBox.Visibility = 'Hidden'
+                    $WPF_DP_Amiga_GroupBox.Visibility = 'Visible'
+                    $AmigaDiskSizeBytes = [int64](Get-Variable -name  $AmigaDiskName).value.DiskSizeBytes
+                    $AmigaEndofPartitionsBytes = [int64](Get-GUIPartitionStartEnd -PartitionType 'Amiga' -AmigaDiskName $AmigaDiskName).EndingPositionBytes
+                    $FreeSpacetoCheck = $AmigaDiskSizeBytes -$AmigaEndofPartitionsBytes              
+                    $DiskSize = (Get-ConvertedSize -Size $AmigaDiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2) 
+                    $DiskFreeSpaceSize = (Get-ConvertedSize -Size $FreeSpacetoCheck -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)  
+                    #Write-debug "$($DiskSize.Size) $($DiskSize.Scale) $($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)"
+                    $WPF_DP_Amiga_TotalDiskSize.Text = "$($DiskSize.Size) $($DiskSize.Scale)"
+                    $WPF_DP_Amiga_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)"                    
+                    $WPF_DP_Amiga_TotalDiskSize_Label.Visibility = 'Visible'
+                    $WPF_DP_Amiga_TotalDiskSize.Visibility = 'Visible'
+                    $WPF_DP_Amiga_TotalFreeSpaceSize.Visibility = 'Visible'
+                    $WPF_DP_Amiga_TotalFreeSpaceSize_Label.Visibility = 'Visible'
+                    $WPF_DP_AmigaSettings_GroupBox.Visibility = 'Visible'
                     $TotalChildren = $WPF_DP_DiskGrid_Amiga.Children.Count-1
                     for ($i = 0; $i -le $TotalChildren; $i++) {
                         $WPF_DP_DiskGrid_Amiga.Children.Remove($WPF_DP_DiskGrid_Amiga.Children[$i])
@@ -318,8 +331,13 @@ function Update-UI {
                     }                    
                 }
                 else{
-                    #$WPF_DP_DiskGrid_Amiga.Visibility ='Hidden'
-                    $WPF_DP_Amiga_GroupBox.Visibility ='Hidden'
+                    #$WPF_DP_DiskGrid_Amiga.Visibility = 'Hidden'
+                    $WPF_DP_Amiga_GroupBox.Visibility = 'Hidden'
+                    $WPF_DP_Amiga_TotalDiskSize_Label.Visibility = 'Hidden'
+                    $WPF_DP_Amiga_TotalDiskSize.Visibility = 'Hidden'
+                    $WPF_DP_Amiga_TotalFreeSpaceSize.Visibility = 'Hidden'
+                    $WPF_DP_Amiga_TotalFreeSpaceSize_Label.Visibility = 'Hidden'
+
                 }
                 $WPF_DP_GPTMBR_GroupBox.Visibility = 'Visible'
               
@@ -328,6 +346,10 @@ function Update-UI {
                 $WPF_DP_SelectedMBRPartition_Value.text = "No partition selected"
                # $WPF_DP_DiskGrid_Amiga.Visibility = 'Hidden'
                 $WPF_DP_Amiga_GroupBox.Visibility = 'Hidden'
+                $WPF_DP_Amiga_TotalDiskSize_Label.Visibility = 'Hidden'
+                $WPF_DP_Amiga_TotalDiskSize.Visibility = 'Hidden'
+                $WPF_DP_Amiga_TotalFreeSpaceSize.Visibility = 'Hidden'
+                $WPF_DP_Amiga_TotalFreeSpaceSize_Label.Visibility = 'Hidden'                                
                 $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Hidden'
                 $WPF_DP_AmigaSettings_GroupBox.Visibility = 'Hidden'
                 #$WPF_DP_GPTMBR_GroupBox.Visibility = 'Hidden'
@@ -339,6 +361,10 @@ function Update-UI {
         else {
             $WPF_DP_GPTMBR_GroupBox.Visibility = 'Hidden'
             $WPF_DP_Amiga_GroupBox.Visibility = 'Hidden'
+            $WPF_DP_Amiga_TotalDiskSize_Label.Visibility = 'Hidden'
+            $WPF_DP_Amiga_TotalDiskSize.Visibility = 'Hidden'
+            $WPF_DP_Amiga_TotalFreeSpaceSize.Visibility = 'Hidden'
+            $WPF_DP_Amiga_TotalFreeSpaceSize_Label.Visibility = 'Hidden'
             $WPF_DP_MBRGPTSettings_GroupBox.Visibility = 'Hidden'
             $WPF_DP_AmigaSettings_GroupBox.Visibility = 'Hidden'            
         }
@@ -392,7 +418,7 @@ function Update-UI {
 
         }
         else {
-            if ($WPF_DP_GPTMBR_GroupBox.Visibility -eq 'Visible'){
+            if ($WPF_DP_GPTMBR_GroupBox.Visibility -eq 'Visible'){                
                 $DiskSize = (Get-ConvertedSize -Size $WPF_DP_Disk_GPTMBR.DiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
                 $PartitionsToCheck = $Script:GUICurrentStatus.GPTMBRPartitionsandBoundaries 
                 $DiskFreeSpaceSize = (Get-ConvertedSize -Size (($PartitionsToCheck[$PartitionsToCheck.Count-1]).BytesAvailableRight) -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2)
@@ -406,7 +432,86 @@ function Update-UI {
                 $WPF_DP_SelectedSize_Input.Text = ''
                 $WPF_DP_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = ''
                 $WPF_DP_MBR_TotalDiskSize.Text = "$($DiskSize.Size) $($DiskSize.Scale)"
-                $WPF_DP_MBR_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)"      
+                $WPF_DP_MBR_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)"   
+                If ($Script:GUICurrentStatus.OperationMode -eq "Simple"){
+                       $WPF_DP_MBRPartitionSelect_LeftArrow.Visibility = "Hidden"
+                       $WPF_DP_MBRPartitionSelect_RightArrow.Visibility = "Hidden"
+                       $WPF_DP_Button_DeleteMBRPartition.Visibility = "Hidden"
+                       $WPF_DP_Button_RemoveFreeSpace.Visibility = "Hidden"
+                       $WPF_DP_Button_AddNewGPTMBRPartition.Visibility = "Hidden"
+                       $WPF_DP_AddNewGPTMBRPartition_DropDown.Visibility = "Hidden"
+                       $WPF_DP_AddNewGPTMBRPartition_Type_DropDown.Visibility = "Hidden"
+                       $WPF_DP_Button_ImportMBRPartition.Visibility = "Hidden"
+                       $WPF_DP_ImportMBRPartition_DropDown.Visibility = "Hidden"
+                       $WPF_DP_SelectedMBRPartition_Label.Visibility = "Hidden"
+                       $WPF_DP_SelectedMBRPartition_Value.Visibility = "Hidden"
+                       $WPF_DP_MBRPartitionSelect_Label.Visibility = "Hidden"
+                       $WPF_DP_Amiga_GroupBox.Visibility = "Visible"
+                       $WPF_DP_DiskGrid_Amiga.Visibility = "Visible"
+                       $WPF_DP_SelectedAmigaPartition_Label.Visibility = "Hidden"
+                       $WPF_DP_SelectedAmigaPartition_Value.Visibility = "Hidden"
+                       $WPF_DP_AmigaPartitionSelect_Label.Visibility = "Hidden"
+                       $WPF_DP_AmigaPartitionSelect_LeftArrow.Visibility = "Hidden"
+                       $WPF_DP_AmigaPartitionSelect_RightArrow.Visibility = "Hidden"
+                       $WPF_DP_Button_AmigaRemoveFreeSpace.Visibility = "Hidden"
+                       $WPF_DP_Button_DeleteAmigaPartition.Visibility = "Hidden"
+                       $WPF_DP_AddNewAmigaPartition_DropDown.Visibility = "Hidden"
+                       $WPF_DP_Button_AddNewAmigaPartition.Visibility = "Hidden"
+                       $WPF_DP_Button_ImportFilesCancel.Visibility = "Hidden"
+                       $WPF_DP_Button_ImportFiles.Visibility = "Hidden"
+                       $WPF_DP_Button_ImportFiles_Label.Visibility = "Hidden"
+                       $WPF_DP_ImportFilesSize_Value.Visibility = "Hidden"
+                       
+                       $WPF_DP_SimpleMode_FAT32Size_Label.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_FAT32Size_Value.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_ID76Size_Label.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_ID76Size_Value.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_Legend_FAT32SizeDefault.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_Legend_ID76Size.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_Legend_WorkbenchSizeDefault.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_Legend_WorkSize.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_WorkbenchSize_Label.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_WorkbenchSize_Value.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_WorkSize_Label.Visibility = "Visible"
+                       $WPF_DP_SimpleMode_WorkSize_Value.Visibility = "Visible"
+                       
+                       $FAT32Partition = (Get-Variable -Name "*_Partition_MBR_*" -Exclude "*Amiga*" | Where-Object {$_.Value.PartitionSubType -eq "FAT32"}).value
+                       $FAT32PartitionSize = Get-ConvertedSize -Size $FAT32Partition.PartitionSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2
+                       $WPF_DP_SimpleMode_FAT32Size_Value.Text = "$($FAT32PartitionSize.size) $($FAT32PartitionSize.scale)"
+
+                       $ID76Partition = (Get-Variable -Name "*_Partition_MBR_*" -Exclude "*Amiga*" | Where-Object {$_.Value.PartitionSubType -eq "ID76"}).Value
+                       $ID76PartitionSize = Get-ConvertedSize -Size $ID76Partition.PartitionSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2
+                       $WPF_DP_SimpleMode_ID76Size_Value.Text = "$($ID76PartitionSize.size) $($ID76PartitionSize.scale)"
+
+                       $WorkbenchPartition = (Get-Variable -Name "$($ID76Partition.PartitionName)_AmigaDisk_*" | Where-Object {$_.Value.VolumeName -eq "Workbench"}).value
+                       $WorkbenchPartitionSize = Get-ConvertedSize -Size $WorkbenchPartition.PartitionSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2
+                       $WPF_DP_SimpleMode_WorkbenchSize_Value.Text = "$($WorkbenchPartitionSize.size) $($WorkbenchPartitionSize.scale)"
+
+                       $WorkPartition = (Get-Variable -Name "$($ID76Partition.PartitionName)_AmigaDisk_*" | Where-Object {$_.Value.VolumeName -eq "Work"}).value
+                       $WorkPartitionSize = Get-ConvertedSize -Size $WorkPartition.PartitionSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2
+                       $WPF_DP_SimpleMode_WorkSize_Value.Text = "$($WorkPartitionSize.size) $($WorkPartitionSize.scale)"
+                                            
+                       $AmigaDiskName =  (Get-Variable -Name "*_AmigaDisk").Name
+                       $AmigaDiskSizeBytes = [int64](Get-Variable -name  $AmigaDiskName).value.DiskSizeBytes
+                       $AmigaEndofPartitionsBytes = [int64](Get-GUIPartitionStartEnd -PartitionType 'Amiga' -AmigaDiskName $AmigaDiskName).EndingPositionBytes
+                       $FreeSpacetoCheck = $AmigaDiskSizeBytes -$AmigaEndofPartitionsBytes              
+                       $DiskSize = (Get-ConvertedSize -Size $AmigaDiskSizeBytes -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2) 
+                       $DiskFreeSpaceSize = (Get-ConvertedSize -Size $FreeSpacetoCheck -ScaleFrom 'B' -AutoScale -NumberofDecimalPlaces 2) 
+                       $WPF_DP_Amiga_TotalDiskSize.Text = "$($DiskSize.Size) $($DiskSize.Scale)"
+                       $WPF_DP_Amiga_TotalFreeSpaceSize.Text = "$($DiskFreeSpaceSize.Size) $($DiskFreeSpaceSize.Scale)"    
+                       $WPF_DP_Amiga_TotalFreeSpaceSize.Visibility = 'Visible' 
+                       $WPF_DP_Amiga_TotalFreeSpaceSize_Label.Visibility = 'Visible'
+                        
+                       $WPF_DP_Amiga_TotalDiskSize_Label.Visibility = 'Visible'
+                       $WPF_DP_Amiga_TotalDiskSize.Visibility = 'Visible'
+                       $TotalChildren = $WPF_DP_DiskGrid_Amiga.Children.Count-1
+                       for ($i = 0; $i -le $TotalChildren; $i++) {
+                           $WPF_DP_DiskGrid_Amiga.Children.Remove($WPF_DP_DiskGrid_Amiga.Children[$i])
+                        }
+                        $WPF_DP_DiskGrid_Amiga.AddChild((Get-Variable -Name $AmigaDiskName).value)                                             
+                       
+                }
+                   
             }
         }
         if ($Script:GUICurrentStatus.SelectedAmigaPartition){
@@ -513,8 +618,8 @@ function Update-UI {
                 $WPF_DP_Amiga_SelectedSize_Input.Background = 'White' 
                 $WPF_DP_Amiga_SelectedSize_Input.Text = ''
                 $WPF_DP_Amiga_SelectedSize_Input_SizeScale_Dropdown.SelectedItem = ''
-                $WPF_DP_Amiga_TotalDiskSize.Text = ''
-                $WPF_DP_Amiga_TotalFreeSpaceSize.Text = ''             
+                #$WPF_DP_Amiga_TotalDiskSize.Text = ''
+                #$WPF_DP_Amiga_TotalFreeSpaceSize.Text = ''             
             }
         }    
     }

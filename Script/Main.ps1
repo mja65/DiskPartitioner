@@ -100,18 +100,31 @@ if ($Script:GUICurrentStatus.RunMode -eq 'CommandLine'){
 Remove-Variable -Scope Script -Name 'WPF_*'
 
 $WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\Assets\UIActions\MainWindow\' -AddWPFVariables
-$WPF_StartPage = Get-XAML -WPFPrefix 'WPF_StartPage_' -XMLFile '.\Assets\WPF\Grid_StartPage.xaml' -ActionsPath '.\Assets\UIActions\StartPage\' -AddWPFVariables
+
+If ($Script:GUICurrentStatus.OperationMode -eq "Advanced"){
+    $WPF_StartPage = Get-XAML -WPFPrefix 'WPF_StartPage_' -XMLFile '.\Assets\WPF\Grid_StartPageAdvancedMode.xaml' -ActionsPath '.\Assets\UIActions\StartPage\' -AddWPFVariables
+}
+elseif ($Script:GUICurrentStatus.OperationMode -eq "Simple"){
+    $WPF_StartPage = Get-XAML -WPFPrefix 'WPF_StartPage_' -XMLFile '.\Assets\WPF\Grid_StartPageSimpleMode.xaml' -ActionsPath '.\Assets\UIActions\StartPage\' -AddWPFVariables
+}
 $WPF_Partition = Get-XAML -WPFPrefix 'WPF_DP_' -XMLFile '.\Assets\WPF\Grid_DiskPartition.xaml' -ActionsPath '.\Assets\UIActions\DiskPartition\' -AddWPFVariables
 $WPF_SetupEmu68 = Get-XAML -WPFPrefix 'WPF_Setup_' -XMLFile '.\Assets\WPF\Grid_SetupEmu68.xaml' -ActionsPath '.\Assets\UIActions\SetupEmu68\' -AddWPFVariables
-$WPF_PackageSelection = Get-XAML -WPFPrefix 'WPF_PackageSelection_' -XMLFile '.\Assets\WPF\Grid_PackageSelection.xaml' -ActionsPath '.\Assets\UIActions\PackageSelection\' -AddWPFVariables
 
-
-Set-PartitionGridActions
+If ($Script:GUICurrentStatus.OperationMode -eq "Advanced"){
+    $WPF_PackageSelection = Get-XAML -WPFPrefix 'WPF_PackageSelection_' -XMLFile '.\Assets\WPF\Grid_PackageSelection.xaml' -ActionsPath '.\Assets\UIActions\PackageSelection\' -AddWPFVariables
+    Set-PartitionGridActions
+}
 
 $Script:GUICurrentStatus.ProcessImageStatus = $false
 
 $WPF_Window_Main.AddChild($WPF_StartPage)
 $Script:GUICurrentStatus.CurrentWindow = 'StartPage'
+
+If ($Script:GUICurrentStatus.OperationMode -eq "Simple"){
+    $WPF_Window_Button_LoadSettings.Visibility = "Hidden"
+    $WPF_Window_Button_SaveSettings.Visibility = "Hidden"
+    $WPF_Window_Button_PackageSelection.Visibility = "Hidden"
+}
 
 update-ui -MainWindowButtons
 
@@ -127,22 +140,3 @@ else {
 
 # # $WPF_MainWindow.Close()
 # # [System.Windows.Controls.CheckBox].GetEvents() | Select-Object Name, *Method, EventHandlerType >test.txt
-
-<#
-#Measure-Command { Get-AllGUIPartitionBoundaries -GPTMBR -Amiga }
-Measure-Command { Update-ui }
-
--Emu68Settings -HighlightSelectedPartitions -UpdateInputBoxes -Buttons -CheckforRunningImage 
-
--MainWindowButtons 20ms
--Emu68Settings 18ms
--Buttons 16
--PhysicalvsImage 
--FreeSpaceAlert 32
--DiskPartitionWindow 134
--HighlightSelectedPartitions 88
--UpdateInputBoxes 103
-
-#>
-
-# 

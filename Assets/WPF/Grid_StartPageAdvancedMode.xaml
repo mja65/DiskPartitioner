@@ -6,19 +6,29 @@
   xmlns:local="clr-namespace:WpfApp14"
   mc:Ignorable="d">
         <TextBlock x:Name="StartPage_TextBlock" HorizontalAlignment="Left" Margin="0,100,0,0" TextWrapping="Wrap"  FontSize="16" VerticalAlignment="Top" Width="1000" Height="800">
+            <Run FontWeight="Bold" FontSize="14" Text="Mode of Operation - Advanced Mode"/>
+            <LineBreak/>    
+            <Run/><LineBreak/>        
             <Run Text="In order to use this tool, click the buttons on the left side of the screen."/>
             <LineBreak/>
             <Run/><LineBreak/>            
-            <Run FontWeight="Bold" Text="Start "/><Run Text="- this page"/><LineBreak/>
+            <Run FontWeight="Bold" Text="Start "/>
+            <Run Text="- this page"/><LineBreak/>
             <Run/><LineBreak/>
-            <Run FontWeight="Bold" Text="Load Settings "/><Run Text="- Load previously saved settings"/><LineBreak/>
+            <Run FontWeight="Bold" Text="Set up Disk"/>
+            <Run Text=" - Select the disk or image to write to, define the size, as well as partioning the disk and image according to your requirements"/><LineBreak/>
             <Run/><LineBreak/>
-            <Run FontWeight="Bold" Text="Save Settings"/><Run Text=" - Save settings from the imager should you wish to run the imager again with the same options"/><LineBreak/><Run/><LineBreak/>
-            <Run FontWeight="Bold" Text="Set up Disk"/><Run Text=" - Select the disk or image to write to as well as partioning the disk and image according to your requirements"/><LineBreak/><Run/><LineBreak/>
-            <Run FontWeight="Bold" Text="Configure Emu68"/><Run Text=" - Configure Emu68 options"/><LineBreak/>
+            <Run FontWeight="Bold" Text="Configure Emu68"/>
+            <Run Text=" - Configure Emu68 options"/><LineBreak/>
             <Run/><LineBreak/>
-            <Run FontWeight="Bold" Text="Select Packages"/><Run Text=" - Enable and/or disable default packages from installation"/><LineBreak/>
+            <Run FontWeight="Bold" Text="Select Packages"/>
+            <Run Text=" - Enable and/or disable default packages from installation"/><LineBreak/>
             <Run/><LineBreak/>
+            <Run FontWeight="Bold" Text="Load Settings "/>
+            <Run Text="- Load previously saved settings"/><LineBreak/>
+            <Run/><LineBreak/>
+            <Run FontWeight="Bold" Text="Save Settings"/>
+            <Run Text=" - Save settings from the imager should you wish to run the imager again with the same options"/><LineBreak/><Run/><LineBreak/>
             <Run Text="If you wish to run by leaving everything at the default, the following steps will prepare an image with minimal customisation:"/><LineBreak/>
             <Run Text="1. Go to the Configure Emu68 Page, set the ROM and OS Files location"/><LineBreak/>
             <Run Text="2. Press the check files option"/><LineBreak/>

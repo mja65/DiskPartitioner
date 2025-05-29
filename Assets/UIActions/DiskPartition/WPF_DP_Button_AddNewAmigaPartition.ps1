@@ -24,14 +24,14 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
     
     Set-AmigaDiskSizeOverhangPixels -AmigaDisk $AmigaDiskName
     
-    $CurrentNumberofPartitionsonAmigaDisk = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object { $AmigaDiskName-match $_.PartitionNameName}).Count
+    $CurrentNumberofPartitionsonAmigaDisk = ($Script:GUICurrentStatus.AmigaPartitionsandBoundaries | Where-Object { $AmigaDiskName-match $_.PartitionName}).Count
 
     if ($CurrentNumberofPartitionsonAmigaDisk -eq $Script:Settings.AmigaPartitionsperDiskMaximum){
         $null = Show-WarningorError -Msg_Header "Exceeded maximum number of partitions" -Msg_Body "You have $($Script:Settings.AmigaPartitionsperDiskMaximum) partitions on this disk! No more partitions can be added." -BoxTypeError -ButtonType_OK
         return
     }
 
-    if (-not ($CurrentNumberofPartitionsonAmigaDisk)){
+    if (-not ($CurrentNumberofPartitionsonAmigaDisk) -or $CurrentNumberofPartitionsonAmigaDisk -eq 0){
         $CanAddPartition = $true
         $EmptyAmigaDisk = $true
     }
@@ -55,13 +55,14 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
         
     if ($EmptyAmigaDisk -eq $true){
         $AvailableFreeSpace = (Get-Variable -name $AmigaDiskName).value.DiskSizeBytes
-        # Write-debug "Available free space is: $AvailableFreeSpace "
+        #Write-debug "Available free space is: $AvailableFreeSpace"
     }
     else {
         $AvailableFreeSpace = (Get-AmigaDiskFreeSpace -Disk (Get-Variable -Name $AmigaDiskName).Value -Position $AddType -PartitionNameNextto $PartitionNexttotouse)
         # Write-debug "Available free space is: $AvailableFreeSpace "
     }
     $AvailableFreeSpace = (Get-AmigaNearestSizeBytes -RoundDown $AvailableFreeSpace)
+    #Write-debug "Available free space rounded down is: $AvailableFreeSpace"
     $MinimumFreeSpace = (Get-AmigaNearestSizeBytes -RoundDown $Script:SDCardMinimumsandMaximums.PFS3Minimum)
     if ($AvailableFreeSpace -lt $MinimumFreeSpace){
         $null = Show-WarningorError -Msg_Header 'No Free Space' -Msg_Body 'Insufficient freespace to create partition!' -BoxTypeError -ButtonType_OK
@@ -74,7 +75,7 @@ $WPF_DP_Button_AddNewAmigaPartition.add_click({
             
             $DeviceandVolumeNametoUse = (Get-DeviceandVolumeNametoUse)
     
-            Write-Host "$AmigaDiskName $AddType $PartitionNexttotouse"
+            #Write-Host "$AmigaDiskName $AddType $PartitionNexttotouse"
 
             Add-GUIPartitiontoAmigaDisk -AmigaDiskName $AmigaDiskName -AddType $AddType -DeviceName $DeviceandVolumeNametoUse.DeviceName -VolumeName $DeviceandVolumeNametoUse.VolumeName -PartitionNameNextto $PartitionNexttotouse -SizeBytes (Get-AmigaNearestSizeBytes -RoundDown -SizeBytes $SpacetoUse) -Buffers $WorkDefaultValues.Buffers -DosType $WorkDefaultValues.DosType -NoMount $WorkDefaultValues.NoMountFlag -Bootable $WorkDefaultValues.BootableFlag -Priority ([int]$WorkDefaultValues.Priority) -MaxTransfer $WorkDefaultValues.MaxTransfer -Mask $WorkDefaultValues.Mask
     

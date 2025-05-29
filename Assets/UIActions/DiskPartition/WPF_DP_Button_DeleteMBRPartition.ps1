@@ -61,7 +61,8 @@ Press OK to continue otherwise cancel
         }
 
         $Script:GUICurrentStatus.SelectedGPTMBRPartition = $null
-        Update-UI -DiskPartitionWindow
+
+        Update-UI -DiskPartitionWindow -HighlightSelectedPartitions
         
     }
     else {

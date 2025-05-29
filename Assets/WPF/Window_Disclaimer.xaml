@@ -5,18 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp14"
         mc:Ignorable="d"
-        Title="Disclaimer and Acknowledgements" Height="400" Width="1054" HorizontalAlignment="Center" HorizontalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ResizeMode="NoResize" WindowStyle="ToolWindow">
+        Title="Disclaimer and Start Mode" Height="500" Width="1000" HorizontalAlignment="Center" HorizontalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid Background="#FFAAAAAA" >
-        <Button x:Name="Button_Acknowledge" Content="Acknowledge and Continue" HorizontalAlignment="Center" Height="40" VerticalAlignment="Bottom" Width="320" BorderBrush="Black" UseLayoutRounding="False" Background="#FF6688BB" Margin="0,0,0,15"/>
-        <TextBox x:Name="TextBox_Message" HorizontalAlignment="Center" Margin="0,50,0,0" TextWrapping="Wrap" Background="Transparent" BorderBrush="Transparent"
-                 Text="This software is used at your own risk! While efforts have been made to test the software, it should be used with caution.  Data will be written to physical media attached to your computer and all data on that media will be erased. If the incorrect media is chosen, data on that media will also be erased!&#xA;&#xA;If you do not accept this risk, then do not use this software! No one likes reading manuals! However, you are strongly encouraged to read at least the Quick Start section of the documentation! This can be accessed through the link below along links to the other section. &#xA;&#xA;A link to the documentation is also available in the tool should you wish to access from there." 
-                 VerticalAlignment="Top" Width="874" IsReadOnly="True" Height="160" VerticalScrollBarVisibility="Disabled" FontSize="14" BorderThickness="0,0,0,0" SelectionOpacity="0"
-                 />
         <TextBox x:Name="TextBox_Header" HorizontalAlignment="Center" Margin="0,20,0,0" TextWrapping="Wrap" Background="Transparent" BorderBrush="Transparent"
-            Text="" FontSize="14" BorderThickness="0,0,0,0" SelectionOpacity="0"
+            Text="Emu68 Imager v" FontSize="14" BorderThickness="0,0,0,0" SelectionOpacity="0"
             VerticalAlignment="Top" Width="772" IsReadOnly="True" Height="20" VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" FontWeight="Bold"
                  />
-        <Button x:Name="LinktoQuickstart_Button" Content="Link to Quick Start Guide" HorizontalAlignment="Center" Margin="0,210,0,0" VerticalAlignment="Top" Height="80" Width="400"/>
+        <Button x:Name="Button_Acknowledge_Simple" Content="Start in Simple Mode " HorizontalAlignment="Left" Height="40" VerticalAlignment="Bottom" Width="320" BorderBrush="Black" UseLayoutRounding="False" Background="#FF6688BB" Margin="50,0,0,20"  />
+        <Button x:Name="Button_Acknowledge_Advanced" Content="Start in Advanced Mode" HorizontalAlignment="Right" Height="40" VerticalAlignment="Bottom" Width="320" BorderBrush="Black" UseLayoutRounding="False" Background="#FF6688BB" Margin="0,0,50,20" />
+
+        <TextBlock Width="900" TextWrapping="Wrap" VerticalAlignment="Top"  Margin="50,50,50,0" Height="310">
+            <Run Foreground="Black" FontSize="14" Text="This software is used at your own risk! Efforts were made to test the software but it should be used with caution. Data will be written to physical media attached to your computer and all data on that media will be erased. If the incorrect media is chosen, data on that media will also be erased" /><LineBreak/>
+            <Run Foreground="Black"/><LineBreak/>
+            <Run Foreground="Black" FontSize="14" Text="If you do not accept this risk, then do not use this software! "/><LineBreak/>
+            <Run Foreground="Black"/><LineBreak/>
+            <Run Foreground="Black" FontSize="14"  Text="There are two modes of operation: "/><LineBreak/> 
+            <Run Foreground="Black" /><LineBreak/>    
+            <Run Foreground="Black" FontSize="14" FontWeight="Bold" Text="Simple Mode"/>         
+            <Run Foreground="Black" FontSize="14" Text=" - This will allow for the basic setup of the card but all options to configure the set up of the card beyond the selection and the size of the card itself are disabled. This includes partitioning of the disk different to the default set up as well as the including and excluding of packages to be installed."/><LineBreak/>   
+            <Run Foreground="Black" /><LineBreak/>
+            <Run Foreground="Black" FontSize="14" FontWeight="Bold" Text="Advanced Mode"/>
+            <Run Foreground="Black" FontSize="14" Text="- All features are available"/><LineBreak/>
+            <Run Foreground="Black"/><LineBreak/>
+            <Run Foreground="Black" FontSize="14" Text="No one likes reading manuals! However, you are strongly encouraged to read at least the Quick Start section of the documentation! This can be accessed through the link "/> 
+            <Hyperlink x:Name="QuickStartDocumentationURL" FontSize="14" NavigateUri="https://discord.com/channels/784428461330530305/1291663799983673468"> here</Hyperlink>
+            <Run Foreground="Black" FontSize="14" Text= " along with links to the other sections of the documentation. A link to the documentation is also available in the tool should you wish to access from there."/>
+            <Span Background="White" FontSize="14" Foreground="Black"/><LineBreak/><Run/></TextBlock>
     </Grid>
 </Window>
-

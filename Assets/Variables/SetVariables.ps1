@@ -139,6 +139,7 @@ $null = $Script:Settings.ProgressBarMarkers.Add([PSCustomObject]@{
 
 
 $Script:GUICurrentStatus = [PSCustomObject]@{
+    OperationMode = $null
     AmigaPartitionsandBoundaries = $null
     GPTMBRPartitionsandBoundaries = $null
     LastMouseMoveUpdateTime = [DateTime]::MinValue
@@ -252,7 +253,6 @@ $Script:GUIActions = [PSCustomObject]@{
     WifiPassword = $null
     FoundInstallMediatoUse = $null
     FoundKickstarttoUse = $null
-    IsDisclaimerAccepted = $null
     ListofRemovableMedia = $null
     ImportPartitionWindowStatus = $null
 
