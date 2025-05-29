@@ -6,7 +6,7 @@
   xmlns:local="clr-namespace:WpfApp14"
   mc:Ignorable="d">
         <TextBlock x:Name="StartPage_TextBlock" HorizontalAlignment="Left" Margin="0,100,0,0" TextWrapping="Wrap"  FontSize="16" VerticalAlignment="Top" Width="1000" Height="800">
-            <Run FontWeight="Bold" FontSize="14" Text="Mode of Operation - Advanced Mode"/>
+            <Run FontWeight="Bold" Text="Mode of Operation - Advanced Mode"/>
             <LineBreak/>    
             <Run/><LineBreak/>        
             <Run Text="In order to use this tool, click the buttons on the left side of the screen."/>
@@ -16,13 +16,13 @@
             <Run Text="- this page"/><LineBreak/>
             <Run/><LineBreak/>
             <Run FontWeight="Bold" Text="Set up Disk"/>
-            <Run Text=" - Select the disk or image to write to, define the size, as well as partioning the disk and image according to your requirements"/><LineBreak/>
+            <Run Text=" - Select the disk or image to write to, define the size, as well as partitioning the disk and image according to your requirements"/><LineBreak/>
             <Run/><LineBreak/>
             <Run FontWeight="Bold" Text="Configure Emu68"/>
-            <Run Text=" - Configure Emu68 options"/><LineBreak/>
+            <Run Text=" - Configure Emu68 options. Where to define the version of Kickstart and Workbench you would like installed as well as configuring Wifi and screen options."/><LineBreak/>
             <Run/><LineBreak/>
             <Run FontWeight="Bold" Text="Select Packages"/>
-            <Run Text=" - Enable and/or disable default packages from installation"/><LineBreak/>
+            <Run Text=" - Enable and/or disable default packages from installation. This will allow you to select and unselect certain OS install features like the language, as well you can remove or add the additional packages."/><LineBreak/>
             <Run/><LineBreak/>
             <Run FontWeight="Bold" Text="Load Settings "/>
             <Run Text="- Load previously saved settings"/><LineBreak/>

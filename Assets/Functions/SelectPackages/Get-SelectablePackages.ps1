@@ -35,7 +35,9 @@ function Get-SelectablePackages {
             $UserSelectableIconSets | ForEach-Object {
                 if ($_.IconSetDefaultInstall -eq $true){
                     $Script:GUIActions.SelectedIconSet = $_.IconSet
-                    $WPF_PackageSelection_CurrentlySelectedIconSet_Value.text = $_.IconSet
+                    if ($Script:GUICurrentStatus.OperationMode -eq "Advanced"){
+                        $WPF_PackageSelection_CurrentlySelectedIconSet_Value.text = $_.IconSet
+                    }
                 }
             }
     }

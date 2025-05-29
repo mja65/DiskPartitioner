@@ -6,7 +6,7 @@
   xmlns:local="clr-namespace:WpfApp14"
   mc:Ignorable="d">
         <TextBlock x:Name="StartPage_TextBlock" HorizontalAlignment="Left" Margin="0,100,0,0" TextWrapping="Wrap"  FontSize="16" VerticalAlignment="Top" Width="1000" Height="800">
-            <Run FontWeight="Bold" FontSize="14" Text="Mode of Operation - Simple Mode"/>
+            <Run FontWeight="Bold" Text="Mode of Operation - Simple Mode"/>
             <LineBreak/>
             <Run/><LineBreak/>  
             <Run Text="In order to use this tool, click the buttons on the left side of the screen."/>
@@ -19,7 +19,7 @@
             <Run Text=" - Select the disk or image to write to, define the size"/><LineBreak/>
             <Run/><LineBreak/>
             <Run FontWeight="Bold" Text="Configure Emu68"/>
-            <Run Text=" - Configure Emu68 options"/><LineBreak/>
+            <Run Text=" - Configure Emu68 options. Where to define the version of Kickstart and Workbench you would like installed as well as configuring Wifi and screen options."/><LineBreak/>
             <Run/><LineBreak/>
             <Run Text="If you wish to run by leaving everything at the default, the following steps will prepare an image with minimal customisation:"/><LineBreak/>
             <Run Text="1. Go to the Configure Emu68 Page, set the ROM and OS Files location"/><LineBreak/>
