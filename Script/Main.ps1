@@ -98,8 +98,14 @@ if ($Script:GUICurrentStatus.RunMode -eq 'CommandLine'){
 }
 
 Remove-Variable -Scope Script -Name 'WPF_*'
+If ($Script:GUICurrentStatus.OperationMode -eq "Advanced"){
+    $WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\Assets\UIActions\MainWindow\' -AddWPFVariables
+}
+elseif ($Script:GUICurrentStatus.OperationMode -eq "Simple"){
+    $WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window_Simple.xaml' -ActionsPath '.\Assets\UIActions\MainWindow\' -AddWPFVariables
+}
 
-$WPF_MainWindow = Get-XAML -WPFPrefix 'WPF_Window_' -XMLFile '.\Assets\WPF\Main_Window.xaml' -ActionsPath '.\Assets\UIActions\MainWindow\' -AddWPFVariables
+$WPF_Window_label.Content = "Emu68 Imager v$([string]$Script:Settings.Version)" 
 
 If ($Script:GUICurrentStatus.OperationMode -eq "Advanced"){
     $WPF_StartPage = Get-XAML -WPFPrefix 'WPF_StartPage_' -XMLFile '.\Assets\WPF\Grid_StartPageAdvancedMode.xaml' -ActionsPath '.\Assets\UIActions\StartPage\' -AddWPFVariables

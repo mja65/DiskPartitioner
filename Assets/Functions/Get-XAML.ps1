@@ -7,11 +7,15 @@ function Get-XAML {
 
     )
 
-    # $XMLFile = '.\Assets\WPF\Main_Window.xaml'
+    # $XMLFile = '.\Assets\WPF\Main_Window_Simple.xaml'
     # $XMLFile = '.\Assets\WPF\Grid_DiskPartition.xaml'
     # $WPFPrefix = 'Test'
 
     [xml]$ParsedXML = (get-content $XMLFile) -replace 'mc:Ignorable="d"','' -replace "x:N",'N' -replace '^<Win.*', '<Window'
+   
+    if (($Script:GUICurrentStatus.OperationMode -eq "Simple") -and ($ParsedXML.Window.Title -eq "Emu68 Imager")){
+        $ParsedXML.Window.'Window.Background'.ImageBrush.ImageSource = [System.IO.Path]::GetFullPath(".\Assets\WPF\Backgrounds\Background.png") -replace ("\\","/")
+    }
 
     $reader = (New-Object System.Xml.XmlNodeReader $ParsedXML)
 

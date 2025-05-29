@@ -6,6 +6,10 @@
         xmlns:local="clr-namespace:WpfApp27"
         mc:Ignorable="d"
    Title="Emu68 Imager" Height="1000" Width="1400" Left="130" HorizontalAlignment="Center" VerticalAlignment="Center" WindowStartupLocation="CenterOwner">
+       <Window.Background>
+        <ImageBrush ImageSource="C:/Background.png"
+                    Stretch="UniformToFill"
+                    Opacity="0.7" /> </Window.Background>
     <Window.Resources>
         
         <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
@@ -110,7 +114,7 @@
             </VisualBrush.Visual>
         </VisualBrush>
     </Window.Resources>
-    <Grid x:Name ="Main" Background="#FFE5E5E5">
+    <Grid x:Name ="Main" Background="Transparent">
         <Button x:Name="Button_StartPage" Content="Start" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Height="20" Width="100"/>
         <Button x:Name="Button_SetupDisk" Content="Setup Disk" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Height="20" Width="100"/>
         <Button x:Name="Button_SetupEmu68" Content="Configure Emu68" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Height="20" Width="100" />
